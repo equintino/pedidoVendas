@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Cadastro</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--<link rel="stylesheet" href="css/login-style.css" />-->
+        <style>           
+            .cadlogin{
+                background: #46BEF0 url('../imagens/excalibur.jpeg') 100% fixed no-repeat;
+                background-position: center;
+            }
+            table caption{
+                font-size: 28px;
+                text-shadow: 4px 4px 4px gray;
+                color: black;
+                font-weight: bolder;
+            }
+            .cadlogin table{
+                border-radius: 10px;
+                box-shadow: 4px 4px 4px gray;
+                text-shadow: 2px 2px 2px white;
+                font-size: 22px;
+                background: #9fcef7;
+            }
+            table{
+                width: 400px;
+                margin: 100px auto;
+                border: 1px solid gray;
+                padding: 6px;
+            }
+            .quadro div{
+                position: relative;
+                left: 100px;
+                top: -100px;
+                width: 200px;
+                margin: auto;
+            }
+            .quadro div input{
+                margin-top: 5px;
+                border: none;
+                background-color: green;
+                color: white;
+                font-size: 20px;
+                font-weight: 800;
+                font-family: sans-serif;
+                border-radius: 5px;
+            }
+        </style>
+    </head>
+    <body class="cadlogin">
+        <form action="cadlogin.php" method="POST" >
+            <div class="quadro">
+                <table>
+                    <caption>CADASTRO DE LOGIN</caption>
+                        <tr>
+                            <td align="right"><label>Nome: </label></td><td><input name="nome" type="text" size="30" /></td>
+                        </tr>
+                        <tr>
+                            <td align="right"><label>E-mail: </label></td><td><input name="email" type="email" size="30" /></td>
+                        </tr>
+                        <tr>
+                            <td align="right"><label>Setor: </label></td><td><input name="setor" type="text" size="30" /></td>
+                        </tr>
+                        <tr>
+                            <td align="right"><label>Função </label></td><td><input name="funcao" type="text" size="30" /></td>
+                        </tr>
+                        <tr>
+                            <td align="right"><label>Login: </label></td><td><input name="login" type="text" size="30" /></td>
+                        </tr>
+                        <tr>
+                            <td align="right"><label>Senha: </label></td><td><input name="senha" type="password" size="30" /></td>
+                        </tr>
+                        <tr>
+                            <td align="right"><label>Confirma: </label></td><td><input name="senha2" type="password" size="30" /></td>
+                        </tr>
+                </table>
+                <div>
+                    <input type="button" onclick="history.go(-1)" value="Voltar" />
+                    <input type="submit" value="Confirmar" />
+                </div>
+            </div>
+        </form>
+    </body>
+</html>

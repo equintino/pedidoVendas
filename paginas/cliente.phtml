@@ -1,0 +1,258 @@
+<script>
+    $(document).ready(function(){
+        $('#saldo').css({
+            float:'right',
+            position: 'relative',
+            top: '-50px'
+        })
+        $('.botao').css({
+            float: 'right',
+            marginRight: '20px'
+        })
+        $('.botao input').css({
+            borderRadius: '0 0 5px 5px',
+            fontWeight: '600',
+            backgroundColor: '#63a9c1',
+            color: '#111f46',
+            padding: '1px 4px'
+        })
+        $('form').css({
+            width: '710px',
+            //border: 'solid red'
+        })
+        $('table tr:odd').css({
+            background: '#ccc'
+        })
+        $('td img').click(function(){
+            if($(this).attr('title')=='Exclui'){
+                var razao=$(this).attr('razao');
+                var confirma=confirm('Confirma Exclusão de "'+razao+'"');
+                //alert(confirma);
+                if(confirma){
+                    var codigo=$(this).attr('codigo');
+                    $(location).attr('href','index.php?pagina=cliente&act=excl&codigo='+codigo+'')
+                }
+            }else if($(this).attr('title')=='Altera'){
+                var codigo=$(this).attr('codigo');
+                $(location).attr('href','index.php?pagina=cliente&act=alt&omie='+codigo+'')
+            }
+        })
+        $('.procura img').mouseover(function(){
+            $(this).css('cursor','pointer')
+        })
+        $('.procura').keyup(function(e){
+              var code = e.which; // recommended to use e.which, it's normalized across browsers
+              if(code==13)e.preventDefault();
+              if(code==13||e.keyCode==13){
+                  var codigo=$('.procura :input').val();
+                  if(codigo){
+                    $(location).attr('href','index.php?pagina=cliente&act=cons&codigo='+codigo+'')
+                  }
+              } 
+        })
+        $('.procura img').click(function(){
+            var codigo=$('.procura :input').val();
+              if(codigo){
+                $(location).attr('href','index.php?pagina=cliente&act=cons&codigo='+codigo+'')
+              }
+        })
+        $('.razaosocial').mouseover(function(){
+            $(this).css('cursor','pointer')
+            $(this).attr('title','dê um duplo clique para ver detalhes.')
+        })
+        $('.razaosocial').dblclick(function(){
+            var codigo=$(this).attr('linha');
+            $(location).attr('href','index.php?pagina=cliente&act=cons&omie='+codigo+'')
+        })
+        $(':submit').click(function(){
+            var arr=new Array();
+            $(':input').each(function(){
+                arr.push($(this).attr('name'));
+            //alert(arr);                
+            })
+            //alert(arr[1]);
+        })
+    })
+</script>
+<style>
+    #menu ul {
+        padding:0px;
+        margin:0px;
+        background-color:#EDEDED;
+        list-style:none;
+        font-size: 20px;
+    }
+    #menu ul li{
+        display: inline;
+    }
+    .head{
+        text-align: center;
+        font-size: 25px;
+    }
+    .pag{
+        font-size: 12px;
+    }
+    .total{
+        float: right;
+    }
+    table{
+        width: 700px;
+    }
+    table td{
+        padding: 3px 10px;
+    }
+    table tr{
+        background: rgba(216, 0, 0,0.1);
+    }
+    .rs{
+        width: 70%;
+    }
+    .ct{
+        align-content: center;
+    }
+    table th{
+        background: black;
+        color: white;
+        font-size: 20px;
+        padding: 2px;
+    }
+    .edicao{
+        background-color: white;
+        padding: 0;
+    }
+    td img:hover{
+        cursor: pointer;
+    }
+    .procura{
+        float: right;
+        margin: 10px;
+    }
+    .procura img{
+        margin-top: 2px;
+    }
+</style>
+<div id="menu">
+    <ul>
+        <li><a href=<?= Utils::createLink('cliente',array('act'=>'cad')); ?>>Incluir</a></li>
+        <li><a href=<?= Utils::createLink('cliente',array('act'=>'list')); ?>>Listar</a></li>
+    </ul>
+    <div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por clientes" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por clientes" /></div>
+</div>
+<div class="conteudo">
+<?php if($act=='cad'): ?>
+<h1>Cadastro de Clientes</h1>
+<div id="saldo">Total de Clientes: <?= $quant ?></div>
+<form method="post" action="../paginas/add.php" />
+<table>
+    <tr>
+        <td align="right">Tags</td><td><input name="tag" type="text" size="10" maxlength="5" required></td><td>&nbsp&nbsp</td>
+        <td align="right">CNPJ/CPF</td><td><input name="cnpj_cpf" type="text" size="13" maxlength="13" required></td>
+    </tr>
+    <tr>
+        <td align="right">Razão Social/Nome Completo</td><td colspan="4"><input type="text" name="nome" /></td>
+    </tr>
+    <tr>
+        <td align="right">Valor</td><td><input neme="valor" type="text" size="10" /></td><td></td>
+        <td align="right">Entrada</td><td><input name="entrada" type="text" size="10"/></td>
+    </tr>
+    <tr>
+        <td align="right">Loja</td><td><input name="loja" type="text" size="10" /></td><td></td>
+    </tr>
+</table>
+<div class="botao">
+    <input type="reset" value="Limpa"/>
+    <input type="submit" value="Confirma"/>
+</div>
+<div id="painel"></div>
+</form>
+<?php elseif($act=='cons'):
+    @$codigo=$_GET['codigo'];
+    @$omie=$_GET['omie'];
+    if(!$codigo)$codigo='';
+    if(!$omie)$omie=0;
+    $clientes_cadastro_chave=array("codigo_cliente_omie"=>$omie,
+"codigo_cliente_integracao"=>$codigo);
+    $dados=$cliente->ConsultarCliente($clientes_cadastro_chave); 
+?>
+<table>
+    <tr><th colspan="2">Dados do Cliente</th></tr>
+    <?php foreach($dados as $key => $item): ?>
+    <tr><td><?= $key ?></td>
+        <td>
+            <?php
+                if($key=='tags'){
+                    for($x=0;$x<count($item);$x++){
+                        if($x<count($item)-1){
+                            echo $item[$x]->tag.',';
+                        }else{
+                            echo $item[$x]->tag;
+                        }
+                    }
+                }elseif($key!='info'){
+                    echo $item;
+                }
+            ?>
+        </td></tr>
+    <?php endforeach; ?>
+</table>
+
+<?php elseif($act=='alt'): 
+    @$codigo=$_GET['codigo'];
+    @$omie=$_GET['omie'];
+    if(!$codigo)$codigo='';
+    if(!$omie)$omie=0;
+    $clientes_cadastro_chave=array("codigo_cliente_omie"=>$omie,
+"codigo_cliente_integracao"=>$codigo);
+    $dados=$cliente->ConsultarCliente($clientes_cadastro_chave); 
+?>
+<form method="POST" action="../paginas/add.php?act=alt" name="alt">
+<table>
+    <tr><th colspan="2">Dados do Cliente</th></tr>
+    <?php $tag=null; ?>
+    <?php foreach($dados as $key => $item): ?>
+    <tr><td><?= $key ?></td>
+        <td>
+            <?php
+                if($key=='codigo_cliente_omie'||$key=='codigo_cliente_integracao'){
+                    echo '<input type=hidden name='.$key.' value="'.$item.'" >';
+                    echo $item;
+                }elseif($key=='tags'){
+                    $x=0;
+                    foreach($item as $y){
+                        if($x<count($item)-1){
+                            $tag .= $y->tag.',';
+                        }else{
+                            $tag .= $y->tag;
+                        }
+                        $x++;
+                    }
+                    echo '<input type=text size=55 name=tags value="'.$tag.'" >';
+                }elseif($key!='info'){
+                    echo '<input type=text size=55px name='.$key.' value="'.$item.'" >';
+                }
+            ?>
+        </td></tr>
+    <?php endforeach; ?>
+</table>
+<input type="submit" value="Salvar" /> 
+</form>
+<?php elseif($act=='list'): 
+    $clientes_list_request=array('pagina'=>'1','registros_por_pagina'=>'50','apenas_importado_api'=>'N');
+    $dados=$cliente->ListarClientes($clientes_list_request);
+?>
+<div class="head">Lista de Clientes Cadastrados <span class="pag">(pág.<?= $dados->pagina ?>/<?= $dados->total_de_paginas ?>)</span>
+</div>
+<div class="total">total de registros <?= $dados->total_de_registros ?></div>
+<table>
+    <tr><th>Razão Social/Nome</th><th>CNPJ/CPF</th><th>Contato</th></tr>
+    <?php 
+    foreach($dados->clientes_cadastro as $cliente): ?>
+    <tr class="razaosocial" linha="<?= $cliente->codigo_cliente_omie ?>"><td class="rs"><?= mb_strtoupper($cliente->razao_social,'utf-8').'<br><font size=1px>('.$cliente->codigo_cliente_integracao.')</font>' ?></td><td align=center ><?= $cliente->cnpj_cpf ?></td><td align=center ><?= @$cliente->contato ?></td><td class="edicao"><img title="Altera" height="12px" src="../web/img/editar.png" codigo="<?= $cliente->codigo_cliente_omie ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $cliente->codigo_cliente_omie ?>" razao="<?= mb_strtoupper($cliente->razao_social,'utf-8') ?>" /></td></tr>
+    <?php endforeach; ?>
+</table>
+
+<?php elseif($act=='excl'): ?>
+
+
+<?php endif; ?>
+</div>

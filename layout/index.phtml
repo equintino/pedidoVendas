@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-br" lang="pt-br">
+<head>
+    <title>EMQDesenv - Aplicações</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="https://fonts.googleapis.com/css?family=Lovers+Quarrel|Miltonian+Tattoo|Sriracha" rel="stylesheet" /> 
+    <link rel="shortcut icon" href="emqdesenv.ico" type="image/x-icon" />
+    <meta name="description" content="emqdesenv - Aplicações" />
+    <meta name="keywords" content="sistemas, PHP" />
+    <meta name="author" content="Edmilson Messias Quintino" />
+
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link href="css/layout.css" rel="stylesheet" type="text/css" />
+    
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../web/js/ClientesCadastroJsonClient.js"></script>
+    
+    <script>
+        $(document).ready(function(){
+            $('<img src="../web/img/sair.png" title="Sair" height="28px" />').appendTo($('#sair'));
+            $('#sair img')
+                .css({
+                    float:'right'
+                });
+            $('#sair img').mouseover(function(){
+                $(this).css({
+                    cursor:'pointer'
+                })
+            })
+            $('#sair img').click(function(){
+                $(location).attr('href','../web/sair.php');
+            })
+            $('#flashes').fadeOut(2000,function(){
+                $(this).hide('slow');
+            })    
+        })
+    </script>
+</head>
+<body id="page">
+    <div id="main">
+        <!-- header -->
+        <div id="header"></div>
+        <span id="sair"></span>
+        <!-- content -->
+        <div id="content">
+            <div class="wrapper">
+                <div class="col-1">
+                    <div class="box">
+                        <div class="inner">
+                            <img src='emqdesenv.ico' />
+                            <!--<div class="title"><a href="index.php">Aplicações</a></div>-->
+                            <ul class="list">
+                                <li><span><a href="<?php echo Utils::createLink('cliente'); ?>" ><img src="img/clientes.png" alt="" title="Cadastro de Clientes" class="icon" />Clientes</a></span></li>
+                                <li><span><a href="<?php echo Utils::createLink('produto', array('act' => 'cad')); ?>" ><img src="img/produtos.png" alt="" title="Cadastro de Produtos" class="icon" />Produtos</a></span></li>
+                                <li><span><a href="<?php echo Utils::createLink('pedidos', array('act' => 'cad')); ?>" ><img src="img/pedidos.png" alt="" title="Cadastro de Pedidos" class="icon" />Pedidos/Faturar</a></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="indent">
+                        <?php if ($flashes): ?>
+                            <ul id="flashes">
+                            <?php foreach ($flashes as $flash): ?>
+                                <li><?php echo $flash; ?></li>
+                            <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
+                        <?php require $template; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- footer -->
+        <div id="footer">
+            <div class="indent">
+                <div class="fleft"><a href="">T.I.</a>, 2016 &copy; Copyright, All rights reserved</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

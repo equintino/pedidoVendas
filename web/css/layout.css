@@ -1,0 +1,55 @@
+#main {
+    width: 1100px;
+    margin: 0 auto;
+    position: relative;
+}
+
+#header {
+    height: 130px;
+    background: url(../img/fundo_menu.png) repeat right top;
+    height: 30px;
+}
+#header, #content, #footer {
+    font-size: 0.75em;
+}
+
+.col-1, .col-2, .col-3 {
+    float: left;
+}
+
+#page #content .col-1 {
+    width: 250px;
+    margin-right: 20px;
+}
+#page #content .col-2 {
+    width: 650px;
+    min-height: 500px;
+}
+#page{
+    background: white;
+}
+#header_cadastro{
+    padding: 2px;
+    height: 130px;
+    background: url(../img/fundo_menu.png) repeat right top;
+    height: 30px;
+    width: 85%;
+    margin: auto;
+}
+#conteudo_cadastro{
+    background-color: beige;
+    height: 400px;
+    width: 85%;
+    margin: auto;
+}
+#footer {
+    height: 89px;
+}
+.relatorio{
+    position: absolute;
+    top: 300px;
+    left: 10px;
+}
+.conteudo{
+    margin-top: 20px;
+}
