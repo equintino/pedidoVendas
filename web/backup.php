@@ -2,7 +2,7 @@
 $host = "localhost";//host do banco
 $user = "root";//usuario do banco
 $senha = "";//senha do banco 
-$db = 'estoque';
+$db = 'pedidoVendas';
 $dbc = mysql_connect($host,$user,$senha);
 $m   = mysql_select_db($db, $dbc);
 $sql = "show databases";//print_r($sql);die;
