@@ -130,17 +130,16 @@
 </style>
 <div id="menu">
     <ul>
-        <li><a href=<?= Utils::createLink('cliente',array('act'=>'cad')); ?>>Incluir</a></li>
-        <li><a href=<?= Utils::createLink('cliente',array('act'=>'list')); ?>>Listar</a></li>
+        <li><a href=<?= Utils::createLink('produto',array('act'=>'cad')); ?>>Incluir</a></li>
+        <li><a href=<?= Utils::createLink('produto',array('act'=>'list')); ?>>Listar</a></li>
     </ul>
     <?php if($act!='cad'){?>
-    <div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por clientes" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por clientes" /></div>
+    <div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por produtos" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por produtos" /></div>
     <?php } ?>
 </div>
 <div class="conteudo">
 <?php if($act=='cad'): ?>
-<h1>Cadastro de Clientes</h1>
-<!--<div id="saldo">Total de Clientes: <?= $quant ?></div>-->
+<h1>Cadastro de Produtos</h1>
 <form method="post" action="../paginas/add.php?act=cad" />
 <?php
 //[tipo_atividade] => [cnae] [tags] => [logradouro] => [importado_api] => [bloqueado] => [cidade_ibge] => ) 
@@ -231,17 +230,19 @@
 <input type="submit" value="Salvar" /> 
 </form>
 <?php elseif($act=='list'): 
-    $clientes_list_request=array('pagina'=>'1','registros_por_pagina'=>'50','apenas_importado_api'=>'N');
-    $dados=$cliente->ListarClientes($clientes_list_request);
+    $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>50,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
+    $dados=$produtos->ListarProdutos($produto_servico_list_request);
+    //echo '<pre>';
+    //print_r($dados->produto_servico_cadastro);die;
 ?>
-<div class="head">Lista de Clientes Cadastrados <span class="pag">(pág.<?= $dados->pagina ?>/<?= $dados->total_de_paginas ?>)</span>
+<div class="head">Lista de Produtos Cadastrados <span class="pag">(pág.<?= $dados->pagina ?>/<?= $dados->total_de_paginas ?>)</span>
 </div>
 <div class="total">total de registros <?= $dados->total_de_registros ?></div>
 <table>
-    <tr><th>Razão Social/Nome</th><th>CNPJ/CPF</th><th>Contato</th></tr>
+    <tr><th>Produto</th><th>Quant. em Estoque/Mínimo</th></tr>
     <?php 
-    foreach($dados->clientes_cadastro as $cliente): ?>
-    <tr class="razaosocial" linha="<?= $cliente->codigo_cliente_omie ?>"><td class="rs"><?= mb_strtoupper($cliente->razao_social,'utf-8').'<br><font size=1px>('.$cliente->codigo_cliente_integracao.')</font>' ?></td><td align=center ><?= $cliente->cnpj_cpf ?></td><td align=center ><?= @$cliente->contato ?></td><td class="edicao"><img title="Altera" height="12px" src="../web/img/editar.png" codigo="<?= $cliente->codigo_cliente_omie ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $cliente->codigo_cliente_omie ?>" razao="<?= mb_strtoupper($cliente->razao_social,'utf-8') ?>" /></td></tr>
+    foreach($dados->produto_servico_cadastro as $produto): ?>
+    <tr class="razaosocial" linha="<?= $produto->codigo_produto_omie ?>"><td class="rs"><?= mb_strtoupper($produto->descricao,'utf-8').'<br><font size=1px>('.$produto->codigo_produto_integracao.')</font>' ?></td><td align=center ><?php if($produto->quantidade_estoque < $produto->estoque_minimo){echo '<font color=red>'.$produto->quantidade_estoque.'</font>/'.$produto->estoque_minimo;}else{echo $produto->quantidade_estoque.'/'.$produto->estoque_minimo;} ?></td><td class="edicao"><img title="Altera" height="12px" src="../web/img/editar.png" codigo="<?= $produto->codigo_produto_omie ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $produto->codigo_produto_omie ?>" razao="<?= mb_strtoupper($produto->descricao,'utf-8') ?>" /></td></tr>
     <?php endforeach; ?>
 </table>
 

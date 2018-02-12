@@ -10,8 +10,8 @@
        $act=null;
     }
     
-    $cliente=new ClientesCadastroJsonClient();
-    
+    $produtos=new ProdutosCadastroJsonClient();
+    //print_r($produtos);die;
     if(!isset($quant))
         $quant=0;
     
@@ -19,15 +19,11 @@
         Flash::addFlash('Registro salvo com sucesso.');
     }
     
-////////// Clientes ////////////
+////////// Produtos ////////////
    if($act=='list'){
-    //// Listar Clientes ////
+    //// Listar Produtos ////
     
-    //print_r($dados->clientes_cadastro);
     
-    //// Listar Clientes Resumido ////
-    $clientes_list_request=array("pagina"=>1,"registros_por_pagina"=>50,"apenas_importado_api"=>"N");
-    //$dados=$cliente->ListarClientesResumido($clientes_list_request);
    }elseif($act=='excl'){
     //// Excluir Cliente ////
     $clientes_cadastro_chave=array("codigo_cliente_omie"=>$_GET['codigo'],"codigo_cliente_integracao"=>"");
