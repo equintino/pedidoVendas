@@ -136,28 +136,24 @@
         <li><a href=<?= Utils::createLink('cliente',array('act'=>'cad')); ?>>Incluir</a></li>
         <li><a href=<?= Utils::createLink('cliente',array('act'=>'list')); ?>>Listar</a></li>
     </ul>
+    <?php if($act!='cad'){?>
     <div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por clientes" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por clientes" /></div>
+    <?php } ?>
 </div>
 <div class="conteudo">
 <?php if($act=='cad'): ?>
 <h1>Cadastro de Clientes</h1>
-<div id="saldo">Total de Clientes: <?= $quant ?></div>
-<form method="post" action="../paginas/add.php" />
+<!--<div id="saldo">Total de Clientes: <?= $quant ?></div>-->
+<form method="post" action="../paginas/add.php?act=cad" />
+<?php
+    $variaveis=array('codigo_cliente_integracao','razao_social','nome_fantasia','cnpj_cpf','telefone1_ddd','telefone1_numero','email','contato');
+?>
 <table>
+    <?php for($x=0;$x<count($variaveis);$x++): ?>
     <tr>
-        <td align="right">Tags</td><td><input name="tag" type="text" size="10" maxlength="5" required></td><td>&nbsp&nbsp</td>
-        <td align="right">CNPJ/CPF</td><td><input name="cnpj_cpf" type="text" size="13" maxlength="13" required></td>
+        <td align="right"><?= $variaveis[$x] ?></td><td><input name="<?= $variaveis[$x] ?>" type="text" size="55" required></td>
     </tr>
-    <tr>
-        <td align="right">Razão Social/Nome Completo</td><td colspan="4"><input type="text" name="nome" /></td>
-    </tr>
-    <tr>
-        <td align="right">Valor</td><td><input neme="valor" type="text" size="10" /></td><td></td>
-        <td align="right">Entrada</td><td><input name="entrada" type="text" size="10"/></td>
-    </tr>
-    <tr>
-        <td align="right">Loja</td><td><input name="loja" type="text" size="10" /></td><td></td>
-    </tr>
+    <?php endfor ?>
 </table>
 <div class="botao">
     <input type="reset" value="Limpa"/>

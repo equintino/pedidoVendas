@@ -28,14 +28,6 @@
     //// Listar Clientes Resumido ////
     $clientes_list_request=array("pagina"=>1,"registros_por_pagina"=>50,"apenas_importado_api"=>"N");
     //$dados=$cliente->ListarClientesResumido($clientes_list_request);
-   }elseif($act=='cons'){
-    //// Consultar Clientes //// 
-   }elseif($act=='cad'){
-    //// Incluir Clientes ////
-    $clientes_cadastro=array("codigo_cliente_integracao"=>"CodigoInterno0001","email"=>"primeiro@ccliente.com.br","razao_social"=>"Primeiro Cliente  Ltda Me","nome_fantasia"=>"Primeiro Cliente");
-    $dados=$cliente->IncluirCliente($clientes_cadastro);
-   }elseif($act=='alt'){
-    //// Alterar Cliente ////
    }elseif($act=='excl'){
     //// Excluir Cliente ////
     $clientes_cadastro_chave=array("codigo_cliente_omie"=>$_GET['codigo'],"codigo_cliente_integracao"=>"");
