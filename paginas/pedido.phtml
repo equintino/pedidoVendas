@@ -28,11 +28,11 @@
                 var confirma=confirm('Confirma Exclusão de "'+razao+'"');
                 if(confirma){
                     var codigo=$(this).attr('codigo');
-                    $(location).attr('href','index.php?pagina=cliente&act=excl&codigo='+codigo+'')
+                    $(location).attr('href','index.php?pagina=produto&act=excl&codigo='+codigo+'')
                 }
             }else if($(this).attr('title')=='Altera'){
                 var codigo=$(this).attr('codigo');
-                $(location).attr('href','index.php?pagina=cliente&act=alt&omie='+codigo+'')
+                $(location).attr('href','index.php?pagina=produto&act=alt&codigo='+codigo+'')
             }
         })
         $('.procura img').mouseover(function(){
@@ -44,14 +44,14 @@
               if(code==13||e.keyCode==13){
                   var codigo=$('.procura :input').val();
                   if(codigo){
-                    $(location).attr('href','index.php?pagina=cliente&act=cons&codigo='+codigo+'')
+                    $(location).attr('href','index.php?pagina=produto&act=cons&codigo='+codigo+'')
                   }
               } 
         })
         $('.procura img').click(function(){
             var codigo=$('.procura :input').val();
               if(codigo){
-                $(location).attr('href','index.php?pagina=cliente&act=cons&codigo='+codigo+'')
+                $(location).attr('href','index.php?pagina=produto&act=cons&codigo='+codigo+'')
               }
         })
         $('.razaosocial').mouseover(function(){
@@ -60,7 +60,7 @@
         })
         $('.razaosocial').dblclick(function(){
             var codigo=$(this).attr('linha');
-            $(location).attr('href','index.php?pagina=cliente&act=cons&omie='+codigo+'')
+            $(location).attr('href','index.php?pagina=produto&act=cons&codigo='+codigo+'')
         })
         $(':submit').click(function(){
             var arr=new Array();
@@ -70,6 +70,9 @@
         })
         var pagina=null;
         $('.pagina').text(pag)
+        /*if(act=='excl'){
+            $(location).attr('href','index.php?pagina=produto&act=list');
+        }*/
     })
 </script>
 <style>
@@ -131,22 +134,20 @@
 </style>
 <div id="menu">
     <ul>
-        <li><a href=<?= Utils::createLink('cliente',array('act'=>'cad')); ?>>Incluir</a></li>
-        <li><a href=<?= Utils::createLink('cliente',array('act'=>'list')); ?>>Listar</a></li>
+        <li><a href=<?= Utils::createLink('pedido',array('act'=>'cad')); ?>>Incluir</a></li>
+        <li><a href=<?= Utils::createLink('pedido',array('act'=>'list')); ?>>Listar</a></li>
     </ul>
     <?php if($act!='cad'){?>
-    <div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por clientes" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por clientes" /></div>
+    <div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por produtos" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por produtos" /></div>
     <?php } ?>
-    <script>var pag="<?= strtoupper($_GET['pagina']); ?>";</script>
+    <script>var pag="PRÉ-VENDA";</script>
 </div>
 <div class="conteudo">
 <?php if($act=='cad'): ?>
-<h1>Cadastro de Clientes</h1>
-<!--<div id="saldo">Total de Clientes: <?= $quant ?></div>-->
-<form method="post" action="../paginas/add.php?act=cad" />
+<h1>Cadastro de Produtos</h1>
+<form method="post" action="../paginas/add.php?act=cad&pagina=produto" />
 <?php
-//[tipo_atividade] => [cnae] [tags] => [logradouro] => [importado_api] => [bloqueado] => [cidade_ibge] => ) 
-    $variaveis=array('codigo_cliente_integracao','razao_social','nome_fantasia','cnpj_cpf','telefone1_ddd','telefone1_numero','email','contato','endereco','endereco_numero','bairro','complemento','estado','cidade','cep','telefone2_ddd','telefone2_numero','fax_ddd','fax_numero','homepage','inscricao_estadual','inscricao_municipal','inscricao_suframa','produtor_rural','contribuinte','observacao','recomendacao_atraso');
+    $variaveis=array('codigo_produto_integracao','descricao','unidade','ncm','valor_unitario');
 ?>
 <table>
     <?php for($x=0;$x<count($variaveis);$x++): ?>
@@ -162,68 +163,65 @@
 <div id="painel"></div>
 </form>
 <?php elseif($act=='cons'):
-    @$codigo=$_GET['codigo'];
-    @$omie=$_GET['omie'];
-    if(!$codigo)$codigo='';
-    if(!$omie)$omie=0;
-    $clientes_cadastro_chave=array("codigo_cliente_omie"=>$omie,
-"codigo_cliente_integracao"=>$codigo);
-    $dados=$cliente->ConsultarCliente($clientes_cadastro_chave); 
+    @$codigo_produto=$_GET['codigo'];
+    if(!$codigo_produto)$codigo_produto=0;
+    $produto_servico_cadastro_chave=array("codigo_produto"=>$codigo_produto,"codigo_produto_integracao"=>"","codigo"=>"");
+    $dados=$produtos->ConsultarProduto($produto_servico_cadastro_chave);
 ?>
 <table>
-    <tr><th colspan="2">Dados do Cliente</th></tr>
+    <tr><th colspan="2">Detalhes do Produto</th></tr>
     <?php foreach($dados as $key => $item): ?>
     <tr><td><?= $key ?></td>
         <td>
             <?php
-                if($key=='tags'){
-                    for($x=0;$x<count($item);$x++){
-                        if($x<count($item)-1){
-                            echo $item[$x]->tag.',';
-                        }else{
-                            echo $item[$x]->tag;
+                if($key=='dadosIbpt'){
+                    foreach($item as $key2 => $item2){
+                        if($item2){
+                            echo $key2.': '.$item2.'&nbsp&nbsp&nbsp';
                         }
                     }
-                }elseif($key!='info'){
+                }elseif($key=='recomendacoes_fiscais'){
+                    foreach($item as $key2 => $item2){
+                        if($item2){
+                            echo $key2.': '.$item2.'&nbsp&nbsp&nbsp';
+                        }
+                    }
+                }else{
                     echo $item;
                 }
             ?>
         </td></tr>
     <?php endforeach; ?>
 </table>
-
 <?php elseif($act=='alt'): 
-    @$codigo=$_GET['codigo'];
-    @$omie=$_GET['omie'];
-    if(!$codigo)$codigo='';
-    if(!$omie)$omie=0;
-    $clientes_cadastro_chave=array("codigo_cliente_omie"=>$omie,
-"codigo_cliente_integracao"=>$codigo);
-    $dados=$cliente->ConsultarCliente($clientes_cadastro_chave); 
+    @$codigo_produto=$_GET['codigo'];
+    if(!$codigo_produto)$codigo_produto=0;
+    $produto_servico_cadastro_chave=array("codigo_produto"=>$codigo_produto,"codigo_produto_integracao"=>"","codigo"=>"");
+    $dados=$produtos->ConsultarProduto($produto_servico_cadastro_chave);
 ?>
-<form method="POST" action="../paginas/add.php?act=alt&pagina=cliente" name="alt">
+<form method="POST" action="../paginas/add.php?act=alt&pagina=produto" name="alt">
 <table>
-    <tr><th colspan="2">Dados do Cliente</th></tr>
-    <?php $tag=null; ?>
+    <tr><th colspan="2">Detalhe do Produto</th></tr>
     <?php foreach($dados as $key => $item): ?>
     <tr><td><?= $key ?></td>
         <td>
             <?php
-                if($key=='codigo_cliente_omie'||$key=='codigo_cliente_integracao'||$key=='codigo_pais'||$key=='pessoa_fisica'||$key=='exterior'||$key=='optante_simples_nacional'){
+                if($key=='codigo_produto'){
                     echo '<input type=hidden name='.$key.' value="'.$item.'" >';
                     echo $item;
-                }elseif($key=='tags'){
-                    $x=0;
-                    foreach($item as $y){
-                        if($x<count($item)-1){
-                            $tag .= $y->tag.',';
-                        }else{
-                            $tag .= $y->tag;
+                }elseif($key=='dadosIbpt'){
+                    foreach($item as $key2 => $item2){
+                        if($item2){
+                            echo $key2.': <input type=test name=dadosIbpt value="'.$item2.'"&nbsp&nbsp&nbsp';
                         }
-                        $x++;
                     }
-                    echo '<input type=text size=55 name=tags value="'.$tag.'" >';
-                }elseif($key!='info'){
+                }elseif($key=='recomendacoes_fiscais'){
+                    foreach($item as $key2 => $item2){
+                        if($item2){
+                            echo $key2.': <input type=test name=dadosIbpt value="'.$item2.'"&nbsp&nbsp&nbsp';
+                        }
+                    }
+                }else{
                     echo '<input type=text size=55px name='.$key.' value="'.$item.'" >';
                 }
             ?>
@@ -233,22 +231,23 @@
 <input type="submit" value="Salvar" /> 
 </form>
 <?php elseif($act=='list'): 
-    $clientes_list_request=array('pagina'=>'1','registros_por_pagina'=>'50','apenas_importado_api'=>'N');
-    $dados=$cliente->ListarClientes($clientes_list_request);
+    $pvpListarRequest=array("pagina"=>1,"registros_por_pagina"=>50,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
+    $dados=$pedido->ListarPedidos($pvpListarRequest);
+    //$value={"call":"ListarPedidos","app_key":"3303943460","app_secret":"8edb08391b6af27936d3daf0ca8aa07d"};
+    //json_encode($value);
+    //print_r(json_decode('{"call":"ListarPedidos","app_key":"3303943460","app_secret":"8edb08391b6af27936d3daf0ca8aa07d","param":[{"pagina":1,"registros_por_pagina":100,"apenas_importado_api":"N"}]}'));die;
+    //echo '<pre>';
+    print_r($dados);die;
 ?>
-<div class="head">Lista de Clientes Cadastrados <span class="pag">(pág.<?= $dados->pagina ?>/<?= $dados->total_de_paginas ?>)</span>
+<div class="head">Lista de Produtos Cadastrados <span class="pag">(pág.<?= $dados->pagina ?>/<?= $dados->total_de_paginas ?>)</span>
 </div>
 <div class="total">total de registros <?= $dados->total_de_registros ?></div>
 <table>
-    <tr><th>Razão Social/Nome</th><th>CNPJ/CPF</th><th>Contato</th></tr>
+    <tr><th>Código</th><th>Cód. Int.</th><th>Produto</th><th>Quant. em Estoque/Mínimo</th></tr>
     <?php 
-    foreach($dados->clientes_cadastro as $cliente): ?>
-    <tr class="razaosocial" linha="<?= $cliente->codigo_cliente_omie ?>"><td class="rs"><?= mb_strtoupper($cliente->razao_social,'utf-8').'<br><font size=1px>('.$cliente->codigo_cliente_integracao.')</font>' ?></td><td align=center ><?= $cliente->cnpj_cpf ?></td><td align=center ><?= @$cliente->contato ?></td><td class="edicao"><img title="Altera" height="12px" src="../web/img/editar.png" codigo="<?= $cliente->codigo_cliente_omie ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $cliente->codigo_cliente_omie ?>" razao="<?= mb_strtoupper($cliente->razao_social,'utf-8') ?>" /></td></tr>
+    foreach($dados->produto_servico_cadastro as $produto): ?>
+    <tr class="razaosocial" linha="<?= $produto->codigo_produto ?>"><td><?= $produto->codigo_produto ?></td><td><?= $produto->codigo_produto_integracao ?></td><td class="rs"><?= mb_strtoupper($produto->descricao,'utf-8') ?></td><td align=center ><?php if($produto->quantidade_estoque < $produto->estoque_minimo){echo '<font color=red>'.$produto->quantidade_estoque.'</font>/'.$produto->estoque_minimo;}else{echo $produto->quantidade_estoque.'/'.$produto->estoque_minimo;} ?></td><td class="edicao"><img title="Altera" height="12px" src="../web/img/editar.png" codigo="<?= $produto->codigo_produto ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $produto->codigo_produto ?>" razao="<?= mb_strtoupper($produto->descricao,'utf-8') ?>" /></td></tr>
     <?php endforeach; ?>
 </table>
-
-<?php elseif($act=='excl'): ?>
-
-
 <?php endif; ?>
 </div>

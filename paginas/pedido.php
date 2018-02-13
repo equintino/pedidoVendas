@@ -10,7 +10,7 @@
        $act=null;
     }
     
-    $produtos=new ProdutosCadastroJsonClient();
+    $pedido=new PedidoVendaProdutoJsonClient();
     if(!isset($quant))
         $quant=0;
     

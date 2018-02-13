@@ -38,7 +38,8 @@ class ProdutosCadastroJsonClient {
 			"app_key"=>OMIE_APP_KEY,
 			"app_secret"=>OMIE_APP_SECRET
 		);
-		return json_decode(file_get_contents(self::$_EndPoint."?JSON=".urlencode(json_encode($call))));
+                //print_r((json_encode($call)));die;
+		return @json_decode(file_get_contents(self::$_EndPoint."?JSON=".urlencode(json_encode($call))));
 	}
 
 	/**

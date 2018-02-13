@@ -46,7 +46,8 @@ final class index{
         'ModelValidador' => '../validacao/ModelValidador.php',
         'valida_cookies'  =>  '../validacao/valida_cookies.php',
         'ClientesCadastroJsonClient' => '../model/ClientesCadastroJsonClient.php',
-        'ProdutosCadastroJsonClient'=>'../model/ProdutosCadastroJsonClient.php'
+        'ProdutosCadastroJsonClient'=>'../model/ProdutosCadastroJsonClient.php',
+        'PedidoVendaProdutoJsonClient'=>'../model/PedidoVendaProdutoJsonClient.php'
     );
     if (!array_key_exists($nome, $classes)){
        die("A classe $nome não existe");
