@@ -20,17 +20,11 @@
     }
     
 ////////// Produtos ////////////
-   if($act=='list'){
-    //// Listar Produtos ////
-    
-    
-   }elseif($act=='excl'){
-    //// Excluir Cliente ////
-    $clientes_cadastro_chave=array("codigo_cliente_omie"=>$_GET['codigo'],"codigo_cliente_integracao"=>"");
-    $cliente->ExcluirCliente($clientes_cadastro_chave);
-    header('Location:index.php?pagina=cliente&act=list');
+   if($act=='excl'){
+    $produto_servico_cadastro_chave = array("codigo_produto" => $_GET['codigo'], "codigo_cliente_integracao" => "", "codigo" => "");
+    $produtos->ExcluirProduto($produto_servico_cadastro_chave);
+    header('Location:index.php?pagina=produto&act=list');
    }
-    
 ////////// Produtos ////////////  
 
 

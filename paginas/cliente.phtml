@@ -69,6 +69,8 @@
                 arr.push($(this).attr('name'));          
             })
         })
+        var pagina=null;
+        $('.pagina').text(pag)
     })
 </script>
 <style>
@@ -136,6 +138,7 @@
     <?php if($act!='cad'){?>
     <div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por clientes" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por clientes" /></div>
     <?php } ?>
+    <script>var pag="<?= strtoupper($_GET['pagina']); ?>";</script>
 </div>
 <div class="conteudo">
 <?php if($act=='cad'): ?>
