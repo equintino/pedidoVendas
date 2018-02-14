@@ -267,11 +267,13 @@
                     $dados_cliente=$cliente->ConsultarCliente($clientes_cadastro_chave);
                     //print_r($dados_cliente);die;
                     echo '<li><b>'.$dados_cliente->nome_fantasia.'</b></li>';
-                    $prev=Utils::dataform($triagem[$item]->data_previsao);
+                    $prev=Utils::datafatura($triagem[$item]->data_previsao);
                     //die;
+                    $cor=substr(strstr($prev,','),1);
+                    $fatura=strstr($prev,',',true);
                     //print_r(date_create('19/09/2018'));die;
                     //print_r($prev > date('Y-m-d'));die;
-                   if($prev > date('Y-m-d'))echo '<li>Faturamento atrasado</li>';
+                    echo '<li><font color='.$cor.'>'.$fatura.'</font></li>';
                 }
                 echo '</ul>';
         echo '</li></ul>';

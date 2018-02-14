@@ -97,11 +97,20 @@ final class Utils {
         //print_r(htmlspecialchars($string, ENT_QUOTES));
         return htmlspecialchars($string, ENT_QUOTES);
     }
-    public static function dataform($str){
-        $dia=substr($str,0,2);
-        $mes=substr($str,3,2);
-        $ano=substr($str,-4,4);
-        return $ano.'-'.$mes.'-'.$dia;
+    public static function datafatura($str){
+        $str=date($str);
+        $hoje=date('d/m/Y');
+        if($str < $hoje){
+            $cor='red';
+            $msg='Faturamento atrasado';
+        }elseif($str==$hoje){
+            $cor='green';
+            $msg='Vence hoje';
+        }elseif($str > $hoje){
+            $cor='blue';
+            $msg='Previsto para '.$str;
+        }
+        return $msg.','.$cor;
     }
 }
 ?>
