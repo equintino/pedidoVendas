@@ -265,14 +265,10 @@
                     echo '<li>Pedido Nº'.number_format($triagem[$item]->numero_pedido).'</li>';
                     $clientes_cadastro_chave=array('codigo_cliente_omie'=>$triagem[$item]->codigo_cliente);
                     $dados_cliente=$cliente->ConsultarCliente($clientes_cadastro_chave);
-                    //print_r($dados_cliente);die;
                     echo '<li><b>'.$dados_cliente->nome_fantasia.'</b></li>';
                     $prev=Utils::datafatura($triagem[$item]->data_previsao);
-                    //die;
                     $cor=substr(strstr($prev,','),1);
                     $fatura=strstr($prev,',',true);
-                    //print_r(date_create('19/09/2018'));die;
-                    //print_r($prev > date('Y-m-d'));die;
                     echo '<li><font color='.$cor.'>'.$fatura.'</font></li>';
                 }
                 echo '</ul>';

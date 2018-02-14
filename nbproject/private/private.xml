@@ -3,11 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Arquivos%20de%20programas/EasyPHP-DevServer-14.1VC9/data/localweb/projects/pedidoVendas/model/ClientesCadastroJsonClient.php</file>
-            <file>file:/C:/Arquivos%20de%20programas/EasyPHP-DevServer-14.1VC9/data/localweb/projects/pedidoVendas/paginas/pedido.phtml</file>
-            <file>file:/C:/Arquivos%20de%20programas/EasyPHP-DevServer-14.1VC9/data/localweb/projects/pedidoVendas/model/PedidoVendaProdutoJsonClient.php</file>
-            <file>file:/C:/Arquivos%20de%20programas/EasyPHP-DevServer-14.1VC9/data/localweb/projects/pedidoVendas/paginas/pedido.php</file>
-            <file>file:/C:/Arquivos%20de%20programas/EasyPHP-DevServer-14.1VC9/data/localweb/projects/pedidoVendas/util/Utils.php</file>
+            <file>file:/C:/xampp/htdocs/projetos/pedidoVendas/model/PedidoVendaProdutoJsonClient.php</file>
+            <file>file:/C:/xampp/htdocs/projetos/pedidoVendas/util/Utils.php</file>
+            <file>file:/C:/xampp/htdocs/projetos/pedidoVendas/paginas/pedido.phtml</file>
+            <file>file:/C:/xampp/htdocs/projetos/pedidoVendas/model/ClientesCadastroJsonClient.php</file>
+            <file>file:/C:/xampp/htdocs/projetos/pedidoVendas/paginas/pedido.php</file>
         </group>
     </open-files>
 </project-private>
