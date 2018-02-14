@@ -97,10 +97,13 @@ final class Utils {
         //print_r(htmlspecialchars($string, ENT_QUOTES));
         return htmlspecialchars($string, ENT_QUOTES);
     }
-    public static function datafatura($str){
+    public static function datafatura($str,$etapa=null){
         $str=date($str);
         $hoje=date('d/m/Y');
-        if($str < $hoje){
+        if($etapa=='60'||$etapa=='70'){
+            $cor='black';
+            $msg='Faturado';
+        }elseif($str < $hoje){
             $cor='red';
             $msg='Faturamento atrasado';
         }elseif($str==$hoje){
