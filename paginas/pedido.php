@@ -11,6 +11,7 @@
     }
     
     $pedido=new PedidoVendaProdutoJsonClient();
+    $cliente=new ClientesCadastroJsonClient();
     if(!isset($quant))
         $quant=0;
     

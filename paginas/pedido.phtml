@@ -231,15 +231,59 @@
 <input type="submit" value="Salvar" /> 
 </form>
 <?php elseif($act=='list'): 
-    $pvpListarRequest=array("pagina"=>1,"registros_por_pagina"=>50,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
+    $pvpListarRequest=array("pagina"=>1,"registros_por_pagina"=>50,"apenas_importado_api"=>"N");
     $dados=$pedido->ListarPedidos($pvpListarRequest);
-    //$value={"call":"ListarPedidos","app_key":"3303943460","app_secret":"8edb08391b6af27936d3daf0ca8aa07d"};
-    //json_encode($value);
-    //print_r(json_decode('{"call":"ListarPedidos","app_key":"3303943460","app_secret":"8edb08391b6af27936d3daf0ca8aa07d","param":[{"pagina":1,"registros_por_pagina":100,"apenas_importado_api":"N"}]}'));die;
+    $posicao=array('Pedido de Venda','Separar Estoque','Faturar','Faturado','Entrega');
+    foreach($dados->pedido_venda_produto as $key => $item){
+            if($item->cabecalho->etapa=='10'){
+                $triagem['Pedido de Venda']=$item->cabecalho;
+            }elseif($item->cabecalho->etapa=='20'){
+                $triagem['Separar Estoque']=$item->cabecalho;
+            }elseif($item->cabecalho->etapa=='50'){
+                $triagem['Faturar']=$item->cabecalho;
+            }elseif($item->cabecalho->etapa=='60'){
+                $triagem['Faturado']=$item->cabecalho;
+            }elseif($item->cabecalho->etapa=='70'){
+                $triagem['Entrega']=$item->cabecalho;
+            }
+    }
     //echo '<pre>';
-    print_r($dados);die;
+    //print_r($triagem);
+    //die;
+    /*$pvpStatusRequest=array('codigo_pedido'=>'111937242','codigo_pedido_integracao'=>'');*/
+    //codigo_cliente
+     $clientes_cadastro_chave=array("codigo_cliente_omie"=>0,"codigo_cliente_integracao"=>"");
+     //echo '<pre>';
+    //print_r($triagem);dir;
+    
+    echo '<ul>';
+    foreach($posicao as $item){
+        echo '<ul><li>';
+            echo $item;
+                echo '<ul>';
+                if(@$triagem[$item]->numero_pedido){
+                    echo '<li>Pedido Nº'.number_format($triagem[$item]->numero_pedido).'</li>';
+                    $clientes_cadastro_chave=array('codigo_cliente_omie'=>$triagem[$item]->codigo_cliente);
+                    $dados_cliente=$cliente->ConsultarCliente($clientes_cadastro_chave);
+                    //print_r($dados_cliente);die;
+                    echo '<li><b>'.$dados_cliente->nome_fantasia.'</b></li>';
+                    $prev=Utils::dataform($triagem[$item]->data_previsao);
+                    //die;
+                    //print_r(date_create('19/09/2018'));die;
+                    //print_r($prev > date('Y-m-d'));die;
+                   if($prev > date('Y-m-d'))echo '<li>Faturamento atrasado</li>';
+                }
+                echo '</ul>';
+        echo '</li></ul>';
+    }
+    echo '</ul>';
 ?>
-<div class="head">Lista de Produtos Cadastrados <span class="pag">(pág.<?= $dados->pagina ?>/<?= $dados->total_de_paginas ?>)</span>
+
+
+
+
+<?php die ?>
+<div class="head">Lista de Pedidos <span class="pag">(pág.<?= $dados->pagina ?>/<?= $dados->total_de_paginas ?>)</span>
 </div>
 <div class="total">total de registros <?= $dados->total_de_registros ?></div>
 <table>

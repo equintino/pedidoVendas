@@ -1,5 +1,5 @@
 <?php
-include '../config/OmieAppAuth.php';
+//include '../config/OmieAppAuth.php';
 /**
  * @service PedidoVendaProdutoJsonClient
  * @author omie
@@ -40,7 +40,7 @@ class PedidoVendaProdutoJsonClient {
 		);
                 //echo '<pre>';
                 //print_r(json_encode($call));              
-		return @json_decode(file_get_contents(self::$_EndPoint."?JSON=".urlencode(json_encode($call))));
+		return json_decode(file_get_contents(self::$_EndPoint."?JSON=".urlencode(json_encode($call))));
 	}
 
 	/**
