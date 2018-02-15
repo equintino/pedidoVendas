@@ -20,7 +20,7 @@
             width: '710px'
         })
         $('table tr:odd').css({
-            background: '#ccc'
+            //background: '#ccc'
         })
         $('td img').click(function(){
             if($(this).attr('title')=='Exclui'){
@@ -70,9 +70,6 @@
         })
         var pagina=null;
         $('.pagina').text(pag)
-        /*if(act=='excl'){
-            $(location).attr('href','index.php?pagina=produto&act=list');
-        }*/
     })
 </script>
 <style>
@@ -97,25 +94,27 @@
         float: right;
     }
     table{
-        width: 700px;
-    }
-    table td{
-        padding: 3px 10px;
-    }
-    table tr{
         background: rgba(216, 0, 0,0.1);
-    }
-    .rs{
-        width: 70%;
-    }
-    .ct{
-        align-content: center;
+        padding: 5px;
+        font-size: 15px;
     }
     table th{
         background: black;
         color: white;
         font-size: 20px;
         padding: 2px;
+    }
+    table td{
+        height: 18px;
+    }
+    form fieldset{
+        border: solid red;
+    }
+    .rs{
+        width: 70%;
+    }
+    .ct{
+        align-content: center;
     }
     .edicao{
         background-color: white;
@@ -131,6 +130,11 @@
     .procura img{
         margin-top: 2px;
     }
+    .valores{
+        //float: right;
+        background: #ccc;
+        //border: solid red;
+    }
 </style>
 <div id="menu">
     <ul>
@@ -145,14 +149,11 @@
 <div class="conteudo">
 <?php if($act=='cad'): ?>
 <h1>Inclusão de Pedido de Venda</h1>
-<form method="post" action="../paginas/add.php?act=cad&pagina=pedido" />
+<form method="post" action="../paginas/add.php?act=cad&pagina=pedido" >
 <?php
 $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codigo_cliente] => 3792227 [codigo_pedido_integracao] => 1518658537 [data_previsao] => 14/02/2018 [etapa] => 50 [numero_pedido] => 68319 [quantidade_itens] => 1 ) [det] => Array ( [0] => stdClass Object ( [ide] => stdClass Object ( [codigo_item_integracao] => 4422421 [simples_nacional] => S ) [imposto] => stdClass Object ( [cofins_padrao] => stdClass Object ( [aliq_cofins] => 3 [base_cofins] => 400 [cod_sit_trib_cofins] => 01 [tipo_calculo_cofins] => B [valor_cofins] => 12 ) [icms_sn] => stdClass Object ( [aliq_icms_sn] => 1.25 [cod_sit_trib_icms_sn] => 101 [origem_icms_sn] => 0 [valor_credito_icms_sn] => 5 ) [ipi] => stdClass Object ( [cod_sit_trib_ipi] => 51 ) [pis_padrao] => stdClass Object ( [aliq_pis] => 0.65 [base_pis] => 400 [cod_sit_trib_pis] => 01 [tipo_calculo_pis] => B [valor_pis] => 2.6 ) ) [inf_adic] => stdClass Object ( [peso_bruto] => 150 [peso_liquido] => 150 ) [produto] => stdClass Object ( [cfop] => 5.102 [codigo_produto] => 4422421 [descricao] => Telefone Celular X [ncm] => 9403.30.00 [quantidade] => 1 [tipo_desconto] => V [unidade] => UN [valor_desconto] => 0 [valor_mercadoria] => 200 [valor_total] => 200 [valor_unitario] => 200 ) ) ) [frete] => stdClass Object ( [codigo_transportadora] => 2239663 [modalidade] => 1 [placa] => ABC1234 [placa_estado] => SP [valor_frete] => 30 ) [informacoes_adicionais] => stdClass Object ( [codigo_categoria] => 1.01.03 [codigo_conta_corrente] => 11850365 [consumidor_final] => S [enviar_email] => N ) [lista_parcelas] => stdClass Object ( [parcela] => Array ( [0] => stdClass Object ( [data_vencimento] => 15/02/2018 [numero_parcela] => 1 [percentual] => 50 [valor] => 100 ) [1] => stdClass Object ( [data_vencimento] => 22/05/2018 [numero_parcela] => 2 [percentual] => 50 [valor] => 100 ) ) ) [total_pedido] => stdClass Object ( [base_calculo_icms] => 200 [valor_mercadorias] => 200 [valor_total_pedido] => 200 ) )';
-    //echo '<pre>';
-    //print_r($json);die;
-    $variaveis=array('Cliente','Previsão de Faturamento','Vendedor','Número de Parcelas','Cenário Fiscal');
-    $variaveis2=array('Total de Mercadorias','Total do Desconto','Total de IPI','Total de ICMS ST','Valor Total do Pedido');//valores preenchidos automaticamente
-    $variaveis3=array(
+    $variaveis1=array('mercadorias'=>'Mercadorias','desconto'=>'Desconto','ipi'=>'IPI','icms'=>'ICMS ST','vPedido'=>'Valor do Pedido');//valores preenchidos automaticamente
+    $variaveis2=array(
                         'Itens da Venda'=>array(
                             'Novo Item'=>array(
                                 'Produto'
@@ -174,15 +175,34 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
                           'Preencha aqui as observações desta venda (elas não serão exibidas na Nota Fiscal)'  
                         )
         );
-    echo '<pre>';
-    print_r($variaveis3);die;
 ?>
 <table>
-    <?php for($x=0;$x<count($variaveis);$x++): ?>
+    <tr><td colspan="4">Cliente</td><td align="center">Previsão Faturamento</td></tr>
+    <tr><td colspan="4"><input name="cliente" type="text" size=65 required></td><td><input name="previsao" type="date" value="<?= date('Y-m-d') ?>" /></td></tr>
+</table>
+<fieldset>
+    <legend>Totais</legend>
+<table>
     <tr>
-        <td align="right"><?= $variaveis[$x] ?></td><td><input name="<?= $variaveis[$x] ?>" type="text" size="55" required></td>
+        <?php foreach($variaveis1 as $key => $item): ?>
+            <?php if($item=='IPI'||$item=='ICMS ST'||$item=='Desconto'): ?>
+                <td width="30%" ><?= $item ?> </td>
+            <?php elseif($item=='Valor do Pedido'): ?>
+                <td align="center" ><?= $item ?> </td>
+            <?php else: ?>
+                <td><?= $item ?></td>
+            <?php endif ?>
+        <?php endforeach; ?>
     </tr>
-    <?php endfor ?>
+    <tr>       
+        <?php foreach($variaveis1 as $key => $item): ?>
+        <td class="valores" align="right">0,00 </td>
+        <?php endforeach; ?>
+    </tr>
+</table></fieldset>
+<table>
+    <tr><td>Vendedor</td><td>Número de Parcelas</td><td></td></tr>
+    <tr><td><input name="vendedor" type="text" ></td><td><input name="parcelas" type="text" /></td></tr>
 </table>
 <div class="botao">
     <input type="reset" value="Limpa"/>
@@ -190,88 +210,13 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
 </div>
 <div id="painel"></div>
 </form>
-<?php elseif($act=='cons'):
-    @$codigo_produto=$_GET['codigo'];
-    if(!$codigo_produto)$codigo_produto=0;
-    $produto_servico_cadastro_chave=array("codigo_produto"=>$codigo_produto,"codigo_produto_integracao"=>"","codigo"=>"");
-    $dados=$produtos->ConsultarProduto($produto_servico_cadastro_chave);
-?>
-<table>
-    <tr><th colspan="2">Detalhes do Produto</th></tr>
-    <?php foreach($dados as $key => $item): ?>
-    <tr><td><?= $key ?></td>
-        <td>
-            <?php
-                if($key=='dadosIbpt'){
-                    foreach($item as $key2 => $item2){
-                        if($item2){
-                            echo $key2.': '.$item2.'&nbsp&nbsp&nbsp';
-                        }
-                    }
-                }elseif($key=='recomendacoes_fiscais'){
-                    foreach($item as $key2 => $item2){
-                        if($item2){
-                            echo $key2.': '.$item2.'&nbsp&nbsp&nbsp';
-                        }
-                    }
-                }else{
-                    echo $item;
-                }
-            ?>
-        </td></tr>
-    <?php endforeach; ?>
-</table>
-<?php elseif($act=='alt'): 
-    @$codigo_produto=$_GET['codigo'];
-    if(!$codigo_produto)$codigo_produto=0;
-    $produto_servico_cadastro_chave=array("codigo_produto"=>$codigo_produto,"codigo_produto_integracao"=>"","codigo"=>"");
-    $dados=$produtos->ConsultarProduto($produto_servico_cadastro_chave);
-?>
-<form method="POST" action="../paginas/add.php?act=alt&pagina=produto" name="alt">
-<table>
-    <tr><th colspan="2">Detalhe do Produto</th></tr>
-    <?php foreach($dados as $key => $item): ?>
-    <tr><td><?= $key ?></td>
-        <td>
-            <?php
-                if($key=='codigo_produto'){
-                    echo '<input type=hidden name='.$key.' value="'.$item.'" >';
-                    echo $item;
-                }elseif($key=='dadosIbpt'){
-                    foreach($item as $key2 => $item2){
-                        if($item2){
-                            echo $key2.': <input type=test name=dadosIbpt value="'.$item2.'"&nbsp&nbsp&nbsp';
-                        }
-                    }
-                }elseif($key=='recomendacoes_fiscais'){
-                    foreach($item as $key2 => $item2){
-                        if($item2){
-                            echo $key2.': <input type=test name=dadosIbpt value="'.$item2.'"&nbsp&nbsp&nbsp';
-                        }
-                    }
-                }else{
-                    echo '<input type=text size=55px name='.$key.' value="'.$item.'" >';
-                }
-            ?>
-        </td></tr>
-    <?php endforeach; ?>
-</table>
-<input type="submit" value="Salvar" /> 
-</form>
-<?php elseif($act=='list'): 
-    
-?>
+<?php elseif($act=='cons'):?>
 
-<div class="head">Lista de Pedidos <span class="pag">(pág.<?= $dados->pagina ?>/<?= $dados->total_de_paginas ?>)</span>
-</div>
-<div class="total">total de registros <?= $dados->total_de_registros ?></div>
-<table>
-    <tr><th>Código</th><th>Cód. Int.</th><th>Produto</th><th>Quant. em Estoque/Mínimo</th></tr>
-    <?php 
-    foreach($dados->produto_servico_cadastro as $produto): ?>
-    <tr class="razaosocial" linha="<?= $produto->codigo_produto ?>"><td><?= $produto->codigo_produto ?></td><td><?= $produto->codigo_produto_integracao ?></td><td class="rs"><?= mb_strtoupper($produto->descricao,'utf-8') ?></td><td align=center ><?php if($produto->quantidade_estoque < $produto->estoque_minimo){echo '<font color=red>'.$produto->quantidade_estoque.'</font>/'.$produto->estoque_minimo;}else{echo $produto->quantidade_estoque.'/'.$produto->estoque_minimo;} ?></td><td class="edicao"><img title="Altera" height="12px" src="../web/img/editar.png" codigo="<?= $produto->codigo_produto ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $produto->codigo_produto ?>" razao="<?= mb_strtoupper($produto->descricao,'utf-8') ?>" /></td></tr>
-    <?php endforeach; ?>
-</table>
+<?php elseif($act=='alt'): ?>
+
+<?php elseif($act=='list'): ?>
+
+
 <?php else: 
     $pvpListarRequest=array("pagina"=>1,"registros_por_pagina"=>50,"apenas_importado_api"=>"N");
     $dados=$pedido->ListarPedidos($pvpListarRequest);
