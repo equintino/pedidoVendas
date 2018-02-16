@@ -1,10 +1,5 @@
 <script>
     $(document).ready(function(){
-        $('#saldo').css({
-            float:'right',
-            position: 'relative',
-            top: '-50px'
-        })
         $('.botao').css({
             float: 'right',
             marginRight: '20px'
@@ -12,12 +7,12 @@
         $('.botao input').css({
             borderRadius: '0 0 5px 5px',
             fontWeight: '600',
-            backgroundColor: '#63a9c1',
+            //backgroundColor: '#63a9c1',
             color: '#111f46',
             padding: '1px 4px'
         })
         $('form').css({
-            width: '710px'
+            //width: '710px'
         })
         $('table tr:odd').css({
             //background: '#ccc'
@@ -70,6 +65,10 @@
         })
         var pagina=null;
         $('.pagina').text(pag)
+        $('.outrosItens span').click(function(){
+            $('.outrosItens span').css('background','white');
+            $(this).css('background','#ccc');
+        })
     })
 </script>
 <style>
@@ -93,22 +92,63 @@
     .total{
         float: right;
     }
-    table{
-        background: rgba(216, 0, 0,0.1);
+    form{
+        width: 710px;
+    }
+    .tabela{
+        //background: rgba(216, 0, 0,0.1);
         padding: 5px;
         font-size: 15px;
+        width: 685px;
     }
-    table th{
+    .tabela th{
         background: black;
         color: white;
         font-size: 20px;
         padding: 2px;
     }
-    table td{
+    .tabela td{
         height: 18px;
     }
-    form fieldset{
-        border: solid red;
+    .fTotais{
+        border: 2px solid rgba(216, 0, 0,0.1);
+        background: rgba(216, 0, 0,0.1);
+        border-radius: 5px;
+        width: 650px;
+    }
+    .fTotais table{
+        margin: auto;
+    }
+    .fTotais table td{
+        padding: 5px;
+    }
+    fieldset legend{
+        font-size: 15px;
+    }
+    .divVendas{
+        //border: solid black;
+        width: 710px;
+        height: 200px;
+        overflow: auto;
+    }
+    .divVendas table{
+        width: 900px;
+        white-space: nowrap;
+    }
+    .divVendas table td{
+        font-size: 10px;
+        //border: solid red;
+        padding: 0 5px;
+    }
+    .iVendas{
+        //border: solid #ccc;
+        height: 170px;
+    }
+    .outrosItens span{
+        padding: 2px 20px;
+    }
+    .outrosItens .item{
+        background: #ccc;
     }
     .rs{
         width: 70%;
@@ -131,9 +171,7 @@
         margin-top: 2px;
     }
     .valores{
-        //float: right;
         background: #ccc;
-        //border: solid red;
     }
 </style>
 <div id="menu">
@@ -151,7 +189,8 @@
 <h1>Inclusão de Pedido de Venda</h1>
 <form method="post" action="../paginas/add.php?act=cad&pagina=pedido" >
 <?php
-$json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codigo_cliente] => 3792227 [codigo_pedido_integracao] => 1518658537 [data_previsao] => 14/02/2018 [etapa] => 50 [numero_pedido] => 68319 [quantidade_itens] => 1 ) [det] => Array ( [0] => stdClass Object ( [ide] => stdClass Object ( [codigo_item_integracao] => 4422421 [simples_nacional] => S ) [imposto] => stdClass Object ( [cofins_padrao] => stdClass Object ( [aliq_cofins] => 3 [base_cofins] => 400 [cod_sit_trib_cofins] => 01 [tipo_calculo_cofins] => B [valor_cofins] => 12 ) [icms_sn] => stdClass Object ( [aliq_icms_sn] => 1.25 [cod_sit_trib_icms_sn] => 101 [origem_icms_sn] => 0 [valor_credito_icms_sn] => 5 ) [ipi] => stdClass Object ( [cod_sit_trib_ipi] => 51 ) [pis_padrao] => stdClass Object ( [aliq_pis] => 0.65 [base_pis] => 400 [cod_sit_trib_pis] => 01 [tipo_calculo_pis] => B [valor_pis] => 2.6 ) ) [inf_adic] => stdClass Object ( [peso_bruto] => 150 [peso_liquido] => 150 ) [produto] => stdClass Object ( [cfop] => 5.102 [codigo_produto] => 4422421 [descricao] => Telefone Celular X [ncm] => 9403.30.00 [quantidade] => 1 [tipo_desconto] => V [unidade] => UN [valor_desconto] => 0 [valor_mercadoria] => 200 [valor_total] => 200 [valor_unitario] => 200 ) ) ) [frete] => stdClass Object ( [codigo_transportadora] => 2239663 [modalidade] => 1 [placa] => ABC1234 [placa_estado] => SP [valor_frete] => 30 ) [informacoes_adicionais] => stdClass Object ( [codigo_categoria] => 1.01.03 [codigo_conta_corrente] => 11850365 [consumidor_final] => S [enviar_email] => N ) [lista_parcelas] => stdClass Object ( [parcela] => Array ( [0] => stdClass Object ( [data_vencimento] => 15/02/2018 [numero_parcela] => 1 [percentual] => 50 [valor] => 100 ) [1] => stdClass Object ( [data_vencimento] => 22/05/2018 [numero_parcela] => 2 [percentual] => 50 [valor] => 100 ) ) ) [total_pedido] => stdClass Object ( [base_calculo_icms] => 200 [valor_mercadorias] => 200 [valor_total_pedido] => 200 ) )';
+$json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codigo_cliente] => 3792227 [codigo_pedido_integracao] => 1518658537 [data_previsao] => 14/02/2018 [etapa] => 50 [numero_pedido] => 68319 [quantidade_itens] => 1 ) '
+        . '[det] => Array ( [0] => stdClass Object ( [ide] => stdClass Object ( [codigo_item_integracao] => 4422421 [simples_nacional] => S ) [imposto] => stdClass Object ( [cofins_padrao] => stdClass Object ( [aliq_cofins] => 3 [base_cofins] => 400 [cod_sit_trib_cofins] => 01 [tipo_calculo_cofins] => B [valor_cofins] => 12 ) [icms_sn] => stdClass Object ( [aliq_icms_sn] => 1.25 [cod_sit_trib_icms_sn] => 101 [origem_icms_sn] => 0 [valor_credito_icms_sn] => 5 ) [ipi] => stdClass Object ( [cod_sit_trib_ipi] => 51 ) [pis_padrao] => stdClass Object ( [aliq_pis] => 0.65 [base_pis] => 400 [cod_sit_trib_pis] => 01 [tipo_calculo_pis] => B [valor_pis] => 2.6 ) ) [inf_adic] => stdClass Object ( [peso_bruto] => 150 [peso_liquido] => 150 ) [produto] => stdClass Object ( [cfop] => 5.102 [codigo_produto] => 4422421 [descricao] => Telefone Celular X [ncm] => 9403.30.00 [quantidade] => 1 [tipo_desconto] => V [unidade] => UN [valor_desconto] => 0 [valor_mercadoria] => 200 [valor_total] => 200 [valor_unitario] => 200 ) ) ) [frete] => stdClass Object ( [codigo_transportadora] => 2239663 [modalidade] => 1 [placa] => ABC1234 [placa_estado] => SP [valor_frete] => 30 ) [informacoes_adicionais] => stdClass Object ( [codigo_categoria] => 1.01.03 [codigo_conta_corrente] => 11850365 [consumidor_final] => S [enviar_email] => N ) [lista_parcelas] => stdClass Object ( [parcela] => Array ( [0] => stdClass Object ( [data_vencimento] => 15/02/2018 [numero_parcela] => 1 [percentual] => 50 [valor] => 100 ) [1] => stdClass Object ( [data_vencimento] => 22/05/2018 [numero_parcela] => 2 [percentual] => 50 [valor] => 100 ) ) ) [total_pedido] => stdClass Object ( [base_calculo_icms] => 200 [valor_mercadorias] => 200 [valor_total_pedido] => 200 ) )';
     $variaveis1=array('mercadorias'=>'Mercadorias','desconto'=>'Desconto','ipi'=>'IPI','icms'=>'ICMS ST','vPedido'=>'Valor do Pedido');//valores preenchidos automaticamente
     $variaveis2=array(
                         'Itens da Venda'=>array(
@@ -176,17 +215,19 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
                         )
         );
 ?>
-<table>
+<table class="tabela">
     <tr><td colspan="4">Cliente</td><td align="center">Previsão Faturamento</td></tr>
-    <tr><td colspan="4"><input name="cliente" type="text" size=65 required></td><td><input name="previsao" type="date" value="<?= date('Y-m-d') ?>" /></td></tr>
+    <tr><td colspan="4"><input name="cliente" type="text" size=65 required></td><td><input name="previsao" type="date" value="<?= date('d/m/Y') ?>" /></td></tr>
+    <tr><td><font size=2px>CNPJ/CPF</font></td><tr>
+    <tr><td><input type="text" name="cnpj_cpf" /></td></tr>
 </table>
-<fieldset>
-    <legend>Totais</legend>
+<fieldset class="fTotais">
+    <legend> Totais </legend>
 <table>
     <tr>
         <?php foreach($variaveis1 as $key => $item): ?>
             <?php if($item=='IPI'||$item=='ICMS ST'||$item=='Desconto'): ?>
-                <td width="30%" ><?= $item ?> </td>
+                <td width="20%" align="right"><?= $item ?> </td>
             <?php elseif($item=='Valor do Pedido'): ?>
                 <td align="center" ><?= $item ?> </td>
             <?php else: ?>
@@ -200,10 +241,32 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
         <?php endforeach; ?>
     </tr>
 </table></fieldset>
-<table>
+<table class="tabela">
     <tr><td>Vendedor</td><td>Número de Parcelas</td><td></td></tr>
     <tr><td><input name="vendedor" type="text" ></td><td><input name="parcelas" type="text" /></td></tr>
 </table>
+    <?php
+        $itens=array('Código','Descrição do Produto','Quantidade','Preço Unitário de Venda','Valor Total do Ítem','Desconto','ICMS','ICMS ST','IPI','PIS','COFINS','Frete','Seguro','Outras Despesas','ICMS Desonerado','Gera Conta a Receber','Peso Líquido (Kg)',"Peso Bruto (Kg)");
+    ?>
+    <div class="outrosItens">
+        <span class="item">Itens de Venda</span>
+        <span class="frete">Frete/Despesas</span>
+        <span class="info">Informações Adcionais</span>
+        <span class="parcela">Parcelas</span>        
+        <span class="email">E-mail</span>
+        <span class="observacao">OBS</span>
+    </div>
+    <div class="divVendas">
+<!--<fieldset class="iVendas">-->
+        <table>
+            <tr>
+            <?php foreach($itens as $key => $item): ?>
+            <td><?= $item ?></td>
+            <?php endforeach; ?>
+            </tr>
+        </table>
+<!--</fieldset>-->
+    </div>
 <div class="botao">
     <input type="reset" value="Limpa"/>
     <input type="submit" value="Confirma"/>
@@ -220,8 +283,8 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
 <?php else: 
     $pvpListarRequest=array("pagina"=>1,"registros_por_pagina"=>50,"apenas_importado_api"=>"N");
     $dados=$pedido->ListarPedidos($pvpListarRequest);
-    echo '<pre>';
-    //print_r($dados->pedido_venda_produto[4]);
+    //echo '<pre>';
+    //print_r($dados->pedido_venda_produto[3]);
     $posicao=array('Pedido de Venda','Separar Estoque','Faturar','Faturado','Entrega');
     foreach($dados->pedido_venda_produto as $key => $item){
             if($item->cabecalho->etapa=='10'){

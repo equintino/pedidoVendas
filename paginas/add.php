@@ -72,6 +72,13 @@
                 die;
             }
         }
+    }elseif($pagina=='pedido'){
+        /*    stdClass Object ( 
+        [cabecalho] => stdClass Object ( 
+            [bloqueado] => N [codigo_cliente] => 3792227 [codigo_pedido_integracao] => 1518658537 [data_previsao] => 14/02/2018 [etapa] => 50 [numero_pedido] => 68319 [quantidade_itens] => 1 
+                                        ) */
+        echo '<pre>';
+        print_r($_POST);die;
     }
     
     include '../dao/dao.php';
