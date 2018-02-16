@@ -1,4 +1,5 @@
 <script>
+    arr=new Array();
     $(document).ready(function(){
         $('.botao').css({
             float: 'right',
@@ -65,10 +66,54 @@
         })
         var pagina=null;
         $('.pagina').text(pag)
+            $('#pnl2').css('display','none')          
+            $('#pnl3').css('display','none')          
+            $('#pnl4').css('display','none')
+            $('#pnl5').css('display','none')           
+            $('#pnl6').css('display','none')
         $('.outrosItens span').click(function(){
-            $('.outrosItens span').css('background','white');
+            $('.outrosItens span').css({
+                background: 'white'
+            });
             $(this).css('background','#ccc');
+            $('#pnl1').css('display','none')
+            $('#pnl2').css('display','none')          
+            $('#pnl3').css('display','none')          
+            $('#pnl4').css('display','none')
+            $('#pnl5').css('display','none')           
+            $('#pnl6').css('display','none')
+            //alert($(this).text());
+            if($(this).text()=='Itens de Venda'){
+                $('#pnl1').css('display','block')
+            }else if($(this).text()=='Frete/Despesas'){
+                $('#pnl2').css('display','block')
+            }else if($(this).text()=='Informações Adcionais'){
+                $('#pnl3').css('display','block')
+            }else if($(this).text()=='Parcelas'){
+                $('#pnl4').css('display','block')
+            }else if($(this).text()=='E-mail'){
+                $('#pnl5').css('display','block')
+            }else if($(this).text()=='OBS'){
+                $('#pnl6').css('display','block')
+            }
         })
+        $('#botoes .bnt,.outrosItens span').mouseover(function(){
+            $(this).css('cursor','pointer')
+        })
+        var cont=0;
+        $('#botoes .bnt').click(function(){
+            if($(this).text()=='Novo Ítem'){
+                /*$.each(arr,function(){
+                    alert(arr[cont]);
+                    cont++;
+                })*/
+            }else if($(this).text()=='Editar Ítem'){
+                
+            }else if($(this).text()=='Excluir Ítem'){
+                
+            }
+        })
+        
     })
 </script>
 <style>
@@ -130,6 +175,7 @@
         width: 710px;
         height: 200px;
         overflow: auto;
+        margin-top: 10px;
     }
     .divVendas table{
         width: 900px;
@@ -149,6 +195,15 @@
     }
     .outrosItens .item{
         background: #ccc;
+    }
+    #botoes{
+        margin-top: 10px;
+    }
+    #botoes .bnt{
+        margin: 5px;
+        background: orange;
+        color: white;
+        padding: 0 5px;
     }
     .rs{
         width: 70%;
@@ -193,10 +248,8 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
         . '[det] => Array ( [0] => stdClass Object ( [ide] => stdClass Object ( [codigo_item_integracao] => 4422421 [simples_nacional] => S ) [imposto] => stdClass Object ( [cofins_padrao] => stdClass Object ( [aliq_cofins] => 3 [base_cofins] => 400 [cod_sit_trib_cofins] => 01 [tipo_calculo_cofins] => B [valor_cofins] => 12 ) [icms_sn] => stdClass Object ( [aliq_icms_sn] => 1.25 [cod_sit_trib_icms_sn] => 101 [origem_icms_sn] => 0 [valor_credito_icms_sn] => 5 ) [ipi] => stdClass Object ( [cod_sit_trib_ipi] => 51 ) [pis_padrao] => stdClass Object ( [aliq_pis] => 0.65 [base_pis] => 400 [cod_sit_trib_pis] => 01 [tipo_calculo_pis] => B [valor_pis] => 2.6 ) ) [inf_adic] => stdClass Object ( [peso_bruto] => 150 [peso_liquido] => 150 ) [produto] => stdClass Object ( [cfop] => 5.102 [codigo_produto] => 4422421 [descricao] => Telefone Celular X [ncm] => 9403.30.00 [quantidade] => 1 [tipo_desconto] => V [unidade] => UN [valor_desconto] => 0 [valor_mercadoria] => 200 [valor_total] => 200 [valor_unitario] => 200 ) ) ) [frete] => stdClass Object ( [codigo_transportadora] => 2239663 [modalidade] => 1 [placa] => ABC1234 [placa_estado] => SP [valor_frete] => 30 ) [informacoes_adicionais] => stdClass Object ( [codigo_categoria] => 1.01.03 [codigo_conta_corrente] => 11850365 [consumidor_final] => S [enviar_email] => N ) [lista_parcelas] => stdClass Object ( [parcela] => Array ( [0] => stdClass Object ( [data_vencimento] => 15/02/2018 [numero_parcela] => 1 [percentual] => 50 [valor] => 100 ) [1] => stdClass Object ( [data_vencimento] => 22/05/2018 [numero_parcela] => 2 [percentual] => 50 [valor] => 100 ) ) ) [total_pedido] => stdClass Object ( [base_calculo_icms] => 200 [valor_mercadorias] => 200 [valor_total_pedido] => 200 ) )';
     $variaveis1=array('mercadorias'=>'Mercadorias','desconto'=>'Desconto','ipi'=>'IPI','icms'=>'ICMS ST','vPedido'=>'Valor do Pedido');//valores preenchidos automaticamente
     $variaveis2=array(
-                        'Itens da Venda'=>array(
-                            'Novo Item'=>array(
-                                'Produto'
-                            )
+                        'Ítens de Venda'=>array(
+                            'Código','Descrição do Produto','Quantidade','Preço Unitário de Venda','Valor Total do Ítem','Desconto','ICMS','ICMS ST','IPI','PIS','COFINS','Frete','Seguros','Outras Despesas','ICMS Desonerado','Gera Conta a Receber','Peso Líquido(Kg)','Peso Bruto(Kg)','CFOP'
                         ),
                         'Frete e Outras Despesas'=>array(
                             'Transportadora','Tipo do Frete','Placa do Veícula','UF','RNTRC (ANTT)','Quantidade de Volumes','Espécie dos Volumes','Marca dos Volumes','Numeração dos Volumes','Peso Líquido (Kg)','Peso Bruto (Kg)','Valor do Frete','Valor do Seguro','Número do Lacre','Outras Despesas Acessórias','O transporte será realizado com veículo próprio'
@@ -245,9 +298,6 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
     <tr><td>Vendedor</td><td>Número de Parcelas</td><td></td></tr>
     <tr><td><input name="vendedor" type="text" ></td><td><input name="parcelas" type="text" /></td></tr>
 </table>
-    <?php
-        $itens=array('Código','Descrição do Produto','Quantidade','Preço Unitário de Venda','Valor Total do Ítem','Desconto','ICMS','ICMS ST','IPI','PIS','COFINS','Frete','Seguro','Outras Despesas','ICMS Desonerado','Gera Conta a Receber','Peso Líquido (Kg)',"Peso Bruto (Kg)");
-    ?>
     <div class="outrosItens">
         <span class="item">Itens de Venda</span>
         <span class="frete">Frete/Despesas</span>
@@ -256,17 +306,88 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
         <span class="email">E-mail</span>
         <span class="observacao">OBS</span>
     </div>
-    <div class="divVendas">
-<!--<fieldset class="iVendas">-->
-        <table>
-            <tr>
-            <?php foreach($itens as $key => $item): ?>
-            <td><?= $item ?></td>
-            <?php endforeach; ?>
-            </tr>
-        </table>
-<!--</fieldset>-->
-    </div>
+        <div id='pnl1'>
+            <div id='botoes'>
+                <span class='bnt'>Novo Ítem</span><span class='bnt'>Editar Ítem</span><span class='bnt'>Excluir Ítem</span>
+            </div>
+            <div class="divVendas dItem">
+        <!--<fieldset class="iVendas">-->
+                <table>
+                    <tr>
+                    <?php foreach($variaveis2['Ítens de Venda'] as $key => $item): ?>
+                    <td><?= $item ?></td>
+                    <script>arr.push('<?=$item?>')</script>
+                    <?php endforeach; ?>
+                    </tr>
+                </table>
+        <!--</fieldset>-->
+            </div>
+        </div>
+        <div id='pnl2'>
+            <div class="divVendas dItem">
+        <!--<fieldset class="iVendas">-->
+                <table>
+                    <tr>
+                    <?php foreach($variaveis2['Frete e Outras Despesas'] as $key => $item): ?>
+                    <td><?= $item ?></td>
+                    <?php endforeach; ?>
+                    </tr>
+                </table>
+        <!--</fieldset>-->
+            </div>
+        </div>
+        <div id='pnl3'>
+            <div class="divVendas dItem">
+        <!--<fieldset class="iVendas">-->
+                <table>
+                    <tr>
+                    <?php foreach($variaveis2['Informações Adcionais'] as $key => $item): ?>
+                    <td><?= $item ?></td>
+                    <?php endforeach; ?>
+                    </tr>
+                </table>
+        <!--</fieldset>-->
+            </div>
+        </div>
+        <div id='pnl4'>
+            <div class="divVendas dItem">
+        <!--<fieldset class="iVendas">-->
+                <table>
+                    <tr>
+                    <?php foreach($variaveis2['Parcelas'] as $key => $item): ?>
+                    <td><?= $item ?></td>
+                    <?php endforeach; ?>
+                    </tr>
+                </table>
+        <!--</fieldset>-->
+            </div>
+        </div>
+        <div id='pnl5'>
+            <div class="divVendas dItem">
+        <!--<fieldset class="iVendas">-->
+                <table>
+                    <tr>
+                    <?php foreach($variaveis2['E-mail para o Cliente'] as $key => $item): ?>
+                    <td><?= $item ?></td>
+                    <?php endforeach; ?>
+                    </tr>
+                </table>
+        <!--</fieldset>-->
+            </div>
+        </div>
+        <div id='pnl6'>
+            <div class="divVendas dItem">
+        <!--<fieldset class="iVendas">-->
+                <table>
+                    <tr>
+                    <?php foreach($variaveis2['Observações'] as $key => $item): ?>
+                    <td><?= $item ?></td>
+                    <?php endforeach; ?>
+                    </tr>
+                </table>
+        <!--</fieldset>-->
+            </div>
+        </div>
 <div class="botao">
     <input type="reset" value="Limpa"/>
     <input type="submit" value="Confirma"/>
