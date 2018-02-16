@@ -82,7 +82,6 @@
             $('#pnl4').css('display','none')
             $('#pnl5').css('display','none')           
             $('#pnl6').css('display','none')
-            //alert($(this).text());
             if($(this).text()=='Itens de Venda'){
                 $('#pnl1').css('display','block')
             }else if($(this).text()=='Frete/Despesas'){
@@ -101,12 +100,15 @@
             $(this).css('cursor','pointer')
         })
         var cont=0;
+        $('.novo').hide();
         $('#botoes .bnt').click(function(){
             if($(this).text()=='Novo Ítem'){
-                /*$.each(arr,function(){
-                    alert(arr[cont]);
+                $.each(arr,function(){
+                    //alert(arr[cont]);
                     cont++;
-                })*/
+                })
+                $('.novo').show()
+                //$('.divVendas').append(text('aqui'))
             }else if($(this).text()=='Editar Ítem'){
                 
             }else if($(this).text()=='Excluir Ítem'){
@@ -317,6 +319,11 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
                     <?php foreach($variaveis2['Ítens de Venda'] as $key => $item): ?>
                     <td><?= $item ?></td>
                     <script>arr.push('<?=$item?>')</script>
+                    <?php endforeach; ?>
+                    </tr>
+                    <tr class='novo'>
+                    <?php foreach($variaveis2['Ítens de Venda'] as $key => $item): ?>
+                        <td><input type='text' name='<?= $item ?>' /></td>
                     <?php endforeach; ?>
                     </tr>
                 </table>

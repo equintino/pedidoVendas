@@ -143,7 +143,7 @@
 <?php if($act=='cad'): ?>
 <h1>Cadastro de Clientes</h1>
 <!--<div id="saldo">Total de Clientes: <?= $quant ?></div>-->
-<form method="post" action="../paginas/add.php?act=cad" />
+<form method="post" action="../paginas/add.php?act=cad&pagina=cliente" />
 <?php
 //[tipo_atividade] => [cnae] [tags] => [logradouro] => [importado_api] => [bloqueado] => [cidade_ibge] => ) 
     $variaveis=array('codigo_cliente_integracao','razao_social','nome_fantasia','cnpj_cpf','telefone1_ddd','telefone1_numero','email','contato','endereco','endereco_numero','bairro','complemento','estado','cidade','cep','telefone2_ddd','telefone2_numero','fax_ddd','fax_numero','homepage','inscricao_estadual','inscricao_municipal','inscricao_suframa','produtor_rural','contribuinte','observacao','recomendacao_atraso');
@@ -151,7 +151,7 @@
 <table>
     <?php for($x=0;$x<count($variaveis);$x++): ?>
     <tr>
-        <td align="right"><?= $variaveis[$x] ?></td><td><input name="<?= $variaveis[$x] ?>" type="text" size="55" required></td>
+        <td align="right"><?= $variaveis[$x] ?></td><td><input name="<?= $variaveis[$x] ?>" type="text" size="55" ></td>
     </tr>
     <?php endfor ?>
 </table>
