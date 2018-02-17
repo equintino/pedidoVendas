@@ -54,14 +54,41 @@
                 $(location).attr('href','index.php?pagina=cliente&act=cons&codigo='+codigo+'')
               }
         })
-        $('.razaosocial').mouseover(function(){
-            $(this).css('cursor','pointer')
-            $(this).attr('title','dê um duplo clique para ver detalhes.')
-        })
-        $('.razaosocial').dblclick(function(){
-            var codigo=$(this).attr('linha');
-            $(location).attr('href','index.php?pagina=cliente&act=cons&omie='+codigo+'')
-        })
+        
+        if(seleciona!=1){
+            $('.razaosocial').mouseover(function(){
+                $(this).css('cursor','pointer')
+                $(this).attr('title','dê um duplo clique para ver detalhes.')
+            })
+            $('.razaosocial').dblclick(function(){
+                var codigo=$(this).attr('linha');
+                $(location).attr('href','index.php?pagina=cliente&act=cons&omie='+codigo+'')
+            })
+        }else{
+            $('.razaosocial').css({
+               background: 'white'
+            })
+            $('.razaosocial td').css({
+                borderBottom: '1px solid #ccc'
+            })
+            $('.razaosocial').mouseover(function(){
+                $(this).css('cursor','pointer')
+                $(this).css('background','silver')
+                $(this).mouseleave(function(){
+                    $('.razaosocial').css('background','white')
+                })
+                $(this).click(function(){
+                    var codigo=$(this).attr('linha');
+                    var razao=$(this).attr('razao');
+                    var cnpj_cpf=$(this).attr('cnpj_cpf');
+                    var contato=$(this).attr('contato');
+                    //alert([codigo,razao,cnpj_cpf,contato]);
+                    $(location).attr('href','index.php?pagina=pedido&act=cad&codigo='+codigo+'&razao='+razao+'&cnpj_cpf='+cnpj_cpf+'&contato='+contato+'')
+                })
+            })
+        }
+        
+        
         $(':submit').click(function(){
             var arr=new Array();
             $(':input').each(function(){
@@ -134,7 +161,7 @@
         <li><a href=<?= Utils::createLink('cliente',array('act'=>'cad')); ?>>Incluir</a></li>
         <li><a href=<?= Utils::createLink('cliente',array('act'=>'list')); ?>>Listar</a></li>
     </ul>
-    <?php if($act!='cad'){?>
+    <?php if($act!='cad' && $seleciona!=1){?>
     <div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por clientes" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por clientes" /></div>
     <?php } ?>
     <script>var pag="<?= strtoupper($_GET['pagina']); ?>";</script>
@@ -236,14 +263,18 @@
     $clientes_list_request=array('pagina'=>'1','registros_por_pagina'=>'50','apenas_importado_api'=>'N');
     $dados=$cliente->ListarClientes($clientes_list_request);
 ?>
-<div class="head">Lista de Clientes Cadastrados <span class="pag">(pág.<?= $dados->pagina ?>/<?= $dados->total_de_paginas ?>)</span>
+<div class="head"><?php if($seleciona!=1){
+        echo 'Lista de Clientes Cadastrados';
+    }else{ 
+        echo 'Slecione Um Cliente Abaixo';
+    }; ?> <span class="pag">(pág.<?= $dados->pagina ?>/<?= $dados->total_de_paginas ?>)</span>
 </div>
 <div class="total">total de registros <?= $dados->total_de_registros ?></div>
 <table>
     <tr><th>Razão Social/Nome</th><th>CNPJ/CPF</th><th>Contato</th></tr>
     <?php 
     foreach($dados->clientes_cadastro as $cliente): ?>
-    <tr class="razaosocial" linha="<?= $cliente->codigo_cliente_omie ?>"><td class="rs"><?= mb_strtoupper($cliente->razao_social,'utf-8').'<br><font size=1px>('.$cliente->codigo_cliente_integracao.')</font>' ?></td><td align=center ><?= $cliente->cnpj_cpf ?></td><td align=center ><?= @$cliente->contato ?></td><td class="edicao"><img title="Altera" height="12px" src="../web/img/editar.png" codigo="<?= $cliente->codigo_cliente_omie ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $cliente->codigo_cliente_omie ?>" razao="<?= mb_strtoupper($cliente->razao_social,'utf-8') ?>" /></td></tr>
+    <tr class="razaosocial" linha="<?= $cliente->codigo_cliente_omie ?>" razao='<?= $cliente->razao_social ?>' cnpj_cpf='<?= $cliente->cnpj_cpf ?>' contato='<?= @$cliente->contato ?>'><td class="rs" ><?= mb_strtoupper($cliente->razao_social,'utf-8').'<br><font size=1px>('.$cliente->codigo_cliente_integracao.')</font>' ?></td><td align=center ><?= $cliente->cnpj_cpf ?></td><td align=center ><?= @$cliente->contato ?></td><?php if(@$seleciona!=1):?><td class="edicao"><img title="Altera" height="12px" src="../web/img/editar.png" codigo="<?= $cliente->codigo_cliente_omie ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $cliente->codigo_cliente_omie ?>" razao="<?= mb_strtoupper($cliente->razao_social,'utf-8') ?>" /></td><?php endif ?></tr>
     <?php endforeach; ?>
 </table>
 

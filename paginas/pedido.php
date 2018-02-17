@@ -1,6 +1,28 @@
 <meta charset="utf-8" >
 <?php
+    include '../paginas/janela.php';
+
     @$excl=$_GET['excl'];
+    if(array_key_exists('razao', $_GET)){
+        $razao=$_GET['razao'];
+    }else{
+        $razao=null;
+    }
+    if(array_key_exists('codigo', $_GET)){
+        $codigo_cliente=$_GET['codigo'];
+    }else{
+        $produto_cliente=null;
+    }
+    if(array_key_exists('cnpj_cpf', $_GET)){
+        $cnpj_cpf=$_GET['cnpj_cpf'];
+    }else{
+        $cnpj_cpf=null;
+    }
+    if(array_key_exists('contato', $_GET)){
+        $contato=$_GET['contato'];
+    }else{
+        $contato=null;
+    }
     if($excl==1){
         print_r($_GET);die;
     }

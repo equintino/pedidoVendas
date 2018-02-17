@@ -115,7 +115,15 @@
                 
             }
         })
-        
+        $('.tabela img').click(function(){
+            $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1')
+        })
+        /*$('.novo input').click(function(){
+            if($(this).attr('name')=='Código'){
+                //$(location).attr('href','../paginas/janela.php')
+            }
+        })*/
+        //alert($('.window').text());
     })
 </script>
 <style>
@@ -161,10 +169,11 @@
         border: 2px solid rgba(216, 0, 0,0.1);
         background: rgba(216, 0, 0,0.1);
         border-radius: 5px;
-        width: 650px;
+        width: 530px;
     }
     .fTotais table{
         margin: auto;
+        font-size: 13px;
     }
     .fTotais table td{
         padding: 5px;
@@ -272,9 +281,9 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
 ?>
 <table class="tabela">
     <tr><td colspan="4">Cliente</td><td align="center">Previsão Faturamento</td></tr>
-    <tr><td colspan="4"><input name="cliente" type="text" size=65 required></td><td><input name="previsao" type="date" value="<?= date('d/m/Y') ?>" /></td></tr>
+    <tr><td colspan="4"><input name="cliente" type="text" size=65 value="<?= $razao ?>" required> <img src="../web/img/lupa.png" height="14px" title="Pesquisar cliente"/> </td><td><input name="previsao" type="date" value="<?= date('d/m/Y') ?>" /></td></tr>
     <tr><td><font size=2px>CNPJ/CPF</font></td><tr>
-    <tr><td><input type="text" name="cnpj_cpf" /></td></tr>
+    <tr><td><input type="text" name="cnpj_cpf" value="<?= $cnpj_cpf ?>"/></td></tr>
 </table>
 <fieldset class="fTotais">
     <legend> Totais </legend>
