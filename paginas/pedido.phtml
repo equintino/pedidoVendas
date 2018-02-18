@@ -123,13 +123,47 @@
         })
         $('.novo input').each(function(){
             //alert($(this).attr('name'));
-            if($(this).attr('name')=='Preço Unitário de Venda'){
+            if($(this).attr('name')=='Quantidade'){
                     //$(this).val().maskMoney({symbol:'R$ ',showSymbol:true, thousands:'.', decimal:',', symbolStay: true});
                 //$(this).maskMoney('mask', 1999.99);
-                //$(this).mask('###.###.###.##0,0', {reverse: true});
-                alert($(this).val());
+                $(this).mask('################', {reverse: true});
+                var quantidade=$(this).val();
+                $(this).keyup(function(){
+                    var algarismo1=qEstoque.length;
+                    var algarismo2=$(this).val().length;
+                    var zero=algarismo1-algarismo2;
+                    //alert(zero);
+                    switch(zero){
+                        case 1:
+                            zero='0';
+                            break;
+                        case 2:
+                            zero='00';
+                            break;
+                        case 3:
+                            zero='000';
+                            break;
+                        default:
+                            zero='';
+                    }
+                    var quantidade=zero+$(this).val();
+                    //alert(quantidade);
+                    //alert([algarismo,quantidade]);
+                    //alert(quantidade > qEstoque);
+                    if(quantidade > qEstoque){
+                        //alert(quantidade);
+                        alert('Quantidade em Estoque '+qEstoque+'');
+                        $(this).val(qEstoque);
+                    }
+                    /*if($.isNumeric($(this).val()){
+                        alert($(this).val());
+                    }*/
+                })
+                
+                alert(quantidade);
             }
         })
+        //alert($('.novo input').attr('name','Quantidade'));
         //alert($('.window').text());
     })
 </script>
