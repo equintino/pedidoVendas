@@ -1,3 +1,6 @@
+<head>
+  <script src="https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
+</head>
 <script>
     arr=new Array();
     $(document).ready(function(){
@@ -118,11 +121,15 @@
         $('.tabela img').click(function(){
             $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1')
         })
-        /*$('.novo input').click(function(){
-            if($(this).attr('name')=='Código'){
-                //$(location).attr('href','../paginas/janela.php')
+        $('.novo input').each(function(){
+            //alert($(this).attr('name'));
+            if($(this).attr('name')=='Preço Unitário de Venda'){
+                    //$(this).val().maskMoney({symbol:'R$ ',showSymbol:true, thousands:'.', decimal:',', symbolStay: true});
+                //$(this).maskMoney('mask', 1999.99);
+                //$(this).mask('###.###.###.##0,0', {reverse: true});
+                alert($(this).val());
             }
-        })*/
+        })
         //alert($('.window').text());
     })
 </script>
@@ -325,6 +332,7 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
         <!--<fieldset class="iVendas">-->
                 <table>
                     <tr>
+                    <?php $ref=1; ?>
                     <?php foreach($variaveis2['Ítens de Venda'] as $key => $item): ?>
                     <td><?= $item ?></td>
                     <script>arr.push('<?=$item?>')</script>
@@ -333,7 +341,7 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
                     <tr class='novo'>
                     <?php foreach($variaveis2['Ítens de Venda'] as $key => $item): ?>
                         <td><input type='text' name='<?= $item ?>' /></td>
-                    <?php endforeach; ?>
+                    <?php $ref++; endforeach; ?>
                     </tr>
                 </table>
         <!--</fieldset>-->

@@ -28,6 +28,7 @@
                     $(id).show();	
  		});              
                 $('.novo input').click(function(){
+                    //alert($(this).attr('name'));
                     if($(this).attr('name')=='Código'){
                         $("a[rel=modal]").trigger("click")
                     }
