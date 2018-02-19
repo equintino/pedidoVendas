@@ -105,6 +105,15 @@
         var cont=0;
         $('.novo').hide();
         $('#botoes .bnt').click(function(){
+            if(!$('.razao input').val()){
+                alert('Preenche campo "CLIENTE"');
+                $('.razao input').focus();
+                return false;
+            }else if(!$('.cnpj input').val()){
+                alert('Preenche campo "CNPJ/CPF"');
+                $('.cnpj input').focus();
+                return false;
+            }
             if($(this).text()=='Novo Ítem'){
                 $.each(arr,function(){
                     //alert(arr[cont]);
@@ -173,10 +182,12 @@
                         //alert(quantidade);
                         alert('Quantidade em Estoque '+qEstoque+'');
                         $(this).val(qEstoque);
+                        total=parseInt(pUnitario)*parseInt(qEstoque);
                         $('.novo input').each(function(){
-                            if($(this).attr('name')=='Valor Total do Ítem'){
-                                total=parseInt(pUnitario)*parseInt(qEstoque);
-                                $(this).val(numeroParaMoeda(total));
+                            if($(this).attr('name')=='Desconto'){
+                                novoValor=total-(total*$(this).val()/100);
+                            }else if($(this).attr('name')=='Valor Total do Ítem'){
+                                $(this).val(numeroParaMoeda(novoTotal));
                             }  
                         })
                     }
@@ -362,9 +373,9 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
 ?>
 <table class="tabela">
     <tr><td colspan="4">Cliente</td><td align="center">Previsão Faturamento</td></tr>
-    <tr><td colspan="4"><input name="cliente" type="text" size=65 value="<?= $razao ?>" required> <img src="../web/img/lupa.png" height="14px" title="Pesquisar cliente"/> </td><td><input name="previsao" type="date" value="<?= date('d/m/Y') ?>" /></td></tr>
+    <tr><td colspan="4" class="razao"><input type="hidden" name="codigo_cliente" value="<?=$codigo_cliente ?>" /><input name="cliente" type="text" size=65 value="<?= $razao ?>" required> <img src="../web/img/lupa.png" height="14px" title="Pesquisar cliente"/> </td><td><input name="previsao" type="date" value="<?= date('d/m/Y') ?>" /></td></tr>
     <tr><td><font size=2px>CNPJ/CPF</font></td><tr>
-    <tr><td><input type="text" name="cnpj_cpf" value="<?= $cnpj_cpf ?>"/></td></tr>
+    <tr><td class="cnpj"><input type="text" name="cnpj_cpf" value="<?= $cnpj_cpf ?>"/></td></tr>
 </table>
 <fieldset class="fTotais">
     <legend> Totais </legend>

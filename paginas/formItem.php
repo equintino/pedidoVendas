@@ -81,7 +81,7 @@
     <tr><th>Descrição</th><th>Quant. Estoque</th><th>Preço Unitário</th></tr>        
 <?php
     foreach($dados->produto_servico_cadastro as $prod){ ?>
-    <?php //echo'<pre>';print_r($prod); ?>
+    <?php echo'<pre>';print_r($prod); ?>
     <?php $vUnitario=number_format($prod->valor_unitario,'2',',','.');?>
     <tr codigo="<?= $prod->codigo_produto ?>" pUnitario="<?= $vUnitario ?>" qEstoque="<?= $prod->quantidade_estoque ?>"><td align="center" ><?= $prod->descricao ?></td><td align="center"><?= $prod->quantidade_estoque ?></td><td align='right'><?= $vUnitario ?></td></tr>
     <?php } ?>

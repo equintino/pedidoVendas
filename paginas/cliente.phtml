@@ -78,12 +78,12 @@
                     $('.razaosocial').css('background','white')
                 })
                 $(this).click(function(){
-                    var codigo=$(this).attr('linha');
+                    var codigo_cliente=$(this).attr('linha');
                     var razao=$(this).attr('razao');
                     var cnpj_cpf=$(this).attr('cnpj_cpf');
                     var contato=$(this).attr('contato');
                     //alert([codigo,razao,cnpj_cpf,contato]);
-                    $(location).attr('href','index.php?pagina=pedido&act=cad&codigo='+codigo+'&razao='+razao+'&cnpj_cpf='+cnpj_cpf+'&contato='+contato+'')
+                    $(location).attr('href','index.php?pagina=pedido&act=cad&codigo_cliente='+codigo_cliente+'&razao='+razao+'&cnpj_cpf='+cnpj_cpf+'&contato='+contato+'')
                 })
             })
         }

@@ -8,8 +8,8 @@
     }else{
         $razao=null;
     }
-    if(array_key_exists('codigo', $_GET)){
-        $codigo_cliente=$_GET['codigo'];
+    if(array_key_exists('codigo_cliente', $_GET)){
+        $codigo_cliente=$_GET['codigo_cliente'];
     }else{
         $produto_cliente=null;
     }
