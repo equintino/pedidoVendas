@@ -30,10 +30,10 @@
                            $(this).val(pUnitario);
                            break;
                         case 'Quantidade':
-                           $(this).val(1);
+                           $(this).val(null);
                            break;
                         case 'Valor Total do Ítem':
-                           $(this).val(pUnitario);
+                           $(this).val(null);
                            break;
                     }
                 })

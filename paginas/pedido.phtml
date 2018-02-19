@@ -146,18 +146,28 @@
                         default:
                             zero='';
                     }
+                    //alert(zero);
                     var quantidade=zero+$(this).val();
                     //alert(quantidade);
                     //alert([algarismo,quantidade]);
                     //alert(quantidade > qEstoque);
                     //alert($('.novo input')attr('name','Valor Total do Ítem'));
                     $('.novo input').each(function(){
-                        if($(this).attr('name')=='Valor Total do Ítem'){
+                        if($(this).attr('name')=='Desconto'){
+                            $(this).mask('000', {reverse: true});
+                            desconto=total-(total*$(this).val()/100);
+                            $('.novo input').each(function(){
+                                if($(this).attr('name')=='Valor Total do Ítem'){
+                                    $(this).val(numeroParaMoeda(desconto));
+                                }  
+                            })
+                        }else if($(this).attr('name')=='Valor Total do Ítem'){
                             $(this).mask('###.###.###.###,##', {reverse: true});
-                            var total=parseInt(pUnitario)*parseInt(quantidade);
+                            //alert(desconto);
+                            total=parseInt(pUnitario)*parseInt(quantidade);
                             $(this).val(numeroParaMoeda(total));
                             //(pUnitario);
-                        }  
+                        }
                     })
                     if(quantidade > qEstoque){
                         //alert(quantidade);
@@ -165,7 +175,7 @@
                         $(this).val(qEstoque);
                         $('.novo input').each(function(){
                             if($(this).attr('name')=='Valor Total do Ítem'){
-                                var total=parseInt(pUnitario)*parseInt(qEstoque);
+                                total=parseInt(pUnitario)*parseInt(qEstoque);
                                 $(this).val(numeroParaMoeda(total));
                             }  
                         })
@@ -175,9 +185,17 @@
                     }*/
                     //alert($(this).attr('Valor Total do Ítem').val());
                     
+                })                            
+            }else if($(this).attr('name')=='Desconto'){
+                $(this).keyup(function(){
+                    desconto=total-(total*$(this).val()/100);
+                    $('.novo input').each(function(){
+                        if($(this).attr('name')=='Valor Total do Ítem'){
+                            $(this).val(numeroParaMoeda(desconto));
+                        }  
+                    })
+                    
                 })
-                
-                //alert(quantidade);
             }
         })
         //alert($('.novo input').attr('name','Quantidade'));
@@ -390,7 +408,11 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
                     <tr>
                     <?php $ref=1; ?>
                     <?php foreach($variaveis2['Ítens de Venda'] as $key => $item): ?>
-                    <td><?= $item ?></td>
+                        <?php if($item=='Desconto'): ?>
+                            <td><?= $item ?>(%)</td>
+                        <?php else: ?>
+                            <td><?= $item ?></td>
+                        <?php endif ?>
                     <script>arr.push('<?=$item?>')</script>
                     <?php endforeach; ?>
                     </tr>
