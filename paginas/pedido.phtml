@@ -150,22 +150,44 @@
                     //alert(quantidade);
                     //alert([algarismo,quantidade]);
                     //alert(quantidade > qEstoque);
+                    //alert($('.novo input')attr('name','Valor Total do Ítem'));
+                    $('.novo input').each(function(){
+                        if($(this).attr('name')=='Valor Total do Ítem'){
+                            $(this).mask('###.###.###.###,##', {reverse: true});
+                            var total=parseInt(pUnitario)*parseInt(quantidade);
+                            $(this).val(numeroParaMoeda(total));
+                            //(pUnitario);
+                        }  
+                    })
                     if(quantidade > qEstoque){
                         //alert(quantidade);
                         alert('Quantidade em Estoque '+qEstoque+'');
                         $(this).val(qEstoque);
+                        $('.novo input').each(function(){
+                            if($(this).attr('name')=='Valor Total do Ítem'){
+                                var total=parseInt(pUnitario)*parseInt(qEstoque);
+                                $(this).val(numeroParaMoeda(total));
+                            }  
+                        })
                     }
                     /*if($.isNumeric($(this).val()){
                         alert($(this).val());
                     }*/
+                    //alert($(this).attr('Valor Total do Ítem').val());
+                    
                 })
                 
-                alert(quantidade);
+                //alert(quantidade);
             }
         })
         //alert($('.novo input').attr('name','Quantidade'));
         //alert($('.window').text());
     })
+    function numeroParaMoeda(n, c, d, t)
+    {
+        c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
+        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+    }
 </script>
 <style>
     #menu ul {

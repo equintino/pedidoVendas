@@ -12,10 +12,10 @@
             $(this).click(function(){
                 var descricao=$(this).text();
                 var codigo=$(this).attr('codigo');
-                var pUnitario=$(this).attr('pUnitario');
+                pUnitario=$(this).attr('pUnitario');
                 qEstoque=$(this).attr('qEstoque');
                 
-                alert(qEstoque);
+                //alert(qEstoque);
                 //alert($('.novo td').attr('ref'));
                 $('.novo input').each(function(){
                     var z=$(this).attr('name');
@@ -27,6 +27,12 @@
                            $(this).val(descricao);
                            break;
                         case 'Preço Unitário de Venda':
+                           $(this).val(pUnitario);
+                           break;
+                        case 'Quantidade':
+                           $(this).val(1);
+                           break;
+                        case 'Valor Total do Ítem':
                            $(this).val(pUnitario);
                            break;
                     }
