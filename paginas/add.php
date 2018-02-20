@@ -73,6 +73,27 @@
             }
         }
     }elseif($pagina=='pedido'){
+        print_r($_POST);
+        $codigo_pedido_integracao=00001;
+        include '../model/PedidoVendaProdutoJsonClient.php';
+        
+        ///// cabecalho /////
+        $cabecalho=new cabecalho();
+        $cabecalho->bloqueado='N';
+        $cabecalho->codigo_cliente=$_POST['codigo_cliente'];
+        $cabecalho->codigo_pedido_integracao=$codigo_pedido_integracao;
+        $cabecalho->data_previsao=$_POST['previsao'];
+        $cabecalho->etapa=10;
+        $cabecalho->numero_pedido='';
+        $cabecalho->quantidade_itens='';
+        
+        ///// det /////
+        $det=new det();
+        $det->ide->codigo_item=$_POST['Código'];
+        //$det->
+        
+                echo '<pre>';
+        print_r([$cabecalho,$det]);die;
         /*
        
    *****************************************************
