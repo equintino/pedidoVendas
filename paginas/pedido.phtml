@@ -132,7 +132,8 @@
         })
         $('.novo input').each(function(){
             //alert($(this).attr('name'));
-            if($(this).attr('name')=='Quantidade'){
+            if($(this).attr('name')=='quantidade'){
+                //alert($(this).attr('name'));
                     //$(this).val().maskMoney({symbol:'R$ ',showSymbol:true, thousands:'.', decimal:',', symbolStay: true});
                 //$(this).maskMoney('mask', 1999.99);
                 $(this).mask('################', {reverse: true});
@@ -162,18 +163,18 @@
                     //alert(quantidade > qEstoque);
                     //alert($('.novo input')attr('name','Valor Total do Ítem'));
                     $('.novo input').each(function(){
-                        if($(this).attr('name')=='Desconto'){
+                        if($(this).attr('name')=='pDesconto'){
                             $(this).mask('000', {reverse: true});
                             desconto=total-(total*$(this).val()/100);
                             $('.novo input').each(function(){
-                                if($(this).attr('name')=='Valor Total do Ítem'){
-                                    $(this).val(numeroParaMoeda(desconto));
+                                if($(this).attr('name')=='vTotal'){
+                                    $(this).val(numeroParaMoeda(pDesconto));
                                 }  
                             })
-                        }else if($(this).attr('name')=='Valor Total do Ítem'){
+                        }else if($(this).attr('name')=='vTotal'){
                             $(this).mask('###.###.###.###,##', {reverse: true});
                             //alert(desconto);
-                            total=parseInt(pUnitario)*parseInt(quantidade);
+                            total=parseInt(vUnitario)*parseInt(quantidade);
                             $(this).val(numeroParaMoeda(total));
                             //(pUnitario);
                         }
@@ -182,11 +183,11 @@
                         //alert(quantidade);
                         alert('Quantidade em Estoque '+qEstoque+'');
                         $(this).val(qEstoque);
-                        total=parseInt(pUnitario)*parseInt(qEstoque);
+                        total=parseInt(vUnitario)*parseInt(qEstoque);
                         $('.novo input').each(function(){
-                            if($(this).attr('name')=='Desconto'){
+                            if($(this).attr('name')=='pDesconto'){
                                 novoValor=total-(total*$(this).val()/100);
-                            }else if($(this).attr('name')=='Valor Total do Ítem'){
+                            }else if($(this).attr('name')=='vTotal'){
                                 $(this).val(numeroParaMoeda(novoTotal));
                             }  
                         })
@@ -197,12 +198,12 @@
                     //alert($(this).attr('Valor Total do Ítem').val());
                     
                 })                            
-            }else if($(this).attr('name')=='Desconto'){
+            }else if($(this).attr('name')=='pDesconto'){
                 $(this).keyup(function(){
-                    desconto=total-(total*$(this).val()/100);
+                    pDesconto=total-(total*$(this).val()/100);
                     $('.novo input').each(function(){
-                        if($(this).attr('name')=='Valor Total do Ítem'){
-                            $(this).val(numeroParaMoeda(desconto));
+                        if($(this).attr('name')=='vTotal'){
+                            $(this).val(numeroParaMoeda(pDesconto));
                         }  
                     })
                     
@@ -210,7 +211,7 @@
             }
         })
         //alert($('.novo input').attr('name','Quantidade'));
-        //alert($('.window').text());
+        $('.previsao input').mask('00/00/0000');
     })
     function numeroParaMoeda(n, c, d, t)
     {
@@ -349,36 +350,17 @@
 <?php
 $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codigo_cliente] => 3792227 [codigo_pedido_integracao] => 1518658537 [data_previsao] => 14/02/2018 [etapa] => 50 [numero_pedido] => 68319 [quantidade_itens] => 1 ) '
         . '[det] => Array ( [0] => stdClass Object ( [ide] => stdClass Object ( [codigo_item_integracao] => 4422421 [simples_nacional] => S ) [imposto] => stdClass Object ( [cofins_padrao] => stdClass Object ( [aliq_cofins] => 3 [base_cofins] => 400 [cod_sit_trib_cofins] => 01 [tipo_calculo_cofins] => B [valor_cofins] => 12 ) [icms_sn] => stdClass Object ( [aliq_icms_sn] => 1.25 [cod_sit_trib_icms_sn] => 101 [origem_icms_sn] => 0 [valor_credito_icms_sn] => 5 ) [ipi] => stdClass Object ( [cod_sit_trib_ipi] => 51 ) [pis_padrao] => stdClass Object ( [aliq_pis] => 0.65 [base_pis] => 400 [cod_sit_trib_pis] => 01 [tipo_calculo_pis] => B [valor_pis] => 2.6 ) ) [inf_adic] => stdClass Object ( [peso_bruto] => 150 [peso_liquido] => 150 ) [produto] => stdClass Object ( [cfop] => 5.102 [codigo_produto] => 4422421 [descricao] => Telefone Celular X [ncm] => 9403.30.00 [quantidade] => 1 [tipo_desconto] => V [unidade] => UN [valor_desconto] => 0 [valor_mercadoria] => 200 [valor_total] => 200 [valor_unitario] => 200 ) ) ) [frete] => stdClass Object ( [codigo_transportadora] => 2239663 [modalidade] => 1 [placa] => ABC1234 [placa_estado] => SP [valor_frete] => 30 ) [informacoes_adicionais] => stdClass Object ( [codigo_categoria] => 1.01.03 [codigo_conta_corrente] => 11850365 [consumidor_final] => S [enviar_email] => N ) [lista_parcelas] => stdClass Object ( [parcela] => Array ( [0] => stdClass Object ( [data_vencimento] => 15/02/2018 [numero_parcela] => 1 [percentual] => 50 [valor] => 100 ) [1] => stdClass Object ( [data_vencimento] => 22/05/2018 [numero_parcela] => 2 [percentual] => 50 [valor] => 100 ) ) ) [total_pedido] => stdClass Object ( [base_calculo_icms] => 200 [valor_mercadorias] => 200 [valor_total_pedido] => 200 ) )';
-    $variaveis1=array('mercadorias'=>'Mercadorias','desconto'=>'Desconto','ipi'=>'IPI','icms'=>'ICMS ST','vPedido'=>'Valor do Pedido');//valores preenchidos automaticamente
-    $variaveis2=array(
-                        'Ítens de Venda'=>array(
-                            'Código','Descrição do Produto','Quantidade','Preço Unitário de Venda','Valor Total do Ítem','Desconto','ICMS','ICMS ST','IPI','PIS','COFINS','Frete','Seguros','Outras Despesas','ICMS Desonerado','Gera Conta a Receber','Peso Líquido(Kg)','Peso Bruto(Kg)','CFOP'
-                        ),
-                        'Frete e Outras Despesas'=>array(
-                            'Transportadora','Tipo do Frete','Placa do Veícula','UF','RNTRC (ANTT)','Quantidade de Volumes','Espécie dos Volumes','Marca dos Volumes','Numeração dos Volumes','Peso Líquido (Kg)','Peso Bruto (Kg)','Valor do Frete','Valor do Seguro','Número do Lacre','Outras Despesas Acessórias','O transporte será realizado com veículo próprio'
-                        ),
-                        'Informações Adcionais'=>array(
-                            'Categoria','Conta Corrente','Etapa','Nº do Pedido do Cliente','Nº do Contrato de Venda','Contato','Projeto','Dados Adicionais para a Nota Fiscal','Nota Fiscal para Consumo Final'
-                        ),
-                        'Parcelas'=>array(
-                            'Valor Total a Receber','Vencimento da Parcela','Valor da Parcela','Percentual da Parcela','Não gerar boleto desta parcela'
-                        ),
-                        'E-mail para o Cliente'=>array(
-                            'Utilizar os seguintes endereço de e-mail','Enviar o e-mail com o boleto de cobrança gerado pelo faturamento (juntamente com o DANFE e o XML da NFe)'
-                        ),
-                        'Observações'=>array(
-                          'Preencha aqui as observações desta venda (elas não serão exibidas na Nota Fiscal)'  
-                        )
-        );
+   
 ?>
 <table class="tabela">
     <tr><td colspan="4">Cliente</td><td align="center">Previsão Faturamento</td></tr>
-    <tr><td colspan="4" class="razao"><input type="hidden" name="codigo_cliente" value="<?=$codigo_cliente ?>" /><input name="cliente" type="text" size=65 value="<?= $razao ?>" required> <img src="../web/img/lupa.png" height="14px" title="Pesquisar cliente"/> </td><td><input name="previsao" type="date" value="<?= date('d/m/Y') ?>" /></td></tr>
+    <tr><td colspan="4" class="razao"><input type="hidden" name="cCliente" value="<?=$cCliente ?>" /><input name="cliente" type="text" size=65 value="<?= $razao ?>" required> <img src="../web/img/lupa.png" height="14px" title="Pesquisar cliente"/> </td><td class="previsao"><input name="dPrevisao" type="text" value="<?= date('d/m/Y') ?>" /></td></tr>
     <tr><td><font size=2px>CNPJ/CPF</font></td><tr>
     <tr><td class="cnpj"><input type="text" name="cnpj_cpf" value="<?= $cnpj_cpf ?>"/></td></tr>
 </table>
 <fieldset class="fTotais">
     <legend> Totais </legend>
+    <!-- Quadro Preenchido Automaticamente -->
 <table>
     <tr>
         <?php foreach($variaveis1 as $key => $item): ?>
@@ -393,13 +375,14 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
     </tr>
     <tr>       
         <?php foreach($variaveis1 as $key => $item): ?>
-        <td class="valores" align="right">0,00 </td>
+        <td class="valores" nome="<?= $key ?>" align="right">0,00 </td>
         <?php endforeach; ?>
     </tr>
 </table></fieldset>
+    <!-- Fim do Quadro -->
 <table class="tabela">
     <tr><td>Vendedor</td><td>Número de Parcelas</td><td></td></tr>
-    <tr><td><input name="vendedor" type="text" ></td><td><input name="parcelas" type="text" /></td></tr>
+    <tr><td><input name="vendedor" type="text" ></td><td><input name="nParcelas" type="text" /></td></tr>
 </table>
     <div class="outrosItens">
         <span class="item">Itens de Venda</span>
@@ -429,7 +412,8 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
                     </tr>
                     <tr class='novo'>
                     <?php foreach($variaveis2['Ítens de Venda'] as $key => $item): ?>
-                        <td><input type='text' name='<?= $item ?>' /></td>
+        <?php echo '<pre>';print_r([$key,$item]); ?>
+                        <td><input type='text' name='<?= $key ?>' /></td>
                     <?php $ref++; endforeach; ?>
                     </tr>
                 </table>
@@ -496,6 +480,9 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
                     <?php foreach($variaveis2['Observações'] as $key => $item): ?>
                     <td><?= $item ?></td>
                     <?php endforeach; ?>
+                    </tr>
+                    <tr>
+                        <td><textarea autofocus name="observacao"></textarea></td>
                     </tr>
                 </table>
         <!--</fieldset>-->

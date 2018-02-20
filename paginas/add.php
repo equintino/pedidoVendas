@@ -80,20 +80,57 @@
         ///// cabecalho /////
         $cabecalho=new cabecalho();
         $cabecalho->bloqueado='N';
-        $cabecalho->codigo_cliente=$_POST['codigo_cliente'];
+        $cabecalho->codigo_cliente=$_POST['cCliente'];
         $cabecalho->codigo_pedido_integracao=$codigo_pedido_integracao;
-        $cabecalho->data_previsao=$_POST['previsao'];
+        $cabecalho->data_previsao=$_POST['dPrevisao'];
         $cabecalho->etapa=10;
         $cabecalho->numero_pedido='';
         $cabecalho->quantidade_itens='';
         
         ///// det /////
+        //$cItem=$_POST['cProduto'];//(defaut em branco)
         $det=new det();
-        $det->ide->codigo_item=$_POST['Código'];
-        //$det->
+        //$det->ide->codigo_item=null;
+        //$det->produto->codigo_produto=$_POST['cProduto'];
+        //$det->produto->descricao=$_POST['descricao'];
+        //$det->produto->quantidade=$_POST['quantidade'];
+        //$det->produto->percentual_desconto="'".$_POST['pDesconto']."'";
+        //$det->produto->valor_mercadoria=200;
+        //$det->produto->valor_total=$_POST['vTotal'];
+        //$det->produto->valor_unitario=$_POST['vUnitario'];
+        
+        ///// produto //////
+        $codigo_produto_integracao=$_POST['cProduto'];
+        $produto=new produto();
+        $produto->codigo_produto=$_POST['cProduto'];
+        $produto->codigo_produto_integracao=$codigo_produto_integracao;
+        $produto->codigo='';
+        $produto->quantidade=$_POST['quantidade'];
+        $produto->valor_unitario=$_POST['vUnitario'];
+        $produto->percentual_desconto=$_POST['pDesconto'];
+        
+        //// Observação ////
+        $observacao=new observacao();
+        $observacao->obs_item=$_POST['observacao'];
+        
+        //// Imposto ////
+        $imposto=new imposto();
+        $imposto->icms_sn=$_POST['icmsSn'];
+        $imposto->icms=$_POST['icms'];
+        $imposto->icms_st=$_POST['icmsSt'];
+        $imposto->icms_ie=$_POST['icmsIe'];
+        $imposto->ipi=$_POST['ipi'];
+        $imposto->pis_padrao=$_POST['pisPadrao'];
+        $imposto->pis_st=$_POST['pisSt'];
+        $imposto->cofins_padrao=$_POST['cofinsPadrao'];
+        $imposto->cofins_st=$_POST['cofinsSt'];
+        $imposto->inss=$_POST['inss'];
+        $imposto->csll=$_POST['csll'];
+        $imposto->irrf=$_POST['irrf'];
+        $imposto->iss=$_POST['iss'];
         
                 echo '<pre>';
-        print_r([$cabecalho,$det]);die;
+        print_r([$cabecalho,$det,$produto,$observacao,$imposto]);die;
         /*
        
    *****************************************************

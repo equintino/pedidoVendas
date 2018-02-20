@@ -29,7 +29,7 @@
  		});              
                 $('.novo input').click(function(){
                     //alert($(this).attr('name'));
-                    if($(this).attr('name')=='Código'){
+                    if($(this).attr('name')=='cProduto'){
                         $("a[rel=modal]").trigger("click")
                     }
                 })
