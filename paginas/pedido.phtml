@@ -21,7 +21,187 @@
         $('table tr:odd').css({
             //background: '#ccc'
         })
-        $('td img').click(function(){
+        
+        //// qudro inferior ////
+        $('.novo input').keyup(function (){
+            $('.novo input').each(function(){
+                switch($(this).attr('name')){
+                    case 'quantidade':
+                       $(this).mask('################', {reverse: true});
+                       quantidade=$(this).val();
+                       break;
+                    case 'vUnitario':
+                        vUnitario=$(this).val();
+                        break;
+                    case 'vTotal':
+                        $(this).mask('###.###.###.###,##', {reverse: true});
+                        var vTotal=$(this).val();
+                        break;
+                    case 'pDesconto':
+                        pDesconto=$(this).val()/100;
+                        vDesconto=vTotal-(vTotal*pDesconto);
+                        $(this).mask('000', {reverse: true});
+                        if($(this).val()>'100'){
+                            $(this).val('100');
+                        }
+                        break;
+                    case 'icmsSt':
+                        $(this).mask('###.###,##', {reverse: true});
+                        var icmsSt=$(this).val();
+                        $('.autoQuadro td').each(function(){
+                            if($(this).attr('nome')=='icmsSt'){
+                                if(icmsSt){
+                                    $(this).text(icmsSt);
+                                }else{
+                                    $(this).text('0,00'); 
+                                }
+                            }
+                        })                      
+                        break;
+                    case 'ipi':
+                        $(this).mask('###.###,##', {reverse: true});
+                        var ipi=$(this).val();
+                        $('.autoQuadro td').each(function(){
+                            if($(this).attr('nome')=='ipi'){
+                                if(ipi){
+                                    $(this).text(ipi);
+                                }else{
+                                    $(this).text('0,00');
+                                }
+                            }
+                        })
+                        break;
+                }
+            })
+        })
+        
+        $('.novo').hide();
+        $('#botoes .bnt,.outrosItens span').mouseover(function(){
+            $(this).css('cursor','pointer')
+        })        
+        $('#botoes .bnt').click(function(){
+            if(!$('.razao input').val()){
+                alert('Preenche campo "CLIENTE"');
+                $('.razao input').focus();
+                return false;
+            }else if(!$('.cnpj input').val()){
+                alert('Preenche campo "CNPJ/CPF"');
+                $('.cnpj input').focus();
+                return false;
+            }
+            if($(this).text()=='Novo Ítem'){
+                $('.novo').show()
+            }
+        })
+        $('#pnl2').css('display','none')          
+        $('#pnl3').css('display','none')          
+        $('#pnl4').css('display','none')
+        $('#pnl5').css('display','none')           
+        $('#pnl6').css('display','none')
+        $('.outrosItens span').click(function(){
+            $('.outrosItens span').css({
+                background: 'white'
+            });
+            $(this).css('background','#ccc');
+            $('#pnl1').css('display','none')
+            $('#pnl2').css('display','none')          
+            $('#pnl3').css('display','none')          
+            $('#pnl4').css('display','none')
+            $('#pnl5').css('display','none')           
+            $('#pnl6').css('display','none')
+            if($(this).text()=='Itens de Venda'){
+                $('#pnl1').css('display','block')
+            }else if($(this).text()=='Frete/Despesas'){
+                $('#pnl2').css('display','block')
+            }else if($(this).text()=='Informações Adcionais'){
+                $('#pnl3').css('display','block')
+            }else if($(this).text()=='Parcelas'){
+                $('#pnl4').css('display','block')
+            }else if($(this).text()=='E-mail'){
+                $('#pnl5').css('display','block')
+            }else if($(this).text()=='OBS'){
+                $('#pnl6').css('display','block')
+            }
+        })
+        $('.novo input').each(function(){
+            if($(this).attr('name')=='quantidade'){
+                $(this).keyup(function(){
+                    var algarismo1=qEstoque.length;
+                    var algarismo2=$(this).val().length;
+                    var zero=algarismo1-algarismo2;
+                    switch(zero){
+                        case 1:
+                            zero='0';
+                            break;
+                        case 2:
+                            zero='00';
+                            break;
+                        case 3:
+                            zero='000';
+                            break;
+                        default:
+                            zero='';
+                    }
+                    var quantidade=zero+$(this).val();
+                    $('.novo input').each(function(){
+                        if($(this).attr('name')=='vTotal'){
+                            vTotal=parseInt(vUnitario)*parseInt(quantidade);
+                            $(this).val(numeroParaMoeda(vTotal));
+                        }
+                    })
+                    if(quantidade > qEstoque){
+                        alert('Quantidade em Estoque '+qEstoque+'');
+                        $(this).val(qEstoque);
+                        vTotal=parseInt(vUnitario)*parseInt(qEstoque);
+                        //alert(vTotal);
+                        $('.novo input').each(function(){
+                            if($(this).attr('name')=='pDesconto'){
+                                pDesconto=$(this).val();
+                            }else if($(this).attr('name')=='vTotal'){
+                                $(this).val(numeroParaMoeda(vTotal));
+                            }  
+                        })
+                    }
+                    $('.autoQuadro td').each(function(){
+                        if($(this).attr('nome')=='mercadorias'){
+                            $(this).text(numeroParaMoeda(vTotal));
+                        }else if($(this).attr('nome')=='vDesconto'){
+                            $('.novo input').each(function(){
+                                if($(this).attr('name')=='pDesconto'){
+                                    vDesconto=vTotal*$(this).val()/100;
+                                }
+                            })
+                            $(this).text(numeroParaMoeda(vDesconto));
+                        }else if($(this).attr('nome')=='vPedido'){
+                            /*$('.novo input').each(function(){
+                                if($(this).attr('name')=='pDesconto'){
+                                    vDesconto=vTotal*$(this).val()/100;
+                                }
+                            })*/
+                            if(!vDesconto)vDesconto=null;
+                            $(this).text(numeroParaMoeda(vTotal-vDesconto));
+                        }
+                    })                 
+                })                         
+            }else if($(this).attr('name')=='pDesconto'){
+                $(this).keyup(function(){
+                    vDesconto=vTotal*$(this).val()/100;
+                    $('.autoQuadro td').each(function(){
+                        if($(this).attr('nome')=='vDesconto'){
+                            $(this).text(numeroParaMoeda(vDesconto));
+                        }else if($(this).attr('nome')=='vPedido'){
+                            $(this).text(numeroParaMoeda(vTotal-vDesconto));
+                        } 
+                    })
+                    
+                })
+            }
+        })
+        
+        
+        
+        
+        /*$('td img').click(function(){
             if($(this).attr('title')=='Exclui'){
                 var razao=$(this).attr('razao');
                 var confirma=confirm('Confirma Exclusão de "'+razao+'"');
@@ -66,149 +246,14 @@
             $(':input').each(function(){
                 arr.push($(this).attr('name'));          
             })
-        })
+        })*/
         var pagina=null;
         $('.pagina').text(pag)
-            $('#pnl2').css('display','none')          
-            $('#pnl3').css('display','none')          
-            $('#pnl4').css('display','none')
-            $('#pnl5').css('display','none')           
-            $('#pnl6').css('display','none')
-        $('.outrosItens span').click(function(){
-            $('.outrosItens span').css({
-                background: 'white'
-            });
-            $(this).css('background','#ccc');
-            $('#pnl1').css('display','none')
-            $('#pnl2').css('display','none')          
-            $('#pnl3').css('display','none')          
-            $('#pnl4').css('display','none')
-            $('#pnl5').css('display','none')           
-            $('#pnl6').css('display','none')
-            if($(this).text()=='Itens de Venda'){
-                $('#pnl1').css('display','block')
-            }else if($(this).text()=='Frete/Despesas'){
-                $('#pnl2').css('display','block')
-            }else if($(this).text()=='Informações Adcionais'){
-                $('#pnl3').css('display','block')
-            }else if($(this).text()=='Parcelas'){
-                $('#pnl4').css('display','block')
-            }else if($(this).text()=='E-mail'){
-                $('#pnl5').css('display','block')
-            }else if($(this).text()=='OBS'){
-                $('#pnl6').css('display','block')
-            }
-        })
-        $('#botoes .bnt,.outrosItens span').mouseover(function(){
-            $(this).css('cursor','pointer')
-        })
         var cont=0;
-        $('.novo').hide();
-        $('#botoes .bnt').click(function(){
-            if(!$('.razao input').val()){
-                alert('Preenche campo "CLIENTE"');
-                $('.razao input').focus();
-                return false;
-            }else if(!$('.cnpj input').val()){
-                alert('Preenche campo "CNPJ/CPF"');
-                $('.cnpj input').focus();
-                return false;
-            }
-            if($(this).text()=='Novo Ítem'){
-                $.each(arr,function(){
-                    //alert(arr[cont]);
-                    cont++;
-                })
-                $('.novo').show()
-                //$('.divVendas').append(text('aqui'))
-            }else if($(this).text()=='Editar Ítem'){
-                
-            }else if($(this).text()=='Excluir Ítem'){
-                
-            }
-        })
+        
+
         $('.tabela img').click(function(){
             $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1')
-        })
-        $('.novo input').each(function(){
-            //alert($(this).attr('name'));
-            if($(this).attr('name')=='quantidade'){
-                //alert($(this).attr('name'));
-                    //$(this).val().maskMoney({symbol:'R$ ',showSymbol:true, thousands:'.', decimal:',', symbolStay: true});
-                //$(this).maskMoney('mask', 1999.99);
-                $(this).mask('################', {reverse: true});
-                var quantidade=$(this).val();
-                $(this).keyup(function(){
-                    var algarismo1=qEstoque.length;
-                    var algarismo2=$(this).val().length;
-                    var zero=algarismo1-algarismo2;
-                    //alert(zero);
-                    switch(zero){
-                        case 1:
-                            zero='0';
-                            break;
-                        case 2:
-                            zero='00';
-                            break;
-                        case 3:
-                            zero='000';
-                            break;
-                        default:
-                            zero='';
-                    }
-                    //alert(zero);
-                    var quantidade=zero+$(this).val();
-                    //alert(quantidade);
-                    //alert([algarismo,quantidade]);
-                    //alert(quantidade > qEstoque);
-                    //alert($('.novo input')attr('name','Valor Total do Ítem'));
-                    $('.novo input').each(function(){
-                        if($(this).attr('name')=='pDesconto'){
-                            $(this).mask('000', {reverse: true});
-                            desconto=total-(total*$(this).val()/100);
-                            $('.novo input').each(function(){
-                                if($(this).attr('name')=='vTotal'){
-                                    $(this).val(numeroParaMoeda(pDesconto));
-                                }  
-                            })
-                        }else if($(this).attr('name')=='vTotal'){
-                            $(this).mask('###.###.###.###,##', {reverse: true});
-                            //alert(desconto);
-                            total=parseInt(vUnitario)*parseInt(quantidade);
-                            $(this).val(numeroParaMoeda(total));
-                            //(pUnitario);
-                        }
-                    })
-                    if(quantidade > qEstoque){
-                        //alert(quantidade);
-                        alert('Quantidade em Estoque '+qEstoque+'');
-                        $(this).val(qEstoque);
-                        total=parseInt(vUnitario)*parseInt(qEstoque);
-                        $('.novo input').each(function(){
-                            if($(this).attr('name')=='pDesconto'){
-                                novoValor=total-(total*$(this).val()/100);
-                            }else if($(this).attr('name')=='vTotal'){
-                                $(this).val(numeroParaMoeda(novoTotal));
-                            }  
-                        })
-                    }
-                    /*if($.isNumeric($(this).val()){
-                        alert($(this).val());
-                    }*/
-                    //alert($(this).attr('Valor Total do Ítem').val());
-                    
-                })                            
-            }else if($(this).attr('name')=='pDesconto'){
-                $(this).keyup(function(){
-                    pDesconto=total-(total*$(this).val()/100);
-                    $('.novo input').each(function(){
-                        if($(this).attr('name')=='vTotal'){
-                            $(this).val(numeroParaMoeda(pDesconto));
-                        }  
-                    })
-                    
-                })
-            }
         })
         //alert($('.novo input').attr('name','Quantidade'));
         $('.previsao input').mask('00/00/0000');
@@ -354,7 +399,7 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
 ?>
 <table class="tabela">
     <tr><td colspan="4">Cliente</td><td align="center">Previsão Faturamento</td></tr>
-    <tr><td colspan="4" class="razao"><input type="hidden" name="cCliente" value="<?=$cCliente ?>" /><input name="cliente" type="text" size=65 value="<?= $razao ?>" required> <img src="../web/img/lupa.png" height="14px" title="Pesquisar cliente"/> </td><td class="previsao"><input name="dPrevisao" type="text" value="<?= date('d/m/Y') ?>" /></td></tr>
+    <tr><td colspan="4" class="razao"><input type="hidden" name="cCliente" value="<?= $cCliente ?>" /><input name="cliente" type="text" size=65 value="<?= $razao ?>" required /> <img src="../web/img/lupa.png" height="14px" title="Pesquisar cliente"/> </td><td class="previsao"><input name="dPrevisao" type="text" value="<?= date('d/m/Y') ?>" /></td></tr>
     <tr><td><font size=2px>CNPJ/CPF</font></td><tr>
     <tr><td class="cnpj"><input type="text" name="cnpj_cpf" value="<?= $cnpj_cpf ?>"/></td></tr>
 </table>
@@ -373,7 +418,7 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
             <?php endif ?>
         <?php endforeach; ?>
     </tr>
-    <tr>       
+    <tr class="autoQuadro">       
         <?php foreach($variaveis1 as $key => $item): ?>
         <td class="valores" nome="<?= $key ?>" align="right">0,00 </td>
         <?php endforeach; ?>
@@ -387,9 +432,9 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
     <div class="outrosItens">
         <span class="item">Itens de Venda</span>
         <span class="frete">Frete/Despesas</span>
-        <span class="info">Informações Adcionais</span>
+        <!--<span class="info">Informações Adcionais</span>-->
         <span class="parcela">Parcelas</span>        
-        <span class="email">E-mail</span>
+        <!--<span class="email">E-mail</span>-->
         <span class="observacao">OBS</span>
     </div>
         <div id='pnl1'>
@@ -407,12 +452,15 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
                         <?php else: ?>
                             <td><?= $item ?></td>
                         <?php endif ?>
-                    <script>arr.push('<?=$item?>')</script>
+                    <!-- <script>arr.push('<?php 
+                        //echo $item 
+                        ?>
+                    ')</script> -->
                     <?php endforeach; ?>
                     </tr>
                     <tr class='novo'>
                     <?php foreach($variaveis2['Ítens de Venda'] as $key => $item): ?>
-        <?php echo '<pre>';print_r([$key,$item]); ?>
+        <?php //echo '<pre>';print_r([$key,$item]); ?>
                         <td><input type='text' name='<?= $key ?>' /></td>
                     <?php $ref++; endforeach; ?>
                     </tr>

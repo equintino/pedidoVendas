@@ -35,6 +35,9 @@
                         case 'vTotal':
                            $(this).val(null);
                            break;
+                        case 'pDesconto':
+                           $(this).val(null);
+                           break;
                     }
                 })
                 //if($('.novo input').attr('name')=='Código'){
@@ -81,7 +84,7 @@
     <tr><th>Descrição</th><th>Quant. Estoque</th><th>Preço Unitário</th></tr>        
 <?php
     foreach($dados->produto_servico_cadastro as $prod){ ?>
-    <?php echo'<pre>';print_r($prod); ?>
+    <?php //echo'<pre>';print_r($prod); ?>
     <?php $vUnitario=number_format($prod->valor_unitario,'2',',','.');?>
     <tr cProduto="<?= $prod->codigo_produto ?>" vUnitario="<?= $vUnitario ?>" qEstoque="<?= $prod->quantidade_estoque ?>" descricao="<?= $prod->descricao ?>"><td align="center" ><?= $prod->descricao ?></td><td align="center"><?= $prod->quantidade_estoque ?></td><td align='right'><?= $vUnitario ?></td></tr>
     <?php } ?>
