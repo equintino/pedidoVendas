@@ -12,5 +12,5 @@
 
 ///// MEmpreendimento //////
 define("OMIE_APP_KEY","3440098827");
-define("OMIE_APP_SECRET","bfd4d9883e4366166a722a52e69d1c4c ");
+define("OMIE_APP_SECRET","bfd4d9883e4366166a722a52e69d1c4c");
 

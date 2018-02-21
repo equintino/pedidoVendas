@@ -50,6 +50,7 @@ class PedidoVendaProdutoJsonClient {
 	 * @return pedido_venda_produto_response Resposta da Inclusão de Pedido de Venda de Produtos.&nbsp;
 	 */
 	public function IncluirPedido($pedido_venda_produto){
+            //print_r((json_encode($pedido_venda_produto)));die;
 		return self::_Call('IncluirPedido',Array(
 			$pedido_venda_produto
 		));

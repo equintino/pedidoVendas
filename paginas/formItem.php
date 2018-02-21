@@ -41,9 +41,9 @@
                 $(".window").hide();
                 $('#mascara').hide();
                 $('.fechar').trigger('click')
+                $('.botao :hidden').val(dadosProduto);
             })
         })
-        //prod1=$('.jItem tr').attr('dados_produto');
     })
 </script>
 <style>
@@ -70,13 +70,13 @@
         foreach($prod as $key => $item){
             $dados_produto[$key]=$item;
         }
-        $dados_produto= json_encode($dados_produto);
+        //echo '<pre>';print_r($dados_produto);die;
+        $dados_produto=json_encode($dados_produto);
         echo '<script>dadosProduto='.$dados_produto.';</script>';
     ?>
     <?php $vUnitario=number_format($prod->valor_unitario,'2',',','.');?>
     <tr cProduto="<?= $prod->codigo_produto ?>" vUnitario="<?= $vUnitario ?>" qEstoque="<?= $prod->quantidade_estoque ?>" descricao="<?= $prod->descricao ?>" dados_produto=dados_produto><td align="center" ><?= $prod->descricao ?></td><td align="center"><?= $prod->quantidade_estoque ?></td><td align='right'><?= $vUnitario ?></td></tr>
     <?php 
-        //echo '<pre>';print_r($dados_produto);
         } 
     ?>
 </table> 

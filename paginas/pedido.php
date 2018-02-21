@@ -47,6 +47,12 @@
     $produtos->ExcluirProduto($produto_servico_cadastro_chave);
     header('Location:index.php?pagina=produto&act=list');*/
    }
+   ////// Classes //////
+   $contas=new contasJsonClient();
+   $contaListarRequest=array('pagina'=>'1','registros_por_pagina'=>'50');
+   //$consulta=array("cCodInt"=>"");
+   //$contas->ListarContas($contaListarRequest);
+   //print_r($contas);die;
    
    //////// Variáveis ////////  
     $variaveis1=array('mercadorias'=>'Mercadorias','vDesconto'=>'Desconto','ipi'=>'IPI','icmsSt'=>'ICMS ST','vPedido'=>'Valor do Pedido');//valores preenchidos automaticamente

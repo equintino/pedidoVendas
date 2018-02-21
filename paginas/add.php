@@ -73,9 +73,16 @@
             }
         }
     }elseif($pagina=='pedido'){
-        print_r($_POST);
-        $codigo_pedido_integracao=00001;
+        // Obtêm o número do pedido Atual
+        $numero_pedido_atual = file_get_contents('numeroPedido.txt');
+        // Atualiza número do Pedido e salva no arquivo
+        file_put_contents('numeroPedido.txt', ++$numero_pedido_atual);
+        // Mostra o número de visitas
+        $codigo_pedido_integracao=file_get_contents('numeroPedido.txt');
+        
+        include '../config/OmieAppAuth.php';
         include '../model/PedidoVendaProdutoJsonClient.php';
+        $pedido=new PedidoVendaProdutoJsonClient();
         
         ///// cabecalho /////
         $cabecalho=new cabecalho();
@@ -90,14 +97,15 @@
         ///// det /////
         //$cItem=$_POST['cProduto'];//(defaut em branco)
         $det=new det();
-        //$det->ide->codigo_item=null;
-        //$det->produto->codigo_produto=$_POST['cProduto'];
+        $det->ide->codigo_item='';
+        $det->ide->codigo_item_integracao=$_POST['cProduto'];
+        $det->produto->codigo_produto=$_POST['cProduto'];
         //$det->produto->descricao=$_POST['descricao'];
-        //$det->produto->quantidade=$_POST['quantidade'];
+        $det->produto->quantidade=$_POST['quantidade'];
         //$det->produto->percentual_desconto="'".$_POST['pDesconto']."'";
         //$det->produto->valor_mercadoria=200;
         //$det->produto->valor_total=$_POST['vTotal'];
-        //$det->produto->valor_unitario=$_POST['vUnitario'];
+        $det->produto->valor_unitario=$_POST['vUnitario'];
         
         ///// produto //////
         $codigo_produto_integracao=$_POST['cProduto'];
@@ -110,10 +118,11 @@
         $produto->percentual_desconto=$_POST['pDesconto'];
         
         //// Observação ////
-        $observacao=new observacao();
-        $observacao->obs_item=$_POST['observacao'];
+        ///????? $observacao=new observacao();
+        ///????? $observacao->obs_item=$_POST['observacao'];
         
         //// Imposto ////
+        /*
         $imposto=new imposto();
         $imposto->icms_sn=$_POST['icmsSn'];
         $imposto->icms=$_POST['icms'];
@@ -128,11 +137,92 @@
         $imposto->csll=$_POST['csll'];
         $imposto->irrf=$_POST['irrf'];
         $imposto->iss=$_POST['iss'];
+        */
+        
+        //// Informacoes Adcionais //////
+        $_POST['codigo_categoria']="1.01.03";
+        $_POST['codigo_conta_corrente']=1229930303;
+        $informacoes_adicionais=new informacoes_adicionais();
+        $informacoes_adicionais->codigo_categoria=$_POST['codigo_categoria'];
+        $informacoes_adicionais->codigo_conta_corrente=$_POST['codigo_conta_corrente'];
+        $informacoes_adicionais->consumidor_final='S';
+        $informacoes_adicionais->enviar_email='N';
         
                 echo '<pre>';
-        print_r([$cabecalho,$det,$produto,$observacao,$imposto]);die;
+        //print_r([$cabecalho,$det,$produto,$observacao]);die;
+        
+        $pedido_venda_produto=new pedido_venda_produto();
+        $pedido_venda_produto->cabecalho=$cabecalho;
+        $pedido_venda_produto->det=$det;
+        $pedido_venda_produto->informacoes_adicionais=$informacoes_adicionais;
+        ////????? $pedido_venda_produto->observacoes=$observacao;
+        //print_r($pedido_venda_produto);
+        //die;
+        $pedido->IncluirPedido($pedido_venda_produto);
+        header('Location:../web/index.php?pagina=pedido&act=cad');
+        die;
         /*
-       
+    
+         * ***********************************
+         * Dados do Produto                  *
+         *                                   *
+         *************************************
+         
+         Array
+(
+    [aliquota_cofins] => 0
+    [aliquota_ibpt] => 0
+    [aliquota_icms] => 0
+    [aliquota_pis] => 0
+    [bloqueado] => N
+    [cest] => 
+    [cfop] => 
+    [codInt_familia] => 
+    [codigo] => 1000
+    [codigo_familia] => 0
+    [codigo_produto] => 1229930876
+    [codigo_produto_integracao] => 
+    [csosn_icms] => 
+    [cst_cofins] => 
+    [cst_icms] => 
+    [cst_pis] => 
+    [dadosIbpt] => stdClass Object
+        (
+            [aliqEstadual] => 0
+            [aliqFederal] => 0
+            [aliqMunicipal] => 0
+            [chave] => 
+            [fonte] => 
+            [valido_ate] => 
+            [valido_de] => 
+            [versao] => 
+        )
+
+    [descr_detalhada] => 
+    [descricao] => Mouse sem fio Microsoft
+    [descricao_familia] => 
+    [ean] => 
+    [estoque_minimo] => 10
+    [importado_api] => N
+    [inativo] => N
+    [ncm] => 9504.10.99
+    [obs_internas] => 
+    [peso_bruto] => 0
+    [peso_liq] => 0
+    [quantidade_estoque] => 10
+    [recomendacoes_fiscais] => stdClass Object
+        (
+            [cupom_fiscal] => N
+            [id_cest] => 
+            [id_preco_tabelado] => 0
+            [origem_mercadoria] => 
+        )
+
+    [red_base_icms] => 0
+    [tipoItem] => 00
+    [unidade] => UN
+    [valor_unitario] => 150
+)        
    *****************************************************
          stdClass Object
 (
