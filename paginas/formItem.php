@@ -15,8 +15,6 @@
                 vUnitario=$(this).attr('vUnitario');
                 qEstoque=$(this).attr('qEstoque');
                 
-                //alert([cProduto,vUnitario,qEstoque]);
-                //alert($('.novo td').attr('ref'));
                 $('.novo input').each(function(){
                     var z=$(this).attr('name');
                     switch(z){
@@ -40,29 +38,12 @@
                            break;
                     }
                 })
-                //if($('.novo input').attr('name')=='Código'){
-                    //$('.novo input').attr('ref','1').val(codigo)
-                    //$('.novo input').attr('ref','2').val(descricao)
-                    $(".window").hide();
-                    $('#mascara').hide();
-                    $('.fechar').trigger('click')
-                //}
+                $(".window").hide();
+                $('#mascara').hide();
+                $('.fechar').trigger('click')
             })
         })
-        /*$('#botoes .bnt').click(function(){
-            if($(this).text()=='Novo Ítem'){
-                $.each(arr,function(){
-                    //alert(arr[cont]);
-                    cont++;
-                })
-                $('.novo').show()
-                //$('.divVendas').append(text('aqui'))
-            }else if($(this).text()=='Editar Ítem'){
-                
-            }else if($(this).text()=='Excluir Ítem'){
-                
-            }
-        })*/
+        //prod1=$('.jItem tr').attr('dados_produto');
     })
 </script>
 <style>
@@ -84,9 +65,20 @@
     <tr><th>Descrição</th><th>Quant. Estoque</th><th>Preço Unitário</th></tr>        
 <?php
     foreach($dados->produto_servico_cadastro as $prod){ ?>
-    <?php //echo'<pre>';print_r($prod); ?>
+    <?php 
+        $dados_produto=array();
+        foreach($prod as $key => $item){
+            $dados_produto[$key]=$item;
+        }
+        $dados_produto= json_encode($dados_produto);
+        echo '<script>dadosProduto='.$dados_produto.';</script>';
+    ?>
     <?php $vUnitario=number_format($prod->valor_unitario,'2',',','.');?>
-    <tr cProduto="<?= $prod->codigo_produto ?>" vUnitario="<?= $vUnitario ?>" qEstoque="<?= $prod->quantidade_estoque ?>" descricao="<?= $prod->descricao ?>"><td align="center" ><?= $prod->descricao ?></td><td align="center"><?= $prod->quantidade_estoque ?></td><td align='right'><?= $vUnitario ?></td></tr>
-    <?php } ?>
+    <tr cProduto="<?= $prod->codigo_produto ?>" vUnitario="<?= $vUnitario ?>" qEstoque="<?= $prod->quantidade_estoque ?>" descricao="<?= $prod->descricao ?>" dados_produto=dados_produto><td align="center" ><?= $prod->descricao ?></td><td align="center"><?= $prod->quantidade_estoque ?></td><td align='right'><?= $vUnitario ?></td></tr>
+    <?php 
+        //echo '<pre>';print_r($dados_produto);
+        } 
+    ?>
 </table> 
 <!--div id="aqui">atencao</div>-->
+<?php //echo '<pre>';print_r($dados_produto); ?>
