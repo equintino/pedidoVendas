@@ -173,11 +173,6 @@
                             })
                             $(this).text(numeroParaMoeda(vDesconto));
                         }else if($(this).attr('nome')=='vPedido'){
-                            /*$('.novo input').each(function(){
-                                if($(this).attr('name')=='pDesconto'){
-                                    vDesconto=vTotal*$(this).val()/100;
-                                }
-                            })*/
                             if(!vDesconto)vDesconto=null;
                             $(this).text(numeroParaMoeda(vTotal-vDesconto));
                         }
