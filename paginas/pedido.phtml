@@ -373,7 +373,7 @@
 <div id="menu">
     <ul>
         <li><a href=<?= Utils::createLink('pedido',array('act'=>'cad')); ?>>Incluir</a></li>
-        <li><a href=<?= Utils::createLink('pedido',array('act'=>'list')); ?>>Listar</a></li>
+        <!--<li><a href=<?= Utils::createLink('pedido',array('act'=>'list')); ?>>Listar</a></li>-->
     </ul>
     <?php if($act!='cad'){?>
     <div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por produtos" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por produtos" /></div>
@@ -391,7 +391,7 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
 ?>
 <table class="tabela">
     <tr><td colspan="4">Cliente</td><td align="center">Previsão Faturamento</td></tr>
-    <tr><td colspan="4" class="razao"><input type="hidden" name="cCliente" value="<?= $cCliente ?>" /><input name="cliente" type="text" size=65 value="<?= $razao ?>" required /> <img src="../web/img/lupa.png" height="14px" title="Pesquisar cliente"/> </td><td class="previsao"><input name="dPrevisao" type="text" value="<?= date('d/m/Y') ?>" /></td></tr>
+    <tr><td colspan="4" class="razao"><input type="hidden" name="cCliente" value="<?= $cCliente ?>" /><input name="cliente" type="text" size=53 value="<?= $razao ?>" required /> <img src="../web/img/lupa.png" height="14px" title="Pesquisar cliente"/> </td><td class="previsao"><input name="dPrevisao" type="text" value="<?= date('d/m/Y') ?>" /></td></tr>
     <tr><td><font size=2px>CNPJ/CPF</font></td><tr>
     <tr><td class="cnpj"><input type="text" name="cnpj_cpf" value="<?= $cnpj_cpf ?>"/></td></tr>
 </table>

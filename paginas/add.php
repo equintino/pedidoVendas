@@ -102,7 +102,8 @@
         $det->produto->codigo_produto=$_POST['cProduto'];
         //$det->produto->descricao=$_POST['descricao'];
         $det->produto->quantidade=$_POST['quantidade'];
-        //$det->produto->percentual_desconto="'".$_POST['pDesconto']."'";
+        $det->produto->percentual_desconto="'".$_POST['pDesconto']."'";
+        $det->produto->tipo_desconto='P';
         //$det->produto->valor_mercadoria=200;
         //$det->produto->valor_total=$_POST['vTotal'];
         $det->produto->valor_unitario=$_POST['vUnitario'];
@@ -141,14 +142,14 @@
         
         //// Informacoes Adcionais //////
         $_POST['codigo_categoria']="1.01.03";
-        $_POST['codigo_conta_corrente']=1229930303;
+        $_POST['codigo_conta_corrente']=740899824;//1229930303;
         $informacoes_adicionais=new informacoes_adicionais();
         $informacoes_adicionais->codigo_categoria=$_POST['codigo_categoria'];
         $informacoes_adicionais->codigo_conta_corrente=$_POST['codigo_conta_corrente'];
         $informacoes_adicionais->consumidor_final='S';
         $informacoes_adicionais->enviar_email='N';
         
-                echo '<pre>';
+               // echo '<pre>';
         //print_r([$cabecalho,$det,$produto,$observacao]);die;
         
         $pedido_venda_produto=new pedido_venda_produto();
