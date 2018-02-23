@@ -54,6 +54,15 @@
    //$contas->ListarContas($contaListarRequest);
    //print_r($contas);die;
    
+   $vendedor=new VendedoresCadastroJsonClient();
+   $vendListarRequest=array("pagina"=>"1","registros_por_pagina"=>"100","apenas_importado_api"=>"N");
+   $vend=$vendedor->ListarVendedores($vendListarRequest);
+   
+   $parc=new ParcelasJsonClient();
+   $parcelaListarRequest=array("pagina"=>1,"registros_por_pagina"=>100);
+   $parcela=$parc->ListarParcelas($parcelaListarRequest);
+   //echo '<pre>';print_r($parcela->cadastros);die;
+   
    //////// Variáveis ////////  
     $variaveis1=array('mercadorias'=>'Mercadorias','vDesconto'=>'Desconto','ipi'=>'IPI','icmsSt'=>'ICMS ST','vPedido'=>'Valor do Pedido');//valores preenchidos automaticamente
     $variaveis2=array(

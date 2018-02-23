@@ -277,8 +277,9 @@
     .total{
         float: right;
     }
-    form{
-        width: 710px;
+    .fPedido{
+        width: 980px;
+        //border: solid red;
     }
     .tabela{
         //background: rgba(216, 0, 0,0.1);
@@ -369,10 +370,22 @@
     .valores{
         background: #ccc;
     }
+    .conteudo{
+        //border: solid green;
+        width: 980px;
+        //margin-left: 50px;
+    }
+    .conteudo form, .conteudo h1{
+        //border: solid blue;
+        margin-left: 120px;
+    }
+    .conteudo h1{
+        font-size: 38px;
+    }
 </style>
 <div id="menu">
     <ul>
-        <li><a href=<?= Utils::createLink('pedido',array('act'=>'cad')); ?>>Incluir</a></li>
+        <!--<li><a href=<?= Utils::createLink('pedido',array('act'=>'cad')); ?>>Incluir</a></li>-->
         <!--<li><a href=<?= Utils::createLink('pedido',array('act'=>'list')); ?>>Listar</a></li>-->
     </ul>
     <?php if($act!='cad'){?>
@@ -383,7 +396,7 @@
 <div class="conteudo">
 <?php if($act=='cad'): ?>
 <h1>Inclusão de Pedido de Venda</h1>
-<form method="post" action="../paginas/add.php?act=cad&pagina=pedido">
+<form class="fPedido" method="post" action="../paginas/add.php?act=cad&pagina=pedido">
 <?php
 $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codigo_cliente] => 3792227 [codigo_pedido_integracao] => 1518658537 [data_previsao] => 14/02/2018 [etapa] => 50 [numero_pedido] => 68319 [quantidade_itens] => 1 ) '
         . '[det] => Array ( [0] => stdClass Object ( [ide] => stdClass Object ( [codigo_item_integracao] => 4422421 [simples_nacional] => S ) [imposto] => stdClass Object ( [cofins_padrao] => stdClass Object ( [aliq_cofins] => 3 [base_cofins] => 400 [cod_sit_trib_cofins] => 01 [tipo_calculo_cofins] => B [valor_cofins] => 12 ) [icms_sn] => stdClass Object ( [aliq_icms_sn] => 1.25 [cod_sit_trib_icms_sn] => 101 [origem_icms_sn] => 0 [valor_credito_icms_sn] => 5 ) [ipi] => stdClass Object ( [cod_sit_trib_ipi] => 51 ) [pis_padrao] => stdClass Object ( [aliq_pis] => 0.65 [base_pis] => 400 [cod_sit_trib_pis] => 01 [tipo_calculo_pis] => B [valor_pis] => 2.6 ) ) [inf_adic] => stdClass Object ( [peso_bruto] => 150 [peso_liquido] => 150 ) [produto] => stdClass Object ( [cfop] => 5.102 [codigo_produto] => 4422421 [descricao] => Telefone Celular X [ncm] => 9403.30.00 [quantidade] => 1 [tipo_desconto] => V [unidade] => UN [valor_desconto] => 0 [valor_mercadoria] => 200 [valor_total] => 200 [valor_unitario] => 200 ) ) ) [frete] => stdClass Object ( [codigo_transportadora] => 2239663 [modalidade] => 1 [placa] => ABC1234 [placa_estado] => SP [valor_frete] => 30 ) [informacoes_adicionais] => stdClass Object ( [codigo_categoria] => 1.01.03 [codigo_conta_corrente] => 11850365 [consumidor_final] => S [enviar_email] => N ) [lista_parcelas] => stdClass Object ( [parcela] => Array ( [0] => stdClass Object ( [data_vencimento] => 15/02/2018 [numero_parcela] => 1 [percentual] => 50 [valor] => 100 ) [1] => stdClass Object ( [data_vencimento] => 22/05/2018 [numero_parcela] => 2 [percentual] => 50 [valor] => 100 ) ) ) [total_pedido] => stdClass Object ( [base_calculo_icms] => 200 [valor_mercadorias] => 200 [valor_total_pedido] => 200 ) )';
@@ -419,7 +432,22 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
     <!-- Fim do Quadro -->
 <table class="tabela">
     <tr><td>Vendedor</td><td>Número de Parcelas</td><td></td></tr>
-    <tr><td><input name="vendedor" type="text" ></td><td><input name="nParcelas" type="text" /></td></tr>
+    <tr><td>
+            <select name="vendedor">
+                <option value=""></option>
+                <?php foreach($vend->cadastro as $key => $item): ?>
+                <option value="<?= $item->nome ?>"><?= $item->nome ?></option>
+                <?php endforeach; ?>
+            </select>
+        </td><td>
+            <select name="parcela">
+                <option value=""></option>
+                <?php //echo '<pre>';print_r($parcela);die ?>
+                <?php foreach($parcela->cadastros as $key => $item): ?>
+                <option value="<?= $item->cDescricao ?>"><?= $item->cDescricao ?></option>
+                <?php endforeach; ?>
+            </select>
+        </td></tr>
 </table>
     <div class="outrosItens">
         <span class="item">Itens de Venda</span>
@@ -427,7 +455,7 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
         <span class="info">Informações Adcionais</span>
         <span class="parcela">Parcelas</span>        
         <!--<span class="email">E-mail</span>-->
-        <!--<span class="observacao">OBS</span>-->
+        <span class="observacao">OBS</span>
     </div>
         <div id='pnl1'>
             <div id='botoes'>

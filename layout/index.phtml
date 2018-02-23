@@ -17,6 +17,12 @@
     
     <script>
         $(document).ready(function(){
+            $('#ico img').css({
+                position: 'absolute',
+                left: '10px',
+                height: '40px',
+                background: 'none'
+            })
             $('<img src="../web/img/sair.png" title="Sair" height="28px" />').appendTo($('#sair'));
             $('#sair img')
                 .css({
@@ -47,24 +53,26 @@
 <body id="page">
     <div id="main">
         <!-- header -->
-        <div id="header"><div class="pagina"></div></div>
+        <div id="header">
+            <div id="ico"><img src='../web/img/logo.png' title='EMQDesenv' /></div>
+            <div class="pagina"></div>
+        </div>
         <span id="sair"></span>
         <!-- content -->
         <div id="content">
             <div class="wrapper">
-                <div class="col-1">
+                <!--<div class="col-1">
                     <div class="box">
                         <div class="inner">
                             <img src='emqdesenv.ico' />
-                            <!--<div class="title"><a href="index.php">Aplicações</a></div>-->
                             <ul class="list">
-                                <li><span><a href="<?php echo Utils::createLink('cliente'); ?>" ><img src="img/clientes.png" alt="" title="Cadastro de Clientes" class="icon" />Clientes</a></span></li>
-                                <li><span><a href="<?php echo Utils::createLink('produto'); ?>" ><img src="img/produtos.png" alt="" title="Cadastro de Produtos" class="icon" />Produtos</a></span></li>
-                                <li><span><a href="<?php echo Utils::createLink('pedido'); ?>" ><img src="img/pedidos.png" alt="" title="Pré-Venda" class="icon" />Pré-Venda</a></span></li>
+                                <li><span><a href="<?php //echo Utils::createLink('cliente'); ?>" ><img src="img/clientes.png" alt="" title="Cadastro de Clientes" class="icon" />Clientes</a></span></li>
+                                <li><span><a href="<?php //echo Utils::createLink('produto'); ?>" ><img src="img/produtos.png" alt="" title="Cadastro de Produtos" class="icon" />Produtos</a></span></li>
+                                <li><span><a href="<?php //echo Utils::createLink('pedido'); ?>" ><img src="img/pedidos.png" alt="" title="Pré-Venda" class="icon" />Pré-Venda</a></span></li>
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div>-->
                 <div class="col-2">
                     <div class="indent">
                         <?php if ($flashes): ?>
@@ -82,7 +90,7 @@
         <!-- footer -->
         <div id="footer">
             <div class="indent">
-                <div class="fleft"><a href="">T.I.</a>, 2016 &copy; Copyright, All rights reserved</div>
+                <div class="fleft"><a href="">T.I.</a>, 2018 &copy; Copyright, All rights reserved</div>
             </div>
         </div>
     </div>
