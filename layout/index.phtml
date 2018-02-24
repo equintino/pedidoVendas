@@ -44,9 +44,24 @@
     <style>
         .pagina{
             float: right;
-            margin: 4px 30px;
+            margin-right: 30px;          
+        }
+        .pagina, .mGeral{
+            margin-top: 5px;
             font-size: 15px;
             text-shadow: 4px 4px 4px white;
+        }
+        .mGeral{
+            float: left;
+            margin-left: 120px;
+        }
+        .mGeral ul li{
+            display: inline;
+            padding: 7px 10px;
+        }
+        .mGeral li:hover{
+            cursor: pointer;
+            background: #ccc;
         }
     </style>
 </head>
@@ -55,7 +70,8 @@
         <!-- header -->
         <div id="header">
             <div id="ico"><img src='../web/img/logo.png' title='EMQDesenv' /></div>
-            <div class="pagina"></div>
+            <div class="mGeral"></div>
+            <div class="pagina"><?= $pagina ?></div>
         </div>
         <span id="sair"></span>
         <!-- content -->

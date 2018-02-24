@@ -51,5 +51,9 @@
     left: 10px;
 }
 .conteudo{
-    margin-top: 10px;
+    width: 1000px;
+    margin-left: 30px;
+    background: rgba(100, 100, 100, 0.1);
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px gray;
 }

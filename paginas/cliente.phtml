@@ -94,34 +94,28 @@
             $(':input').each(function(){
                 arr.push($(this).attr('name'));          
             })
-        })
-        var pagina=null;
-        $('.pagina').text(pag)
+        }) 
+        $('.pagina').text('CLIENTE')
+        $('.mGeral').append('<ul><li>INCLUIR</li><li>LISTAR</li><ul>')
     })
 </script>
 <style>
-    #menu ul {
-        padding:0px;
-        margin:0px;
-        background-color:#EDEDED;
-        list-style:none;
-        font-size: 20px;
-    }
-    #menu ul li{
-        display: inline;
-    }
     .head{
         text-align: center;
-        font-size: 25px;
+        font-size: 30px;
+        padding-top: 10px;
+        //border: solid red;
     }
     .pag{
-        font-size: 12px;
+        font-size: 15px;
     }
     .total{
         float: right;
+        margin-right: 30px;
     }
     table{
-        width: 700px;
+        width: 100%;
+        border: 1px solid #ccc;
     }
     table td{
         padding: 3px 10px;
@@ -157,14 +151,14 @@
     }
 </style>
 <div id="menu">
-    <ul>
+    <!--<ul>
         <li><a href=<?= Utils::createLink('cliente',array('act'=>'cad')); ?>>Incluir</a></li>
         <li><a href=<?= Utils::createLink('cliente',array('act'=>'list')); ?>>Listar</a></li>
-    </ul>
+    </ul>-->
     <?php if($act!='cad' && $seleciona!=1){?>
     <div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por clientes" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por clientes" /></div>
     <?php } ?>
-    <script>var pag="<?= strtoupper($_GET['pagina']); ?>";</script>
+    <!--<script>var pag="<?php //strtoupper($_GET['pagina']); ?>";</script>-->
 </div>
 <div class="conteudo">
 <?php if($act=='cad'): ?>
@@ -259,10 +253,7 @@
 </table>
 <input type="submit" value="Salvar" /> 
 </form>
-<?php elseif($act=='list'): 
-    $clientes_list_request=array('pagina'=>'1','registros_por_pagina'=>'50','apenas_importado_api'=>'N');
-    $dados=$cliente->ListarClientes($clientes_list_request);
-?>
+<?php elseif($act=='list'): ?>
 <div class="head"><?php if($seleciona!=1){
         echo 'Lista de Clientes Cadastrados';
     }else{ 

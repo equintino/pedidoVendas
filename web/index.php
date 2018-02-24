@@ -112,6 +112,8 @@ final class index{
     return file_exists($this->getTemplate($pagina));
   }
 }
+//// Declaração de Variáveis ///
+//if(key_exists('pagina', $_GET))//$pagina=$_GET['pagina'];
 
 $index = new index();
 $index->init();

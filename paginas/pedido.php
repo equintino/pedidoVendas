@@ -64,10 +64,10 @@
    //echo '<pre>';print_r($parcela->cadastros);die;
    
    //////// Variáveis ////////  
-    $variaveis1=array('mercadorias'=>'Mercadorias','vDesconto'=>'Desconto','ipi'=>'IPI','icmsSt'=>'ICMS ST','vPedido'=>'Valor do Pedido');//valores preenchidos automaticamente
+    $variaveis1=array('tItem'=>'Total de Ítens','mercadorias'=>'Mercadorias','vDesconto'=>'Desconto',/*'ipi'=>'IPI','icmsSt'=>'ICMS ST',*/'vPedido'=>'Valor do Pedido');//valores preenchidos automaticamente
     $variaveis2=array(
                         'Ítens de Venda'=>array(
-                            'cProduto'=>'Código','descricao'=>'Descrição do Produto','quantidade'=>'Quantidade','vUnitario'=>'Preço Unitário de Venda','vTotal'=>'Valor Total do Ítem','pDesconto'=>'Desconto',/*'icms'=>'ICMS',*/'icmsSt'=>'ICMS ST','ipi'=>'IPI'/*,'pis'=>'PIS','cofins'=>'COFINS','frete'=>'Frete','seguro'=>'Seguros','oDespesa'=>'Outras Despesas','icmsDesonerado'=>'ICMS Desonerado','gCReceber'=>'Gera Conta a Receber','pLiquido'=>'Peso Líquido(Kg)','pBruto'=>'Peso Bruto(Kg)','cfop'=>'CFOP'*/
+                            'cProduto'=>'Código','descricao'=>'Descrição do Produto','quantidade'=>'Quantidade','vUnitario'=>'Preço Unitário de Venda','vTotal'=>'Valor Total do Ítem','pDesconto'=>'Desconto',/*'icms'=>'ICMS','icmsSt'=>'ICMS ST','ipi'=>'IPI','pis'=>'PIS','cofins'=>'COFINS','frete'=>'Frete','seguro'=>'Seguros','oDespesa'=>'Outras Despesas','icmsDesonerado'=>'ICMS Desonerado','gCReceber'=>'Gera Conta a Receber','pLiquido'=>'Peso Líquido(Kg)','pBruto'=>'Peso Bruto(Kg)','cfop'=>'CFOP'*/
                         ),
                         'Frete e Outras Despesas'=>array(
                             'Transportadora','Tipo do Frete','Placa do Veícula','UF','RNTRC (ANTT)','Quantidade de Volumes','Espécie dos Volumes','Marca dos Volumes','Numeração dos Volumes','Peso Líquido (Kg)','Peso Bruto (Kg)','Valor do Frete','Valor do Seguro','Número do Lacre','Outras Despesas Acessórias','O transporte será realizado com veículo próprio'

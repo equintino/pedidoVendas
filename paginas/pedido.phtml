@@ -5,9 +5,13 @@
     arr=new Array();
     $(document).ready(function(){
         $('.botao :reset').trigger('click')
+        $('.botao input').mouseover(function(){
+            $(this).css('cursor','pointer')
+        })
         $('.botao').css({
-            float: 'right',
-            marginRight: '20px'
+            float: 'left',
+            marginTop: '4px',
+            marginLeft: '745px'
         })
         $('.botao input').css({
             borderRadius: '0 0 5px 5px',
@@ -70,10 +74,11 @@
             })
         })
         
-        $('.novo').hide();
+        //$('.novo').hide();
         $('#botoes .bnt,.outrosItens span').mouseover(function(){
             $(this).css('cursor','pointer')
-        })        
+        })  
+        var item=0;
         $('#botoes .bnt').click(function(){
             if(!$('.razao input').val()){
                 alert('Preenche campo "CLIENTE"');
@@ -84,8 +89,50 @@
                 $('.cnpj input').focus();
                 return false;
             }
+            
             if($(this).text()=='Novo Ítem'){
-                $('.novo').show()
+                var str=$('#pnl1 table .item').text();
+                ultimoItem=str.length-1;
+                /*alert(item);
+                alert(str);
+                if(str){
+                    var ultmoItem=str.charAt(str.lenght-1);
+                }*/
+                    var y=1;
+                $('#pnl1 table input').each(function(){
+                    if($(this).attr('name')=='codigo_produto'){
+                            //alert(y);
+                        if(y==item){
+                            //alert(item);
+                            if(!$(this).val()){
+                                alert('Não foi inserido nenhum dado no NOVO ÍTEM.');
+                                $(this).css('background','rgba(216, 0, 0,0.1)')
+                                $(this).focus();
+                                die;
+                            }
+                            //alert($(this).val());
+                        }
+                        y++;
+                    }
+                })
+                //.val());
+                //alert(ultimoItem);
+                /*
+                if(ultimoItem==item){
+                    var dCodigo=0;
+                    alert('entrei');
+                }else{
+                    var dCodigo=1;
+                }*/
+                    //alert(dCodigo);
+                //$('.novo').show()
+                //$('#pnl1 table input').val()
+                //if((!$('#pnl1 table input').val() && item != 0)){
+                    //alert('Favo inserir novo item.');
+                //}else{
+                    item++;
+                    $('#pnl1 table').append('<tr><td><input autofocus type="text" name="codigo_produto" /></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" /></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vToalItem" /></td><td><input type="text" name="pDescontoItem" /></td><td class=item>'+item+'</td></tr>')
+                //}
             }
         })
         $('#pnl2').css('display','none')          
@@ -95,7 +142,7 @@
         $('#pnl6').css('display','none')
         $('.outrosItens span').click(function(){
             $('.outrosItens span').css({
-                background: 'white'
+                background: 'none'
             });
             $(this).css('background','#ccc');
             $('#pnl1').css('display','none')
@@ -239,8 +286,7 @@
                 arr.push($(this).attr('name'));          
             })
         })*/
-        var pagina=null;
-        $('.pagina').text(pag)
+        $('.pagina').text('PRÉ-VENDA')
         var cont=0;
         
 
@@ -332,6 +378,10 @@
         //border: solid #ccc;
         height: 170px;
     }
+    .outrosItens{
+        padding: 8px 0;
+        //border: 1px solid #ccc;
+    }
     .outrosItens span{
         padding: 2px 20px;
     }
@@ -370,11 +420,6 @@
     .valores{
         background: #ccc;
     }
-    .conteudo{
-        //border: solid green;
-        width: 980px;
-        //margin-left: 50px;
-    }
     .conteudo form, .conteudo h1{
         //border: solid blue;
         margin-left: 120px;
@@ -391,7 +436,7 @@
     <?php if($act!='cad'){?>
     <div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por produtos" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por produtos" /></div>
     <?php } ?>
-    <script>var pag="PRÉ-VENDA";</script>
+    <!--<script>var pag="PRÉ-VENDA";</script>-->
 </div>
 <div class="conteudo">
 <?php if($act=='cad'): ?>
@@ -465,7 +510,7 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
         <!--<fieldset class="iVendas">-->
                 <table>
                     <tr>
-                    <?php $ref=1; ?>
+                    <?php //$ref=1; ?>
                     <?php foreach($variaveis2['Ítens de Venda'] as $key => $item): ?>
                         <?php if($item=='Desconto'): ?>
                             <td><?= $item ?>(%)</td>
@@ -478,13 +523,14 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
                     ')</script> -->
                     <?php endforeach; ?>
                     </tr>
-        <?php //if(@$dados_produto){echo '<pre>';print_r($dados_produto);} ?>
-                    <tr class='novo'>
-                    <?php foreach($variaveis2['Ítens de Venda'] as $key => $item): ?>
-                        <td><input type='text' name='<?= $key ?>' /></td>
-                    <?php $ref++; endforeach; ?>
-                    </tr>
                 </table>
+        <?php //if(@$dados_produto){echo '<pre>';print_r($dados_produto);} ?>
+                    <!--<tr class='novo'>-->
+                    <?php //foreach($variaveis2['Ítens de Venda'] as $key => $item): ?>
+                        <!--<td><input type='text' name='<?php //$key ?>' /></td>-->
+                    <?php //$ref++; //endforeach; ?>
+                    <!--</tr>
+                </table>-->
         <!--</fieldset>-->
             </div>
         </div>
@@ -575,11 +621,11 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
         <!--</fieldset>-->
             </div>
         </div>
-    <div class="botao">
+    <span class="botao">
         <input type="hidden" name="dadosProduto" />
         <input type="reset" value="Limpa"/>
         <input type="submit" value="Confirma"/>
-    </div>
+    </span>
 <div id="painel"></div>
 </form>
 <?php elseif($act=='cons'):?>

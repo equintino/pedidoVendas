@@ -26,14 +26,11 @@
     }
     
 ////////// Clientes ////////////
-   if($act=='list'){
-    //// Listar Clientes ////
-    
-    //print_r($dados->clientes_cadastro);
-    
+   if($act=='list'){    
     //// Listar Clientes Resumido ////
-    $clientes_list_request=array("pagina"=>1,"registros_por_pagina"=>50,"apenas_importado_api"=>"N");
-    //$dados=$cliente->ListarClientesResumido($clientes_list_request);
+    $clientes_list_request=array('pagina'=>'1','registros_por_pagina'=>'100','apenas_importado_api'=>'N');
+    $dados=$cliente->ListarClientes($clientes_list_request);
+    
    }elseif($act=='excl'){
     //// Excluir Cliente ////
     $clientes_cadastro_chave=array("codigo_cliente_omie"=>$_GET['codigo'],"codigo_cliente_integracao"=>"");
