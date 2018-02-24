@@ -88,51 +88,32 @@
                 alert('Preenche campo "CNPJ/CPF"');
                 $('.cnpj input').focus();
                 return false;
-            }
-            
+            }           
             if($(this).text()=='Novo Ítem'){
-                var str=$('#pnl1 table .item').text();
-                ultimoItem=str.length-1;
-                /*alert(item);
-                alert(str);
-                if(str){
-                    var ultmoItem=str.charAt(str.lenght-1);
-                }*/
-                    var y=1;
+                var y=1;
                 $('#pnl1 table input').each(function(){
                     if($(this).attr('name')=='codigo_produto'){
-                            //alert(y);
                         if(y==item){
-                            //alert(item);
                             if(!$(this).val()){
                                 alert('Não foi inserido nenhum dado no NOVO ÍTEM.');
                                 $(this).css('background','rgba(216, 0, 0,0.1)')
                                 $(this).focus();
                                 die;
                             }
-                            //alert($(this).val());
                         }
                         y++;
                     }
                 })
-                //.val());
-                //alert(ultimoItem);
-                /*
-                if(ultimoItem==item){
-                    var dCodigo=0;
-                    alert('entrei');
-                }else{
-                    var dCodigo=1;
-                }*/
-                    //alert(dCodigo);
-                //$('.novo').show()
-                //$('#pnl1 table input').val()
-                //if((!$('#pnl1 table input').val() && item != 0)){
-                    //alert('Favo inserir novo item.');
-                //}else{
                     item++;
-                    $('#pnl1 table').append('<tr><td><input autofocus type="text" name="codigo_produto" /></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" /></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vToalItem" /></td><td><input type="text" name="pDescontoItem" /></td><td class=item>'+item+'</td></tr>')
-                //}
+                    $('#pnl1 table').append('<tr id=item'+item+'><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" /></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" /></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vToalItem" /></td><td><input type="text" name="pDescontoItem" /></td></tr>')
+            }else if($(this).text()=='Excluir Ítem'){
+                var itemExcl=3;
+                var num=parseInt(itemExcl)+1;
+                $('#item'+itemExcl).remove();
+                for(i=num; i<parseInt(item)+1; i++){
+                    $('#item'+i+' .item').text(i-1);
+                }
+                item=i-2;
             }
         })
         $('#pnl2').css('display','none')          
