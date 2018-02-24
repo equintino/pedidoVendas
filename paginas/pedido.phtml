@@ -74,12 +74,12 @@
             })
         })
         
-        //$('.novo').hide();
         $('#botoes .bnt,.outrosItens span').mouseover(function(){
             $(this).css('cursor','pointer')
         })  
         var item=0;
         var conf=null;
+        var conf2=null;
         $('#botoes .bnt').click(function(){
             if(!$('.razao input').val()){
                 alert('Preenche campo "CLIENTE"');
@@ -106,59 +106,20 @@
                     }
                 })
                     item++;
-                    $('#pnl1 table').append('<tr id=item'+item+'><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" /></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" /></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vToalItem" /></td><td><input type="text" name="pDescontoItem" /></td></tr>')
+                    //alert(item);
+                    //alert($('#pnl1 table span').length);
+                    if($('#pnl1 table span').length != 0){
+                       $('#pnl1 table').append('<tr id=item'+item+'><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" /></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" /></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vToalItem" /></td><td><input type="text" name="pDescontoItem" /></td></tr>')
+                       itemExclusao();
+                    }else{
+                        $('#pnl1 table').append('<tr id=item'+item+'><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" /></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" /></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vToalItem" /></td><td><input type="text" name="pDescontoItem" /></td></tr>')
+                    }
             }else if($(this).text()=='Excluir Ítem'){
                 if($('#pnl1 table input').val()){
                     alert('Clique no Nº do Ítem para excluir.');
                     if(!conf){
-                        $('#pnl1 table .item').wrap('<span></span>')
-                        $('#pnl1 table span').css({
-                                background: 'yellow',
-                                borderRadius: '10px',
-                                boxShadow: '4px 4px 4px gray'
-                        }).mouseover(function(){
-                            $(this).css({
-                                cursor: 'pointer',
-                                background: '#ccc'
-                            })
-                            $(this).mouseleave(function(){
-                                $(this).css({
-                                    background: 'yellow'                                
-                                })
-                            })
-                            $(this).mousedown(function(){
-                                $(this).css({
-                                    position: 'relative',
-                                    top: '4px',
-                                    boxShadow: 'none'
-                                }).bind('mouseout mouseup', function(){
-                                    $(this).css({
-                                        position: 'relative',
-                                        top: '-1px',
-                                        boxShadow: '4px 4px 4px gray'
-                                    })
-                                    //$(this).click(function(){
-                                        var confirma=confirm('Confirma a exclusão do ítem '+$(this).text()+'?');
-                                        if(confirma){
-                                            $('#item'+$(this).text()+' .item').remove();
-                                        }
-                                        //alert($('#item1 .item').text());
-                                        //$('#item'+itemExcl).remove();
-                                    //})
-                                })
-                            })
-                            
-                        })
-                        conf=1;
+                        itemExclusao();
                     }
-                    //$('#pnl1 table button').focus()  
-                    var itemExcl=3;
-                    var num=parseInt(itemExcl)+1;
-                    //$('#item'+itemExcl).remove();
-                    for(i=num; i<parseInt(item)+1; i++){
-                        $('#item'+i+' .item').text(i-1);
-                    }
-                    //item=i-2;
                     die;
                 }
             }
@@ -323,6 +284,65 @@
         })
         //alert($('.novo input').attr('name','Quantidade'));
         $('.previsao input').mask('00/00/0000');
+        
+        ///// funcoes ////
+        function itemExclusao(){
+            $('#pnl1 table .item').wrap('<span></span>')
+            $('#pnl1 table span').css({
+                    background: 'yellow',
+                    borderRadius: '10px',
+                    boxShadow: '4px 4px 4px gray'
+            }).mouseover(function(){
+                $(this).css({
+                    cursor: 'pointer',
+                    background: '#ccc'
+                })
+                $(this).mouseleave(function(){
+                    $(this).css({
+                        background: 'yellow'                                
+                    })
+                })
+                $(this).mousedown(function(){
+                    $(this).css({
+                        position: 'relative',
+                        top: '4px',
+                        boxShadow: 'none'
+                    }).bind('mouseout mouseup', function(){
+                        $(this).css({
+                            position: 'relative',
+                            top: '-1px',
+                            boxShadow: '4px 4px 4px gray'
+                        })
+                    }).mouseup(function(){
+                        if(!conf2){
+                            if(confirm('Confirma a exclusão do ítem '+$(this).text()+'?')){
+                                //alert($('#item'+$(this).text()).text());
+                                $('#item'+$(this).text()).remove();
+                                var z=1;
+                                var w=0;
+                                $('#pnl1 table .item').each(function(){
+                                    $(this).text(z)
+                                    z++;
+                                });
+                                $('#pnl1 table tr').each(function(){
+                                   $(this).attr('id','item'+w)
+                                   w++;
+                                })
+                                item=$('#pnl1 table .item').length;
+                                //alert(item);
+                                conf2=null;
+                                die;
+                            }else{
+                                die;
+                            }
+                        }
+                    })
+                })
+
+            })
+            conf=1;
+        }
+        
     })
     function numeroParaMoeda(n, c, d, t)
     {
