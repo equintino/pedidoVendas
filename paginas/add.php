@@ -2,7 +2,7 @@
 <?php
     $act=$_GET['act'];
     @$pagina=$_GET['pagina'];
-    
+    print_r($_POST);die;
     if($pagina=='cliente'){
         include '../model/ClientesCadastroJsonClient.php';
         $cliente=new ClientesCadastroJsonClient();
