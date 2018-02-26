@@ -16,62 +16,8 @@
         $('.botao input').css({
             borderRadius: '0 0 5px 5px',
             fontWeight: '600',
-            //backgroundColor: '#63a9c1',
             color: '#111f46',
             padding: '1px 4px'
-        })
-        
-        //// qudro inferior ////
-        $('.novo input').keyup(function (){
-            $('.novo input').each(function(){
-                switch($(this).attr('name')){
-                    case 'quantidade':
-                       $(this).mask('################', {reverse: true});
-                       quantidade=$(this).val();
-                       break;
-                    case 'vUnitario':
-                        vUnitario=$(this).val();
-                        break;
-                    case 'vTotal':
-                        $(this).mask('###.###.###.###,##', {reverse: true});
-                        var vTotal=$(this).val();
-                        break;
-                    case 'pDesconto':
-                        pDesconto=$(this).val()/100;
-                        vDesconto=vTotal-(vTotal*pDesconto);
-                        $(this).mask('000', {reverse: true});
-                        if($(this).val()>'100'){
-                            $(this).val('100');
-                        }
-                        break;
-                    case 'icmsSt':
-                        $(this).mask('###.###,##', {reverse: true});
-                        var icmsSt=$(this).val();
-                        $('.autoQuadro td').each(function(){
-                            if($(this).attr('nome')=='icmsSt'){
-                                if(icmsSt){
-                                    $(this).text(icmsSt);
-                                }else{
-                                    $(this).text('0,00'); 
-                                }
-                            }
-                        })                      
-                        break;
-                    case 'ipi':
-                        $(this).mask('###.###,##', {reverse: true});
-                        var ipi=$(this).val();
-                        $('.autoQuadro td').each(function(){
-                            if($(this).attr('nome')=='ipi'){
-                                if(ipi){
-                                    $(this).text(ipi);
-                                }else{
-                                    $(this).text('0,00');
-                                }
-                            }
-                        })
-                        break;
-                }
-            })
         })
         
         $('#botoes .bnt,.outrosItens span').mouseover(function(){
@@ -99,28 +45,31 @@
                                 alert('Não foi inserido nenhum dado no NOVO ÍTEM.');
                                 $(this).css('background','rgba(216, 0, 0,0.1)')
                                 $(this).focus();
+                                //quadroInferior();
                                 die;
                             }
                         }
                         y++;
                     }
                 })
-                    item++;
-                    //alert(item);
-                    //alert($('#pnl1 table span').length);
-                    if($('#pnl1 table span').length != 0){
-                       $('#pnl1 table').append('<tr id=item'+item+'><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" /></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" /></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vToalItem" /></td><td><input type="text" name="pDescontoItem" /></td></tr>')
-                       itemExclusao();
-                    }else{
-                        $('#pnl1 table').append('<tr id=item'+item+'><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" /></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" /></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vToalItem" /></td><td><input type="text" name="pDescontoItem" /></td></tr>')
-                    }
+                item++;
+                if($('#pnl1 table span').length != 0){
+                   $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" /></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" /></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vToalItem" /></td><td><input type="text" name="pDescontoItem" /></td></span></tr>')
+                   itemExclusao();
+                   quadroInferior();
+                }else{
+                    $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class=lupa></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" /></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" /></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vToalItem" /></td><td><input type="text" name="pDescontoItem" /></td></span></tr>')
+                    //itemExclusao();
+                    quadroInferior();
+                }
             }else if($(this).text()=='Excluir Ítem'){
+                //quadroInferior();
                 if($('#pnl1 table input').val()){
                     alert('Clique no Nº do Ítem para excluir.');
                     if(!conf){
                         itemExclusao();
                     }
-                    die;
+                    //die;
                 }
             }
         })
@@ -131,9 +80,6 @@
         $('#pnl6').css('display','none')
        
         $('.outrosItens span').click(function(){
-            /*$('.outrosItens span').css({
-                //background: 'none'
-            });*/
             $(this).css({
                 position: 'relative',
                 top: '1px',
@@ -142,14 +88,8 @@
                 color: 'white',
                 textShadow: '2px 2px 2px black'
             });
-            //var bntAtual=$(this);
             var bntAtual=$(this).attr('class');
-            //if(!bntAnt){
-                //antAnt=bntAtual;
-                //alert(bntAtual);
-            //}
             $('.outrosItens span').each(function(){
-                //alert(bntAnt);
                 if(!$(this).hasClass(bntAtual)){
                     $(this).css({
                         position: 'relative',
@@ -162,11 +102,6 @@
                 }
             })
             $('#pnl1, #pnl2, #pnl3, #pnl4, #pnl5, #pnl6').css('display','none')
-            /*$('#pnl2').css('display','none')          
-            $('#pnl3').css('display','none')          
-            $('#pnl4').css('display','none')
-            $('#pnl5').css('display','none')           
-            $('#pnl6').css('display','none')*/
             if($(this).text()=='Itens de Venda'){
                 $('#pnl1').css('display','block')
             }else if($(this).text()=='Frete/Despesas'){
@@ -180,137 +115,14 @@
             }else if($(this).text()=='Observação'){
                 $('#pnl6').css('display','block')
             }           
-                //alert($('.botao :hidden').attr('name'));
-                //alert($('.botao :hidden').val());
         })
-        $('.novo input').each(function(){
-            if($(this).attr('name')=='quantidade'){
-                $(this).keyup(function(){
-                    var algarismo1=qEstoque.length;
-                    var algarismo2=$(this).val().length;
-                    var zero=algarismo1-algarismo2;
-                    switch(zero){
-                        case 1:
-                            zero='0';
-                            break;
-                        case 2:
-                            zero='00';
-                            break;
-                        case 3:
-                            zero='000';
-                            break;
-                        default:
-                            zero='';
-                    }
-                    var quantidade=zero+$(this).val();
-                    $('.novo input').each(function(){
-                        if($(this).attr('name')=='vTotal'){
-                            vTotal=parseInt(vUnitario)*parseInt(quantidade);
-                            $(this).val(numeroParaMoeda(vTotal));
-                        }
-                    })
-                    if(quantidade > qEstoque){
-                        alert('Quantidade em Estoque '+qEstoque+'');
-                        $(this).val(qEstoque);
-                        vTotal=parseInt(vUnitario)*parseInt(qEstoque);
-                        //alert(vTotal);
-                        $('.novo input').each(function(){
-                            if($(this).attr('name')=='pDesconto'){
-                                pDesconto=$(this).val();
-                            }else if($(this).attr('name')=='vTotal'){
-                                $(this).val(numeroParaMoeda(vTotal));
-                            }  
-                        })
-                    }
-                    $('.autoQuadro td').each(function(){
-                        if($(this).attr('nome')=='mercadorias'){
-                            $(this).text(numeroParaMoeda(vTotal));
-                        }else if($(this).attr('nome')=='vDesconto'){
-                            $('.novo input').each(function(){
-                                if($(this).attr('name')=='pDesconto'){
-                                    vDesconto=vTotal*$(this).val()/100;
-                                }
-                            })
-                            $(this).text(numeroParaMoeda(vDesconto));
-                        }else if($(this).attr('nome')=='vPedido'){
-                            if(!vDesconto)vDesconto=null;
-                            $(this).text(numeroParaMoeda(vTotal-vDesconto));
-                        }
-                    })                 
-                })                         
-            }else if($(this).attr('name')=='pDesconto'){
-                $(this).keyup(function(){
-                    vDesconto=vTotal*$(this).val()/100;
-                    $('.autoQuadro td').each(function(){
-                        if($(this).attr('nome')=='vDesconto'){
-                            $(this).text(numeroParaMoeda(vDesconto));
-                        }else if($(this).attr('nome')=='vPedido'){
-                            $(this).text(numeroParaMoeda(vTotal-vDesconto));
-                        } 
-                    })
-                    
-                })
-            }
-        })
-        
-        
-        
-        
-        /*$('td img').click(function(){
-            if($(this).attr('title')=='Exclui'){
-                var razao=$(this).attr('razao');
-                var confirma=confirm('Confirma Exclusão de "'+razao+'"');
-                if(confirma){
-                    var codigo=$(this).attr('codigo');
-                    $(location).attr('href','index.php?pagina=produto&act=excl&codigo='+codigo+'')
-                }
-            }else if($(this).attr('title')=='Altera'){
-                var codigo=$(this).attr('codigo');
-                $(location).attr('href','index.php?pagina=produto&act=alt&codigo='+codigo+'')
-            }
-        })
-        $('.procura img').mouseover(function(){
-            $(this).css('cursor','pointer')
-        })
-        $('.procura').keyup(function(e){
-              var code = e.which; // recommended to use e.which, it's normalized across browsers
-              if(code==13)e.preventDefault();
-              if(code==13||e.keyCode==13){
-                  var codigo=$('.procura :input').val();
-                  if(codigo){
-                    $(location).attr('href','index.php?pagina=produto&act=cons&codigo='+codigo+'')
-                  }
-              } 
-        })
-        $('.procura img').click(function(){
-            var codigo=$('.procura :input').val();
-              if(codigo){
-                $(location).attr('href','index.php?pagina=produto&act=cons&codigo='+codigo+'')
-              }
-        })
-        $('.razaosocial').mouseover(function(){
-            $(this).css('cursor','pointer')
-            $(this).attr('title','dê um duplo clique para ver detalhes.')
-        })
-        $('.razaosocial').dblclick(function(){
-            var codigo=$(this).attr('linha');
-            $(location).attr('href','index.php?pagina=produto&act=cons&codigo='+codigo+'')
-        })
-        $(':submit').click(function(){
-            var arr=new Array();
-            $(':input').each(function(){
-                arr.push($(this).attr('name'));          
-            })
-        })*/
         $('.pagina').text('PRÉ-VENDA')
         var cont=0;
-        
-
         $('.tabela img').click(function(){
             $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1')
         })
-        //alert($('.novo input').attr('name','Quantidade'));
         $('.previsao input').mask('00/00/0000');
+        
         
         ///// funcoes ////
         function itemExclusao(){
@@ -359,26 +171,157 @@
                                    w++;
                                 })
                                 item=$('#pnl1 table .item').length;
-                                //alert(item);
                                 conf2=null;
+                                //quadroInferior();
                                 die;
                             }else{
+                                //quadroInferior();
                                 die;
                             }
                         }
                     })
                 })
-
             })
             conf=1;
         }
         
+            //// qudro inferior ////
+        function quadroInferior(){             
+            $('td input').click(function(){
+                //alert($(this).attr('name'));
+                if($(this).attr('name')=='codigo_produto'){
+                    alert($(this).attr('name'));
+                }
+            })
+            $('.divVendas td input').keyup(function (){ 
+                $('.divVendas td input').each(function(){
+                //alert($(this).attr('name'));
+                    switch($(this).attr('name')){
+                        case 'codigo_produto':
+                           break;
+                        case 'descricao':
+                           break;
+                        case 'quantidade':
+                           $(this).mask('################', {reverse: true});
+                           quantidade=$(this).val();
+                           break;
+                        case 'vUnitarioItem':
+                            vUnitario=$(this).val();
+                            break;
+                        case 'vToalItem':
+                            $(this).mask('###.###.###.###,##', {reverse: true});
+                            var vTotal=$(this).val();
+                            break;
+                        case 'pDescontoItem':
+                            pDesconto=$(this).val()/100;
+                            vDesconto=vTotal-(vTotal*pDesconto);
+                            $(this).mask('000', {reverse: true});
+                            if($(this).val()>'100'){
+                                $(this).val('100');
+                            }
+                            break;
+                        case 'icmsSt':
+                            $(this).mask('###.###,##', {reverse: true});
+                            var icmsSt=$(this).val();
+                            $('.autoQuadro td').each(function(){
+                                if($(this).attr('nome')=='icmsSt'){
+                                    if(icmsSt){
+                                        $(this).text(icmsSt);
+                                    }else{
+                                        $(this).text('0,00'); 
+                                    }
+                                }
+                            })                      
+                            break;
+                        case 'ipi':
+                            $(this).mask('###.###,##', {reverse: true});
+                            var ipi=$(this).val();
+                            $('.autoQuadro td').each(function(){
+                                if($(this).attr('nome')=='ipi'){
+                                    if(ipi){
+                                        $(this).text(ipi);
+                                    }else{
+                                        $(this).text('0,00');
+                                    }
+                                }
+                            })
+                            break;
+                    }
+                })
+            })          
+            $('td input').each(function(){
+                if($(this).attr('name')=='quantidade'){
+                    $(this).keyup(function(){
+                        var algarismo1=qEstoque.length;
+                        var algarismo2=$(this).val().length;
+                        var zero=algarismo1-algarismo2;
+                        switch(zero){
+                            case 1:
+                                zero='0';
+                                break;
+                            case 2:
+                                zero='00';
+                                break;
+                            case 3:
+                                zero='000';
+                                break;
+                            default:
+                                zero='';
+                        }
+                        var quantidade=zero+$(this).val();
+                        $('td input').each(function(){
+                            if($(this).attr('name')=='vTotal'){
+                                vTotal=parseInt(vUnitario)*parseInt(quantidade);
+                                $(this).val(numeroParaMoeda(vTotal));
+                            }
+                        })
+                        if(quantidade > qEstoque){
+                            alert('Quantidade em Estoque '+qEstoque+'');
+                            $(this).val(qEstoque);
+                            vTotal=parseInt(vUnitario)*parseInt(qEstoque);
+                            $('td input').each(function(){
+                                if($(this).attr('name')=='pDesconto'){
+                                    pDesconto=$(this).val();
+                                }else if($(this).attr('name')=='vTotal'){
+                                    $(this).val(numeroParaMoeda(vTotal));
+                                }  
+                            })
+                        }
+                        $('.autoQuadro td').each(function(){
+                            if($(this).attr('nome')=='mercadorias'){
+                                $(this).text(numeroParaMoeda(vTotal));
+                            }else if($(this).attr('nome')=='vDesconto'){
+                                $('td input').each(function(){
+                                    if($(this).attr('name')=='pDesconto'){
+                                        vDesconto=vTotal*$(this).val()/100;
+                                    }
+                                })
+                                $(this).text(numeroParaMoeda(vDesconto));
+                            }else if($(this).attr('nome')=='vPedido'){
+                                if(!vDesconto)vDesconto=null;
+                                $(this).text(numeroParaMoeda(vTotal-vDesconto));
+                            }
+                        })                 
+                    })                         
+                }else if($(this).attr('name')=='pDesconto'){
+                    $(this).keyup(function(){
+                        vDesconto=vTotal*$(this).val()/100;
+                        $('.autoQuadro td').each(function(){
+                            if($(this).attr('nome')=='vDesconto'){
+                                $(this).text(numeroParaMoeda(vDesconto));
+                            }else if($(this).attr('nome')=='vPedido'){
+                                $(this).text(numeroParaMoeda(vTotal-vDesconto));
+                            } 
+                        })
+
+                    })
+                }
+            })
+        }
     })
-    function numeroParaMoeda(n, c, d, t)
-    {
+    function numeroParaMoeda(n, c, d, t){
         c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
-        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-    }
+        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");    }
 </script>
 <style>
     body {
