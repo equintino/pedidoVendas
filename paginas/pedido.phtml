@@ -8,6 +8,7 @@
         $('.botao input').mouseover(function(){
             $(this).css('cursor','pointer')
         })
+        //$('body').css('background','rgba(100,200,100,0.1)')
         $('.botao').css({
             float: 'left',
             marginTop: '4px',
@@ -116,7 +117,7 @@
             }           
         })
         $('.pagina').text('PRÉ-VENDA')
-        var cont=0;
+        //var cont=0;
         $('.tabela img').click(function(){
             $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1')
         })
@@ -185,12 +186,18 @@
         }
         
             //// quadro inferior ////
-        function quadroInferior(){             
+        function quadroInferior(){
+            //var j=1;
             $('td input').focus(function(){
                 if($(this).attr('name')=='codigo_produto'){
+                    $('#pnl1 table .item').each(function(){
+                        j=$(this).text();
+                    })
                     $('#pnl1 table tr .lupa img').remove();
                     if(!$('#pnl1 table tr .lupa img').attr('src')){
-                        $('<img title="Pesquisar ítem" height=15px src="../web/img/lupa.png" />').appendTo('#pnl1 table tr .lupa')
+                        //$('<img title="Pesquisar ítem" height=15px src="../web/img/lupa.png" />').appendTo('#pnl1 table tr .lupa')
+                        $('#pnl1 table tr .lupa').append('<img title="Pesquisar ítem" height=15px src="../web/img/lupa.png" busca='+j+' />')
+                        //j++;
                     }
                 }
             })
@@ -331,6 +338,7 @@
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+        //background: black;
     }
     #menu ul {
         padding:0px;

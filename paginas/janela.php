@@ -11,7 +11,7 @@
                     var alturaTela = $(document).height();
                     var larguraTela = $(window).width();
                     //colocando o fundo preto
-                    $('#mascara').css({'width':larguraTela,'height':alturaTela});
+                    //$('#mascara').css({'width':larguraTela,'height':alturaTela});
                     $('#mascara').fadeIn(1000);	
                     $('#mascara').fadeTo("slow",0.8);
                     //var left = ($(window).width() /2) - ( $(id).width() / 1 );
@@ -28,12 +28,29 @@
                     $(id).show();	
  		});              
                 $('#pnl1 table').on('click',function(){
-                    if($('#pnl1 table tr .lupa img').attr('src')){
+                    //alert(j);
+                    
+                    
+                    
+                    //$(this).each(function(){
+                        //alert($('.item'));
+                    //})
+                    /*if($('#pnl1 table tr .lupa img').attr('src')){
                         $('#pnl1 table tr .lupa img').click(function(){
+                            alert($(this).text());
                             //alert($('#pnl1 table tr').attr('linha'));
                             $("a[rel=modal]").trigger("click")
                         })
-                    }
+                    }*/
+                    $('#pnl1 table tr').click('each',function(){
+                        //alert($('.lupa img').attr('src'));
+                        //if($(this)==$('.lupa img').attr('src')){
+                            linha=$(this).attr('id');
+                        //}
+                    })
+                    $('#pnl1 table tr .lupa img').click(function(){
+                        $("a[rel=modal]").trigger("click")
+                    })
                 })
  		$("#mascara").click( function(){
                     $(this).hide();
@@ -52,12 +69,14 @@
 		width:80%;
 		height:600px;
 		position:absolute;
-		left:0;
-		top:0;
+		left:200;
+		//top:0;
+                //margin: auto;
 		background:#FFF;
 		z-index:9900;
 		padding:10px;
 		border-radius:10px;
+                
             }
             #mascara{
 		position:absolute;
@@ -77,8 +96,7 @@
 	</style>
     </head>
     <body>
-	<a href="../paginas/formItem.php" rel="modal">
-        </a>
+	<a href='../paginas/formItem.php' rel="modal"></a>
 	<div class="window" id="janela1">Aguarde...</div>
 	<!-- mascara para cobrir o site -->	
 	<div id="mascara"></div>
