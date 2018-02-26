@@ -45,7 +45,6 @@
                                 alert('Não foi inserido nenhum dado no NOVO ÍTEM.');
                                 $(this).css('background','rgba(216, 0, 0,0.1)')
                                 $(this).focus();
-                                //quadroInferior();
                                 die;
                             }
                         }
@@ -54,11 +53,11 @@
                 })
                 item++;
                 if($('#pnl1 table span').length != 0){
-                   $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" /></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" /></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vToalItem" /></td><td><input type="text" name="pDescontoItem" /></td></span></tr>')
+                   $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" linha='+item+' /></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" /></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vToalItem" /></td><td><input type="text" name="pDescontoItem" /></td></span></tr>')
                    itemExclusao();
                    quadroInferior();
                 }else{
-                    $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class=lupa></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" /></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" /></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vToalItem" /></td><td><input type="text" name="pDescontoItem" /></td></span></tr>')
+                    $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class=lupa></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" linha='+item+' /></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" /></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vToalItem" /></td><td><input type="text" name="pDescontoItem" /></td></span></tr>')
                     //itemExclusao();
                     quadroInferior();
                 }
@@ -185,17 +184,18 @@
             conf=1;
         }
         
-            //// qudro inferior ////
+            //// quadro inferior ////
         function quadroInferior(){             
-            $('td input').click(function(){
-                //alert($(this).attr('name'));
+            $('td input').focus(function(){
                 if($(this).attr('name')=='codigo_produto'){
-                    alert($(this).attr('name'));
+                    $('#pnl1 table tr .lupa img').remove();
+                    if(!$('#pnl1 table tr .lupa img').attr('src')){
+                        $('<img title="Pesquisar ítem" height=15px src="../web/img/lupa.png" />').appendTo('#pnl1 table tr .lupa')
+                    }
                 }
             })
             $('.divVendas td input').keyup(function (){ 
                 $('.divVendas td input').each(function(){
-                //alert($(this).attr('name'));
                     switch($(this).attr('name')){
                         case 'codigo_produto':
                            break;
@@ -504,11 +504,6 @@
 <?php if($act=='cad'): ?>
 <h1>Inclusão de Pedido de Venda</h1>
 <form class="fPedido" method="post" action="../paginas/add.php?act=cad&pagina=pedido">
-<?php
-$json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codigo_cliente] => 3792227 [codigo_pedido_integracao] => 1518658537 [data_previsao] => 14/02/2018 [etapa] => 50 [numero_pedido] => 68319 [quantidade_itens] => 1 ) '
-        . '[det] => Array ( [0] => stdClass Object ( [ide] => stdClass Object ( [codigo_item_integracao] => 4422421 [simples_nacional] => S ) [imposto] => stdClass Object ( [cofins_padrao] => stdClass Object ( [aliq_cofins] => 3 [base_cofins] => 400 [cod_sit_trib_cofins] => 01 [tipo_calculo_cofins] => B [valor_cofins] => 12 ) [icms_sn] => stdClass Object ( [aliq_icms_sn] => 1.25 [cod_sit_trib_icms_sn] => 101 [origem_icms_sn] => 0 [valor_credito_icms_sn] => 5 ) [ipi] => stdClass Object ( [cod_sit_trib_ipi] => 51 ) [pis_padrao] => stdClass Object ( [aliq_pis] => 0.65 [base_pis] => 400 [cod_sit_trib_pis] => 01 [tipo_calculo_pis] => B [valor_pis] => 2.6 ) ) [inf_adic] => stdClass Object ( [peso_bruto] => 150 [peso_liquido] => 150 ) [produto] => stdClass Object ( [cfop] => 5.102 [codigo_produto] => 4422421 [descricao] => Telefone Celular X [ncm] => 9403.30.00 [quantidade] => 1 [tipo_desconto] => V [unidade] => UN [valor_desconto] => 0 [valor_mercadoria] => 200 [valor_total] => 200 [valor_unitario] => 200 ) ) ) [frete] => stdClass Object ( [codigo_transportadora] => 2239663 [modalidade] => 1 [placa] => ABC1234 [placa_estado] => SP [valor_frete] => 30 ) [informacoes_adicionais] => stdClass Object ( [codigo_categoria] => 1.01.03 [codigo_conta_corrente] => 11850365 [consumidor_final] => S [enviar_email] => N ) [lista_parcelas] => stdClass Object ( [parcela] => Array ( [0] => stdClass Object ( [data_vencimento] => 15/02/2018 [numero_parcela] => 1 [percentual] => 50 [valor] => 100 ) [1] => stdClass Object ( [data_vencimento] => 22/05/2018 [numero_parcela] => 2 [percentual] => 50 [valor] => 100 ) ) ) [total_pedido] => stdClass Object ( [base_calculo_icms] => 200 [valor_mercadorias] => 200 [valor_total_pedido] => 200 ) )';
-   
-?>
 <table class="tabela">
     <tr><td colspan="4">Cliente</td><td align="center">Previsão Faturamento</td></tr>
     <tr><td colspan="4" class="razao"><input type="hidden" name="cCliente" value="<?= $cCliente ?>" /><input name="cliente" type="text" size=53 value="<?= $razao ?>" required /> <img src="../web/img/lupa.png" height="14px" title="Pesquisar cliente"/> </td><td class="previsao"><input name="dPrevisao" type="text" value="<?= date('d/m/Y') ?>" /></td></tr>
@@ -677,7 +672,7 @@ $json='stdClass Object ( [cabecalho] => stdClass Object ( [bloqueado] => N [codi
                     <?php endforeach; ?>
                     </tr>
                     <tr>
-                        <td><textarea cols="90" name="observacao"></textarea></td>
+                        <td><textarea cols="80" name="observacao"></textarea></td>
                     </tr>
                 </table>
         <!--</fieldset>-->

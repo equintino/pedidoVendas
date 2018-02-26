@@ -15,10 +15,14 @@
                 vUnitario=$(this).attr('vUnitario');
                 qEstoque=$(this).attr('qEstoque');
                 
-                $('.novo input').each(function(){
+                $('#pnl1 table input').each(function(evento){
+                    //alert($('#pnl1 table input').val());
+                    //var data=evento.data;
                     var z=$(this).attr('name');
+                    //alert(evento);
+                    //alert($(this).attr('linha'));
                     switch(z){
-                        case 'cProduto':
+                        case 'codigo_produto':
                            $(this).val(cProduto);
                            break;
                         case 'descricao':
@@ -29,11 +33,12 @@
                            break;
                         case 'quantidade':
                            $(this).val(null);
+                           $(this).focus();
                            break;
-                        case 'vTotal':
+                        case 'vTotalItem':
                            $(this).val(null);
                            break;
-                        case 'pDesconto':
+                        case 'pDescontoItem':
                            $(this).val(null);
                            break;
                     }

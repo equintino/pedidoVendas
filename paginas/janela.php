@@ -27,10 +27,12 @@
                     $('.window').load(href);
                     $(id).show();	
  		});              
-                $('.novo input').click(function(){
-                    //alert($(this).attr('name'));
-                    if($(this).attr('name')=='cProduto'){
-                        $("a[rel=modal]").trigger("click")
+                $('#pnl1 table').on('click',function(){
+                    if($('#pnl1 table tr .lupa img').attr('src')){
+                        $('#pnl1 table tr .lupa img').click(function(){
+                            //alert($('#pnl1 table tr').attr('linha'));
+                            $("a[rel=modal]").trigger("click")
+                        })
                     }
                 })
  		$("#mascara").click( function(){
