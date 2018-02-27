@@ -6,12 +6,11 @@
             $(document).ready(function(){
 		$("a[rel=modal]").click( function(ev){
                     ev.preventDefault();
-                    //alterado
                     var id = '.window';
                     var alturaTela = $(document).height();
                     var larguraTela = $(window).width();
                     //colocando o fundo preto
-                    //$('#mascara').css({'width':larguraTela,'height':alturaTela});
+                    $('#mascara').css({'width':larguraTela,'height':alturaTela});
                     $('#mascara').fadeIn(1000);	
                     $('#mascara').fadeTo("slow",0.8);
                     //var left = ($(window).width() /2) - ( $(id).width() / 1 );
@@ -43,10 +42,7 @@
                         })
                     }*/
                     $('#pnl1 table tr').click('each',function(){
-                        //alert($('.lupa img').attr('src'));
-                        //if($(this)==$('.lupa img').attr('src')){
                             linha=$(this).attr('id');
-                        //}
                     })
                     $('#pnl1 table tr .lupa img').click(function(){
                         $("a[rel=modal]").trigger("click")
@@ -70,6 +66,7 @@
 		height:600px;
 		position:absolute;
 		left:200;
+                overflow: scroll;
 		//top:0;
                 //margin: auto;
 		background:#FFF;

@@ -105,12 +105,14 @@
     .jItem td{
         border-bottom: 1px solid gray;
     }
+    .jItem{
+        margin: auto;
+        //border: solid red;
+    }
 </style>
 <?php
     include '../model/ProdutosCadastroJsonClient.php';
-    //include '../model/ItensVenda.php';
     $produto=new ProdutosCadastroJsonClient();
-    //$item=new ItensVenda();
     
     $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>50,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
     $dados=$produto->ListarProdutos($produto_servico_list_request);
