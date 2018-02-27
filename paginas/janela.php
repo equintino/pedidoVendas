@@ -43,8 +43,15 @@
                     }*/
                     $('#pnl1 table tr').click('each',function(){
                             linha=$(this).attr('id');
+                            $('#'+linha+' input').each(function(){
+                                if($(this).attr('name')=='codigo_produto'){
+                                    codigo_produto=$(this).val().replace(/^\s+|\s+$/g,"");
+                                }
+                            })
                     })
                     $('#pnl1 table tr .lupa img').click(function(){
+                        link='../paginas/formItem.php?codigo_produto='+codigo_produto+'';
+                        $('a[rel=modal]').attr('href',link);
                         $("a[rel=modal]").trigger("click")
                     })
                 })
@@ -93,7 +100,7 @@
 	</style>
     </head>
     <body>
-	<a href='../paginas/formItem.php' rel="modal"></a>
+	<a href='#' rel="modal"></a>
 	<div class="window" id="janela1">Aguarde...</div>
 	<!-- mascara para cobrir o site -->	
 	<div id="mascara"></div>

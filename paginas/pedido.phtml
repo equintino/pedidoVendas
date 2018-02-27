@@ -54,11 +54,11 @@
                 })
                 item++;
                 if($('#pnl1 table span').length != 0){
-                   $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" linha='+item+' /></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" autocomplete="off"/></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vTotalItem" /></td><td><input type="text" name="pDescontoItem" /></td></span></tr>')
+                   $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" linha='+item+' required/></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" autocomplete="off" required /></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vTotalItem" /></td><td><input type="text" name="pDescontoItem" /></td></span></tr>')
                    itemExclusao();
                    quadroInferior();
                 }else{
-                    $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class=lupa></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" linha='+item+' /></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" autocomplete="off"/></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vTotalItem" /></td><td><input type="text" name="pDescontoItem" /></td></span></tr>')
+                    $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class=lupa></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" linha='+item+' required/></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" autocomplete="off" required /></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vTotalItem" /></td><td><input type="text" name="pDescontoItem" /></td></span></tr>')
                     quadroInferior();
                 }
             }else if($(this).text()=='Excluir Ítem'){
