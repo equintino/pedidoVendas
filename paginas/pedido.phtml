@@ -54,11 +54,13 @@
                 })
                 item++;
                 if($('#pnl1 table span').length != 0){
-                   $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" linha='+item+' required/></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" autocomplete="off" required /></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vTotalItem" /></td><td><input type="text" name="pDescontoItem" /></td></span></tr>')
+                   $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" linha='+item+' required/></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" autocomplete="off" required linha='+item+' /></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vTotalItem" linha='+item+' /></td><td><input type="text" name="pDescontoItem" linha='+item+' /></td></span></tr>')
                    itemExclusao();
+                   busca();
                    quadroInferior();
                 }else{
-                    $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class=lupa></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" linha='+item+' required/></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" autocomplete="off" required /></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vTotalItem" /></td><td><input type="text" name="pDescontoItem" /></td></span></tr>')
+                    $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class=lupa></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" linha='+item+' required/></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" autocomplete="off" linha='+item+' required /></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vTotalItem" linha='+item+' /></td><td><input type="text" name="pDescontoItem" linha='+item+' /></td></span></tr>')
+                    busca();
                     quadroInferior();
                 }
             }else if($(this).text()=='Excluir Ítem'){
@@ -75,7 +77,7 @@
                 })*/
                 //alert('clicou');
                 quadroInferior();
-                confereDados();
+                //confereDados();
             })
         })
         $('#pnl2').css('display','none')          
@@ -192,9 +194,8 @@
             })
             conf=1;
         }
-        
-            //// quadro inferior ////
-        function quadroInferior(){
+            //// Cria Busca ////
+        function busca(){      
             $('td input').focus(function(){
                 if($(this).attr('name')=='codigo_produto'){
                     $('#pnl1 table .item').each(function(){
@@ -205,21 +206,14 @@
                         $('#pnl1 table tr .lupa').append('<img title="Pesquisar ítem" height=15px src="../web/img/lupa.png" busca='+j+' />')
                     }
                 }
-            })  
-            //'#pnl1 td input'
+            })    
+        }
+            //// quadro inferior ////
+        function quadroInferior(){
             $('#pnl1 td input').each(function(){
-                /*$('#pnl1 table tr').click('each',function(){
-                        linha=$(this).attr('id');
-                })*/
-                /*$(this).each(function(data){
-                    //var rows = $(this).jqxGrid();
-                    //alert(rows);
-                    alert($(this));
-                    //alert($(this));
-                })*/
-                //alert($(this).each);
                 if($(this).attr('name')=='quantidade'){
                     $(this).bind('keyup click', function(){
+                        pedLinha=$(this).attr('linha');
                         var algarismo1=qEstoque.length;
                         var algarismo2=$(this).val().length;
                         var zero=algarismo1-algarismo2;
@@ -241,25 +235,26 @@
                                 zero='';
                         }
                         quantidade=zero+$(this).val();
-                        //alert(quantidade);
                         $('#pnl1 td input').each(function(){
-                            //alert($(this).attr('name'));
                             if($(this).attr('name')=='vTotalItem'){
-                                //alert($(this).attr('name'));
-                                vTotalItem=parseInt(vUnitario)*parseInt(quantidade);
-                                $(this).val(numeroParaMoeda(vTotalItem));
+                                if($(this).attr('linha')==pedLinha){
+                                    vTotalItem=parseInt(vUnitario)*parseInt(quantidade);
+                                    $(this).val(numeroParaMoeda(vTotalItem));
+                                }
                             }
                         })
                         if(quantidade > qEstoque){
                             alert('Quantidade em Estoque '+qEstoque+'');
                             vTotalItem=parseInt(vUnitario)*parseInt(qEstoque);
                             $('#pnl1 td input').each(function(){
-                                if($(this).attr('name')=='pDescontoItem'){
-                                    pDescontoItem=$(this).val();
-                                }else if($(this).attr('name')=='vTotalItem'){
-                                    $(this).val(numeroParaMoeda(vTotalItem));
-                                }else if($(this).attr('name')=='quantidade'){
-                                    $(this).val(qEstoque);
+                                if($(this).attr('linha')==pedLinha){
+                                    if($(this).attr('name')=='pDescontoItem'){
+                                        pDescontoItem=$(this).val();
+                                    }else if($(this).attr('name')=='vTotalItem'){
+                                        $(this).val(numeroParaMoeda(vTotalItem));
+                                    }else if($(this).attr('name')=='quantidade'){
+                                        $(this).val(qEstoque);
+                                    }
                                 }
                             })
                         }
@@ -300,7 +295,7 @@
             })
         }
     })
-    function confereDados(){       
+    function pegaDados(){       
         mercInicial=null;
         $('.divVendas td input').each(function(){
             switch($(this).attr('name')){
