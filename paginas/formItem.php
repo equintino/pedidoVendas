@@ -16,18 +16,9 @@
                 vUnitario=$(this).attr('vUnitario');
                 qEstoque=$(this).attr('qEstoque');
                 
-                //nomeString .charAt(nomeString .length()-1)
-                //alert(linha.length);
                 linha=linha.substring(4,5);
-                //$('#pnl1 table #item1').trigger('click');
                 $('#pnl1 table #item'+linha+' input').each(function(){
-                    //alert($(this).val());
-                    //$(this).each(function(){
-                        //alert($(this).val());
-                    //})
                     var z=$(this).attr('name');
-                    //alert(z);
-                    //alert($(this).attr('linha'));
                     switch(z){
                         case 'codigo_produto':
                            $(this).val(cProduto);
@@ -50,45 +41,6 @@
                            break;
                     }
                 })
-                /*
-                $('#pnl1 table input').each(function(evento){
-                    //alert($('#pnl1 table input').val());
-                    //var data=evento.data;
-                    //if($('#pnl1 table .item').text()==j){
-                    $('#pnl1 table .item').each(function(){
-                        
-                       // alert($(this).text());
-                        if($(this).text()==j){
-                        //})
-                        //alert($('#pnl1 table .item').text());
-                    //}
-                    var z=$(this).attr('name');
-                    //alert(evento);
-                    //alert($(this).attr('linha'));
-                    switch(z){
-                        case 'codigo_produto':
-                           $(this).val(cProduto);
-                           break;
-                        case 'descricao':
-                           $(this).val(descricao);
-                           break;
-                        case 'vUnitario':
-                           $(this).val(vUnitario);
-                           break;
-                        case 'quantidade':
-                           $(this).val(null);
-                           $(this).focus();
-                           break;
-                        case 'vTotalItem':
-                           $(this).val(null);
-                           break;
-                        case 'pDescontoItem':
-                           $(this).val(null);
-                           break;
-                    }
-                    }
-                    })
-                })*/
                 $(".window").hide();
                 $('#mascara').hide();
                 //$('.fechar').trigger('click')

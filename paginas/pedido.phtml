@@ -59,19 +59,24 @@
                    quadroInferior();
                 }else{
                     $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class=lupa></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" linha='+item+' /></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" autocomplete="off"/></td><td><input type="text" name="vUnitario" /></td><td><input type="text" name="vTotalItem" /></td><td><input type="text" name="pDescontoItem" /></td></span></tr>')
-                    //itemExclusao();
                     quadroInferior();
                 }
             }else if($(this).text()=='Excluir Ítem'){
-                //quadroInferior();
                 if($('#pnl1 table input').val()){
                     alert('Clique no Nº do Ítem para excluir.');
                     if(!conf){
                         itemExclusao();
                     }
-                    //die;
                 }
-            }
+            }      
+            $('.divVendas td input').bind('keyup click focus', function (){
+                /*$(this).each(function(){
+                    alert($(this).attr('name'));
+                })*/
+                //alert('clicou');
+                quadroInferior();
+                confereDados();
+            })
         })
         $('#pnl2').css('display','none')          
         $('#pnl3').css('display','none')          
@@ -117,12 +122,10 @@
             }           
         })
         $('.pagina').text('PRÉ-VENDA')
-        //var cont=0;
         $('.tabela img').click(function(){
             $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1')
         })
-        $('.previsao input').mask('00/00/0000');
-        
+        $('.previsao input').mask('00/00/0000');  
         
         ///// funcoes ////
         function itemExclusao(){
@@ -192,7 +195,6 @@
         
             //// quadro inferior ////
         function quadroInferior(){
-            //var j=1;
             $('td input').focus(function(){
                 if($(this).attr('name')=='codigo_produto'){
                     $('#pnl1 table .item').each(function(){
@@ -200,68 +202,22 @@
                     })
                     $('#pnl1 table tr .lupa img').remove();
                     if(!$('#pnl1 table tr .lupa img').attr('src')){
-                        //$('<img title="Pesquisar ítem" height=15px src="../web/img/lupa.png" />').appendTo('#pnl1 table tr .lupa')
                         $('#pnl1 table tr .lupa').append('<img title="Pesquisar ítem" height=15px src="../web/img/lupa.png" busca='+j+' />')
-                        //j++;
                     }
                 }
-            })
-            $('.divVendas td input').bind('keyup click', function (){ 
-                $('.divVendas td input').each(function(){
-                    switch($(this).attr('name')){
-                        case 'codigo_produto':
-                           break;
-                        case 'descricao':
-                           break;
-                        case 'quantidade':
-                           $(this).mask('################', {reverse: true});
-                           quantidade=$(this).val();
-                           break;
-                        case 'vUnitarioItem':
-                            vUnitario=$(this).val();
-                            break;
-                        case 'vTotalItem':
-                            $(this).mask('###.###.###.###,##', {reverse: true});
-                            var vTotalItem=$(this).val();
-                            break;
-                        case 'pDescontoItem':
-                            pDescontoItem=$(this).val()/100;
-                            vDesconto=vTotalItem-(vTotalItem*pDescontoItem);
-                            $(this).mask('000', {reverse: true});
-                            if($(this).val()>100){
-                                $(this).val(100);
-                            }
-                            break;
-                        case 'icmsSt':
-                            $(this).mask('###.###,##', {reverse: true});
-                            var icmsSt=$(this).val();
-                            $('.autoQuadro td').each(function(){
-                                if($(this).attr('nome')=='icmsSt'){
-                                    if(icmsSt){
-                                        $(this).text(icmsSt);
-                                    }else{
-                                        $(this).text('0,00'); 
-                                    }
-                                }
-                            })                      
-                            break;
-                        case 'ipi':
-                            $(this).mask('###.###,##', {reverse: true});
-                            var ipi=$(this).val();
-                            $('.autoQuadro td').each(function(){
-                                if($(this).attr('nome')=='ipi'){
-                                    if(ipi){
-                                        $(this).text(ipi);
-                                    }else{
-                                        $(this).text('0,00');
-                                    }
-                                }
-                            })
-                            break;
-                    }
-                })
-            })          
-            $('td input').each(function(){
+            })  
+            //'#pnl1 td input'
+            $('#pnl1 td input').each(function(){
+                /*$('#pnl1 table tr').click('each',function(){
+                        linha=$(this).attr('id');
+                })*/
+                /*$(this).each(function(data){
+                    //var rows = $(this).jqxGrid();
+                    //alert(rows);
+                    alert($(this));
+                    //alert($(this));
+                })*/
+                //alert($(this).each);
                 if($(this).attr('name')=='quantidade'){
                     $(this).bind('keyup click', function(){
                         var algarismo1=qEstoque.length;
@@ -284,7 +240,7 @@
                                 $(this).mask('0');
                                 zero='';
                         }
-                        var quantidade=zero+$(this).val();
+                        quantidade=zero+$(this).val();
                         //alert(quantidade);
                         $('#pnl1 td input').each(function(){
                             //alert($(this).attr('name'));
@@ -344,6 +300,43 @@
             })
         }
     })
+    function confereDados(){       
+        mercInicial=null;
+        $('.divVendas td input').each(function(){
+            switch($(this).attr('name')){
+                case 'codigo_produto':
+                   break;
+                case 'descricao':
+                   break;
+                case 'quantidade':
+                   $(this).mask('################', {reverse: true});
+                   quantidade=$(this).val();
+                   break;
+                case 'vUnitarioItem':
+                    vUnitario=$(this).val();
+                    break;
+                case 'vTotalItem':
+                    $(this).mask('###.###.###.###,##', {reverse: true});
+                    vTotalItem=$(this).val();
+                    if(!mercInicial && vTotalItem){
+                        mercadorias=vTotalItem;
+                        mercInicial=1;
+                    }else if(mercadorias && vTotalItem){
+                        mercadorias=parseInt(mercadorias)+parseInt(vTotalItem);
+                    }
+                    //alert([mercInicial,mercadorias,vTotalItem]);
+                    break;
+                case 'pDescontoItem':
+                    pDescontoItem=$(this).val()/100;
+                    vDesconto=vTotalItem-(vTotalItem*pDescontoItem);
+                    $(this).mask('000', {reverse: true});
+                    if($(this).val()>100){
+                        $(this).val(100);
+                    }
+                    break;
+            }
+        })
+    }
     function numeroParaMoeda(n, c, d, t){
         c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
         return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");    }
