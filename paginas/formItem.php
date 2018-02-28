@@ -30,7 +30,7 @@
                             case 'descricao':
                                $(this).val(descricao);
                                break;
-                            case 'vUnitario':
+                            case 'vUnitarioItem':
                                $(this).val(vUnitario);
                                break;
                             case 'quantidade':
