@@ -128,7 +128,7 @@
         echo '<script>dadosProduto='.$dados_produto.';</script>';
         $vUnitario=number_format($prod->valor_unitario,'2',',','.');
 ?>
-    <tr cProduto="<?= $prod->codigo_produto ?>" vUnitario="<?= $vUnitario ?>" qEstoque="<?= $prod->quantidade_estoque ?>" descricao="<?= $prod->descricao ?>" dados_produto=dados_produto><td align="center" ><?= $prod->descricao ?></td><td align="center"><?= $prod->quantidade_estoque ?></td><td align='right'><?= $vUnitario ?></td></tr>
+    <tr cProduto="<?= $prod->codigo_produto ?>" vUnitario="<?= $prod->valor_unitario ?>" qEstoque="<?= $prod->quantidade_estoque ?>" descricao="<?= $prod->descricao ?>" dados_produto=dados_produto><td align="center" ><?= $prod->descricao ?></td><td align="center"><?= $prod->quantidade_estoque ?></td><td align='right'><?= $vUnitario ?></td></tr>
 <?php 
         }
     }else{
@@ -138,7 +138,7 @@
         //echo '<pre>';
         //print_r($prod);
 ?>
-    <tr cProduto="<?= $prod->codigo_produto ?>" vUnitario="<?= $vUnitario ?>" qEstoque="<?= $prod->quantidade_estoque ?>" descricao="<?= $prod->descricao ?>" dados_produto=dados_produto><td align="center" ><?= $prod->descricao ?></td><td align="center"><?= $prod->quantidade_estoque ?></td><td align='right'><?= $vUnitario ?></td></tr>
+    <tr cProduto="<?= $prod->codigo_produto ?>" vUnitario="<?= $prod->valor_unitario ?>" qEstoque="<?= $prod->quantidade_estoque ?>" descricao="<?= $prod->descricao ?>" dados_produto=dados_produto><td align="center" ><?= $prod->descricao ?></td><td align="center"><?= $prod->quantidade_estoque ?></td><td align='right'><?= $vUnitario ?></td></tr>
 <?php } ?>
 </table> 
 <!--div id="aqui">atencao</div>-->
