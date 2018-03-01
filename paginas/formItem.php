@@ -2,8 +2,8 @@
   <script src="https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
 <meta charset="utf-8" />
 <?php
-    $codigo_produto=$_GET['codigo_produto'];
-    echo $codigo_produto;
+    //$codigo_produto=$_GET['codigo_produto'];
+    //echo $codigo_produto;
 ?>
 </head>
 <script>
@@ -19,6 +19,7 @@
                     cProduto=$(this).attr('cProduto');
                     vUnitario=$(this).attr('vUnitario');
                     qEstoque=$(this).attr('qEstoque');
+                    //alert(vUnitario);
 
                     linha=linha.substring(4,5);
                     $('#pnl1 table #item'+linha+' input').each(function(){
@@ -38,10 +39,10 @@
                                $(this).focus();
                                break;
                             case 'vTotalItem':
-                               $(this).val(null);
+                               $(this).val(0,00);
                                break;
                             case 'pDescontoItem':
-                               $(this).val(null);
+                               $(this).val(0);
                                break;
                         }
                     })
@@ -115,7 +116,7 @@
     //$cProduto=$_GET['cProduto'];
     
     
-    if(!$codigo_produto){
+    if(!@$codigo_produto){
         $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>50,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
         $dados=$produto->ListarProdutos($produto_servico_list_request);
         $detalhes=$dados->produto_servico_cadastro;
@@ -128,7 +129,7 @@
         echo '<script>dadosProduto='.$dados_produto.';</script>';
         $vUnitario=number_format($prod->valor_unitario,'2',',','.');
 ?>
-    <tr cProduto="<?= $prod->codigo_produto ?>" vUnitario="<?= $prod->valor_unitario ?>" qEstoque="<?= $prod->quantidade_estoque ?>" descricao="<?= $prod->descricao ?>" dados_produto=dados_produto><td align="center" ><?= $prod->descricao ?></td><td align="center"><?= $prod->quantidade_estoque ?></td><td align='right'><?= $vUnitario ?></td></tr>
+    <tr cProduto="<?= $prod->codigo_produto ?>" vUnitario="<?= $vUnitario ?>" qEstoque="<?= $prod->quantidade_estoque ?>" descricao="<?= $prod->descricao ?>" dados_produto=dados_produto><td align="center" ><?= $prod->descricao ?></td><td align="center"><?= $prod->quantidade_estoque ?></td><td align='right'><?= $vUnitario ?></td></tr>
 <?php 
         }
     }else{
@@ -138,7 +139,7 @@
         //echo '<pre>';
         //print_r($prod);
 ?>
-    <tr cProduto="<?= $prod->codigo_produto ?>" vUnitario="<?= $prod->valor_unitario ?>" qEstoque="<?= $prod->quantidade_estoque ?>" descricao="<?= $prod->descricao ?>" dados_produto=dados_produto><td align="center" ><?= $prod->descricao ?></td><td align="center"><?= $prod->quantidade_estoque ?></td><td align='right'><?= $vUnitario ?></td></tr>
+    <tr cProduto="<?= $prod->codigo_produto ?>" vUnitario="<?= $vUnitario ?>" qEstoque="<?= $prod->quantidade_estoque ?>" descricao="<?= $prod->descricao ?>" dados_produto=dados_produto><td align="center" ><?= $prod->descricao ?></td><td align="center"><?= $prod->quantidade_estoque ?></td><td align='right'><?= $vUnitario ?></td></tr>
 <?php } ?>
 </table> 
 <!--div id="aqui">atencao</div>-->

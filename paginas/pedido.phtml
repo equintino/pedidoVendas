@@ -62,7 +62,7 @@
                     $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class=lupa></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" linha='+item+' required/></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" autocomplete="off" linha='+item+' required /></td><td><input type="text" name="vUnitarioItem" /></td><td><input type="text" name="vTotalItem" linha='+item+' /></td><td><input type="text" name="pDescontoItem" linha='+item+' /></td></span></tr>')  
                     busca();
                     quadroInferior();
-                    preencheTotais();
+                    //preencheTotais();
                 }
             }else if($(this).text()=='Excluir Ítem'){
                 if($('#pnl1 table input').val()){
@@ -185,7 +185,7 @@
                                 })
                                 item=$('#pnl1 table .item').length;
                                 conf2=null;
-                                //quadroInferior();
+                                $('#pnl1 td input[name=quantidade]').trigger('click')
                                 die;
                             }else{
                                 //quadroInferior();
@@ -214,6 +214,7 @@
             //// quadro inferior ////
         function quadroInferior(){
             $('#pnl1 td input').each(function(){
+                //alert($(this).attr('name'));
                 if($(this).attr('name')=='quantidade'){
                     $(this).mask('00000');
                     $(this).bind('keyup click', function(){
@@ -240,21 +241,28 @@
                         }
                         quantidade=zero+$(this).val();
                         vUnitarioItem=($('#pnl1 tr[id=item'+pedLinha+'] input[name=vUnitarioItem]').val());
+                        VUI=vUnitarioItem.replace(',','.');
                         //pDescontoItem=($('#pnl1 tr[id=item'+pedLinha+'] input[name=pDescontoItem]').val());
-                        vTotalItem=parseFloat(vUnitarioItem)*parseInt(quantidade);
+                        vTotalItem=parseFloat(VUI)*parseInt(quantidade);
                         //vDescontoItem=vTotalItem*pDescontoItem/100;
                         $($('#pnl1 tr[id=item'+pedLinha+'] input[name=vTotalItem]')).val(numeroParaMoeda(vTotalItem));
                         if(quantidade > qEstoque){
                             alert('Quantidade em Estoque '+qEstoque+'');
                             //pDescontoItem=($('#pnl1 tr[id=item'+pedLinha+'] input[name=pDescontoItem]').val());
-                            vTotalItem=parseFloat(vUnitarioItem)*parseInt(qEstoque);
+                            vTotalItem=parseFloat(VUI)*parseInt(qEstoque);
                             //vDescontoItem=vTotalItem*pDescontoItem/100;
                             $($('#pnl1 tr[id=item'+pedLinha+'] input[name=vTotalItem]')).val(numeroParaMoeda(vTotalItem));
                             $($('#pnl1 tr[id=item'+pedLinha+'] input[name=quantidade]')).val(qEstoque);
                             
-                        }              
+                        }
+                        preencheTotais();
                     })                         
-                }/*else if($(this).attr('name')=='pDescontoItem'){
+                }else if($(this).attr('name')=='pDescontoItem'){
+                    //alert('desconto');
+                    $(this).bind('keyup click', function(){
+                        preencheTotais(); 
+                    })
+                }/*
                     //alert(pedLinha);
                     $(this).bind('keyup click', function(){
                         pedLinha=$(this).attr('linha');
@@ -277,51 +285,52 @@
                 }*/
             }) 
         }
-        function preencheTotais(){      
-            ///// preencher quadro com valores Totais ////
-            $('#pnl1 td input').bind('click keyup', function(){
-                //alert($(this));
+        function preencheTotais(){///// preencher quadro com valores Totais ////
                 mercadoriaTotal=0;
                 vDescontoTotal=0;
-                $('.autoQuadro td[nome=tItem]').text(item)
+                $('.autoQuadro td[nome=tItem]').text(item)/// Rotal de Ítens ////
                 for(var i=1;i<item+1;i++){
                     if(mercadoriaTotal==0){
-                        mercadoria=$('#pnl1 tr[id=item'+i+'] input[name=vTotalItem]').val().replace(',','.');
-                        mercadoriaTotal=mercadoria;
+                        mercadoria=$('#pnl1 tr[id=item'+i+'] input[name=vTotalItem]').val();
+                        mercadoriaTotal=mercadoria.replace(',','.');
                     }else{
-                        mercadoria=parseFloat($('#pnl1 tr[id=item'+i+'] input[name=vTotalItem]').val().replace(',','.'));
-                        mercadoriaTotal=parseFloat(mercadoriaTotal)+mercadoria;
-                    }
-                    /*if(vDescontoTotal==0){
                         mercadoria=$('#pnl1 tr[id=item'+i+'] input[name=vTotalItem]').val().replace(',','.');
-                        vDescontoTotal=mercadoria*$('#pnl1 tr[id=item'+i+'] input[name=pDescontoItem]').val()/100;
-                    }else*/
-                    //vDescontoTotal=$('#pnl1 tr[')
-                    //alert($('#pnl1 tr input[vDescontoItem]').val());
+                        //alert(mercadoria);
+                        var MT=mercadoriaTotal;
+                        //var M=mercadoria.replace(',','.');
+                        if(mercadoria != 0){
+                            mercadoriaTotal=parseFloat(MT)+parseFloat(mercadoria);
+                        }
+                    }
+                    var temDesconto=0;
                     $('#pnl1 tr input').each(function(){
-                        //alert($(this).attr('name'));
                         if($(this).attr('name')=='pDescontoItem'){
                             if($(this).val()!=0)temDesconto=1;
                         }
                     })
                     if(temDesconto != 0){
+                        //alert('desconto');
                         mercadoria=parseFloat($('#pnl1 tr[id=item'+i+'] input[name=vTotalItem]').val().replace(',','.'));
                         vDescontoItem=mercadoria*$('#pnl1 tr[id=item'+i+'] input[name=pDescontoItem]').val()/100;
                         vDescontoTotal=parseFloat(vDescontoTotal)+parseFloat(vDescontoItem);
-                        //alert([mercadoria,vDescontoItem,DescontoTotal]);
                     }
-                    //alert(vDescontoTotal);
-                    //vTotalItem=$('#pnl1 tr[id=item'+pedLinha+'] input[name=vTotalItem]').val().replace(',','.');
-                        //vDesconto=vTotalItem*$('#pnl1 tr[id=item'+pedLinha+'] input[name=pDescontoItem]').val()/100;
                 }
-                //alert(mercadoriaTotal);
                 if(mercadoriaTotal){
-                    $('.autoQuadro td[nome=mercadorias]').text(mercadoriaTotal)
+                    $('.autoQuadro td[nome=mercadorias]').attr('vlr',mercadoriaTotal)
+                    $('.autoQuadro td[nome=mercadorias]').text(mercadoriaTotal) /// mercadorias ////
                 }
                 if(vDescontoTotal){
-                    $('.autoQuadro td[nome=vDesconto]').text(vDescontoTotal).mask('###.###,##', {reverse: true})
+                    $('.autoQuadro td[nome=vDesconto]').attr('vlr',vDescontoTotal)
+                    $('.autoQuadro td[nome=vDesconto]').text(vDescontoTotal) /// Desconto ///
                 }
-            })
+                //if(vPedido){
+                    var vPedido=parseFloat($('.autoQuadro td[nome=mercadorias]').text())-parseFloat($('.autoQuadro td[nome=vDesconto]').text());
+                    $('.autoQuadro td[nome=vPedido]').attr('vlr',vPedido)
+                    $('.autoQuadro td[nome=vPedido]').text(vPedido) /// Valor do Pedido ///
+                //}
+                //var centavos=vPedido.split('.');
+                //alert(centavos);
+            //alert('fim funcao preencher totais');
         }
         function formataCampo(){
             //alert(pedLinha);
@@ -569,7 +578,7 @@
         <?php if($key=='tItem'): ?>
         <td class="valores" nome="<?= $key ?>" align="center">0 </td>
         <?php else: ?>
-        <td class="valores" nome="<?= $key ?>" align="right">0,00 </td>
+        <td class="valores" nome="<?= $key ?>" vlr="" align="right">0,00 </td>
         <?php endif; endforeach; ?>
     </tr>
 </table></fieldset>
