@@ -54,12 +54,12 @@
                 })
                 item++;
                 if($('#pnl1 table span').length != 0){
-                   $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" linha='+item+' required/></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" autocomplete="off" required linha='+item+' /></td><td><input type="text" name="vUnitarioItem" /></td><td><input type="text" name="vTotalItem" linha='+item+' /></td><td><input type="text" name="pDescontoItem" linha='+item+' /></td></span></tr>')
+                   $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" linha='+item+' required/></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" autocomplete="off" required linha='+item+' /></td><td><input type="text" name="vUnitarioItem" /></td><td><input type="text" name="vTotalItem" linha='+item+' disabled /></td><td><input type="text" name="pDescontoItem" linha='+item+' /></td></span></tr>')
                     itemExclusao();
                     busca();
                     quadroInferior();
                 }else{
-                    $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class=lupa></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" linha='+item+' required/></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" autocomplete="off" linha='+item+' required /></td><td><input type="text" name="vUnitarioItem" /></td><td><input type="text" name="vTotalItem" linha='+item+' /></td><td><input type="text" name="pDescontoItem" linha='+item+' /></td></span></tr>')  
+                    $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class=lupa></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto" linha='+item+' required/></td><td><input type="text" name="descricao" /></td><td><input type="text" name="quantidade" autocomplete="off" linha='+item+' required /></td><td><input type="text" name="vUnitarioItem" /></td><td><input type="text" name="vTotalItem" linha='+item+' disabled /></td><td><input type="text" name="pDescontoItem" linha='+item+' /></td></span></tr>')  
                     busca();
                     quadroInferior();
                     //preencheTotais();
@@ -316,20 +316,20 @@
                     }
                 }
                 if(mercadoriaTotal){
-                    $('.autoQuadro td[nome=mercadorias]').attr('vlr',mercadoriaTotal)
-                    $('.autoQuadro td[nome=mercadorias]').text(mercadoriaTotal) /// mercadorias ////
+                    //$('.autoQuadro td[nome=mercadorias]').attr('vlr',mercadoriaTotal)
+                    $('.autoQuadro td[nome=mercadorias]').text(numeroParaMoeda(mercadoriaTotal)) /// mercadorias ////
                 }
                 if(vDescontoTotal){
-                    $('.autoQuadro td[nome=vDesconto]').attr('vlr',vDescontoTotal)
-                    $('.autoQuadro td[nome=vDesconto]').text(vDescontoTotal) /// Desconto ///
+                    //$('.autoQuadro td[nome=vDesconto]').attr('vlr',vDescontoTotal)
+                    $('.autoQuadro td[nome=vDesconto]').text(numeroParaMoeda(vDescontoTotal)) /// Desconto ///
                 }
                 //if(vPedido){
                     var vPedido=parseFloat($('.autoQuadro td[nome=mercadorias]').text())-parseFloat($('.autoQuadro td[nome=vDesconto]').text());
-                    $('.autoQuadro td[nome=vPedido]').attr('vlr',vPedido)
-                    $('.autoQuadro td[nome=vPedido]').text(vPedido) /// Valor do Pedido ///
+                    //$('.autoQuadro td[nome=vPedido]').attr('vlr',vPedido)
+                    $('.autoQuadro td[nome=vPedido]').text(numeroParaMoeda(vPedido)) /// Valor do Pedido ///
                 //}
-                //var centavos=vPedido.split('.');
-                //alert(centavos);
+                //document.write(vPedido.split("."));
+                //alert(vPedido[1]);
             //alert('fim funcao preencher totais');
         }
         function formataCampo(){

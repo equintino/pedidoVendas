@@ -42,7 +42,7 @@
                                $(this).val(0,00);
                                break;
                             case 'pDescontoItem':
-                               $(this).val(0);
+                               $(this).val();
                                break;
                         }
                     })
