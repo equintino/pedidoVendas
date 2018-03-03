@@ -24,7 +24,7 @@
                     linha=linha.substring(4,5);
                     $('#pnl1 table #item'+linha+' input').each(function(){
                         var z=$(this).attr('name');
-                        switch(z){
+                        switch(z.substr(0,z.length-1)){
                             case 'codigo_produto':
                                $(this).val(cProduto);
                                break;
@@ -36,6 +36,7 @@
                                break;
                             case 'quantidade':
                                $(this).val(null);
+                               $(this).attr('qestoque',qEstoque);
                                $(this).focus();
                                break;
                             case 'vTotalItem':

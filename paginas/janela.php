@@ -44,7 +44,8 @@
                     $('#pnl1 table tr').click('each',function(){
                             linha=$(this).attr('id');
                             $('#'+linha+' input').each(function(){
-                                if($(this).attr('name')=='codigo_produto'){
+                                var str=$(this).attr('name');
+                                if(str.substr(0,str.length-1)=='codigo_produto'){
                                     codigo_produto=$(this).val().replace(/^\s+|\s+$/g,"");
                                 }
                             })
