@@ -140,7 +140,8 @@ class comparListarResponse{
  * @pw_element string $cDescricao Descrição da forma de pagamento.
  * @pw_complex cadastros
  */
-class cadastros{
+
+class cadastrosFormaPagamento{
 	/**
 	 * Código da forma de pagamento.
 	 *

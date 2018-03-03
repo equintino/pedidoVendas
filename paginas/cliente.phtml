@@ -96,7 +96,7 @@
             })
         }) 
         $('.pagina').text('CLIENTE')
-        $('.mGeral').append('<ul><li>INCLUIR</li><li>LISTAR</li><ul>')
+        //$('.mGeral').append('<ul><li>INCLUIR</li><li>LISTAR</li><ul>')
     })
 </script>
 <style>
@@ -262,10 +262,10 @@
 </div>
 <div class="total">total de registros <?= $dados->total_de_registros ?></div>
 <table>
-    <tr><th>Razão Social/Nome</th><th>CNPJ/CPF</th><th>Contato</th></tr>
+    <tr><th>Razão Social/Nome</th><th>CNPJ/CPF</th><!--<th>Contato</th>--></tr>
     <?php 
-    foreach($dados->clientes_cadastro as $cliente): ?>
-    <tr class="razaosocial" linha="<?= $cliente->codigo_cliente_omie ?>" razao='<?= $cliente->razao_social ?>' cnpj_cpf='<?= $cliente->cnpj_cpf ?>' contato='<?= @$cliente->contato ?>'><td class="rs" ><?= mb_strtoupper($cliente->razao_social,'utf-8').'<br><font size=1px>('.$cliente->codigo_cliente_integracao.')</font>' ?></td><td align=center ><?= $cliente->cnpj_cpf ?></td><td align=center ><?= @$cliente->contato ?></td><?php if(@$seleciona!=1):?><td class="edicao"><img title="Altera" height="12px" src="../web/img/editar.png" codigo="<?= $cliente->codigo_cliente_omie ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $cliente->codigo_cliente_omie ?>" razao="<?= mb_strtoupper($cliente->razao_social,'utf-8') ?>" /></td><?php endif ?></tr>
+    foreach($dados->clientes_cadastro_resumido as $cliente): ?>
+    <tr class="razaosocial" linha="<?= $cliente->codigo_cliente_omie ?>" razao='<?= $cliente->razao_social ?>' cnpj_cpf='<?= $cliente->cnpj_cpf ?>'> <!--contato='<?php //echo @$cliente->contato ?>'--><td class="rs" ><?= mb_strtoupper($cliente->razao_social,'utf-8').'<br><font size=1px>('.$cliente->codigo_cliente_integracao.')</font>' ?></td><td align=center ><?= $cliente->cnpj_cpf ?></td><!--<td align=center ><?php //echo @$cliente->contato ?></td>--><?php if(@$seleciona!=1):?><td class="edicao"><img title="Altera" height="12px" src="../web/img/editar.png" codigo="<?= $cliente->codigo_cliente_omie ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $cliente->codigo_cliente_omie ?>" razao="<?= mb_strtoupper($cliente->razao_social,'utf-8') ?>" /></td><?php endif ?></tr>
     <?php endforeach; ?>
 </table>
 

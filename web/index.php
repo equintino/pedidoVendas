@@ -51,7 +51,11 @@ final class index{
         'PedidoVendaEtapaJsonClient'=>'../model/PedidoVendaEtapaJsonClient.php',
         'contasJsonClient'=>'../model/contasJsonClient.php',
         'VendedoresCadastroJsonClient'=>'../model/VendedoresCadastroJsonClient.php',
-        'ParcelasJsonClient'=>'../model/ParcelasJsonClient.php'
+        'ParcelasJsonClient'=>'../model/ParcelasJsonClient.php',
+        'FormasPagComprasJsonClient'=>'../model/FormasPagComprasJsonClient.php',
+        'omie_fail'=>'../model/FormasPagComprasJsonClient.php',
+        'ContaCorrenteCadastroJsonClient'=>'../model/ContaCorrenteCadastroJsonClient.php',
+        'EtapasFaturamentoJsonClient'=>'../model/EtapasFaturamentoJsonClient.php'
     );
     if (!array_key_exists($nome, $classes)){
        die("A classe $nome não existe");

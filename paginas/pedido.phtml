@@ -122,6 +122,13 @@
         })
         $('.previsao input').mask('00/00/0000'); 
         
+        $('.tabela td select[name=fPagamento]').change(function(){
+            if($(this).val()=='credito'){
+                $('.doc').show();
+            }else{
+                $('.doc').hide();
+            }
+        })
         ///// funcoes ////
         function itemExclusao(){
             var corItem='rgba(255,0,0,0.7)';
@@ -234,17 +241,12 @@
                         quantidade=zero+$(this).val();
                         vUnitarioItem=($('#pnl1 tr[id=item'+pedLinha+'] input[name=vUnitarioItem'+pedLinha+']').val());
                         VUI=vUnitarioItem.replace(',','.');
-                        //pDescontoItem=($('#pnl1 tr[id=item'+pedLinha+'] input[name=pDescontoItem]').val());
                         vTotalItem=parseFloat(VUI)*parseInt(quantidade);
-                        //vDescontoItem=vTotalItem*pDescontoItem/100;
                         $($('#pnl1 tr[id=item'+pedLinha+'] input[name=vTotalItem'+pedLinha+  ']')).val(numeroParaMoeda(vTotalItem));
-                        //var qEstoque = $(this).val();
                         qEstoque=$(this).attr('qestoque');
                         if(quantidade > qEstoque){
                             alert('Quantidade em Estoque '+qEstoque+'');
-                            //pDescontoItem=($('#pnl1 tr[id=item'+pedLinha+'] input[name=pDescontoItem]').val());
                             vTotalItem=parseFloat(VUI)*parseInt(qEstoque);
-                            //vDescontoItem=vTotalItem*pDescontoItem/100;
                             $($('#pnl1 tr[id=item'+pedLinha+'] input[name=vTotalItem'+pedLinha+']')).val(numeroParaMoeda(vTotalItem));
                             $($('#pnl1 tr[id=item'+pedLinha+'] input[name=quantidade'+pedLinha+']')).val(qEstoque);
                             
@@ -265,7 +267,7 @@
         function preencheTotais(){///// preencher quadro com valores Totais ////
                 mercadoriaTotal=0;
                 vDescontoTotal=0;
-                $('.autoQuadro input[name=tItem]').val(item)
+                $('#pnl2 .novo2 input[name=qvolume]').val(item)
                 $('.autoQuadro td[nome=tItem]').text(item)/// Rotal de Ítens ////
                 for(var i=1;i<item+1;i++){
                     if(mercadoriaTotal==0){
@@ -511,6 +513,9 @@
     .conteudo h1{
         font-size: 38px;
     }
+    .doc{
+        display: none;
+    }
 </style>
 </head>
 <body>
@@ -562,7 +567,7 @@
 </table></fieldset>
     <!-- Fim do Quadro -->
 <table class="tabela">
-    <tr><td>Vendedor</td><td>Número de Parcelas</td><td></td></tr>
+    <tr><td>Vendedor</td><td>Número de Parcelas</td><td>Forma de Pagamento</td></tr>
     <tr><td>
             <select name="vendedor">
                 <option value=""></option>
@@ -573,12 +578,19 @@
         </td><td>
             <select name="parcela">
                 <option value=""></option>
-                <?php //echo '<pre>';print_r($parcela);die ?>
                 <?php foreach($parcela->cadastros as $key => $item): ?>
                 <option value="<?= $item->cDescricao ?>"><?= $item->cDescricao ?></option>
                 <?php endforeach; ?>
             </select>
-        </td></tr>
+        </td><td>
+            <select class='fPag' name="fPagamento">
+                <option value=""></option>
+                <?php foreach($form_pag as $key => $item): ?>
+                <option value="<?= $key ?>"><?= $item ?></option>
+                <?php endforeach; ?>
+            </select>
+        </td>
+        <td class='doc'><input type='text' name='doc' placeholder="Isira aqui o documento"/></td></tr>
 </table>
     <div class="outrosItens">
         <span class="item">Itens de Venda</span>
@@ -618,9 +630,19 @@
                     <?php endforeach; ?>
                     </tr>
                     <tr class='novo2'>
+                        <?php //echo '<pre>';print_r($correios); ?>
                     <?php foreach($variaveis2['Frete e Outras Despesas'] as $key => $item): ?>
-                        <td><input type='text' name='<?= $key ?>' /></td>
-                    <?php /*$ref++;*/ endforeach; ?>
+                        <?php if($item == 'Transportadora'){
+                            echo '<td><input type="text" name="'.$key.'" value="'.$correios->nome_fantasia.'" /></td>';
+                        }elseif($item == 'Tipo do Frete'){
+                            echo '<td><input type="text" name="'.$key.'" value="1-Frete por Conta do Destinatário" /></td>';  
+                        }elseif($item=='Quantidade de Volumes'){
+                            echo "<td><input type='text' name=$key value='' /></td>";
+                        }else{
+                            echo '<td><input type="text" name="'.$key.'" /></td>';
+                        }
+                        endforeach; 
+                    ?>
                     </tr>
                 </table>
         <!--</fieldset>-->
@@ -640,7 +662,19 @@
                         <?php if($item=='Categoria'): ?>
                             <td><input type='text' name='<?= $key ?>' value="<?= '1.01.03' ?>"/></td>
                         <?php elseif($item=='Conta Corrente'): ?>
-                            <td><input type='text' name='<?= $key ?>' value="<?= '1229930303' ?>"/></td>
+                            <td>
+                            <?php foreach($conta as $key => $item):
+                                //echo '<pre>';
+                                //print_r($item);die;
+                            ?>
+                            <select name='Conta Corrente'>
+                                    <option value='1229930303'><?= $item->descricao ?></option>
+                            </select>
+                                <!--<input type='text' name='<?php //echo $key ?>' value="<?php //echo '1229930303' ?>"/>-->
+                            </td>
+                            <?php endforeach; ?>
+                        <?php elseif($item=='Conta Corrente'): ?>
+                            
                         <?php endif; ?>
                     <?php /*$ref++;*/ endforeach; ?>
                     </tr>

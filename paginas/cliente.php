@@ -29,7 +29,7 @@
    if($act=='list'){    
     //// Listar Clientes Resumido ////
     $clientes_list_request=array('pagina'=>'1','registros_por_pagina'=>'100','apenas_importado_api'=>'N');
-    $dados=$cliente->ListarClientes($clientes_list_request);
+    $dados=$cliente->ListarClientesResumido($clientes_list_request);
     
    }elseif($act=='excl'){
     //// Excluir Cliente ////

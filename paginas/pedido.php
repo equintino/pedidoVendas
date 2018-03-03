@@ -48,11 +48,12 @@
     header('Location:index.php?pagina=produto&act=list');*/
    }
    ////// Classes //////
-   $contas=new contasJsonClient();
+   $contas=new ContaCorrenteCadastroJsonClient();
    $contaListarRequest=array('pagina'=>'1','registros_por_pagina'=>'50');
    //$consulta=array("cCodInt"=>"");
-   //$contas->ListarContas($contaListarRequest);
-   //print_r($contas);die;
+   $conta=$contas->PesquisarContaCorrente($contaListarRequest)->conta_corrente_lista;
+   //echo '<pre>';
+   //print_r($conta);die;
    
    $vendedor=new VendedoresCadastroJsonClient();
    $vendListarRequest=array("pagina"=>"1","registros_por_pagina"=>"100","apenas_importado_api"=>"N");
@@ -63,6 +64,31 @@
    $parcela=$parc->ListarParcelas($parcelaListarRequest);
    //echo '<pre>';print_r($parcela->cadastros);die;
    
+   $clientes_list_request=array("pagina"=>1,"registros_por_pagina"=>100);
+   $clientes=new ClientesCadastroJsonClient();
+   $cliente=$clientes->ListarClientes($clientes_list_request)->clientes_cadastro;
+   foreach($cliente as $item){
+       if($item->tags[0]='Transportadora'){
+           if($item->nome_fantasia=='Correios'){
+               $correios=$item;
+           }
+       }
+   }
+   
+   $etapas=new EtapasFaturamentoJsonClient();
+   $etaproListarRequest=array("pagina"=>1,"registros_por_pagina"=>100);
+   $etapa=$etapas->ListarEtapasFaturamento($etaproListarRequest)->cadastros;
+   //foreach($etapa as $item){
+       //print_r($item);die;
+   //}
+   $selEtapa=($etapa[2]->etapas);
+   
+   
+   $form_pag=array('dinheiro'=>'Dinheiro','credito'=>'Cartão de Crédito','debito'=>'Cartão de Débito');
+   
+   //echo '<pre>';
+   //print_r($form_pag);die;
+   
    //////// Variáveis ////////  
     $variaveis1=array('tItem'=>'Total de Ítens','mercadorias'=>'Mercadorias','vDesconto'=>'Desconto',/*'ipi'=>'IPI','icmsSt'=>'ICMS ST',*/'vPedido'=>'Valor do Pedido');//valores preenchidos automaticamente
     $variaveis2=array(
@@ -70,7 +96,7 @@
                             'busca'=>'','nItem'=>'Nº','cProduto'=>'Código','descricao'=>'Descrição do Produto','quantidade'=>'Quantidade','vUnitario'=>'Preço Unitário de Venda','vTotal'=>'Valor Total do Ítem','pDesconto'=>'Desconto',/*'icms'=>'ICMS','icmsSt'=>'ICMS ST','ipi'=>'IPI','pis'=>'PIS','cofins'=>'COFINS','frete'=>'Frete','seguro'=>'Seguros','oDespesa'=>'Outras Despesas','icmsDesonerado'=>'ICMS Desonerado','gCReceber'=>'Gera Conta a Receber','pLiquido'=>'Peso Líquido(Kg)','pBruto'=>'Peso Bruto(Kg)','cfop'=>'CFOP'*/
                         ),
                         'Frete e Outras Despesas'=>array(
-                            'Transportadora','Tipo do Frete','Placa do Veícula','UF','RNTRC (ANTT)','Quantidade de Volumes','Espécie dos Volumes','Marca dos Volumes','Numeração dos Volumes','Peso Líquido (Kg)','Peso Bruto (Kg)','Valor do Frete','Valor do Seguro','Número do Lacre','Outras Despesas Acessórias','O transporte será realizado com veículo próprio'
+                            'transportadora'=>'Transportadora','tfrete'=>'Tipo do Frete',/*'Placa do Veícula','UF','RNTRC (ANTT)',*/'qvolume'=>'Quantidade de Volumes','evolume'=>'Espécie dos Volumes','mvolume'=>'Marca dos Volumes','nvolume'=>'Numeração dos Volumes','pliquido'=>'Peso Líquido (Kg)','pbruto'=>'Peso Bruto (Kg)','vfrete'=>'Valor do Frete','vseguro'=>'Valor do Seguro','nlacre'=>'Número do Lacre','odespesas'=>'Outras Despesas Acessórias'/*,'O transporte será realizado com veículo próprio'*/
                         ),
                         'Informações Adcionais'=>array(
                             'Categoria','Conta Corrente','Etapa','Nº do Pedido do Cliente','Nº do Contrato de Venda','Contato','Projeto','Dados Adicionais para a Nota Fiscal','Nota Fiscal para Consumo Final'

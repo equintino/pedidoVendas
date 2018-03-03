@@ -120,6 +120,9 @@
             <div class="IM">IM:0.000.000-0</div>
             <hr>
             <span class="data"><?= date('d/m/Y h:m:s') ?></span>
+            <!--O CCF significa Contador de Cupom Fiscal, que serve como um contador da impressora fiscal que conta os cupons fiscais emitidos pela impressora fiscal.
+
+            O COO, Contador de Ordem de Operação, é o número mais destacado em negrito. Este número é o número do Cupom Fiscal. Os números do CCO registram o primeiro e o último documento emitidos no dia-->
             <span class="ccf">CCF: 000000</span>
             <span class="coo">COO: 000000</span>
             <h2>CUPOM FISCAL</h2>
