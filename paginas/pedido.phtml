@@ -214,6 +214,7 @@
         function quadroInferior(){
             $('#pnl1 td input').each(function(){
                 var str=$(this).attr('name');
+                //alert(str);
                 if(str.substr(0,str.length-1)=='quantidade'){
                     $(this).mask('00000');
                     $(this).bind('keyup click', function(){
@@ -261,6 +262,12 @@
                         }
                         preencheTotais(); 
                     })
+                }else if(str.substr(0,str.length-1)=='vUnitarioItem'){
+                    $(this).mask('###,##', {reverse: true})
+                    $(this).bind('keyup click', function(){
+                        $('#pnl1 td input[name=quantidade'+pedLinha+']').trigger('click');
+                        //alert('oi');      
+                    })
                 }
             }) 
         }
@@ -268,6 +275,7 @@
                 mercadoriaTotal=0;
                 vDescontoTotal=0;
                 $('#pnl2 .novo2 input[name=qvolume]').val(item)
+                $('.autoQuadro input[name=tItem]').val(item)
                 $('.autoQuadro td[nome=tItem]').text(item)/// Rotal de Ítens ////
                 for(var i=1;i<item+1;i++){
                     if(mercadoriaTotal==0){
@@ -516,6 +524,10 @@
     .doc{
         display: none;
     }
+    #pnl3 .divVendas table{
+        //width: 300px;
+        //border: solid red;
+    }
 </style>
 </head>
 <body>
@@ -633,11 +645,11 @@
                         <?php //echo '<pre>';print_r($correios); ?>
                     <?php foreach($variaveis2['Frete e Outras Despesas'] as $key => $item): ?>
                         <?php if($item == 'Transportadora'){
-                            echo '<td><input type="text" name="'.$key.'" value="'.$correios->nome_fantasia.'" /></td>';
+                            echo '<td width=20px><input size=10px type="text" name="'.$key.'" value="'.$correios->nome_fantasia.'" /></td>';
                         }elseif($item == 'Tipo do Frete'){
-                            echo '<td><input type="text" name="'.$key.'" value="1-Frete por Conta do Destinatário" /></td>';  
+                            echo '<td width=40px><input size=40px type="text" name="'.$key.'" value="1-Frete por Conta do Destinatário" /></td>';  
                         }elseif($item=='Quantidade de Volumes'){
-                            echo "<td><input type='text' name=$key value='' /></td>";
+                            echo "<td><input size=10px type='text' name=$key value='' /></td>";
                         }else{
                             echo '<td><input type="text" name="'.$key.'" /></td>';
                         }
@@ -660,21 +672,22 @@
                     <tr class='novo3'>
                     <?php foreach($variaveis2['Informações Adcionais'] as $key => $item): ?>
                         <?php if($item=='Categoria'): ?>
-                            <td><input type='text' name='<?= $key ?>' value="<?= '1.01.03' ?>"/></td>
-                        <?php elseif($item=='Conta Corrente'): ?>
-                            <td>
-                            <?php foreach($conta as $key => $item):
-                                //echo '<pre>';
-                                //print_r($item);die;
-                            ?>
-                            <select name='Conta Corrente'>
-                                    <option value='1229930303'><?= $item->descricao ?></option>
-                            </select>
-                                <!--<input type='text' name='<?php //echo $key ?>' value="<?php //echo '1229930303' ?>"/>-->
-                            </td>
+                        <td width='8px'><input disabled size=8px type='text' name='<?= $key ?>' value="<?= '1.01.03' ?>"/></td>
+                            <input type='hidden' name='<?= $key ?>' value="<?= '1.01.03' ?>"/>
+                        <?php elseif($item=='Banco'): ?>
+                            <td width=20px><select name='codigo_conta_corrente'>
+                            <?php foreach($conta as $key => $item): ?>
+                                    <option value='<?= $item->nCodCC ?>'><?= $item->descricao ?></option>
                             <?php endforeach; ?>
-                        <?php elseif($item=='Conta Corrente'): ?>
-                            
+                            </td></select>
+                        <?php elseif($item=='Etapa'): ?>
+                            <td><select name='etapa'>
+                            <?php 
+                                foreach($selEtapa as $key => $item): ?>
+                                    <?php if($item->cCodigo!='00'): ?>
+                                        <option value='<?= $item->cCodigo ?>'><?= $item->cDescricao ?></option>
+                                <?php endif; endforeach; ?>
+                            </td></select>               
                         <?php endif; ?>
                     <?php /*$ref++;*/ endforeach; ?>
                     </tr>

@@ -34,6 +34,10 @@
     
     $pedido=new PedidoVendaProdutoJsonClient();
     $cliente=new ClientesCadastroJsonClient();
+    
+    $pvpListarRequest=array('pagina'=>'1','registros_por_pagina'=>'50');
+    //echo '<pre>';
+    //print_r($pedido->ListarPedidos($pvpListarRequest)->pedido_venda_produto[0]);
     if(!isset($quant))
         $quant=0;
     
@@ -53,7 +57,7 @@
    //$consulta=array("cCodInt"=>"");
    $conta=$contas->PesquisarContaCorrente($contaListarRequest)->conta_corrente_lista;
    //echo '<pre>';
-   //print_r($conta);die;
+   //print_r($conta[0]);//die;
    
    $vendedor=new VendedoresCadastroJsonClient();
    $vendListarRequest=array("pagina"=>"1","registros_por_pagina"=>"100","apenas_importado_api"=>"N");
@@ -96,10 +100,10 @@
                             'busca'=>'','nItem'=>'Nº','cProduto'=>'Código','descricao'=>'Descrição do Produto','quantidade'=>'Quantidade','vUnitario'=>'Preço Unitário de Venda','vTotal'=>'Valor Total do Ítem','pDesconto'=>'Desconto',/*'icms'=>'ICMS','icmsSt'=>'ICMS ST','ipi'=>'IPI','pis'=>'PIS','cofins'=>'COFINS','frete'=>'Frete','seguro'=>'Seguros','oDespesa'=>'Outras Despesas','icmsDesonerado'=>'ICMS Desonerado','gCReceber'=>'Gera Conta a Receber','pLiquido'=>'Peso Líquido(Kg)','pBruto'=>'Peso Bruto(Kg)','cfop'=>'CFOP'*/
                         ),
                         'Frete e Outras Despesas'=>array(
-                            'transportadora'=>'Transportadora','tfrete'=>'Tipo do Frete',/*'Placa do Veícula','UF','RNTRC (ANTT)',*/'qvolume'=>'Quantidade de Volumes','evolume'=>'Espécie dos Volumes','mvolume'=>'Marca dos Volumes','nvolume'=>'Numeração dos Volumes','pliquido'=>'Peso Líquido (Kg)','pbruto'=>'Peso Bruto (Kg)','vfrete'=>'Valor do Frete','vseguro'=>'Valor do Seguro','nlacre'=>'Número do Lacre','odespesas'=>'Outras Despesas Acessórias'/*,'O transporte será realizado com veículo próprio'*/
+                            'transportadora'=>'Transportadora','tfrete'=>'Tipo do Frete',/*'Placa do Veícula','UF','RNTRC (ANTT)',*/'qvolume'=>'Quantidade de Volumes'/*,'evolume'=>'Espécie dos Volumes','mvolume'=>'Marca dos Volumes','nvolume'=>'Numeração dos Volumes','pliquido'=>'Peso Líquido (Kg)','pbruto'=>'Peso Bruto (Kg)','vfrete'=>'Valor do Frete','vseguro'=>'Valor do Seguro','nlacre'=>'Número do Lacre','odespesas'=>'Outras Despesas Acessórias','O transporte será realizado com veículo próprio'*/
                         ),
                         'Informações Adcionais'=>array(
-                            'Categoria','Conta Corrente','Etapa','Nº do Pedido do Cliente','Nº do Contrato de Venda','Contato','Projeto','Dados Adicionais para a Nota Fiscal','Nota Fiscal para Consumo Final'
+                            'codigo_categoria'=>'Categoria','codigo_conta_corrente'=>'Banco','etapa'=>'Etapa'/*,'Nº do Pedido do Cliente','Nº do Contrato de Venda','Contato','Projeto','Dados Adicionais para a Nota Fiscal','Nota Fiscal para Consumo Final'*/
                         ),
                         'Parcelas'=>array(
                             'Valor Total a Receber','Vencimento da Parcela','Valor da Parcela','Percentual da Parcela','Não gerar boleto desta parcela'
