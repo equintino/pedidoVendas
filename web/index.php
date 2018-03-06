@@ -45,6 +45,7 @@ final class index{
         'ModelSearchCriteria' => '../dao/ModelSearchCriteria.php',
         'ModelValidador' => '../validacao/ModelValidador.php',
         'valida_cookies'  =>  '../validacao/valida_cookies.php',
+        'ModelValidador' => '../validacao/ModelValidador.php',
         'ClientesCadastroJsonClient' => '../model/ClientesCadastroJsonClient.php',
         'ProdutosCadastroJsonClient'=>'../model/ProdutosCadastroJsonClient.php',
         'PedidoVendaProdutoJsonClient'=>'../model/PedidoVendaProdutoJsonClient.php',
@@ -55,7 +56,8 @@ final class index{
         'FormasPagComprasJsonClient'=>'../model/FormasPagComprasJsonClient.php',
         'omie_fail'=>'../model/FormasPagComprasJsonClient.php',
         'ContaCorrenteCadastroJsonClient'=>'../model/ContaCorrenteCadastroJsonClient.php',
-        'EtapasFaturamentoJsonClient'=>'../model/EtapasFaturamentoJsonClient.php'
+        'EtapasFaturamentoJsonClient'=>'../model/EtapasFaturamentoJsonClient.php',
+        'TabelaPrecosJsonClient'=>'../model/TabelaPrecosJsonClient.php'
     );
     if (!array_key_exists($nome, $classes)){
        die("A classe $nome não existe");

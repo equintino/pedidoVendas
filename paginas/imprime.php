@@ -1,6 +1,14 @@
 <html>
     <head>
         <meta charset="utf-8" />
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        
+        <script>
+            $(document).ready(function(){
+                window.print();
+                window.location='../web/index.php?pagina=pedido&act=cad';
+            })
+        </script>
         <style>
             *{
                 padding: 0;
@@ -11,6 +19,9 @@
                 color: #454545; 
                 font: 12pt serif;
                 font-weight: 600;
+                //border: solid red;
+                width: 105mm;
+                margin: auto;
             }
             #texto{
                 width: 100%; 
@@ -84,6 +95,9 @@
             .vTotal{
                 float: right;
             }
+            .desconto{
+                float: right;
+            }
             .hrTotal{
                 width: 40%;
                 float: right;
@@ -97,18 +111,25 @@
                 .conteudo {
                     -webkit-column-count: 1; /* Chrome, Safari, Opera */
                     -moz-column-count: 1; /* Firefox */
-                    column-count: 2;
+                    column-count: 1;
                 }
             }
         </style>
 <?php
-    @$item=$_POST['item'];
-    @$codigo=$_POST['codigo'];
-    @$descricao=$_POST['descricao'];
-    @$quantidade=$_POST['quantidade'];
-    @$vUnitario=$_POST['vUnitario'];
-    @$vTotalItem=$_POST['vTotalItem'];
+    //echo '<pre>';print_r($pedido_venda_produto);
+    $tItens=$pedido_venda_produto->cabecalho->quantidade_itens;
+    
+    //print_r($codigo);die;
+    //@$item=$_POST['item'];
+    //@$codigo=$_POST['codigo'];
+    //@$descricao=$_POST['descricao'];
+    //@$quantidade=$_POST['quantidade'];
+    //@$vUnitario=$_POST['vUnitario'];
+    //@$vTotalItem=$_POST['vTotalItem'];
     @$vPedido=$_POST['vPedido'];
+    @$vDesconto=$_POST['vDesconto'];
+    
+    date_default_timezone_set('America/Sao_Paulo');
 ?>
     </head>
     <body>
@@ -132,14 +153,24 @@
             </div>
             <hr>
             <div class="titulo2">
-                <span><?= $item.'</span><span class=cod>'.$codigo.'</span><span class=desc>'.$descricao ?><br></span>
+            <?php for($i=1;$i<=$tItens;$i++): 
+                $codigo=$pedido_venda_produto->det[$i-1]['produto']->codigo_produto;
+                $descricao=$pedido_venda_produto->det[$i-1]['produto']->descricao;
+                $quantidade=$pedido_venda_produto->det[$i-1]['produto']->quantidade;
+                $vUnitario=number_format($pedido_venda_produto->det[$i-1]['produto']->valor_unitario,'2',',','.');
+                $vTotalItem=number_format($pedido_venda_produto->det[$i-1]['produto']->valor_mercadoria,'2',',','.');
+            ?>
+                <span><?= '00'.$i.'</span><span class=cod>'.$codigo.'</span><span class=desc>'.$descricao ?><br></span>
                 <span class="quant">&nbsp&nbsp<?= $quantidade.'</span> &nbsp&nbsp&nbsp&nbsp&nbsp X <span class=vlUnit2>'.$vUnitario.'</span><span class=vTotalItem2>'.$vTotalItem ?></span>
-            </div>
+            <?php endfor; ?>
+            </div><br>
+            <span class=desconto>(Desconto) -<?= $vDesconto ?></span><br>
             <hr class='hrTotal'>
             <div class='final'>
                 <span class="total">TOTAL</span>
-                <span class="vTotal"><?= $vPedido ?></span>
+                <span class="vTotal">R$ <?= $vPedido ?></span>
             </div>
-        </div>        
+        </div>
+        <!--<button onclick='window.print()'>Imprimir</button>-->
     </body>
 </html>

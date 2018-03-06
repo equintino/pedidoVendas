@@ -36,8 +36,7 @@
     $cliente=new ClientesCadastroJsonClient();
     
     $pvpListarRequest=array('pagina'=>'1','registros_por_pagina'=>'50');
-    //echo '<pre>';
-    //print_r($pedido->ListarPedidos($pvpListarRequest)->pedido_venda_produto[0]);
+    //echo '<pre>';print_r($pedido->ListarPedidos($pvpListarRequest)->pedido_venda_produto);die;
     if(!isset($quant))
         $quant=0;
     
@@ -62,6 +61,7 @@
    $vendedor=new VendedoresCadastroJsonClient();
    $vendListarRequest=array("pagina"=>"1","registros_por_pagina"=>"100","apenas_importado_api"=>"N");
    $vend=$vendedor->ListarVendedores($vendListarRequest);
+   //echo '<pre>';print_r($vend);die;
    
    $parc=new ParcelasJsonClient();
    $parcelaListarRequest=array("pagina"=>1,"registros_por_pagina"=>100);
@@ -87,6 +87,12 @@
    //}
    $selEtapa=($etapa[2]->etapas);
    
+   $tabPreco=new TabelaPrecosJsonClient();
+   $tprListarRequest=array("nPagina"=>1,"nRegPorPagina"=>20);
+   $tabelaPreco=$tabPreco->ListarTabelasPreco($tprListarRequest)->listaTabelasPreco;
+            //foreach($tabelaPreco as $key => $item): ?>
+            <?php //die;//endforeach;
+   //echo '<pre>';print_r($tabelaPreco);//die;//cCodIntTabPreco cNome
    
    $form_pag=array('dinheiro'=>'Dinheiro','credito'=>'Cartão de Crédito','debito'=>'Cartão de Débito');
    
@@ -97,13 +103,13 @@
     $variaveis1=array('tItem'=>'Total de Ítens','mercadorias'=>'Mercadorias','vDesconto'=>'Desconto',/*'ipi'=>'IPI','icmsSt'=>'ICMS ST',*/'vPedido'=>'Valor do Pedido');//valores preenchidos automaticamente
     $variaveis2=array(
                         'Ítens de Venda'=>array(
-                            'busca'=>'','nItem'=>'Nº','cProduto'=>'Código','descricao'=>'Descrição do Produto','quantidade'=>'Quantidade','vUnitario'=>'Preço Unitário de Venda','vTotal'=>'Valor Total do Ítem','pDesconto'=>'Desconto',/*'icms'=>'ICMS','icmsSt'=>'ICMS ST','ipi'=>'IPI','pis'=>'PIS','cofins'=>'COFINS','frete'=>'Frete','seguro'=>'Seguros','oDespesa'=>'Outras Despesas','icmsDesonerado'=>'ICMS Desonerado','gCReceber'=>'Gera Conta a Receber','pLiquido'=>'Peso Líquido(Kg)','pBruto'=>'Peso Bruto(Kg)','cfop'=>'CFOP'*/
+                            'busca'=>'','nItem'=>'Nº','cProduto'=>'Código','descricao'=>'Descrição do Produto','quantidade'=>'Quantidade','vUnitario'=>'Preço Unitário de Venda','vTotal'=>'Valor Total do Ítem','pDesconto'=>'Desconto',/*'tabelaPreco'=>'Tabela de Preço','obs_item'=>'Observação do Ítem',*/'loja'=>'Loja de Origem'/*'icms'=>'ICMS','icmsSt'=>'ICMS ST','ipi'=>'IPI','pis'=>'PIS','cofins'=>'COFINS','frete'=>'Frete','seguro'=>'Seguros','oDespesa'=>'Outras Despesas','icmsDesonerado'=>'ICMS Desonerado','gCReceber'=>'Gera Conta a Receber','pLiquido'=>'Peso Líquido(Kg)','pBruto'=>'Peso Bruto(Kg)','cfop'=>'CFOP'*/
                         ),
                         'Frete e Outras Despesas'=>array(
                             'transportadora'=>'Transportadora','tfrete'=>'Tipo do Frete',/*'Placa do Veícula','UF','RNTRC (ANTT)',*/'qvolume'=>'Quantidade de Volumes'/*,'evolume'=>'Espécie dos Volumes','mvolume'=>'Marca dos Volumes','nvolume'=>'Numeração dos Volumes','pliquido'=>'Peso Líquido (Kg)','pbruto'=>'Peso Bruto (Kg)','vfrete'=>'Valor do Frete','vseguro'=>'Valor do Seguro','nlacre'=>'Número do Lacre','odespesas'=>'Outras Despesas Acessórias','O transporte será realizado com veículo próprio'*/
                         ),
                         'Informações Adcionais'=>array(
-                            'codigo_categoria'=>'Categoria','codigo_conta_corrente'=>'Banco','etapa'=>'Etapa'/*,'Nº do Pedido do Cliente','Nº do Contrato de Venda','Contato','Projeto','Dados Adicionais para a Nota Fiscal','Nota Fiscal para Consumo Final'*/
+                            'codigo_categoria'=>'Categoria','codigo_conta_corrente'=>'Banco','etapa'=>'Etapa'/*,'Nº do Pedido do Cliente','Nº do Contrato de Venda','Contato','Projeto'*/,'dados_adcionais_nf'=>'Dados Adicionais para a Nota Fiscal'/*,'Nota Fiscal para Consumo Final'*/
                         ),
                         'Parcelas'=>array(
                             'Valor Total a Receber','Vencimento da Parcela','Valor da Parcela','Percentual da Parcela','Não gerar boleto desta parcela'
@@ -112,7 +118,7 @@
                             'Utilizar os seguintes endereço de e-mail','Enviar o e-mail com o boleto de cobrança gerado pelo faturamento (juntamente com o DANFE e o XML da NFe)'
                         ),
                         'Observações'=>array(
-                          'Preencha aqui as observações desta venda (elas não serão exibidas na Nota Fiscal)'  
+                          /*'Preencha aqui as observações desta venda (elas não serão exibidas na Nota Fiscal)'*/  
                         ),
                         'imposto' => array(
                             'cofins_padrao' => array(

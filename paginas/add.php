@@ -1,9 +1,21 @@
 <meta charset='utf-8'>
+<script>
+    function removeVirgula(str){
+        //alert([vl1.charAt(vl1.length-3),vl2]);
+        if(str.charAt(str.length-3)!='.'){
+            str=str.replace('.','');
+        }
+        if(str.charAt(str.length-3)==','){
+            str=str.replace(',','.');
+        }
+        return str.toFixed('2');
+    }
+</script>
 <?php
     $act=$_GET['act'];
     @$pagina=$_GET['pagina'];
-    echo '<pre>';
-    print_r($_POST);die;
+    //echo '<pre>';
+    //print_r($_POST);die;
     if($pagina=='cliente'){
         include '../model/ClientesCadastroJsonClient.php';
         $cliente=new ClientesCadastroJsonClient();
@@ -74,6 +86,7 @@
             }
         }
     }elseif($pagina=='pedido'){
+        include '../validacao/ModelValidador.php';
         // Obtêm o número do pedido Atual
         $numero_pedido_atual = file_get_contents('numeroPedido.txt');
         // Atualiza número do Pedido e salva no arquivo
@@ -85,39 +98,106 @@
         include '../model/PedidoVendaProdutoJsonClient.php';
         $pedido=new PedidoVendaProdutoJsonClient();
         
+        $parcela='000';
+        
+            /*
+            [codigo_cliente_integracao] => 
+            [codigo_empresa] => 740225718
+            [codigo_empresa_integracao] => 
+            [codigo_pedido] => 742241154
+            [importado_api] => */
+        
         ///// cabecalho /////
         $cabecalho=new cabecalho();
         $cabecalho->bloqueado='N';
         $cabecalho->codigo_cliente=$_POST['cCliente'];
+        $cabecalho->codigo_parcela=$parcela;
         $cabecalho->codigo_pedido_integracao=$codigo_pedido_integracao;
         $cabecalho->data_previsao=$_POST['dPrevisao'];
-        $cabecalho->etapa=10;
+        $cabecalho->etapa=$_POST['etapa'];
+        $cabecalho->importado_api='S';
         $cabecalho->numero_pedido='';
-        $cabecalho->quantidade_itens='';
+        $cabecalho->qtde_parcelas=0;
+        $cabecalho->quantidade_itens=$_POST['tItem'];
         
         ///// det /////
         //$cItem=$_POST['cProduto'];//(defaut em branco)
-        $det=new det();
-        $det->ide->codigo_item='';
-        $det->ide->codigo_item_integracao=$_POST['cProduto'];
-        $det->produto->codigo_produto=$_POST['cProduto'];
-        //$det->produto->descricao=$_POST['descricao'];
-        $det->produto->quantidade=$_POST['quantidade'];
-        $det->produto->percentual_desconto="'".$_POST['pDesconto']."'";
-        $det->produto->tipo_desconto='P';
-        //$det->produto->valor_mercadoria=200;
-        //$det->produto->valor_total=$_POST['vTotal'];
-        $det->produto->valor_unitario=$_POST['vUnitario'];
+        //$det=new det();
         
-        ///// produto //////
-        $codigo_produto_integracao=$_POST['cProduto'];
-        $produto=new produto();
-        $produto->codigo_produto=$_POST['cProduto'];
-        $produto->codigo_produto_integracao=$codigo_produto_integracao;
+        /*
+        $ide->codigo_item='';
+        $ide->codigo_item_integracao=$_POST['codigo_produto1'];
+        
+        $observacao->obs_item=$_POST['obs_item1'];
+
+            ///// produto //////
+        $produto->codigo_produto=$_POST['codigo_produto1'];
+        $produto->descricao=$_POST['descricao1'];
+        $produto->quantidade=$_POST['quantidade1'];
+        $produto->tipo_desconto='P';
+        $produto->valor_mercadoria=$_POST['vTotalItem1'];
+        $produto->valor_unitario=$_POST['vUnitarioItem1'];
+        $produto->codigo_produto_integracao=$_POST['codigo_produto1'];
         $produto->codigo='';
-        $produto->quantidade=$_POST['quantidade'];
-        $produto->valor_unitario=$_POST['vUnitario'];
-        $produto->percentual_desconto=$_POST['pDesconto'];
+        $produto->percentual_desconto=$_POST['pDescontoItem1'];
+        
+        /// calculando ///
+        $vDescontoItem=str_replace(',','.',$_POST['vTotalItem1'])*str_replace(',','.',$_POST['pDescontoItem1'])/100;
+        //echo str_replace(',','.',$_POST['vTotalItem1']).' x '.str_replace(',','.',$_POST['pDescontoItem1']).' / 100 = '.$vDescontoItem;
+        $vTotal=str_replace(',','.',$_POST['vTotalItem1'])-$vDescontoItem;
+        //echo str_replace(',','.',$_POST['vTotalItem1']).' - '.$vDescontoItem.' = '.$vTotal;
+        $produto->valor_desconto=number_format($vDescontoItem,'2',',','');
+        $produto->valor_total=number_format($vTotal,'2',',','');
+        */
+        //$det=array(array('ide'=>$ide,'observacao'=>$observacao,'produto'=>$produto));
+        $det=array();
+        //echo '<pre>';print_r($det);die;
+        
+        //echo number_format($vDescontoItem,'2',',','').' -> '.number_format($vTotal,'2',',','');
+        //echo $_POST['tItem'];
+        for($x=1;$x <= $_POST['tItem'];$x++){
+            $ide=new ide();
+            $observacao=new observacao();
+            $produto=new produto();
+        
+            array_push($det,array('ide'=>$ide,'observacao'=>$observacao,'produto'=>$produto));
+            $ide->codigo_item='';
+            $ide->codigo_item_integracao=$_POST['codigo_produto'.$x.''];
+
+            $observacao->obs_item=$_POST['loja'.$x.''];//.','.$_POST['obs_item'.$x.''];
+        
+        
+        /*
+        [cfop] => 5.405
+        [codigo] => 783
+        [codigo_produto_integracao] => 
+        [codigo_tabela_preco] => 742240473
+        [ean] => 7898930919331
+        [ncm] => 8528.52.20
+        [unidade] => PC
+        [valor_deducao] => 0
+        
+         */        
+        
+        
+            ///// produto //////
+            $produto->codigo_produto=$_POST['codigo_produto'.$x.''];
+            $produto->descricao=$_POST['descricao'.$x.''];
+            $produto->quantidade=$_POST['quantidade'.$x.''];
+            $produto->tipo_desconto='P';
+            $produto->valor_mercadoria=ModelValidador::removePonto($_POST['vTotalItem'.$x.'']);
+            $produto->valor_unitario=ModelValidador::removePonto($_POST['vUnitarioItem'.$x.'']);
+            $produto->codigo_produto_integracao=$_POST['codigo_produto'.$x.''];
+            $produto->codigo='';
+            $produto->percentual_desconto=$_POST['pDescontoItem'.$x.''];
+            //$produto->codigo_tabela_preco=$_POST['cCodIntTabPreco'.$x.''];
+                
+            /// calculando ///
+            $vDescontoItem=ModelValidador::removePonto($_POST['vTotalItem'.$x.''])*ModelValidador::removePonto($_POST['pDescontoItem'.$x.''])/100;
+            $vTotal=ModelValidador::removePonto($_POST['vTotalItem'.$x.''])-$vDescontoItem;
+            $produto->valor_desconto=$vDescontoItem;
+            $produto->valor_total=$vTotal;
+        }
         
         //// Observação ////
         ///????? $observacao=new observacao();
@@ -141,14 +221,60 @@
         $imposto->iss=$_POST['iss'];
         */
         
+        /*
+            [especie_volumes] => 
+            [marca_volumes] => 
+            [modalidade] => 9
+            [numeracao_volumes] =>                                                        
+            [numero_lacre] => 
+            [outras_despesas] => 0
+            [peso_bruto] => 0
+            [peso_liquido] => 0
+            [placa] => 
+            [placa_estado] => 
+            [registro_transportador] => 
+            [valor_frete] => 0
+            [valor_seguro] => 0
+            [veiculo_proprio] => 
+        */
+        
+        
+        //// Frete ////
+        $frete=new frete();
+        $frete->codigo_transportadora=$_POST['codigo_transportadora'];
+        $frete->codigo_transportadora_integracao;
+        $frete->quantidade_volumes=$_POST['qvolume'];
+        $frete->modalidade=substr($_POST['tfrete'],0,1);
+        
+        
+        
+        /*
+        [codProj] => 0
+            [codVend] => 742241153
+            [consumidor_final] => N
+            [contato] => 
+            [dados_adicionais_nf] => 
+            [enviar_email] => 
+            [numero_contrato] => 
+            [numero_pedido_cliente] => 
+            [utilizar_emails] => 
+         * 
+         */
+        
+        
         //// Informacoes Adcionais //////
-        $_POST['codigo_categoria']="1.01.03";
-        $_POST['codigo_conta_corrente']=740899824;//1229930303;
+        //$_POST['codigo_categoria']="1.01.03";
+        //$_POST['codigo_conta_corrente']=740899824;//1229930303;
         $informacoes_adicionais=new informacoes_adicionais();
         $informacoes_adicionais->codigo_categoria=$_POST['codigo_categoria'];
         $informacoes_adicionais->codigo_conta_corrente=$_POST['codigo_conta_corrente'];
         $informacoes_adicionais->consumidor_final='S';
         $informacoes_adicionais->enviar_email='N';
+        $informacoes_adicionais->codVend=$_POST['cod_vend'];
+        $informacoes_adicionais->dados_adicionais_nf=$_POST['dados_adcionais_nf'];
+        
+        //// Total Pedido ////
+        $tPedido=new total_pedido();
         
                // echo '<pre>';
         //print_r([$cabecalho,$det,$produto,$observacao]);die;
@@ -156,12 +282,16 @@
         $pedido_venda_produto=new pedido_venda_produto();
         $pedido_venda_produto->cabecalho=$cabecalho;
         $pedido_venda_produto->det=$det;
+        $pedido_venda_produto->frete=$frete;
         $pedido_venda_produto->informacoes_adicionais=$informacoes_adicionais;
         ////????? $pedido_venda_produto->observacoes=$observacao;
-        //print_r($pedido_venda_produto);
+        //echo '<pre>';print_r($_POST);
+        //echo '<pre>';print_r($pedido_venda_produto);//die;
+        //header('Location:imprime.php');
+        include 'imprime.php';
         //die;
         $pedido->IncluirPedido($pedido_venda_produto);
-        header('Location:../web/index.php?pagina=pedido&act=cad');
+        //header('Location:../web/index.php?pagina=pedido&act=cad');
         die;
         /*
     

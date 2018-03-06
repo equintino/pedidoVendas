@@ -55,12 +55,12 @@
                 })
                 item++;
                 if($('#pnl1 table span').length != 0){
-                   $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto'+item+'" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" /></td><td><input type="text" name="quantidade'+item+'" autocomplete="off" required linha='+item+' /></td><td><input type="text" name="vUnitarioItem'+item+'" /></td><td><input type="text" name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" name="pDescontoItem'+item+'" linha='+item+' /></td></span></tr>')
+                   $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto'+item+'" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" /></td><td><input type="text" name="quantidade'+item+'" autocomplete="off" required linha='+item+' /></td><td><input type="text" name="vUnitarioItem'+item+'" /></td><td><input type="text" name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" name="pDescontoItem'+item+'" linha='+item+' /></td><td><select name=loja'+item+' ><option value=loja1>Loja 1</option><option value=loja2>Loja 2</option></select></td><td><input type="hidden" name="vTotalItem'+item+'" linha='+item+' /></td></span></tr>')
                     itemExclusao();
                     busca();
                     quadroInferior();
                 }else{
-                    $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class=lupa></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto'+item+'" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" /></td><td><input type="text" name="quantidade'+item+'" autocomplete="off" linha='+item+' required /></td><td><input type="text" name="vUnitarioItem'+item+'" /></td><td><input type="text" name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" name="pDescontoItem'+item+'" linha='+item+' /></td></span></tr>')  
+                    $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class=lupa></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto'+item+'" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" /></td><td><input type="text" name="quantidade'+item+'" autocomplete="off" linha='+item+' required /></td><td><input type="text" name="vUnitarioItem'+item+'" /></td><td><input type="text" name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" name="pDescontoItem'+item+'" linha='+item+' /></td><td><select name=loja'+item+' ><option value=loja1>Loja 1</option><option value=loja2>Loja 2</option></select></td><td><input type="hidden" name="vTotalItem'+item+'" linha='+item+' /></td></span></tr>')  
                     busca();
                     quadroInferior();
                 }
@@ -205,7 +205,7 @@
                     })
                     $('#pnl1 table tr .lupa img').remove();
                     if(!$('#pnl1 table tr .lupa img').attr('src')){
-                        $('#pnl1 table tr .lupa').append('<img title="Pesquisar ítem" height=15px src="../web/img/lupa.png" busca='+j+' />')
+                        $('#pnl1 table tr .lupa').append('<img title="Pesquisar ítem" height=15px src="../web/img/lupa.png" busca='+j+' /> ')
                     }
                 }
             })    
@@ -241,13 +241,15 @@
                         }
                         quantidade=zero+$(this).val();
                         vUnitarioItem=($('#pnl1 tr[id=item'+pedLinha+'] input[name=vUnitarioItem'+pedLinha+']').val());
-                        VUI=vUnitarioItem.replace(',','.');
-                        vTotalItem=parseFloat(VUI)*parseInt(quantidade);
+                        //VUI=vUnitarioItem.replace(',','.');
+                        //vTotalItem=parseFloat(VUI)*parseInt(quantidade);
+                        vTotalItem=calcula('*',vUnitarioItem,quantidade);
                         $($('#pnl1 tr[id=item'+pedLinha+'] input[name=vTotalItem'+pedLinha+  ']')).val(numeroParaMoeda(vTotalItem));
                         qEstoque=$(this).attr('qestoque');
                         if(quantidade > qEstoque){
                             alert('Quantidade em Estoque '+qEstoque+'');
-                            vTotalItem=parseFloat(VUI)*parseInt(qEstoque);
+                            //vTotalItem=parseFloat(VUI)*parseInt(qEstoque);
+                            vTotalItem=calcula('*',vUnitarioItem,qEstoque);
                             $($('#pnl1 tr[id=item'+pedLinha+'] input[name=vTotalItem'+pedLinha+']')).val(numeroParaMoeda(vTotalItem));
                             $($('#pnl1 tr[id=item'+pedLinha+'] input[name=quantidade'+pedLinha+']')).val(qEstoque);
                             
@@ -281,11 +283,14 @@
                     if(mercadoriaTotal==0){
                         mercadoria=$('#pnl1 tr[id=item'+i+'] input[name=vTotalItem'+i+']').val();
                         mercadoriaTotal=mercadoria.replace(',','.');
+                        //alert(mercadoriaTotal);
                     }else{
-                        mercadoria=$('#pnl1 tr[id=item'+i+'] input[name=vTotalItem'+i+']').val().replace(',','.');
-                        var MT=mercadoriaTotal;
+                        mercadoria=$('#pnl1 tr[id=item'+i+'] input[name=vTotalItem'+i+']').val();
+                        //var MT=mercadoriaTotal;
                         if(mercadoria != 0){
-                            mercadoriaTotal=parseFloat(MT)+parseFloat(mercadoria);
+                            //mercadoriaTotal=parseFloat(MT)+parseFloat(mercadoria);
+                            //alert()
+                            mercadoriaTotal=calcula('+',mercadoriaTotal,mercadoria);
                         }
                     }
                     var temDesconto=0;
@@ -296,9 +301,13 @@
                         }
                     })
                     if(temDesconto != 0){
-                        mercadoria=parseFloat($('#pnl1 tr[id=item'+i+'] input[name=vTotalItem'+i+']').val().replace(',','.'));
-                        vDescontoItem=mercadoria*$('#pnl1 tr[id=item'+i+'] input[name=pDescontoItem'+i+']').val()/100;
-                        vDescontoTotal=parseFloat(vDescontoTotal)+parseFloat(vDescontoItem);
+                        mercadoria=$('#pnl1 tr[id=item'+i+'] input[name=vTotalItem'+i+']').val();
+                        vDescontoItem=calcula('%',mercadoria,$('#pnl1 tr[id=item'+i+'] input[name=pDescontoItem'+i+']').val());
+                        if(vDescontoItem != 'NaN'){
+                            //alert(vDescontoItem);
+                            vDescontoTotal += parseFloat(vDescontoItem);
+                        }
+                        //alert([vDescontoItem,vDescontoTotal]);
                     }
                 }
                 if(mercadoriaTotal){
@@ -312,7 +321,8 @@
                     $('.autoQuadro input[name=vDesconto]').val(numeroParaMoeda('0,00'))
                     $('.autoQuadro td[nome=vDesconto]').text(numeroParaMoeda('0,00'))
                 }
-                var vPedido=parseFloat($('.autoQuadro td[nome=mercadorias]').text().replace(',','.'))-parseFloat($('.autoQuadro td[nome=vDesconto]').text().replace(',','.'));
+                var vPedido=calcula('-',$('.autoQuadro td[nome=mercadorias]').text(),$('.autoQuadro td[nome=vDesconto]').text());
+                //alert()
                 $('.autoQuadro input[name=vPedido]').val(numeroParaMoeda(vPedido))
                 $('.autoQuadro td[nome=vPedido]').text(numeroParaMoeda(vPedido)) /// Valor do Pedido ///
         }
@@ -354,6 +364,39 @@
     function numeroParaMoeda(n, c, d, t){
         c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
         return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");    
+    }
+    
+    function calcula(ope,vl1,vl2){
+        if(vl1.charAt(vl1.length-3)!='.'){
+            vl1=vl1.replace('.','');
+        }
+        if(vl2.charAt(vl2.length-3)!='.'){
+            vl2=vl2.replace('.','');
+        }
+        if(vl1.charAt(vl1.length-3)==','){
+            vl1=vl1.replace(',','.');
+        }
+        if(vl2.charAt(vl2.length-3)==','){
+            vl2=vl2.replace(',','.');
+        }
+        switch(ope){
+            case '+':
+                result=parseFloat(vl1)+parseFloat(vl2);
+                break;
+            case '-':
+                result=parseFloat(vl1)-parseFloat(vl2);
+                break;
+            case '*':
+                result=parseFloat(vl1)*parseFloat(vl2);
+                break;
+            case '/':
+                result=parseFloat(vl1)/parseFloat(vl2);
+                break;
+            case '%':
+                result=parseFloat(vl1)*parseFloat(vl2)/100;
+                break;
+        }
+        return result.toFixed('2');
     }
 </script>
 <style>
@@ -525,7 +568,7 @@
         display: none;
     }
     #pnl3 .divVendas table{
-        //width: 300px;
+        width: 300px;
         //border: solid red;
     }
 </style>
@@ -548,8 +591,11 @@
 <table class="tabela">
     <tr><td colspan="4">Cliente</td><td align="center">Previsão Faturamento</td></tr>
     <tr><td colspan="4" class="razao"><input type="hidden" name="cCliente" value="<?= $cCliente ?>" /><input name="cliente" type="text" size=53 value="<?= $razao ?>" required /> <img src="../web/img/lupa.png" height="14px" title="Pesquisar cliente"/> </td><td class="previsao"><input name="dPrevisao" type="text" value="<?= date('d/m/Y') ?>" /></td></tr>
-    <tr><td><font size=2px>CNPJ/CPF</font></td><tr>
-    <tr><td class="cnpj"><input type="text" name="cnpj_cpf" value="<?= $cnpj_cpf ?>"/></td></tr>
+    <tr><td><font size=2px>CNPJ/CPF</font></td><!--<td>Tabela de Preço</td>--><tr>
+    <tr><td class="cnpj"><input type="text" name="cnpj_cpf" value="<?= $cnpj_cpf ?>"/></td>
+        <!--<td><select name='cCodIntTabPreco'>   
+        </select></td>-->
+    </tr>
 </table>
 <fieldset class="fTotais">
     <legend> Totais </legend>
@@ -581,10 +627,10 @@
 <table class="tabela">
     <tr><td>Vendedor</td><td>Número de Parcelas</td><td>Forma de Pagamento</td></tr>
     <tr><td>
-            <select name="vendedor">
+            <select name="cod_vend">
                 <option value=""></option>
                 <?php foreach($vend->cadastro as $key => $item): ?>
-                <option value="<?= $item->nome ?>"><?= $item->nome ?></option>
+                <option value="<?= $item->codigo ?>"><?= $item->nome ?></option>
                 <?php endforeach; ?>
             </select>
         </td><td>
@@ -610,11 +656,11 @@
         <span class="info">Informações Adcionais</span>
         <span class="parcela">Parcelas</span>        
         <!--<span class="email">E-mail</span>-->
-        <span class="observacao">Observação</span>
+        <!--<span class="observacao">Observação</span>-->
     </div>
         <div id='pnl1'>
             <div id='botoes'>
-                <span class='bnt'>Novo Ítem</span><span class='bnt'>Excluir Ítem</span>
+                <span class='bnt'>Novo Ítem</span><span class='bnt'>Excluir Ítem</span><span class='loja'></span>
             </div>
             <div class="divVendas dItem">
         <!--<fieldset class="iVendas">-->
@@ -645,7 +691,7 @@
                         <?php //echo '<pre>';print_r($correios); ?>
                     <?php foreach($variaveis2['Frete e Outras Despesas'] as $key => $item): ?>
                         <?php if($item == 'Transportadora'){
-                            echo '<td width=20px><input size=10px type="text" name="'.$key.'" value="'.$correios->nome_fantasia.'" /></td>';
+                            echo '<td width=20px><input size=10px type="text" name="'.$key.'" value="'.$correios->nome_fantasia.'" /></td><input type=hidden name=codigo_transportadora value="'.$correios->codigo_cliente_omie.'" />';
                         }elseif($item == 'Tipo do Frete'){
                             echo '<td width=40px><input size=40px type="text" name="'.$key.'" value="1-Frete por Conta do Destinatário" /></td>';  
                         }elseif($item=='Quantidade de Volumes'){
@@ -681,13 +727,14 @@
                             <?php endforeach; ?>
                             </td></select>
                         <?php elseif($item=='Etapa'): ?>
-                            <td><select name='etapa'>
+                            <td width='20px'><select name='etapa'>
                             <?php 
                                 foreach($selEtapa as $key => $item): ?>
                                     <?php if($item->cCodigo!='00'): ?>
                                         <option value='<?= $item->cCodigo ?>'><?= $item->cDescricao ?></option>
                                 <?php endif; endforeach; ?>
-                            </td></select>               
+                            </td></select>
+                        <?php elseif($item=='Dados Adicionais para a Nota Fiscal'): ?>                                <td><input size=50px type=text name='dados_adcionais_nf' /></td>
                         <?php endif; ?>
                     <?php /*$ref++;*/ endforeach; ?>
                     </tr>

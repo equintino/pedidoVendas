@@ -10,7 +10,10 @@
     $(document).ready(function(){
         //if(!codigo_produto){
             $('.jItem tr').mouseover(function(){
-                $(this).css('background','#ccc')
+                $(this).css({
+                    background:'#ccc',
+                    cursor: 'pointer'
+                })
                 $(this).mouseleave(function(){
                     $(this).css('background','white')
                 })
@@ -115,12 +118,14 @@
     include '../model/ProdutosCadastroJsonClient.php';
     $produto=new ProdutosCadastroJsonClient();
     //$cProduto=$_GET['cProduto'];
+    //echo '<pre>';print_r($produto->ListarProdutos($produto_servico_list_request));die;
     
     
     if(!@$codigo_produto){
         $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>50,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
         $dados=$produto->ListarProdutos($produto_servico_list_request);
         $detalhes=$dados->produto_servico_cadastro;
+        //echo '<pre>';print_r($detalhes);die;
         foreach($detalhes as $prod){
         $dados_produto=array();
         foreach($prod as $key => $item){
