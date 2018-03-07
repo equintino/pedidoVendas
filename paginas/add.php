@@ -284,12 +284,8 @@
         $pedido_venda_produto->det=$det;
         $pedido_venda_produto->frete=$frete;
         $pedido_venda_produto->informacoes_adicionais=$informacoes_adicionais;
-        ////????? $pedido_venda_produto->observacoes=$observacao;
-        //echo '<pre>';print_r($_POST);
-        //echo '<pre>';print_r($pedido_venda_produto);//die;
-        //header('Location:imprime.php');
+        $pedido_venda_produto->observacoes=$observacao;
         include 'imprime.php';
-        //die;
         $pedido->IncluirPedido($pedido_venda_produto);
         //header('Location:../web/index.php?pagina=pedido&act=cad');
         die;

@@ -8,6 +8,42 @@
                 window.print();
                 window.location='../web/index.php?pagina=pedido&act=cad';
             })
+            
+            /* estudar
+            // Imprime a página
+        window.print();
+                
+        (function () {
+            var beforePrint = function () {
+                
+                // Remove o loading
+                $(".se-pre-con").hide();
+
+                // Remove Menu topo
+                $(".header").hide();
+                $('.content').css({
+                    top: ("0px")
+                }).show();
+            };
+            var afterPrint = function () {
+                // Redireciona página
+                window.location = 'Logado.php?pagina=<?php //$pagina_crypt ?>';
+            };
+
+            if (window.matchMedia) {
+                var mediaQueryList = window.matchMedia('print');
+                mediaQueryList.addListener(function (mql) {
+                    if (mql.matches) {
+                        beforePrint();
+                    } else {
+                        afterPrint();
+                    }
+                });
+            }
+
+            window.onbeforeprint = beforePrint;
+            window.onafterprint = afterPrint;
+        }()); */
         </script>
         <style>
             *{
