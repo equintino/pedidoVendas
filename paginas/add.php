@@ -193,7 +193,7 @@
             //$produto->codigo_tabela_preco=$_POST['cCodIntTabPreco'.$x.''];
                 
             /// calculando ///
-            $vDescontoItem=ModelValidador::removePonto($_POST['vTotalItem'.$x.''])*ModelValidador::removePonto($_POST['pDescontoItem'.$x.''])/100;
+            @$vDescontoItem=ModelValidador::removePonto($_POST['vTotalItem'.$x.''])*$_POST['pDescontoItem'.$x.'']/100;
             $vTotal=ModelValidador::removePonto($_POST['vTotalItem'.$x.''])-$vDescontoItem;
             $produto->valor_desconto=$vDescontoItem;
             $produto->valor_total=$vTotal;
