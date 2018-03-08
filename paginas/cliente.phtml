@@ -104,7 +104,6 @@
         text-align: center;
         font-size: 30px;
         padding-top: 10px;
-        //border: solid red;
     }
     .pag{
         font-size: 15px;
@@ -272,5 +271,29 @@
 <?php elseif($act=='excl'): ?>
 
 
+<?php elseif($act=='atualiza'): ?>
+<form method="POST" action="../paginas/add.php?act=alt&pagina=cliente" name="alt">
+<?php foreach($dados->clientes_cadastro as $item):
+        foreach($item as $key => $item2):
+            if($key=='info'):
+                foreach($item2 as $key2 => $item3):
+        ?>
+                    <br>----> info -> <?= $key2 ?> -> <?= $item3 ?>
+                <?php endforeach; ?>
+                <br><br>
+            <?php elseif($key=='tags'):
+                foreach($item2 as $item4): ?>
+                    <br>----> tags -> <?= $item4->tag ?>
+                <?php endforeach; ?>
+                <br><br>
+            <?php else: ?>
+                <input name="<?= $key ?>" type="text" value="<?= $item2 ?>" /><br>
+            <?php endif;
+            echo '<input type="submit" value="Salvar" />';
+        endforeach; die;
+    endforeach; ?>
+<input type="submit" value="Salvar" /> 
+</form>
+                
 <?php endif; ?>
 </div>

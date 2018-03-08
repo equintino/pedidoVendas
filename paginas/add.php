@@ -1,7 +1,6 @@
 <meta charset='utf-8'>
 <script>
     function removeVirgula(str){
-        //alert([vl1.charAt(vl1.length-3),vl2]);
         if(str.charAt(str.length-3)!='.'){
             str=str.replace('.','');
         }
@@ -12,10 +11,61 @@
     }
 </script>
 <?php
+    include 'criaClasses.php';
+    
+    /// Cria classes se não existir ///
+    if(file_exists('../model/model.php')&&file_exists('../dao/ModelSearchCriteria.php')&&file_exists('../dao/CRUD.php')&&file_exists('../mapping/modelMapper.php')){
+        
+        include '../config/Config.php';
+        include '../excecao/Excecao.php';
+        include '../dao/ModelSearchCriteria.php';
+        include '../model/model.php';
+        include '../mapping/modelMapper.php';
+        include '../dao/dao.php';
+        include '../dao/CRUD.php';
+        
+        $model = new Model();
+        $CRUD = new CRUD();
+        
+        
+        foreach($_POST as $key => $item){
+            $classe='set'.$key;
+            $model->$classe($item);
+        }
+        
+        
+        $model->settabela('tb_cliente');
+        
+        echo '<pre>';print_r($model);die;
+        //$x=1;
+        //foreach($model as $item){
+            //echo $model;
+            //$x++;
+        //}
+            //echo $x;
+        //die;
+        $CRUD->grava($model);
+        //Utils::redirect('cadastro',array('act'=>'cad','gravado'=>'ok')); 
+    }else{
+        $arquivo = new criaClsses();
+        $arquivo->tabela='tb_cliente';
+        $arquivo->novoArquivo($_POST);
+    }
+    echo '<pre>';
+    $model = new Model();
+    
+    /*$result = array();
+    foreach ($_POST as $row){
+        $model = new Model();
+        modelMapper::map($model, $row);
+        $result[$model->getid()] = $model;
+    }*/
+    print_r($model);
+    //print_r(count($_POST));
+    //$CRUD->criaTabela();
+    die;
     $act=$_GET['act'];
     @$pagina=$_GET['pagina'];
-    //echo '<pre>';
-    //print_r($_POST);die;
     if($pagina=='cliente'){
         include '../model/ClientesCadastroJsonClient.php';
         $cliente=new ClientesCadastroJsonClient();
@@ -24,7 +74,6 @@
             $clientes_cadastro=array("codigo_cliente_omie"=>$_POST['codigo_cliente_omie'],"codigo_cliente_integracao"=>$_POST['codigo_cliente_integracao'],"email"=>$_POST['email'],"razao_social"=>$_POST['razao_social'],"nome_fantasia"=>$_POST['nome_fantasia'],"cnpj_cpf"=>$_POST['cnpj_cpf'],"telefone1_ddd"=>$_POST['telefone1_ddd'],"telefone1_numero"=>$_POST['telefone1_numero'],"contato"=>$_POST['contato'],"endereco"=>$_POST['endereco'],"endereco_numero"=>$_POST['endereco_numero'],"bairro"=>$_POST['bairro'],"complemento"=>$_POST['complemento'],"estado"=>$_POST['estado'],"cidade"=>$_POST['cidade'],"cep"=>$_POST['cep'],"telefone2_ddd"=>$_POST['telefone2_ddd'],"telefone2_numero"=>$_POST['telefone2_numero'],"fax_ddd"=>$_POST['fax_ddd'],"fax_numero"=>$_POST['fax_numero'],"homepage"=>$_POST['homepage'],"inscricao_estadual"=>$_POST['inscricao_estadual'],"inscricao_municipal"=>$_POST['inscricao_municipal'],"inscricao_suframa"=>$_POST['inscricao_suframa'],"optante_simples_nacional"=>$_POST['optante_simples_nacional'],"observacao"=>$_POST['observacao'],"pessoa_fisica"=>$_POST['pessoa_fisica']);
 
             $status=@$cliente->AlterarCliente($clientes_cadastro);
-            //print_r($status);die;
             if(@$status->descricao_status!='Cliente alterado com sucesso!'){
                 echo "Não foi possível fazer a última alteração.";
                 echo '<br>';
@@ -65,10 +114,8 @@
             $produto_servico_cadastro=$_POST;
             //[{%22codigo_produto_integracao%22:%22123456%22,%22codigo_produto%22:%22%22,%22descricao%22:%22Produto%20de%20teste%22,%22unidade%22:%22UN%22,%22ncm%22:%229504.10.99%22,%22valor_unitario%22:%22100.99%22}],%22app_key%22:%223303943460%22,%22app_secret%22:%228edb08391b6af27936d3daf0ca8aa07d%22}
             //[descricao_status] => Produto cadastrado com sucesso! )
-            //print_r($_POST);echo '<br>';
             //$produto_servico_cadastro=array("codigo_produto_integracao" => "15185297955","codigo_produto"=>"","descricao" => "Produto de teste","unidade" => "UN","ncm" => '9504.10.99',"valor_unitario"=>"100.99");
             if($status=$produto->IncluirProduto($produto_servico_cadastro)){
-            //print_r($status);die;
             //if($status==null)$status->descricao_status=0;
             if($status->descricao_status!='Produto cadastrado com sucesso!'){
                 echo "Não foi possível efetuar o cadastro.";
@@ -119,42 +166,8 @@
         $cabecalho->numero_pedido='';
         $cabecalho->qtde_parcelas=0;
         $cabecalho->quantidade_itens=$_POST['tItem'];
-        
-        ///// det /////
-        //$cItem=$_POST['cProduto'];//(defaut em branco)
-        //$det=new det();
-        
-        /*
-        $ide->codigo_item='';
-        $ide->codigo_item_integracao=$_POST['codigo_produto1'];
-        
-        $observacao->obs_item=$_POST['obs_item1'];
-
-            ///// produto //////
-        $produto->codigo_produto=$_POST['codigo_produto1'];
-        $produto->descricao=$_POST['descricao1'];
-        $produto->quantidade=$_POST['quantidade1'];
-        $produto->tipo_desconto='P';
-        $produto->valor_mercadoria=$_POST['vTotalItem1'];
-        $produto->valor_unitario=$_POST['vUnitarioItem1'];
-        $produto->codigo_produto_integracao=$_POST['codigo_produto1'];
-        $produto->codigo='';
-        $produto->percentual_desconto=$_POST['pDescontoItem1'];
-        
-        /// calculando ///
-        $vDescontoItem=str_replace(',','.',$_POST['vTotalItem1'])*str_replace(',','.',$_POST['pDescontoItem1'])/100;
-        //echo str_replace(',','.',$_POST['vTotalItem1']).' x '.str_replace(',','.',$_POST['pDescontoItem1']).' / 100 = '.$vDescontoItem;
-        $vTotal=str_replace(',','.',$_POST['vTotalItem1'])-$vDescontoItem;
-        //echo str_replace(',','.',$_POST['vTotalItem1']).' - '.$vDescontoItem.' = '.$vTotal;
-        $produto->valor_desconto=number_format($vDescontoItem,'2',',','');
-        $produto->valor_total=number_format($vTotal,'2',',','');
-        */
-        //$det=array(array('ide'=>$ide,'observacao'=>$observacao,'produto'=>$produto));
+                
         $det=array();
-        //echo '<pre>';print_r($det);die;
-        
-        //echo number_format($vDescontoItem,'2',',','').' -> '.number_format($vTotal,'2',',','');
-        //echo $_POST['tItem'];
         for($x=1;$x <= $_POST['tItem'];$x++){
             $ide=new ide();
             $observacao=new observacao();

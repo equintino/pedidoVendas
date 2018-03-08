@@ -1,14 +1,14 @@
 <?php
     class criaClsses {
+        public $POST;
+        public $tabela;
         private $filename1='../model/model.php';        
         private $filename2='../mapping/modelMapper.php';
         private $filename3='../dao/ModelSearchCriteria.php';
         private $filename4='../dao/CRUD.php';
-        public $POST;
-        private $tabela='tb_pedido';
         public function novoArquivo($POST){
             $mode='w+';
-            $variaveis = array();
+            $variaveis = array('cod_API');
             foreach($POST as $key => $item){
                 $variaveis[] = $key;
             }  
@@ -104,7 +104,7 @@
                 $model->setid(null);
                 $model->setexcluido(0);
                 $model->setcriado($now);  
-                $sql=$this->criaTabela(\'tb_estoque\');
+                $sql=$this->criaTabela(\''.$this->tabela.'\');
                 $this->execute($sql, $model);
                 $sql = \'INSERT INTO '.$this->tabela.' (';
                   foreach($variaveis as $item){
@@ -163,12 +163,12 @@
                         $sql="CREATE TABLE IF NOT EXISTS '.$this->tabela.' ( `id` INT(5) NOT NULL AUTO_INCREMENT , `criado` INT(100) NULL,';
                         foreach($variaveis as $item){
                             $texto .= '`'.$item.'`';
-                            if($item=='codigo'){
+                            if($item=='cod_API'){
                                 $texto .=' INT (5) NULL,';
-                            }elseif($item=='entrada'||$item=='saida'){
+                            /*}elseif($item=='entrada'||$item=='saida'){
                                 $texto .=' DATETIME DEFAULT NULL,';
                             }elseif($item=='descricao'){
-                                $texto .=' TEXT NULL,';
+                                $texto .=' TEXT NULL,';*/
                             }else{
                                 $texto .=' varchar(100) NULL,';
                             }
