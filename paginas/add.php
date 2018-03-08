@@ -11,61 +11,65 @@
     }
 </script>
 <?php
-    include 'criaClasses.php';
-    
-    /// Cria classes se não existir ///
-    if(file_exists('../model/model.php')&&file_exists('../dao/ModelSearchCriteria.php')&&file_exists('../dao/CRUD.php')&&file_exists('../mapping/modelMapper.php')){
-        
-        include '../config/Config.php';
-        include '../excecao/Excecao.php';
-        include '../dao/ModelSearchCriteria.php';
-        include '../model/model.php';
-        include '../mapping/modelMapper.php';
-        include '../dao/dao.php';
-        include '../dao/CRUD.php';
-        
-        $model = new Model();
-        $CRUD = new CRUD();
-        
-        
-        foreach($_POST as $key => $item){
-            $classe='set'.$key;
-            $model->$classe($item);
-        }
-        
-        
-        $model->settabela('tb_cliente');
-        
-        echo '<pre>';print_r($model);die;
-        //$x=1;
-        //foreach($model as $item){
-            //echo $model;
-            //$x++;
-        //}
-            //echo $x;
-        //die;
-        $CRUD->grava($model);
-        //Utils::redirect('cadastro',array('act'=>'cad','gravado'=>'ok')); 
-    }else{
-        $arquivo = new criaClsses();
-        $arquivo->tabela='tb_cliente';
-        $arquivo->novoArquivo($_POST);
-    }
-    echo '<pre>';
-    $model = new Model();
-    
-    /*$result = array();
-    foreach ($_POST as $row){
-        $model = new Model();
-        modelMapper::map($model, $row);
-        $result[$model->getid()] = $model;
-    }*/
-    print_r($model);
-    //print_r(count($_POST));
-    //$CRUD->criaTabela();
-    die;
     $act=$_GET['act'];
     @$pagina=$_GET['pagina'];
+    
+    if($act=='atualiza'){
+        include 'criaClasses.php';
+    
+        /// Cria classes se não existir ///
+        if(file_exists('../model/model.php')&&file_exists('../dao/ModelSearchCriteria.php')&&file_exists('../dao/CRUD.php')&&file_exists('../mapping/modelMapper.php')){
+        
+            include '../config/Config.php';
+            include '../excecao/Excecao.php';
+            include '../dao/ModelSearchCriteria.php';
+            include '../model/model.php';
+            include '../mapping/modelMapper.php';
+            include '../dao/dao.php';
+            include '../dao/CRUD.php';
+
+            $model = new Model();
+            $CRUD = new CRUD();
+
+
+            foreach($_POST as $key => $item){
+                $classe='set'.$key;
+                $model->$classe($item);
+            }
+
+
+            $model->settabela('tb_cliente');
+
+            echo '<pre>';print_r($model);die;
+
+            //$x=1;
+            //foreach($model as $item){
+                //echo $model;
+                //$x++;
+            //}
+                //echo $x;
+            //die;
+            $CRUD->grava($model);
+            //Utils::redirect('cadastro',array('act'=>'cad','gravado'=>'ok')); 
+        }else{
+            $arquivo = new criaClsses();
+            $arquivo->tabela='tb_cliente';
+            $arquivo->novoArquivo($_POST);
+        }
+        echo '<pre>';
+        $model = new Model();
+
+        /*$result = array();
+        foreach ($_POST as $row){
+            $model = new Model();
+            modelMapper::map($model, $row);
+            $result[$model->getid()] = $model;
+        }*/
+        print_r($model);
+        //print_r(count($_POST));
+        //$CRUD->criaTabela();
+        die;
+    }
     if($pagina=='cliente'){
         include '../model/ClientesCadastroJsonClient.php';
         $cliente=new ClientesCadastroJsonClient();
@@ -563,17 +567,18 @@
                             'valor_total_pedido'=>$_POST['valor_total_pedido']
                         )
                     );
-         */
+         
         echo '<pre>';
  print_r(json_decode('{"cabecalho": {"bloqueado": "N","codigo_cliente": 3792227,"codigo_pedido_integracao": "1519060633","data_previsao": "19/02/2018","etapa": "50","numero_pedido": "66628","quantidade_itens": 1},"det": [{"ide": {"codigo_item_integracao": "4422421","simples_nacional": "S"},"imposto": {"cofins_padrao": {"aliq_cofins": 3,"base_cofins": 400,"cod_sit_trib_cofins": "01","tipo_calculo_cofins": "B","valor_cofins": 12},"icms_sn": {"aliq_icms_sn": 1.25,"cod_sit_trib_icms_sn": 101,"origem_icms_sn": 0,"valor_credito_icms_sn": 5},"ipi": {"cod_sit_trib_ipi": 51},"pis_padrao": {"aliq_pis": 0.65,"base_pis": 400,"cod_sit_trib_pis": "01","tipo_calculo_pis": "B","valor_pis": 2.6}},"inf_adic": {"peso_bruto": 150,"peso_liquido": 150},"produto": {"cfop": "5.102","codigo_produto": "4422421","descricao": "Telefone Celular X","ncm": "9403.30.00","quantidade": 1,"tipo_desconto": "V","unidade": "UN","valor_desconto": 0,"valor_mercadoria": 200,"valor_total": 200,"valor_unitario": 200}}],"frete": {"codigo_transportadora": 2239663,"modalidade": "1","placa": "ABC1234","placa_estado": "SP","valor_frete": 30},"informacoes_adicionais": {"codigo_categoria": "1.01.03","codigo_conta_corrente": 11850365,"consumidor_final": "S","enviar_email": "N"},"lista_parcelas": {"parcela": [{"data_vencimento": "20/02/2018","numero_parcela": 1,"percentual": 50,"valor": 100},{"data_vencimento": "18/05/2018","numero_parcela": 2,"percentual": 50,"valor": 100}]},"total_pedido": {"base_calculo_icms": 200,"valor_mercadorias": 200,"valor_total_pedido": 200}}'));
- 
+ */
          
         /*    stdClass Object ( 
         [cabecalho] => stdClass Object ( 
             [bloqueado] => N [codigo_cliente] => 3792227 [codigo_pedido_integracao] => 1518658537 [data_previsao] => 14/02/2018 [etapa] => 50 [numero_pedido] => 68319 [quantidade_itens] => 1 
                                         ) */
-        echo '<pre>';
-        print_r($_POST);die;
+        //echo '<pre>';
+        //print_r($_POST);
+        die;
     }
     
     include '../dao/dao.php';
