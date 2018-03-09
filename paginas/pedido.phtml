@@ -55,12 +55,12 @@
                 })
                 item++;
                 if($('#pnl1 table span').length != 0){
-                   $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto'+item+'" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" /></td><td><input type="text" name="quantidade'+item+'" autocomplete="off" required linha='+item+' /></td><td><input type="text" name="vUnitarioItem'+item+'" /></td><td><input type="text" name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" name="pDescontoItem'+item+'" linha='+item+' /></td><td><select name=loja'+item+' ><option value=loja1>Loja 1</option><option value=loja2>Loja 2</option></select></td><td><input type="hidden" name="vTotalItem'+item+'" linha='+item+' /></td></span></tr>')
+                   $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto'+item+'" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" /></td><td><input type="text" name="quantidade'+item+'" autocomplete="off" required linha='+item+' /></td><td><input type="text" name="vUnitarioItem'+item+'" /></td><td><input type="text" name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" name="pDescontoItem'+item+'" linha='+item+' /></td><td><input type="text" name="obs_item'+item+'" linha='+item+' /></td><td><input type="text" name="cfop'+item+'" linha='+item+' /></td><td><input type="text" name="ncm'+item+'" linha='+item+' /></td><td><input type="text" name="ean'+item+'" linha='+item+' /></td><td><input type="text" name="unidade'+item+'" linha='+item+' /></td><!--<td><select name=loja'+item+' ><option value=loja1>Loja 1</option><option value=loja2>Loja 2</option></select></td>--><td><input type="hidden" name="vTotalItem'+item+'" linha='+item+' /></td></span></tr>')
                     itemExclusao();
                     busca();
                     quadroInferior();
                 }else{
-                    $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class=lupa></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto'+item+'" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" /></td><td><input type="text" name="quantidade'+item+'" autocomplete="off" linha='+item+' required /></td><td><input type="text" name="vUnitarioItem'+item+'" /></td><td><input type="text" name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" name="pDescontoItem'+item+'" linha='+item+' /></td><td><select name=loja'+item+' ><option value=loja1>Loja 1</option><option value=loja2>Loja 2</option></select></td><td><input type="hidden" name="vTotalItem'+item+'" linha='+item+' /></td></span></tr>')  
+                    $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class=lupa></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto'+item+'" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" /></td><td><input type="text" name="quantidade'+item+'" autocomplete="off" linha='+item+' required /></td><td><input type="text" name="vUnitarioItem'+item+'" /></td><td><input type="text" name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" name="pDescontoItem'+item+'" linha='+item+' /></td><td><input type="text" name="obs_item'+item+'" linha='+item+' /></td><td><input type="text" name="cfop'+item+'" linha='+item+' /></td><td><input type="text" name="ncm'+item+'" linha='+item+' /></td><td><input type="text" name="ean'+item+'" linha='+item+' /></td><td><input type="text" name="unidade'+item+'" linha='+item+' /></td><!--<td><select name=loja'+item+' ><option value=loja1>Loja 1</option><option value=loja2>Loja 2</option></select></td>--><td><input type="hidden" name="vTotalItem'+item+'" linha='+item+' /></td></span></tr>')  
                     busca();
                     quadroInferior();
                 }
@@ -110,7 +110,7 @@
                 $('#pnl3').css('display','block')
             }else if($(this).text()=='Parcelas'){
                 $('#pnl4').css('display','block')
-            }else if($(this).text()=='E-mail'){
+            }else if($(this).text()=='E-mail para Cliente'){
                 $('#pnl5').css('display','block')
             }else if($(this).text()=='Observação'){
                 $('#pnl6').css('display','block')
@@ -123,10 +123,16 @@
         $('.previsao input').mask('00/00/0000'); 
         
         $('.tabela td select[name=fPagamento]').change(function(){
-            if($(this).val()=='credito'){
+            if($(this).val()=='credito' || $(this).val()=='debito'){
                 $('.doc').show();
+                $('.doc').keyup(function(){
+                    var doc=$('.doc input').val();
+                    $('#pnl3 table .novo3 input[name=dados_adcionais_nf]').val(doc);
+                })
             }else{
                 $('.doc').hide();
+                $('.doc input').val('');
+                $('#pnl3 table .novo3 input[name=dados_adcionais_nf]').val('');
             }
         })
         ///// funcoes ////
@@ -290,7 +296,6 @@
                             mercadoria=mercadoria.replace(',','.');
                         }
                         mercadoriaTotal=mercadoria;
-                        //alert(mercadoriaTotal);
                     }else{
                         mercadoriaTotal=calcula('+',mercadoriaTotal,mercadoria);
                     }
@@ -516,7 +521,7 @@
     .doc{
         display: none;
     }
-    #pnl3 .divVendas table{
+    #pnl2 .divVendas table, #pnl3 .divVendas table, #pnl5 .divVendas table{
         width: 300px;
     }
 </style>
@@ -602,7 +607,7 @@
         <span class="frete">Frete/Despesas</span>
         <span class="info">Informações Adcionais</span>
         <span class="parcela">Parcelas</span>        
-        <!--<span class="email">E-mail</span>-->
+        <span class="email">E-mail para Cliente</span>
         <!--<span class="observacao">Observação</span>-->
     </div>
         <div id='pnl1'>
@@ -711,9 +716,12 @@
         <!--<fieldset class="iVendas">-->
                 <table>
                     <tr>
-                    <?php foreach($variaveis2['E-mail para o Cliente'] as $key => $item): ?>
+                    <?php foreach($variaveis2['E-mail para o Cliente'] as $item): ?>
                     <td><?= $item ?></td>
                     <?php endforeach; ?>
+                    </tr>
+                    <tr>
+                        <td><textarea cols="80" name="e-mail"><?= $email ?></textarea></td>
                     </tr>
                 </table>
         <!--</fieldset>-->
@@ -752,8 +760,9 @@
 <?php else: 
     $pvpListarRequest=array("pagina"=>1,"registros_por_pagina"=>50,"apenas_importado_api"=>"N");
     $dados=$pedido->ListarPedidos($pvpListarRequest);
-    //echo '<pre>';
-    //print_r($dados->pedido_venda_produto[0]);die;
+    
+    //echo '<pre>';print_r($dados->pedido_venda_produto);die;
+    
     $posicao=array('Pedido de Venda','Separar Estoque','Faturar','Faturado','Entrega');
     foreach($dados->pedido_venda_produto as $key => $item){
             if($item->cabecalho->etapa=='10'){

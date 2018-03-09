@@ -29,7 +29,7 @@
    if($act=='list'){    
         //// Listar Clientes Resumido ////
         $clientes_list_request=array('pagina'=>'1','registros_por_pagina'=>'100','apenas_importado_api'=>'N');
-        $dados=$cliente->ListarClientesResumido($clientes_list_request);    
+        $dados=$cliente->ListarClientes($clientes_list_request);    
    }elseif($act=='excl'){
         //// Excluir Cliente ////
         $clientes_cadastro_chave=array("codigo_cliente_omie"=>$_GET['codigo'],"codigo_cliente_integracao"=>"");

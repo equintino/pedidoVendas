@@ -23,6 +23,11 @@
     }else{
         $contato=null;
     }
+    if(array_key_exists('email', $_GET)){
+        $email=$_GET['email'];
+    }else{
+        $email=null;
+    }
     if($excl==1){
         print_r($_GET);die;
     }
@@ -49,6 +54,7 @@
     /*$produto_servico_cadastro_chave = array("codigo_produto" => $_GET['codigo'], "codigo_cliente_integracao" => "", "codigo" => "");
     $produtos->ExcluirProduto($produto_servico_cadastro_chave);
     header('Location:index.php?pagina=produto&act=list');*/
+       die;
    }
    ////// Classes //////
    $contas=new ContaCorrenteCadastroJsonClient();
@@ -103,7 +109,7 @@
     $variaveis1=array('tItem'=>'Total de Ítens','mercadorias'=>'Mercadorias','vDesconto'=>'Desconto',/*'ipi'=>'IPI','icmsSt'=>'ICMS ST',*/'vPedido'=>'Valor do Pedido');//valores preenchidos automaticamente
     $variaveis2=array(
                         'Ítens de Venda'=>array(
-                            'busca'=>'','nItem'=>'Nº','cProduto'=>'Código','descricao'=>'Descrição do Produto','quantidade'=>'Quantidade','vUnitario'=>'Preço Unitário de Venda','vTotal'=>'Valor Total do Ítem','pDesconto'=>'Desconto',/*'tabelaPreco'=>'Tabela de Preço','obs_item'=>'Observação do Ítem',*/'loja'=>'Loja de Origem'/*'icms'=>'ICMS','icmsSt'=>'ICMS ST','ipi'=>'IPI','pis'=>'PIS','cofins'=>'COFINS','frete'=>'Frete','seguro'=>'Seguros','oDespesa'=>'Outras Despesas','icmsDesonerado'=>'ICMS Desonerado','gCReceber'=>'Gera Conta a Receber','pLiquido'=>'Peso Líquido(Kg)','pBruto'=>'Peso Bruto(Kg)','cfop'=>'CFOP'*/
+                            'busca'=>'','nItem'=>'Nº','cProduto'=>'Código','descricao'=>'Descrição do Produto','quantidade'=>'Quantidade','vUnitario'=>'Preço Unitário de Venda','vTotal'=>'Valor Total do Ítem','pDesconto'=>'Desconto',/*'tabelaPreco'=>'Tabela de Preço',*/'obs_item'=>'Observação do Ítem','cfop'=>'CFOP','ncm'=>'NCM','ean'=>'EAN','unidade'=>'Unidade'/*,'loja'=>'Loja de Origem','icms'=>'ICMS','icmsSt'=>'ICMS ST','ipi'=>'IPI','pis'=>'PIS','cofins'=>'COFINS','frete'=>'Frete','seguro'=>'Seguros','oDespesa'=>'Outras Despesas','icmsDesonerado'=>'ICMS Desonerado','gCReceber'=>'Gera Conta a Receber','pLiquido'=>'Peso Líquido(Kg)','pBruto'=>'Peso Bruto(Kg)'*/
                         ),
                         'Frete e Outras Despesas'=>array(
                             'transportadora'=>'Transportadora','tfrete'=>'Tipo do Frete',/*'Placa do Veícula','UF','RNTRC (ANTT)',*/'qvolume'=>'Quantidade de Volumes'/*,'evolume'=>'Espécie dos Volumes','mvolume'=>'Marca dos Volumes','nvolume'=>'Numeração dos Volumes','pliquido'=>'Peso Líquido (Kg)','pbruto'=>'Peso Bruto (Kg)','vfrete'=>'Valor do Frete','vseguro'=>'Valor do Seguro','nlacre'=>'Número do Lacre','odespesas'=>'Outras Despesas Acessórias','O transporte será realizado com veículo próprio'*/
@@ -115,7 +121,7 @@
                             'Valor Total a Receber','Vencimento da Parcela','Valor da Parcela','Percentual da Parcela','Não gerar boleto desta parcela'
                         ),
                         'E-mail para o Cliente'=>array(
-                            'Utilizar os seguintes endereço de e-mail','Enviar o e-mail com o boleto de cobrança gerado pelo faturamento (juntamente com o DANFE e o XML da NFe)'
+                            'Utilizar os seguintes endereço de e-mail'/*,'Enviar o e-mail com o boleto de cobrança gerado pelo faturamento (juntamente com o DANFE e o XML da NFe)'*/
                         ),
                         'Observações'=>array(
                           /*'Preencha aqui as observações desta venda (elas não serão exibidas na Nota Fiscal)'*/  

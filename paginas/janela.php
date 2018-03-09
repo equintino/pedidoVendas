@@ -51,7 +51,10 @@
                             })
                     })
                     $('#pnl1 table tr .lupa img').click(function(){
-                        link='../paginas/formItem.php?codigo_produto='+codigo_produto+'';
+                        if(!pagAtual){
+                            var pagAtual=1;
+                        }
+                        link='../paginas/formItem.php?codigo_produto='+codigo_produto+'&pagAtual='+pagAtual+'';
                         $('a[rel=modal]').attr('href',link);
                         $("a[rel=modal]").trigger("click")
                     })
@@ -66,6 +69,7 @@
                     $(".window").hide();
  		});
             });
+            pagAtual=1;
 	</script>
         <style type="text/css">
             .window{

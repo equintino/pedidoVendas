@@ -176,18 +176,18 @@
             $ide=new ide();
             $observacao=new observacao();
             $produto=new produto();
+            $inf_adic=new inf_adic();
         
-            array_push($det,array('ide'=>$ide,'observacao'=>$observacao,'produto'=>$produto));
+            array_push($det,array('ide'=>$ide,'observacao'=>$observacao,'produto'=>$produto,'inf_adic'=>$inf_adic));
             $ide->codigo_item='';
             $ide->codigo_item_integracao=$_POST['codigo_produto'.$x.''];
 
-            $observacao->obs_item=$_POST['loja'.$x.''];//.','.$_POST['obs_item'.$x.''];
+            //$observacao->obs_item=$_POST['obs_item'.$x.''];//.','.$_POST['obs_item'.$x.''];
         
         
         /*
         [cfop] => 5.405
         [codigo] => 783
-        [codigo_produto_integracao] => 
         [codigo_tabela_preco] => 742240473
         [ean] => 7898930919331
         [ncm] => 8528.52.20
@@ -206,8 +206,15 @@
             $produto->valor_unitario=ModelValidador::removePonto($_POST['vUnitarioItem'.$x.'']);
             $produto->codigo_produto_integracao=$_POST['codigo_produto'.$x.''];
             $produto->codigo='';
+            $produto->cfop=$_POST['cfop'];
+            $produto->ean=$_POST['ean'];
+            $produto->ncm=$_POST['ncm'];
+            $produto->unidade=$_POST['unidade'];
             $produto->percentual_desconto=$_POST['pDescontoItem'.$x.''];
             //$produto->codigo_tabela_preco=$_POST['cCodIntTabPreco'.$x.''];
+            
+            $inf_adic->dados_adicionais_item=$_POST['obs_item'.$x.''];
+            
                 
             /// calculando ///
             @$vDescontoItem=ModelValidador::removePonto($_POST['vTotalItem'.$x.''])*$_POST['pDescontoItem'.$x.'']/100;
@@ -289,6 +296,7 @@
         $informacoes_adicionais->enviar_email='N';
         $informacoes_adicionais->codVend=$_POST['cod_vend'];
         $informacoes_adicionais->dados_adicionais_nf=$_POST['dados_adcionais_nf'];
+        $informacoes_adicionais->utilizar_emails=$_POST['e-mail'];
         
         //// Total Pedido ////
         $tPedido=new total_pedido();
@@ -302,6 +310,8 @@
         $pedido_venda_produto->frete=$frete;
         $pedido_venda_produto->informacoes_adicionais=$informacoes_adicionais;
         $pedido_venda_produto->observacoes=$observacao;
+        
+        //echo '<pre>';print_r([$_POST,$pedido_venda_produto]);die;
         include 'imprime.php';
         $pedido->IncluirPedido($pedido_venda_produto);
         //header('Location:../web/index.php?pagina=pedido&act=cad');
