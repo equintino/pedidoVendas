@@ -74,11 +74,11 @@
         <style type="text/css">
             .window{
 		display:none;
-		width:80%;
-		height:600px;
+		width:90%;
+		height:620px;
 		position:absolute;
-		left:200;
-                overflow: scroll;
+		left:0;
+                //overflow: scroll;
 		//top:0;
                 //margin: auto;
 		background:#FFF;
