@@ -72,9 +72,13 @@
                     $(this).css('background','white')
                 })
                 $(this).click(function(){
-                    $(this).each(function(){
-                        alert($(this).text()+' - ');
-                    })
+                    //$(this).each(function(){
+                            alert($(this).attr('descricao'));
+                        //$(this).each(function(){
+                            //alert($('td').attr('name'));
+                            //alert('oi');
+                        //})
+                    //})
                     descricao=$(this).attr('descricao');
                     cProduto=$(this).attr('cProduto');
                     vUnitario=$(this).attr('vUnitario');
@@ -324,28 +328,39 @@ $fixedColumn.find('tr').each(function (i, elem) {
                         }elseif($key=='valor_unitario'){
                             echo '<th class="col'.$col.'">VL.UNITÁRIO</th>';
                         }else{
-                            echo '<th class=col'.$col.'>'.mb_strtoupper(str_replace('_',' ',$key),'utf-8').'</th>';
+                            echo '<th class="col'.$col.'">'.mb_strtoupper(str_replace('_',' ',$key),'utf-8').'</th>';
                         }
                     $col++;
                     }
                 }
                 echo '</tr>';
                 $w=1;
+                goto s;
             }
+            s:
             //echo '</table>';
             //echo '<table class=jItem border=1 cellspacing=0 >';
             $col=1;
             $z=0;
+            //echo '<pre>';print_r($prod);//die;
             echo '</thead>';
-            echo '<tr row='.$row.'>';
+            echo '<tr row="'.$row.'" ';
+            foreach($prod as $key => $item){
+                if($key!='dadosIbpt' && $key!='imagens' && $key!='recomendacoes_fiscais'){
+                    echo $key.'="'.$item.'"';
+                }//goto pula;
+                //echo '<br>';
+            }//die;
+            //pula:
+            echo '>';
             foreach($prod as $key => $item){
                 if(!strstr($key,'aliquo') && !strstr($key,'altura') && !strstr($key,'bloqueado') && !strstr($key,'cest') && !strstr($key,'familia') && !strstr($key,'cst') && !strstr($key,'dias') && !stristr($key,'dadosib') && !stristr($key,'csosn') && !stristr($key,'importado') && !stristr($key,'inativo') && !stristr($key,'largura') && !stristr($key,'peso') && !stristr($key,'profundidade') && !stristr($key,'red') && !stristr($key,'recomendacoes') && !stristr($key,'imagens') && !stristr($key,'integracao') && !stristr($key,'marca') && !stristr($key,'cfop') && !stristr($key,'produto') && !stristr($key,'minimo') && !stristr($key,'internas') && !stristr($key,'tipo')){
                     if(stristr($key,'detalhada') || stristr($key,'obs_interna')){
-                        echo '<td class=col'.$col.' align=center>'.substr(mb_strtoupper(str_replace('_',' ',$item),'utf-8'),0,40).'...</td>';
+                        echo '<td class="col'.$col.'" name="'.$item.'" align=center>'.substr(mb_strtoupper(str_replace('_',' ',$item),'utf-8'),0,40).'...</td>';
                     }elseif(stristr($key,'valor')){
-                        echo '<td class=col'.$col.' align=right>'.number_format($item,'2',',','.').'</td>';
+                        echo '<td class="col'.$col.'" name="'.$item.'"  align=right>'.number_format($item,'2',',','.').'</td>';
                     }else{
-                        echo '<td class=col'.$col.' align=center>'.mb_strtoupper(str_replace('_',' ',$item),'utf-8').'</td>';
+                        echo '<td class="col'.$col.'" name="'.$item.'"  align=center>'.mb_strtoupper(str_replace('_',' ',$item),'utf-8').'</td>';
                     }
                 $col++;
                 $z=1;
