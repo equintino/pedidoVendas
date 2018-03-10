@@ -118,7 +118,45 @@
         })
         $('.pagina').text('PRÉ-VENDA')
         $('.tabela img').click(function(){
-            $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1')
+            if($('#pnl1 input').val()){
+                var resp=confirm('Você já adcionou itens a este pedido, estes dados serão descartados. Deseja continuar?');
+                if(resp){
+                    $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1')
+                }else{
+                    return false;
+                }
+            }
+        })
+        $(document).keyup(function(e){
+            //alert(e.which);
+            if(e.which==113){
+               //alert($('#pnl1 input').val());
+                if($('form').hasClass('#pnl1') || $('#pnl1 input').val()){
+                    var resp=confirm('Você já adcionou itens a este pedido, estes dados serão descartados. Deseja continuar?');
+                    if(resp){
+                        $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1')
+                    }else{
+                        return false;
+                    }
+                }else{
+                    $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1')
+                }
+            }else if(e.which==115){
+                $('.bnt').each(function(){
+                    if($(this).text()=='Novo Ítem'){
+                        $(this).trigger('click')
+                        alert($('#pnl1 input').attr('name'));
+                        //break;
+                    }
+                })
+                //busca();
+                if(!pagAtual){
+                    var pagAtual=1;
+                }
+                link='../paginas/formItem.php?codigo_produto='+codigo_produto+'&pagAtual='+pagAtual+'';
+                $('a[rel=modal]').attr('href',link);
+                $("a[rel=modal]").trigger("click") 
+            }
         })
         $('.previsao input').mask('00/00/0000'); 
         
