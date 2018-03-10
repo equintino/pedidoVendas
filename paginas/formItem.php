@@ -63,14 +63,18 @@
         //if(!codigo_produto){
         
             $('.jTabela tr').mouseover(function(){
+                //alert($(this).attr('row'));
                 $(this).css({
-                    background:'#ccc',
+                    background:'#EDEDED',
                     cursor: 'pointer'
                 })
                 $(this).mouseleave(function(){
                     $(this).css('background','white')
                 })
                 $(this).click(function(){
+                    $(this).each(function(){
+                        alert($(this).text()+' - ');
+                    })
                     descricao=$(this).attr('descricao');
                     cProduto=$(this).attr('cProduto');
                     vUnitario=$(this).attr('vUnitario');
@@ -121,14 +125,14 @@
                     $('.botao :hidden').val(dadosProduto);
                 })
             })    
-        var $table = $('.table');
+        /*var $table = $('.table');
 var $fixedColumn = $table.clone().insertBefore($table).addClass('fixed-column');
 
 $fixedColumn.find('th:not(:first-child),td:not(:first-child)').remove();
 
 $fixedColumn.find('tr').each(function (i, elem) {
     $(this).height($table.find('tr:eq(' + i + ')').height());
-});
+});*/
     })
 </script>
 <style>
@@ -154,8 +158,9 @@ $fixedColumn.find('tr').each(function (i, elem) {
         width: auto;
         border-right: 1px solid #ddd;*/
     }
-    table td{
-        background: #EDEDED;
+    .head td{
+        //background: #EDEDED;
+        
         color: black;
         padding: 5px;
         font-size: 15px;
@@ -180,8 +185,8 @@ $fixedColumn.find('tr').each(function (i, elem) {
     .cima {
         overflow: hidden;
         //scroll: hidden;
-        width: 1005px;
-        top: 40px;
+        width: 1020px;
+        top: 42px;
         //padding-bottom: 10px;
         position: absolute;
         z-indez: 3;
@@ -306,7 +311,7 @@ $fixedColumn.find('tr').each(function (i, elem) {
             <thead>
             <tr>
         <?php
-        $w=0;
+        $w=$row=0;
         $col=1;
         foreach($detalhes as $prod){
             if($w==0){
@@ -331,8 +336,8 @@ $fixedColumn.find('tr').each(function (i, elem) {
             //echo '<table class=jItem border=1 cellspacing=0 >';
             $col=1;
             $z=0;
-            echo '<tr>';
             echo '</thead>';
+            echo '<tr row='.$row.'>';
             foreach($prod as $key => $item){
                 if(!strstr($key,'aliquo') && !strstr($key,'altura') && !strstr($key,'bloqueado') && !strstr($key,'cest') && !strstr($key,'familia') && !strstr($key,'cst') && !strstr($key,'dias') && !stristr($key,'dadosib') && !stristr($key,'csosn') && !stristr($key,'importado') && !stristr($key,'inativo') && !stristr($key,'largura') && !stristr($key,'peso') && !stristr($key,'profundidade') && !stristr($key,'red') && !stristr($key,'recomendacoes') && !stristr($key,'imagens') && !stristr($key,'integracao') && !stristr($key,'marca') && !stristr($key,'cfop') && !stristr($key,'produto') && !stristr($key,'minimo') && !stristr($key,'internas') && !stristr($key,'tipo')){
                     if(stristr($key,'detalhada') || stristr($key,'obs_interna')){
@@ -347,6 +352,7 @@ $fixedColumn.find('tr').each(function (i, elem) {
                 }
             }
             echo '</tr>';
+            $row++;
         /*    die;
         $dados_produto=array();
         foreach($prod as $key => $item){
