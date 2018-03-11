@@ -236,16 +236,23 @@
                                    w++;
                                 })
                                 var z=1;
+                                var verifica=($('#pnl1 input').attr('name').substr(-1,1));
                                 $('#pnl1 input[name]').each(function(){
                                     nome=$(this).attr('name');
-                                    if(nome.substr(0,nome.length-1)=='codigo_produto'){
-                                        $(this).attr('name',(nome.substr(0,nome.length-1)+z));
+                                    if(nome.substr(-1,1)==verifica){
+                                        nome_=nome.substr(0,nome.length-1)+z;
+                                        $(this).attr('name',nome_)
+                                        $(this).attr('linha',z)
+                                        //alert([nome,nome_]);
+                                    }else{
+                                        verifica=nome.substr(-1,1);
                                         z++;
+                                        $(this).attr('name',nome.substr(0,nome.length-1)+z)
+                                        $(this).attr('linha',z)
                                     }
                                 })
                                 item=$('#pnl1 table .item').length;
                                 conf2=null;
-                                //var q=
                                 $('#pnl1 td input[name=quantidade1]').trigger('click')
                                 die;
                             }else{
