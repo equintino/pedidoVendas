@@ -38,10 +38,18 @@
                 return false;
             }             
             if($(this).text()=='Novo Ítem'){
-                var y=1;
-                $('#pnl1 table input').each(function(){
+                //var y=1;
+                //alert([item,$('#pnl1 table input[name=codigo_produto'+item+']').val()]);
+                if(!$('#pnl1 table input[name=codigo_produto'+item+']').val()){
+                    alert('Não foi inserido nenhum dado no NOVO ÍTEM.');
+                    $('#pnl1 table input[name=codigo_produto'+item+']').css('background','rgba(216, 0, 0,0.1)').focus()
+                    //$('#pnl1 table input[name=codigo_produto'+item+']').focus();
+                    die;
+                }
+                /*$('#pnl1 table input').each(function(){
                     var str=$(this).attr('name');
                     if(str.substr(0,str.length-1)=='codigo_produto'){
+                        alert([y,item]);
                         if(y==item){
                             if(!$(this).val()){
                                 alert('Não foi inserido nenhum dado no NOVO ÍTEM.');
@@ -52,7 +60,7 @@
                         }
                         y++;
                     }
-                })
+                })*/
                 item++;//alert(item);
                 //if($('#pnl1 table span').length != 0){
                    $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto'+item+'" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" /></td><td><input type="text" name="quantidade'+item+'" autocomplete="off" required linha='+item+' /></td><td><input type="text" name="vUnitarioItem'+item+'" /></td><td><input type="text" name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" name="pDescontoItem'+item+'" linha='+item+' /></td><td><input type="text" name="obs_item'+item+'" linha='+item+' /></td><td><input type="text" name="cfop'+item+'" linha='+item+' /></td><td><input type="text" name="ncm'+item+'" linha='+item+' /></td><td><input type="text" name="ean'+item+'" linha='+item+' /></td><td><input type="text" name="unidade'+item+'" linha='+item+' /></td><!--<td><select name=loja'+item+' ><option value=loja1>Loja 1</option><option value=loja2>Loja 2</option></select></td>--><td><input type="hidden" name="vTotalItem'+item+'" linha='+item+' /></td></span></tr>')
@@ -126,6 +134,8 @@
                 }else{
                     return false;
                 }
+            }else{
+                $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1')
             }
         })
         $(document).keyup(function(e){
@@ -224,6 +234,14 @@
                                 $('#pnl1 table tr').each(function(){
                                    $(this).attr('id','item'+w)
                                    w++;
+                                })
+                                var z=1;
+                                $('#pnl1 input[name]').each(function(){
+                                    nome=$(this).attr('name');
+                                    if(nome.substr(0,nome.length-1)=='codigo_produto'){
+                                        $(this).attr('name',(nome.substr(0,nome.length-1)+z));
+                                        z++;
+                                    }
                                 })
                                 item=$('#pnl1 table .item').length;
                                 conf2=null;
