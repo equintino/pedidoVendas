@@ -206,10 +206,10 @@
             $produto->valor_unitario=ModelValidador::removePonto($_POST['vUnitarioItem'.$x.'']);
             $produto->codigo_produto_integracao=$_POST['codigo_produto'.$x.''];
             $produto->codigo='';
-            $produto->cfop=$_POST['cfop'];
-            $produto->ean=$_POST['ean'];
-            $produto->ncm=$_POST['ncm'];
-            $produto->unidade=$_POST['unidade'];
+            $produto->cfop=$_POST['cfop'.$x.''];
+            $produto->ean=$_POST['ean'.$x.''];
+            $produto->ncm=$_POST['ncm'.$x.''];
+            $produto->unidade=$_POST['unidade'.$x.''];
             $produto->percentual_desconto=$_POST['pDescontoItem'.$x.''];
             //$produto->codigo_tabela_preco=$_POST['cCodIntTabPreco'.$x.''];
             
@@ -311,7 +311,7 @@
         $pedido_venda_produto->informacoes_adicionais=$informacoes_adicionais;
         $pedido_venda_produto->observacoes=$observacao;
         
-        //echo '<pre>';print_r([$_POST,$pedido_venda_produto]);die;
+        echo '<pre>';print_r([$_POST,$pedido_venda_produto]);die;
         include 'imprime.php';
         $pedido->IncluirPedido($pedido_venda_produto);
         //header('Location:../web/index.php?pagina=pedido&act=cad');

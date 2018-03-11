@@ -73,16 +73,20 @@
                 })
                 $(this).click(function(){
                     //$(this).each(function(){
-                            alert($(this).attr('descricao'));
+                            //alert($(this).attr('codigo_produto'));die;
                         //$(this).each(function(){
-                            //alert($('td').attr('name'));
+                            //alert($(this).attr());
                             //alert('oi');
                         //})
                     //})
                     descricao=$(this).attr('descricao');
-                    cProduto=$(this).attr('cProduto');
-                    vUnitario=$(this).attr('vUnitario');
-                    qEstoque=$(this).attr('qEstoque');
+                    cProduto=$(this).attr('codigo_produto');
+                    vUnitario=$(this).attr('valor_unitario');
+                    qEstoque=$(this).attr('quantidade_estoque');
+                    cfop=$(this).attr('cfop');
+                    ncm=$(this).attr('ncm');
+                    ean=$(this).attr('ean');
+                    unidade=$(this).attr('unidade');
                     //alert(vUnitario);
 
                     linha=linha.substring(4,5);
@@ -96,7 +100,7 @@
                                $(this).val(descricao);
                                break;
                             case 'vUnitarioItem':
-                               $(this).val(vUnitario);
+                               $(this).val(numeroParaMoeda(vUnitario));
                                break;
                             case 'quantidade':
                                $(this).val(null);
@@ -110,21 +114,23 @@
                                $(this).val();
                                break;
                             case 'cfop':
-                               $(this).val();
+                               $(this).val(cfop);
                                break;
                             case 'ncm':
-                               $(this).val();
+                               $(this).val(ncm);
                                break;
                             case 'ean':
-                               $(this).val();
+                               $(this).val(ean);
                                break;
                             case 'unidade':
-                               $(this).val();
+                               $(this).val(unidade);
                                break;
                         }
                     })
                     $(".window").hide();
                     $('#mascara').hide();
+                    $('.tudo').hide();
+                    $('.tituloProd').text('Aguarde...');
                     //$('.fechar').trigger('click')
                     $('.botao :hidden').val(dadosProduto);
                 })
@@ -356,11 +362,11 @@ $fixedColumn.find('tr').each(function (i, elem) {
             foreach($prod as $key => $item){
                 if(!strstr($key,'aliquo') && !strstr($key,'altura') && !strstr($key,'bloqueado') && !strstr($key,'cest') && !strstr($key,'familia') && !strstr($key,'cst') && !strstr($key,'dias') && !stristr($key,'dadosib') && !stristr($key,'csosn') && !stristr($key,'importado') && !stristr($key,'inativo') && !stristr($key,'largura') && !stristr($key,'peso') && !stristr($key,'profundidade') && !stristr($key,'red') && !stristr($key,'recomendacoes') && !stristr($key,'imagens') && !stristr($key,'integracao') && !stristr($key,'marca') && !stristr($key,'cfop') && !stristr($key,'produto') && !stristr($key,'minimo') && !stristr($key,'internas') && !stristr($key,'tipo')){
                     if(stristr($key,'detalhada') || stristr($key,'obs_interna')){
-                        echo '<td class="col'.$col.'" name="'.$item.'" align=center>'.substr(mb_strtoupper(str_replace('_',' ',$item),'utf-8'),0,40).'...</td>';
+                        echo '<td class="col'.$col.'" align=center>'.substr(mb_strtoupper(str_replace('_',' ',$item),'utf-8'),0,40).'...</td>';
                     }elseif(stristr($key,'valor')){
-                        echo '<td class="col'.$col.'" name="'.$item.'"  align=right>'.number_format($item,'2',',','.').'</td>';
+                        echo '<td class="col'.$col.'" align=right>'.number_format($item,'2',',','.').'</td>';
                     }else{
-                        echo '<td class="col'.$col.'" name="'.$item.'"  align=center>'.mb_strtoupper(str_replace('_',' ',$item),'utf-8').'</td>';
+                        echo '<td class="col'.$col.'" align=center>'.mb_strtoupper(str_replace('_',' ',$item),'utf-8').'</td>';
                     }
                 $col++;
                 $z=1;

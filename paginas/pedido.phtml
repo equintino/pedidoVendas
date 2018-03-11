@@ -24,7 +24,7 @@
         $('#botoes .bnt,.outrosItens span').mouseover(function(){
             $(this).css('cursor','pointer')
         })  
-        var item=0;
+        var item=1;
         var conf=null;
         var conf2=null;
         $('#botoes .bnt').click(function(){
@@ -53,17 +53,17 @@
                         y++;
                     }
                 })
-                item++;
-                if($('#pnl1 table span').length != 0){
+                item++;//alert(item);
+                //if($('#pnl1 table span').length != 0){
                    $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto'+item+'" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" /></td><td><input type="text" name="quantidade'+item+'" autocomplete="off" required linha='+item+' /></td><td><input type="text" name="vUnitarioItem'+item+'" /></td><td><input type="text" name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" name="pDescontoItem'+item+'" linha='+item+' /></td><td><input type="text" name="obs_item'+item+'" linha='+item+' /></td><td><input type="text" name="cfop'+item+'" linha='+item+' /></td><td><input type="text" name="ncm'+item+'" linha='+item+' /></td><td><input type="text" name="ean'+item+'" linha='+item+' /></td><td><input type="text" name="unidade'+item+'" linha='+item+' /></td><!--<td><select name=loja'+item+' ><option value=loja1>Loja 1</option><option value=loja2>Loja 2</option></select></td>--><td><input type="hidden" name="vTotalItem'+item+'" linha='+item+' /></td></span></tr>')
                     itemExclusao();
                     busca();
                     quadroInferior();
-                }else{
-                    $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class=lupa></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto'+item+'" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" /></td><td><input type="text" name="quantidade'+item+'" autocomplete="off" linha='+item+' required /></td><td><input type="text" name="vUnitarioItem'+item+'" /></td><td><input type="text" name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" name="pDescontoItem'+item+'" linha='+item+' /></td><td><input type="text" name="obs_item'+item+'" linha='+item+' /></td><td><input type="text" name="cfop'+item+'" linha='+item+' /></td><td><input type="text" name="ncm'+item+'" linha='+item+' /></td><td><input type="text" name="ean'+item+'" linha='+item+' /></td><td><input type="text" name="unidade'+item+'" linha='+item+' /></td><!--<td><select name=loja'+item+' ><option value=loja1>Loja 1</option><option value=loja2>Loja 2</option></select></td>--><td><input type="hidden" name="vTotalItem'+item+'" linha='+item+' /></td></span></tr>')  
-                    busca();
-                    quadroInferior();
-                }
+                //}else{
+                    //$('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class=lupa></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto'+item+'" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" /></td><td><input type="text" name="quantidade'+item+'" autocomplete="off" linha='+item+' required /></td><td><input type="text" name="vUnitarioItem'+item+'" /></td><td><input type="text" name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" name="pDescontoItem'+item+'" linha='+item+' /></td><td><input type="text" name="obs_item'+item+'" linha='+item+' /></td><td><input type="text" name="cfop'+item+'" linha='+item+' /></td><td><input type="text" name="ncm'+item+'" linha='+item+' /></td><td><input type="text" name="ean'+item+'" linha='+item+' /></td><td><input type="text" name="unidade'+item+'" linha='+item+' /></td><!--<td><select name=loja'+item+' ><option value=loja1>Loja 1</option><option value=loja2>Loja 2</option></select></td>--><td><input type="hidden" name="vTotalItem'+item+'" linha='+item+' /></td></span></tr>')  
+                    //busca();
+                    //quadroInferior();
+               // }
             }else if($(this).text()=='Excluir Ítem'){
                 if($('#pnl1 table input').val()){
                     alert('Clique no Nº do Ítem para excluir.');
@@ -71,8 +71,9 @@
                         itemExclusao();
                     }
                 }
-            } 
+            }
         })
+        busca();
         $('#pnl2').css('display','none')          
         $('#pnl3').css('display','none')          
         $('#pnl4').css('display','none')
@@ -665,6 +666,7 @@
                         <?php endif ?>
                     <?php endforeach; ?>
                     </tr>
+                    <tr id=item1><span class=novo><td class=lupa></td><td class=item>1</td><td><input type="text" name="codigo_produto1" linha=1 required/></td><td><input type="text" name="descricao1" /></td><td><input type="text" name="quantidade1" autocomplete="off" linha=1 required /></td><td><input type="text" name="vUnitarioItem1" /></td><td><input type="text" name="vTotalItem1" linha=1 disabled /></td><td><input type="text" name="pDescontoItem1" linha=1 /></td><td><input type="text" name="obs_item1" linha=1 /></td><td><input type="text" name="cfop1" linha=1 /></td><td><input type="text" name="ncm1" linha=1 /></td><td><input type="text" name="ean1" linha=1 /></td><td><input type="text" name="unidade1" linha=1 /></td><!--<td><select name=loja1 ><option value=loja1>Loja 1</option><option value=loja2>Loja 2</option></select></td>--><td><input type="hidden" name="vTotalItem1" linha=1 /></td></span></tr>
                 </table>
             </div>
         </div>
