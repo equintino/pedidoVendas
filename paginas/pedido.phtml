@@ -38,12 +38,9 @@
                 return false;
             }             
             if($(this).text()=='Novo Ítem'){
-                //var y=1;
-                //alert([item,$('#pnl1 table input[name=codigo_produto'+item+']').val()]);
                 if(!$('#pnl1 table input[name=codigo_produto'+item+']').val()){
                     alert('Não foi inserido nenhum dado no NOVO ÍTEM.');
                     $('#pnl1 table input[name=codigo_produto'+item+']').css('background','rgba(216, 0, 0,0.1)').focus()
-                    //$('#pnl1 table input[name=codigo_produto'+item+']').focus();
                     die;
                 }
                 /*$('#pnl1 table input').each(function(){
@@ -66,7 +63,8 @@
                    $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto'+item+'" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" /></td><td><input type="text" name="quantidade'+item+'" autocomplete="off" required linha='+item+' /></td><td><input type="text" name="vUnitarioItem'+item+'" /></td><td><input type="text" name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" name="pDescontoItem'+item+'" linha='+item+' /></td><td><input type="text" name="obs_item'+item+'" linha='+item+' /></td><td><input type="text" name="cfop'+item+'" linha='+item+' /></td><td><input type="text" name="ncm'+item+'" linha='+item+' /></td><td><input type="text" name="ean'+item+'" linha='+item+' /></td><td><input type="text" name="unidade'+item+'" linha='+item+' /></td><!--<td><select name=loja'+item+' ><option value=loja1>Loja 1</option><option value=loja2>Loja 2</option></select></td>--><td><input type="hidden" name="vTotalItem'+item+'" linha='+item+' /></td></span></tr>')
                     itemExclusao();
                     busca();
-                    quadroInferior();
+                    $('#pnl1 table input[name=codigo_produto'+item+']').trigger('focus')
+                    //quadroInferior();
                 //}else{
                     //$('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class=lupa></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto'+item+'" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" /></td><td><input type="text" name="quantidade'+item+'" autocomplete="off" linha='+item+' required /></td><td><input type="text" name="vUnitarioItem'+item+'" /></td><td><input type="text" name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" name="pDescontoItem'+item+'" linha='+item+' /></td><td><input type="text" name="obs_item'+item+'" linha='+item+' /></td><td><input type="text" name="cfop'+item+'" linha='+item+' /></td><td><input type="text" name="ncm'+item+'" linha='+item+' /></td><td><input type="text" name="ean'+item+'" linha='+item+' /></td><td><input type="text" name="unidade'+item+'" linha='+item+' /></td><!--<td><select name=loja'+item+' ><option value=loja1>Loja 1</option><option value=loja2>Loja 2</option></select></td>--><td><input type="hidden" name="vTotalItem'+item+'" linha='+item+' /></td></span></tr>')  
                     //busca();
@@ -82,6 +80,7 @@
             }
         })
         busca();
+        $('#pnl1 table input[name=codigo_produto'+item+']').trigger('focus')
         $('#pnl2').css('display','none')          
         $('#pnl3').css('display','none')          
         $('#pnl4').css('display','none')
@@ -266,8 +265,8 @@
             conf=1;
         }
             //// Cria Busca ////
-        function busca(){      
-            $('td input').focus(function(){
+        function busca(){ 
+            $('#pnl1 input').focus(function(){
                 var str=$(this).attr('name');
                 if(str.substr(0,str.length-1)=='codigo_produto'){
                     $('#pnl1 table .item').each(function(){
@@ -278,7 +277,8 @@
                         $('#pnl1 table tr .lupa').append('<img title="Pesquisar ítem" height=15px src="../web/img/lupa.png" busca='+j+' /> ')
                     }
                 }
-            })    
+            })
+            quadroInferior();
         }
             //// quadro inferior ////
         function quadroInferior(){
