@@ -168,8 +168,86 @@
                 $("a[rel=modal]").trigger("click") 
             }
         })
-        $('.previsao input').mask('00/00/0000'); 
+        $('.previsao input').mask('00/00/0000');
+        $('.tabela input[name=dPrevisao]').keyup(function(){
+            $('#pnl4 .novo4 input[name=data_vencimento]').val($(this).val())
+        })
         
+        
+        $('.tabela td select[name=parcela]').change(function(){
+            var selecao=$(this).val().substr(0,2);
+            //selecao=selecao.substr(0,2);
+            //var now=new Date();
+            //alert(now.getDate()+'/'+now.getMonth()+'/'+now.getFullYear());
+            //alert(data());
+            //alert($(this).val());
+            if(selecao=='A '){
+                $('#pnl4 .novo4').each(function(){
+                    if($(this).attr('linha')>1){
+                        $(this).remove()
+                    }
+                })
+                //alert($('.tabela input[name=dPrevisao]').val());
+                $('#pnl4 .novo4 input[name=numero_parcela1]').val(0)
+                $('#pnl4 .novo4 input[name=data_vencimento1]').val($('.tabela input[name=dPrevisao]').val())
+                $('#pnl4 .novo4 input[name=1]').removeAttr('disabled')
+                $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
+                $('#pnl4 .novo4 input[name=percentual1]').val(100)
+            }else if(selecao=='1 '){
+                $('#pnl4 .novo4').each(function(){
+                    if($(this).attr('linha')>1){
+                        $(this).remove()
+                    }
+                })
+                $('#pnl4 .novo4 input[name=numero_parcela1]').val(1)
+                $('#pnl4 .novo4 input[name=data_vencimento1]').val(data(1))
+                $('#pnl4 .novo4 input[name=data_vencimento1]').attr('disabled','disabled')
+                $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
+                $('#pnl4 .novo4 input[name=percentual1]').val(100)
+            }else if(selecao!='Pa' && selecao!='In'){
+                $('#pnl4 .novo4').each(function(){
+                    if($(this).attr('linha')>1){
+                        $(this).remove()
+                    }
+                })
+                var percent=100/selecao;
+                //alert(percent);
+                for(var x=1;x<parseInt(selecao)+1;x++){
+                    if(x!=1){
+                        /// adciona nova parcela ///
+                        $('#pnl4 table').append($('<tr linha='+x+' class=novo4><td><input size=1px type=text name=numero_parcela'+x+' disabled/></td><td><input size=10px type=text name=data_vencimento'+x+' disabled/></td><td><input size=10px type=text name=valor'+x+' disabled/></td><td><input size=10px type=text name=percentual'+x+' disabled/></td>'))
+                    }
+                    //alert([selecao,x]);
+                    $('#pnl4 .novo4 input[name=numero_parcela'+x+']').val(x)
+                    $('#pnl4 .novo4 input[name=data_vencimento'+x+']').val(data(x))
+                    $('#pnl4 .novo4 input[name=data_vencimento'+x+']').attr('disabled','disabled')
+                    $('#pnl4 .novo4 input[name=valor'+x+']').val(calcula('/',$('.autoQuadro td[nome=vPedido]').text(),selecao))
+                    $('#pnl4 .novo4 input[name=percentual'+x+']').val(percent*x)
+                    //fSelecao--;
+                    /*if(x==selecao){
+                        die;;
+                    }*/
+                    //alert('passei');
+                }
+            }else if(selecao=='Pa'){
+                $('#pnl4 .novo4').each(function(){
+                    if($(this).attr('linha')>1){
+                        $(this).remove()
+                    }
+                })
+                var now = new Date();
+                var numeroMes=new Array('01','02','03','04','05','06','07','08','09','10','11','12');
+                selecao2=$(this).val().substr(5,2);
+                if(now.getDate()+parseInt(selecao2) < 30){
+                    var data_vencimento=now.getDate()+parseInt(selecao2)+'/'+numeroMes[now.getMonth()]+'/'+now.getFullYear();
+                    $('#pnl4 .novo4 input[name=numero_parcela1]').val(1)
+                    $('#pnl4 .novo4 input[name=data_vencimento1]').val(data_vencimento)
+                    $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
+                    $('#pnl4 .novo4 input[name=percentual1]').val(100)
+                    /// verificar a previsao de faturamento ///
+                }
+            }
+        })
         $('.tabela td select[name=fPagamento]').change(function(){
             if($(this).val()=='credito' || $(this).val()=='debito'){
                 $('.doc').show();
@@ -393,13 +471,42 @@
                 $('.autoQuadro input[name=vPedido]').val(numeroParaMoeda(vPedido))
                 $('.autoQuadro td[nome=vPedido]').text(numeroParaMoeda(vPedido)) /// Valor do Pedido ///
         }
+        
+        /*
+         * var meses = new Array("Janeiro", "Fevereiro", "Marco", "Abril", "Maio", "Junho", "Julho", "Agosto", "Septembro", "Outubro", "Novembro", "Dezembro");
+
+            function diasDoAno() {
+                var ano = $('#ano').val();
+                var dias = [];
+                for (var x = 0; x < 12; x++) {
+                    var diasNoMes = new Date(ano, x + 1, 0).getDate();
+                    dias[x] = [];
+                    for (var i = 1; i <= diasNoMes; i++) {
+                        dias[x].push(i);
+                    }
+                }
+                var resultado = $('#resultado');
+                dias.forEach(function (mes, i) {
+                    var div = $('<div />').addClass('mes');
+                    div.append(meses[i]);
+                    var subDiv = $('<div />').addClass('dias');
+                    mes.forEach(function (dia) {
+                        subDiv.append(dia);
+                    });
+                    div.append(subDiv);
+                    resultado.append(div);
+                });
+            }
+
+
+         */
     })
     function numeroParaMoeda(n, c, d, t){
         c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
         return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");    
     }
-    
     function calcula(ope,vl1,vl2){
+        //alert([ope,vl1,vl2]);
         if(vl1.charAt(vl1.length-3)!='.'){
             vl1=vl1.replace('.','');
         }
@@ -430,6 +537,19 @@
                 break;
         }
         return result.toFixed('2');
+    }
+    function data(fator){
+        var fator;
+        //alert(fator);
+        //var fator=dia/30;
+        var now=new Date();
+        //alert(fator+now.getDate());
+        var numeroMes=new Array('01','02','03','04','05','06','07','08','09','10','11','12');
+        //switch(dia){
+            //case 30:
+                m=now.getMonth()+parseInt(fator);
+        //}
+        return now.getDate()+'/'+numeroMes[m]+'/'+now.getFullYear();
     }
 </script>
 <style>
@@ -587,6 +707,17 @@
     }
     #pnl2 .divVendas table, #pnl3 .divVendas table, #pnl5 .divVendas table{
         width: 300px;
+    }
+    #pnl4 .divVendas table{
+        width: 100px;
+        //border: solid red;
+    }
+    #pnl4 fieldset{
+        padding: 10px 20px;
+        overflow-y: scroll;
+    }
+    #pnl4 .novo4 td{
+        font-size: 18px;
     }
 </style>
 </head>
@@ -760,23 +891,34 @@
         </div>
         <div id='pnl4'>
             <div class="divVendas dItem">
-        <!--<fieldset class="iVendas">-->
+        <fieldset class="iVendas">
+            <legend>Abaixo as parcelas e vencimentos desta venda</legend>
                 <table>
                     <tr>
                     <?php foreach($variaveis2['Parcelas'] as $key => $item): ?>
-                    <td><?= $item ?></td>
-                    <?php endforeach; ?>
+                    <?php if($key!='quantidade_dias'): ?>
+                        <td><?= $item ?></td>
+                    <?php endif; endforeach; ?>
                     </tr>
-                    <tr class='novo4'>
+                    <tr linha=1 class='novo4'>
                     <?php foreach($variaveis2['Parcelas'] as $key => $item): ?>
                         <?php if($key=='numero_parcela'): ?>
-                            <td><?= $item ?><input type='hidden' name='<?= $key ?>' /></td>
-                        <?php else: ?>
-                        <td><input type='text' name='<?= $key ?>' /></td>
+                            <td align='center' width='2px'><input size='1px' type='text' name='<?= $key ?>1' disabled /></td>
+                            <input type='hidden' name='<?= $key ?>1' />
+                        <?php elseif($key=='data_vencimento'): ?>
+                            <td align='center' width='7px'><input size='10px' type='text' name='<?= $key ?>1' /></td>
+                            <input type='hidden' name='<?= $key ?>1' />
+                        <?php elseif($key=='valor' || $key=='percentual'): ?>
+                            <td align='center' width='7px'><input size='10px' type='text' name='<?= $key ?>1' disabled/></td>
+                            <input type='hidden' name='<?= $key ?>1' />
+                        <?php elseif($key!='quantidade_dias'): ?>
+                            <td align='center'><input type='text' name='<?= $key ?>1' disabled /></td>
+                            <input type='hidden' name='<?= $key ?>1' />
+                        <!--<td><input type='text' name='<?= $key ?>' /></td>-->
                     <?php endif; endforeach; ?>
                     </tr>
                 </table>
-        <!--</fieldset>-->
+        </fieldset>
             </div>
         </div>
         <div id='pnl5'>

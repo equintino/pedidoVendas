@@ -118,7 +118,7 @@
                             'codigo_categoria'=>'Categoria','codigo_conta_corrente'=>'Banco','etapa'=>'Etapa'/*,'Nº do Pedido do Cliente','Nº do Contrato de Venda','Contato','Projeto'*/,'dados_adcionais_nf'=>'Dados Adicionais para a Nota Fiscal'/*,'Nota Fiscal para Consumo Final'*/
                         ),
                         'Parcelas'=>array(
-                            /*'Valor Total a Receber'*/'numero_parcela'=>'Nº','data_vencimento'=>'Vencimento da Parcela','valor'=>'Valor da Parcela','percentual'=>'Percentual da Parcela','quantidade_dias'=>'Quantidade dias'/*,'Não gerar boleto desta parcela'*/
+                            /*'Valor Total a Receber'*/'numero_parcela'=>'Parcela','data_vencimento'=>'Vencimento','valor'=>'Valor da Parcela','percentual'=>'Percentual da Parcela','quantidade_dias'=>'Quantidade dias'/*,'Não gerar boleto desta parcela'*/
                         ),
                         'E-mail para o Cliente'=>array(
                             'Utilizar os seguintes endereço de e-mail'/*,'Enviar o e-mail com o boleto de cobrança gerado pelo faturamento (juntamente com o DANFE e o XML da NFe)'*/
