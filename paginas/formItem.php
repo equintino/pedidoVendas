@@ -88,7 +88,16 @@
                     ean=$(this).attr('ean');
                     unidade=$(this).attr('unidade');
                     //alert(vUnitario);
-
+                    
+                    $('#pnl1 table input[name]').each(function(){
+                        var name=$(this).attr('name');
+                        if(name.substr(0,name.length-1)=='codigo_produto'){
+                            if($(this).val()==cProduto){
+                                alert('Este Produto já foi inserido');
+                                die;
+                            }
+                        }
+                    })
                     linha=linha.substring(4,5);
                     $('#pnl1 table #item'+linha+' input').each(function(){
                         var z=$(this).attr('name');

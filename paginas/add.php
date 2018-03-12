@@ -148,8 +148,19 @@
         include '../config/OmieAppAuth.php';
         include '../model/PedidoVendaProdutoJsonClient.php';
         $pedido=new PedidoVendaProdutoJsonClient();
-        
-        $parcela='000';
+        $parcela=substr($_POST['parcela'],0,1);
+        switch (strlen($parcela)){
+            case 1:
+                $zero='00';
+                break;
+            case 2:
+                $zero='0';
+                break;
+            case 3:
+                $zero='';
+                break;
+        }
+        $cParcela=$zero.$parcela;
         
             /*
             [codigo_cliente_integracao] => 
@@ -162,14 +173,24 @@
         $cabecalho=new cabecalho();
         $cabecalho->bloqueado='N';
         $cabecalho->codigo_cliente=$_POST['cCliente'];
-        $cabecalho->codigo_parcela=$parcela;
+        $cabecalho->codigo_parcela=$cParcela;
         $cabecalho->codigo_pedido_integracao=$codigo_pedido_integracao;
         $cabecalho->data_previsao=$_POST['dPrevisao'];
         $cabecalho->etapa=$_POST['etapa'];
         $cabecalho->importado_api='S';
         $cabecalho->numero_pedido='';
-        $cabecalho->qtde_parcelas=0;
+        $cabecalho->qtde_parcelas=$parcela;
         $cabecalho->quantidade_itens=$_POST['tItem'];
+        
+        
+        //echo $parcela;die;
+        $parcelas=array();
+        for($x=0;$x<$parcela;$x++){
+            $lista_parcela=new lista_parcelas();
+            array_push($parcelas,array('data_vencimento'=>'','numero_parcela'=>'','percentual'=>'','quantidade_dias'=>'','valor'=>''));
+        }
+        //$lista_parcela->parcela=$parcelas;
+        //echo '<pre>';print_r($lista_parcela);die;
                 
         $det=array();
         for($x=1;$x <= $_POST['tItem'];$x++){
@@ -310,6 +331,7 @@
         $pedido_venda_produto->frete=$frete;
         $pedido_venda_produto->informacoes_adicionais=$informacoes_adicionais;
         $pedido_venda_produto->observacoes=$observacao;
+        $pedido_venda_produto->lista_parcelas=$parcelas;
         
         echo '<pre>';print_r([$_POST,$pedido_venda_produto]);die;
         include 'imprime.php';
