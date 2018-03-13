@@ -148,8 +148,13 @@
         include '../config/OmieAppAuth.php';
         include '../model/PedidoVendaProdutoJsonClient.php';
         $pedido=new PedidoVendaProdutoJsonClient();
-        $parcela=substr($_POST['parcela'],0,1);
-        switch (strlen($parcela)){
+        $parc=substr($_POST['parcela'],0,2);
+        if($parc == 'Pa'){
+            $parc=substr($_POST['parcela'],5,2);
+            $parcela=1;
+        }
+        
+        switch (strlen($parc)){
             case 1:
                 $zero='00';
                 break;
@@ -160,7 +165,7 @@
                 $zero='';
                 break;
         }
-        $cParcela=$zero.$parcela;
+        $cParcela=$zero.$parc;
         
             /*
             [codigo_cliente_integracao] => 
@@ -186,10 +191,12 @@
         //echo $parcela;die;
         $parcelas=array();
         for($x=0;$x<$parcela;$x++){
+            $y=$x+1;
+            //echo $_POST['valor'.$y.''];die;
             $lista_parcela=new lista_parcelas();
-            array_push($parcelas,array('data_vencimento'=>'','numero_parcela'=>'','percentual'=>'','quantidade_dias'=>'','valor'=>''));
+            array_push($parcelas,array('data_vencimento'=>$_POST['data_vencimento'.$y.''],'numero_parcela'=>$parcela,'percentual'=>$_POST['percentual'.$y.''],'quantidade_dias'=>'','valor'=>str_replace(',','.',$_POST['valor'.$y.''])));
         }
-        //$lista_parcela->parcela=$parcelas;
+        $lista_parcela->parcela=$parcelas;
         //echo '<pre>';print_r($lista_parcela);die;
                 
         $det=array();
