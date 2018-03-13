@@ -69,10 +69,10 @@
    $vend=$vendedor->ListarVendedores($vendListarRequest);
    //echo '<pre>';print_r($vend);die;
    
-   $parc=new ParcelasJsonClient();
+   $parc=new FormasPagVendasJsonClient();
    $parcelaListarRequest=array("pagina"=>1,"registros_por_pagina"=>100);
-   $parcela=$parc->ListarParcelas($parcelaListarRequest);
-   //echo '<pre>';print_r($parcela->cadastros);die;
+   $parcela=$parc->ListarFormasPagVendas($parcelaListarRequest);
+   //echo '<pre>';print_r($parcela);die;
    
    $clientes_list_request=array("pagina"=>1,"registros_por_pagina"=>100);
    $clientes=new ClientesCadastroJsonClient();

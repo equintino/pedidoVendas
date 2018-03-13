@@ -57,7 +57,8 @@ final class index{
         'omie_fail'=>'../model/FormasPagComprasJsonClient.php',
         'ContaCorrenteCadastroJsonClient'=>'../model/ContaCorrenteCadastroJsonClient.php',
         'EtapasFaturamentoJsonClient'=>'../model/EtapasFaturamentoJsonClient.php',
-        'TabelaPrecosJsonClient'=>'../model/TabelaPrecosJsonClient.php'
+        'TabelaPrecosJsonClient'=>'../model/TabelaPrecosJsonClient.php',
+        'FormasPagVendasJsonClient'=>'../model/FormasPagVendasJsonClient.php'
     );
     if (!array_key_exists($nome, $classes)){
        die("A classe $nome não existe");

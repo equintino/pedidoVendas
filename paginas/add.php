@@ -148,24 +148,44 @@
         include '../config/OmieAppAuth.php';
         include '../model/PedidoVendaProdutoJsonClient.php';
         $pedido=new PedidoVendaProdutoJsonClient();
+        //echo '<pre>';print_r($_POST['parcela']);
+        $parCod=explode(',', $_POST['parcela']);
+        //print_r($parCod[1]);die;
         $parc=substr($_POST['parcela'],0,2);
+        //echo $parc;die;
         if($parc == 'Pa'){
             $parc=substr($_POST['parcela'],5,2);
             $parcela=1;
+            $cParcela='001';
+        }else{
+            switch (strlen(trim($parc))){
+                case 1:
+                    $zero='00';
+                    break;
+                case 2:
+                    $zero='0';
+                    break;
+                case 3:
+                    $zero='';
+                    break;
+            }
+            $cParcela=$zero.$parc;
+            $parcela=substr($_POST['parcela'],0,2);
+            //$vlr=$parc_=0;
+            //echo intval(30);die;
+            //for($x=0;$x<$parc;$x++){
+                //echo $x.'<br>';
+                //$vlr += intval(30);
+                //$parc_.$x = 1;
+                //echo ($parc_).($x).'<br>';//die;
+                //echo $vlr.'<br>';
+            //}
+                //echo $parc1.'<br>';die;
+            $parc=null;
         }
-        
-        switch (strlen($parc)){
-            case 1:
-                $zero='00';
-                break;
-            case 2:
-                $zero='0';
-                break;
-            case 3:
-                $zero='';
-                break;
-        }
-        $cParcela=$zero.$parc;
+        $cparcela=$parCod[1];
+        //print_r([$parcela,$cParcela]);die;
+        //echo strlen($parc).$cParcela;die;
         
             /*
             [codigo_cliente_integracao] => 
@@ -192,11 +212,15 @@
         $parcelas=array();
         for($x=0;$x<$parcela;$x++){
             $y=$x+1;
+            if(!$parc){
+                $parc=$y*30;
+            }
             //echo $_POST['valor'.$y.''];die;
             $lista_parcela=new lista_parcelas();
-            array_push($parcelas,array('data_vencimento'=>$_POST['data_vencimento'.$y.''],'numero_parcela'=>$parcela,'percentual'=>$_POST['percentual'.$y.''],'quantidade_dias'=>'','valor'=>str_replace(',','.',$_POST['valor'.$y.''])));
+            array_push($parcelas,array('data_vencimento'=>$_POST['data_vencimento'.$y.''],'numero_parcela'=>$y,'percentual'=>$_POST['percentual'.$y.''],'quantidade_dias'=>$parc,'valor'=>str_replace(',','.',$_POST['valor'.$y.''])));
+            $parc=null;
         }
-        $lista_parcela->parcela=$parcelas;
+        //$lista_parcela->parcela=$parcelas;
         //echo '<pre>';print_r($lista_parcela);die;
                 
         $det=array();
@@ -340,7 +364,7 @@
         $pedido_venda_produto->observacoes=$observacao;
         $pedido_venda_produto->lista_parcelas=$parcelas;
         
-        echo '<pre>';print_r([$_POST,$pedido_venda_produto]);die;
+        //echo '<pre>';print_r([$_POST,$pedido_venda_produto]);//die;
         include 'imprime.php';
         $pedido->IncluirPedido($pedido_venda_produto);
         //header('Location:../web/index.php?pagina=pedido&act=cad');

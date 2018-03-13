@@ -140,7 +140,7 @@ class etaproListarResponse{
  * @pw_element etapasArray $etapas Lista de etapas
  * @pw_complex cadastros
  */
-class cadastros{
+class cadastrosEtapa{
 	/**
 	 * Código da Operação de faturamento.
 	 *

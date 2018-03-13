@@ -155,7 +155,8 @@
     //echo '<pre>';print_r($pedido_venda_produto);
     $tItens=$pedido_venda_produto->cabecalho->quantidade_itens;
     
-    //print_r($codigo);die;
+    //echo '<pre>';print_r($pedido_venda_produto->det);
+    //print_r($_POST);die;
     //@$item=$_POST['item'];
     //@$codigo=$_POST['codigo'];
     //@$descricao=$_POST['descricao'];
@@ -193,10 +194,11 @@
                 $codigo=$pedido_venda_produto->det[$i-1]['produto']->codigo_produto;
                 $descricao=$pedido_venda_produto->det[$i-1]['produto']->descricao;
                 $quantidade=$pedido_venda_produto->det[$i-1]['produto']->quantidade;
+                $dados_adcionais_item=$pedido_venda_produto->det[$i-1]['inf_adic']->dados_adicionais_item;
                 $vUnitario=number_format($pedido_venda_produto->det[$i-1]['produto']->valor_unitario,'2',',','.');
                 $vTotalItem=number_format($pedido_venda_produto->det[$i-1]['produto']->valor_mercadoria,'2',',','.');
             ?>
-                <span><?= '00'.$i.'</span><span class=cod>'.$codigo.'</span><span class=desc>'.$descricao ?><br></span>
+                <span><?= '00'.$i.'</span><span class=cod>'.$codigo.'</span><span class=desc>'.$descricao.' ('.$dados_adcionais_item.')' ?><br></span>
                 <span class="quant">&nbsp&nbsp<?= $quantidade.'</span> &nbsp&nbsp&nbsp&nbsp&nbsp X <span class=vlUnit2>'.$vUnitario.'</span><span class=vTotalItem2>'.$vTotalItem ?></span>
             <?php endfor; ?>
             </div><br>

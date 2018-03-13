@@ -170,9 +170,9 @@
             }
         })
         $('.previsao input').mask('00/00/0000');
-        $('.tabela input[name=dPrevisao]').keyup(function(){
+        /*$('.tabela input[name=dPrevisao]').keyup(function(){
             $('#pnl4 .novo4 input[name=data_vencimento]').val($(this).val())
-        })
+        })*/
         
         
         $('.tabela td select[name=parcela]').change(function(){
@@ -223,7 +223,7 @@
                     $('#pnl4 .novo4 input[name=data_vencimento'+x+']').val(data(x))
                     //$('#pnl4 .novo4 input[name=data_vencimento'+x+']').attr('disabled','disabled')
                     $('#pnl4 .novo4 input[name=valor'+x+']').val(calcula('/',$('.autoQuadro td[nome=vPedido]').text(),selecao))
-                    $('#pnl4 .novo4 input[name=percentual'+x+']').val(percent*x)
+                    $('#pnl4 .novo4 input[name=percentual'+x+']').val(percent)
                     //fSelecao--;
                     /*if(x==selecao){
                         die;;
@@ -307,6 +307,8 @@
                 $('#pnl4 .novo4 input[name=percentual1]').val(100)
                 
             }
+            //alert('mudou');
+            $('.tabela input[name=dPrevisao]').val($('#pnl4 .novo4 input[name=data_vencimento1]').val())
         })
         $('.tabela td select[name=fPagamento]').change(function(){
             if($(this).val()=='credito' || $(this).val()=='debito'){
@@ -844,7 +846,7 @@
             <select name="parcela" disabled>
                 <option value=""></option>
                 <?php foreach($parcela->cadastros as $key => $item): ?>
-                <option value="<?= $item->cDescricao ?>"><?= $item->cDescricao ?></option>
+                <option value="<?= $item->cDescricao.','.$item->cCodigo.','.$item->nQtdeParc ?>"><?= $item->cDescricao ?></option>
                 <?php endforeach; ?>
             </select>
         </td><td>
@@ -1028,10 +1030,10 @@
 
 
 <?php else: 
-    $pvpListarRequest=array("pagina"=>1,"registros_por_pagina"=>50,"apenas_importado_api"=>"N");
+    $pvpListarRequest=array("pagina"=>2,"registros_por_pagina"=>100,"apenas_importado_api"=>"N");
     $dados=$pedido->ListarPedidos($pvpListarRequest);
     
-    //echo '<pre>';print_r($dados->pedido_venda_produto);die;
+    echo '<pre>';print_r($dados);die;
     
     $posicao=array('Pedido de Venda','Separar Estoque','Faturar','Faturado','Entrega');
     foreach($dados->pedido_venda_produto as $key => $item){
