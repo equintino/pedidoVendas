@@ -130,37 +130,33 @@
             if($('#pnl1 input').val()){
                 var resp=confirm('Você já adcionou itens a este pedido, estes dados serão descartados. Deseja continuar?');
                 if(resp){
-                    $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1')
+                    $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&pagAtual=1')
                 }else{
                     return false;
                 }
             }else{
-                $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1')
+                $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&pagAtual=1')
             }
         })
         $(document).keyup(function(e){
-            //alert(e.which);
             if(e.which==113){
-               //alert($('#pnl1 input').val());
                 if($('form').hasClass('#pnl1') || $('#pnl1 input').val()){
                     var resp=confirm('Você já adcionou itens a este pedido, estes dados serão descartados. Deseja continuar?');
                     if(resp){
-                        $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1')
+                        $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&pagAtual=1')
                     }else{
                         return false;
                     }
                 }else{
-                    $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1')
+                    $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&pagAtual=1')
                 }
             }else if(e.which==115){
                 $('.bnt').each(function(){
                     if($(this).text()=='Novo Ítem'){
                         $(this).trigger('click')
                         alert($('#pnl1 input').attr('name'));
-                        //break;
                     }
                 })
-                //busca();
                 if(!pagAtual){
                     var pagAtual=1;
                 }
@@ -170,28 +166,18 @@
             }
         })
         $('.previsao input').mask('00/00/0000');
-        /*$('.tabela input[name=dPrevisao]').keyup(function(){
-            $('#pnl4 .novo4 input[name=data_vencimento]').val($(this).val())
-        })*/
         
         
         $('.tabela td select[name=parcela]').change(function(){
             var selecao=$(this).val().substr(0,2);
-            //selecao=selecao.substr(0,2);
-            //var now=new Date();
-            //alert(now.getDate()+'/'+now.getMonth()+'/'+now.getFullYear());
-            //alert(data());
-            //alert($(this).val());
             if(selecao=='A '){
                 $('#pnl4 .novo4').each(function(){
                     if($(this).attr('linha')>1){
                         $(this).remove()
                     }
                 })
-                //alert($('.tabela input[name=dPrevisao]').val());
                 $('#pnl4 .novo4 input[name=numero_parcela1]').val(0)
                 $('#pnl4 .novo4 input[name=data_vencimento1]').val($('.tabela input[name=dPrevisao]').val())
-                //$('#pnl4 .novo4 input[name=1]').removeAttr('disabled')
                 $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
                 $('#pnl4 .novo4 input[name=percentual1]').val(100)
             }else if(selecao=='1 '){
@@ -202,7 +188,6 @@
                 })
                 $('#pnl4 .novo4 input[name=numero_parcela1]').val(1)
                 $('#pnl4 .novo4 input[name=data_vencimento1]').val(data(1))
-                //$('#pnl4 .novo4 input[name=data_vencimento1]').attr('disabled','disabled')
                 $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
                 $('#pnl4 .novo4 input[name=percentual1]').val(100)
             }else if(selecao!='Pa' && selecao!='In'){
@@ -212,23 +197,15 @@
                     }
                 })
                 var percent=100/selecao;
-                //alert(percent);
                 for(var x=1;x<parseInt(selecao)+1;x++){
                     if(x!=1){
                         /// adciona nova parcela ///
                         $('#pnl4 table').append($('<tr linha='+x+' class=novo4><td><input size=1px type=text name=numero_parcela'+x+' /></td><td><input size=10px type=text name=data_vencimento'+x+' /></td><td><input size=10px type=text name=valor'+x+' /></td><td><input size=10px type=text name=percentual'+x+' /></td>'))
                     }
-                    //alert([selecao,x]);
                     $('#pnl4 .novo4 input[name=numero_parcela'+x+']').val(x)
                     $('#pnl4 .novo4 input[name=data_vencimento'+x+']').val(data(x))
-                    //$('#pnl4 .novo4 input[name=data_vencimento'+x+']').attr('disabled','disabled')
                     $('#pnl4 .novo4 input[name=valor'+x+']').val(calcula('/',$('.autoQuadro td[nome=vPedido]').text(),selecao))
                     $('#pnl4 .novo4 input[name=percentual'+x+']').val(percent)
-                    //fSelecao--;
-                    /*if(x==selecao){
-                        die;;
-                    }*/
-                    //alert('passei');
                 }
             }else if(selecao=='Pa'){
                 $('#pnl4 .novo4').each(function(){
@@ -238,8 +215,6 @@
                 })
                 var now = new Date();
                 var numeroMes=new Array('01','02','03','04','05','06','07','08','09','10','11','12','01','02');
-                //var mes31=new Array(0,2,4,6,7,9,11);
-                //var mes30=new Array(3,5,8,10);
                 function mesDias(mesDia){
                     switch(mesDia){
                         case 0:
@@ -268,11 +243,8 @@
                 
                 
                 selecao2=$(this).val().substr(5,2);//,now.getMonth()]);
-                //alert(now.getMonth()+2);
-                //alert(mesDias(now.getMonth()+2));
                 if(parseInt(selecao2)+parseInt(now.getDate()) <= mesDias(now.getMonth())){
                     data_vencimento=parseInt(selecao2)+parseInt(now.getDate())+'/'+numeroMes[now.getMonth()]+'/'+now.getFullYear();
-                    //alert('entrei');
                 }else if(selecao2-(mesDias(now.getMonth())-now.getDate()) < mesDias(now.getMonth()+1)){
                     var d=selecao2-(mesDias(now.getMonth())-now.getDate());
                     var m=numeroMes[now.getMonth()+1];
@@ -283,9 +255,7 @@
                     }
                     
                     data_vencimento=d+'/'+m+'/'+a;
-                    //alert(data_vencimento);
                 }else{
-                    //alert([selecao2,mesDias(now.getMonth())-now.getDate(),mesDias(now.getMonth()+1)]);
                     var d=selecao2-(mesDias(now.getMonth())-now.getDate()) - mesDias(now.getMonth()+1);
                     if(d==0){
                         d='01';
@@ -298,8 +268,6 @@
                     }
                     
                     data_vencimento=d+'/'+m+'/'+a;
-                    //alert(data_vencimento);
-                    //data_vencimento=d+'/'+numeroMes[now.getMonth()+2]+'/'+now.getFullYear();;
                 }
                 $('#pnl4 .novo4 input[name=numero_parcela1]').val(1)
                 $('#pnl4 .novo4 input[name=data_vencimento1]').val(data_vencimento)
@@ -307,7 +275,6 @@
                 $('#pnl4 .novo4 input[name=percentual1]').val(100)
                 
             }
-            //alert('mudou');
             $('.tabela input[name=dPrevisao]').val($('#pnl4 .novo4 input[name=data_vencimento1]').val())
         })
         $('.tabela td select[name=fPagamento]').change(function(){
@@ -382,7 +349,6 @@
                                         nome_=nome.substr(0,nome.length-1)+z;
                                         $(this).attr('name',nome_)
                                         $(this).attr('linha',z)
-                                        //alert([nome,nome_]);
                                     }else{
                                         verifica=nome.substr(-1,1);
                                         z++;
@@ -395,7 +361,6 @@
                                 $('#pnl1 td input[name=quantidade1]').trigger('click')
                                 die;
                             }else{
-                                //quadroInferior();
                                 die;
                             }
                         }
@@ -533,42 +498,12 @@
                 $('.autoQuadro input[name=vPedido]').val(numeroParaMoeda(vPedido))
                 $('.autoQuadro td[nome=vPedido]').text(numeroParaMoeda(vPedido)) /// Valor do Pedido ///
         }
-        
-        /*
-         * var meses = new Array("Janeiro", "Fevereiro", "Marco", "Abril", "Maio", "Junho", "Julho", "Agosto", "Septembro", "Outubro", "Novembro", "Dezembro");
-
-            function diasDoAno() {
-                var ano = $('#ano').val();
-                var dias = [];
-                for (var x = 0; x < 12; x++) {
-                    var diasNoMes = new Date(ano, x + 1, 0).getDate();
-                    dias[x] = [];
-                    for (var i = 1; i <= diasNoMes; i++) {
-                        dias[x].push(i);
-                    }
-                }
-                var resultado = $('#resultado');
-                dias.forEach(function (mes, i) {
-                    var div = $('<div />').addClass('mes');
-                    div.append(meses[i]);
-                    var subDiv = $('<div />').addClass('dias');
-                    mes.forEach(function (dia) {
-                        subDiv.append(dia);
-                    });
-                    div.append(subDiv);
-                    resultado.append(div);
-                });
-            }
-
-
-         */
     })
     function numeroParaMoeda(n, c, d, t){
         c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
         return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");    
     }
     function calcula(ope,vl1,vl2){
-        //alert([ope,vl1,vl2]);
         if(vl1.charAt(vl1.length-3)!='.'){
             vl1=vl1.replace('.','');
         }
@@ -602,15 +537,9 @@
     }
     function data(fator){
         var fator;
-        //alert(fator);
-        //var fator=dia/30;
         var now=new Date();
-        //alert(fator+now.getDate());
         var numeroMes=new Array('01','02','03','04','05','06','07','08','09','10','11','12');
-        //switch(dia){
-            //case 30:
-                m=now.getMonth()+parseInt(fator);
-        //}
+        m=now.getMonth()+parseInt(fator);
         return now.getDate()+'/'+numeroMes[m]+'/'+now.getFullYear();
     }
 </script>
@@ -772,7 +701,6 @@
     }
     #pnl4 .divVendas table{
         width: 100px;
-        //border: solid red;
     }
     #pnl4 fieldset{
         padding: 10px 20px;
@@ -780,6 +708,9 @@
     }
     #pnl4 .novo4 td{
         font-size: 18px;
+    }
+    .tecla{
+        font-size: 13px;
     }
 </style>
 </head>
@@ -799,7 +730,7 @@
 <form class="fPedido" method="post" action="../paginas/add.php?act=cad&pagina=pedido">
 <table class="tabela">
     <tr><td colspan="4">Cliente</td><td align="center">Previsão Faturamento</td></tr>
-    <tr><td colspan="4" class="razao"><input type="hidden" name="cCliente" value="<?= $cCliente ?>" /><input name="cliente" type="text" size=53 value="<?= $razao ?>" required /> <img src="../web/img/lupa.png" height="14px" title="Pesquisar cliente"/> </td><td class="previsao"><input name="dPrevisao" type="text" value="<?= date('d/m/Y') ?>" /></td></tr>
+    <tr><td colspan="4" class="razao"><input type="hidden" name="cCliente" value="<?= $cCliente ?>" /><input name="cliente" type="text" size=53 value="<?= $razao ?>" required /> <img src="../web/img/lupa.png" height="14px" title="Pesquisar cliente"/><span class="tecla"> (F2)</span></td><td class="previsao"><input name="dPrevisao" type="text" value="<?= date('d/m/Y') ?>" /></td></tr>
     <tr><td><font size=2px>CNPJ/CPF</font></td><!--<td>Tabela de Preço</td>--><tr>
     <tr><td class="cnpj"><input type="text" name="cnpj_cpf" value="<?= $cnpj_cpf ?>"/></td>
         <!--<td><select name='cCodIntTabPreco'>   

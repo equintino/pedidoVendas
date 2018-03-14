@@ -79,7 +79,7 @@ class valida_cookies{
             $senhaDb = @$item->getSenha();
             if($senhaDb== $senha){
                 $this->popup("Bem-Vindo ".$this->getlogin().".",'sim');
-                exit;
+                //exit;
             }else{
                 $this->popup('A senha não confere.',null);
                 exit;
@@ -127,7 +127,8 @@ class valida_cookies{
                 echo '<br>';
                 echo "<center><input type=button value='  Cancelar  ' onclick=history.back()>";
             }else{
-                echo "<center><input autofocus type=button value=\"Entrar\" onclick=\"location.href='web/index.php?index=sim&pagina=pedido&act=cad'\">";
+                header('Location:web/index.php?index=sim&pagina=pedido&act=cad');
+                //echo "<center><input autofocus type=button value=\"Entrar\" onclick=\"location.href='web/index.php?index=sim&pagina=pedido&act=cad'\">";
             }
         echo "</td></tr></table>";
         echo "</td></tr>";

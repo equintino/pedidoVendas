@@ -39,7 +39,7 @@
             $(this).css('cursor','pointer')
         })
         $('.procura').keyup(function(e){
-              var code = e.which; // recommended to use e.which, it's normalized across browsers
+              var code = e.which;
               if(code==13)e.preventDefault();
               if(code==13||e.keyCode==13){
                   var codigo=$('.procura :input').val();
@@ -83,13 +83,14 @@
                     var cnpj_cpf=$(this).attr('cnpj_cpf');
                     var contato=$(this).attr('contato');
                     var email=$(this).attr('email');
-                    //alert([codigo,razao,cnpj_cpf,contato]);
+                    if(email.indexOf('Undefined') != '-1'){
+                        alert('Este cliente não possui e-mail');
+                        die;
+                    }
                     $(location).attr('href','index.php?pagina=pedido&act=cad&codigo_cliente='+codigo_cliente+'&razao='+razao+'&cnpj_cpf='+cnpj_cpf+'&contato='+contato+'&email='+email+'')
                 })
             })
-        }
-        
-        
+        }      
         $(':submit').click(function(){
             var arr=new Array();
             $(':input').each(function(){
@@ -97,14 +98,58 @@
             })
         }) 
         $('.pagina').text('CLIENTE')
-        //$('.mGeral').append('<ul><li>INCLUIR</li><li>LISTAR</li><ul>')
+        $(".procura2 input").on("keyup", function(){
+            var value = $(this).val().toLowerCase();
+            $(".listaCliente .tudo").filter(function(){
+              $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+        $('button').each(function(){
+            $(this).css('cursor','pointer')
+            $(this).css({
+                border: 'none'
+            })
+            if($(this).text()==pagAtual){
+                $(this).css({
+                    border: 'solid #767e7e'
+                });
+            }
+        })
+        $('button').focus(function(){
+            pagAtual=$(this).text();
+            $('button').each(function(){
+                $(this).css({
+                    border: 'none'
+                })
+                if($(this).text()==pagAtual){
+                    $(this).css({
+                        border: 'solid #767e7e'
+                    });
+                }
+            })
+            link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'';          
+            $('.tudo').hide()
+            $('.tituloProd').text('Aguarde...')
+            $(location).attr('href',link)
+        })
+        
+        $('.tituloProd').text('Páginas ');
     })
 </script>
 <style>
+    body {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
     .head{
         text-align: center;
         font-size: 30px;
         padding-top: 10px;
+        margin-left: 160px;
     }
     .pag{
         font-size: 15px;
@@ -120,11 +165,15 @@
     table td{
         padding: 3px 10px;
     }
+    table td div{
+        width: 250px;
+        word-wrap:  break-word;
+    }
     table tr{
         background: rgba(216, 0, 0,0.1);
     }
     .rs{
-        width: 70%;
+        width: 600px;
     }
     .ct{
         align-content: center;
@@ -149,24 +198,37 @@
     .procura img{
         margin-top: 2px;
     }
+    .procura2{
+        float: right;
+        margin: 10px;
+    }
+    #menu{
+        width: 1030px;
+    }
+    .tituloProd{
+        font-size: 20px;
+    }
+    button{
+        box-shadow: 2px 2px 2px gray;
+        background-color: #cbcbcb;
+        padding: 1px 3px;
+        border-radius: 5px;
+        text-shadow: 2px 2px 2px white;
+        font-weight: bolder;
+    }
 </style>
 <div id="menu">
-    <!--<ul>
-        <li><a href=<?= Utils::createLink('cliente',array('act'=>'cad')); ?>>Incluir</a></li>
-        <li><a href=<?= Utils::createLink('cliente',array('act'=>'list')); ?>>Listar</a></li>
-    </ul>-->
-    <?php if($act!='cad' && $seleciona!=1){?>
-    <div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por clientes" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por clientes" /></div>
-    <?php } ?>
-    <!--<script>var pag="<?php //strtoupper($_GET['pagina']); ?>";</script>-->
+    <?php if($act!='cad' && $seleciona!=1):?>
+        <div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por clientes" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por clientes" /></div>
 </div>
+    <?php else: ?>
+        <div class="procura2"><input autofocus type="text" name="procura" title="Pesquisar por clientes" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por clientes" /></div>
+    <?php endif; ?>
 <div class="conteudo">
 <?php if($act=='cad'): ?>
 <h1>Cadastro de Clientes</h1>
-<!--<div id="saldo">Total de Clientes: <?= $quant ?></div>-->
 <form method="post" action="../paginas/add.php?act=cad&pagina=cliente" />
 <?php
-//[tipo_atividade] => [cnae] [tags] => [logradouro] => [importado_api] => [bloqueado] => [cidade_ibge] => ) 
     $variaveis=array('codigo_cliente_integracao','razao_social','nome_fantasia','cnpj_cpf','telefone1_ddd','telefone1_numero','email','contato','endereco','endereco_numero','bairro','complemento','estado','cidade','cep','telefone2_ddd','telefone2_numero','fax_ddd','fax_numero','homepage','inscricao_estadual','inscricao_municipal','inscricao_suframa','produtor_rural','contribuinte','observacao','recomendacao_atraso');
 ?>
 <table>
@@ -254,6 +316,13 @@
 <input type="submit" value="Salvar" /> 
 </form>
 <?php elseif($act=='list'): ?>
+<script>var pagAtual='<?= $pagAtual ?>'</script>
+<span class=tituloProd>Páginas </span>
+<?php
+    for($g=1;$g <= $dados->total_de_paginas;$g++){
+            echo '<button class=paginacao>'.$g.'</button>&nbsp&nbsp';
+    }
+?>
 <div class="head"><?php if($seleciona!=1){
         echo 'Lista de Clientes Cadastrados';
     }else{ 
@@ -261,11 +330,11 @@
     }; ?> <span class="pag">(pág.<?= $dados->pagina ?>/<?= $dados->total_de_paginas ?>)</span>
 </div>
 <div class="total">total de registros <?= $dados->total_de_registros ?></div>
-<table>
-    <tr><th>Razão Social/Nome</th><th>CNPJ/CPF</th><!--<th>Contato</th>--></tr>
+<table class="listaCliente">
+    <tr><th>Razão Social/Nome</th><th>CNPJ/CPF</th><!--<th>Contato</th>--><th>E-mail</th></tr>
     <?php 
     foreach($dados->clientes_cadastro as $cliente): ?>
-    <tr class="razaosocial" linha="<?= $cliente->codigo_cliente_omie ?>" razao='<?= $cliente->razao_social ?>' cnpj_cpf='<?= $cliente->cnpj_cpf ?>' email="<?= $cliente->email ?>"> <!--contato='<?php //echo @$cliente->contato ?>'--><td class="rs" ><?= mb_strtoupper($cliente->razao_social,'utf-8').'<br><font size=1px>('.$cliente->codigo_cliente_integracao.')</font>' ?></td><td align=center ><?= $cliente->cnpj_cpf ?></td><!--<td align=center ><?php //echo @$cliente->contato ?></td>--><?php if(@$seleciona!=1):?><td class="edicao"><img title="Altera" height="12px" src="../web/img/editar.png" codigo="<?= $cliente->codigo_cliente_omie ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $cliente->codigo_cliente_omie ?>" razao="<?= mb_strtoupper($cliente->razao_social,'utf-8') ?>" /></td><?php endif ?></tr>
+        <tr class="razaosocial tudo" linha="<?= $cliente->codigo_cliente_omie ?>" razao='<?= $cliente->razao_social ?>' cnpj_cpf='<?= $cliente->cnpj_cpf ?>' email="<?= $cliente->email ?>"><td class="rs"><?= mb_strtoupper($cliente->razao_social,'utf-8').'<!--<br><font size=1px>('.$cliente->codigo_cliente_integracao.')</font>-->' ?></td><td align=center ><?= $cliente->cnpj_cpf ?></td><td align=center ><div><?php echo @$cliente->email ?></div></td><?php if(@$seleciona!=1):?><td class="edicao"><img title="Altera" height="12px" src="../web/img/editar.png" codigo="<?= $cliente->codigo_cliente_omie ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $cliente->codigo_cliente_omie ?>" razao="<?= mb_strtoupper($cliente->razao_social,'utf-8') ?>" /></td><?php endif ?></tr>
     <?php endforeach; ?>
 </table>
 
@@ -294,7 +363,6 @@
         endforeach; die;
     endforeach; ?>
 <input type="submit" value="Salvar" /> 
-</form>
-                
+</form>               
 <?php endif; ?>
 </div>

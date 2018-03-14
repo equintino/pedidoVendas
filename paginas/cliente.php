@@ -1,6 +1,7 @@
 <meta charset="utf-8" >
 <?php
     @$excl=$_GET['excl'];
+    @$pagAtual=$_GET['pagAtual'];
     if($excl==1){
         print_r($_GET);die;
     }
@@ -27,9 +28,9 @@
     
 ////////// Clientes ////////////
    if($act=='list'){    
-        //// Listar Clientes Resumido ////
-        $clientes_list_request=array('pagina'=>'1','registros_por_pagina'=>'100','apenas_importado_api'=>'N');
-        $dados=$cliente->ListarClientes($clientes_list_request);    
+        //// Listar Clientes ////
+        $clientes_list_request=array('pagina'=>$pagAtual,'registros_por_pagina'=>'100','apenas_importado_api'=>'N');
+        $dados=$cliente->ListarClientes($clientes_list_request);
    }elseif($act=='excl'){
         //// Excluir Cliente ////
         $clientes_cadastro_chave=array("codigo_cliente_omie"=>$_GET['codigo'],"codigo_cliente_integracao"=>"");
@@ -48,44 +49,9 @@
             //modelMapper::map($model, $row);
             $result[$model->getid()] = $model;
         }
-        
-        echo '<pre>';print_r($result);die;
-        
         foreach($_POST as $key => $item){
             $classe='set'.$key;
             $model->$classe($item);
         }
-        
-        die;
-        /*
-        
-    [info] => stdClass Object
-        (
-            [cImpAPI] => N
-            [dAlt] => 10/01/2018
-            [dInc] => 10/01/2018
-            [hAlt] => 22:15:22
-            [hInc] => 21:09:54
-            [uAlt] => P000065360
-            [uInc] => P000065360
-        )
-    [tags] => Array
-        (
-            [0] => stdClass Object
-                (
-                    [tag] => Fornecedor
-                )
-
-        )
-
-        
-        */
-        print_r(count($dados));
    }
-       
-    /*
-    $url = 'http://app.omie.com.br/api/v1/produtos/pedido/?JSON={%22call%22:%22ConsultarPedido%22,%22app_key%22:%221560731700%22,%22app_secret%22:%22226dcf372489bb45ceede61bfd98f0f1%22,%22param%22:[{%22codigo_pedido%22:25953530}]}';//'http://app.omie.com.br/api/v1/geral/clientes/?WSDL';
-    $obj = json_decode(file_get_contents($url), true);
-    echo '<pre>';
-    print_r($obj);die;*/
 ?>
