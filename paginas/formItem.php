@@ -223,15 +223,9 @@
         $pagAtual=1;
     }
     $produto_servico_list_request=array("pagina"=>$pagAtual,"registros_por_pagina"=>40,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
-    //echo '<pre>';print_r($produto->ListarProdutos($produto_servico_list_request));
-    //echo 'estou aqui';die;
-    
-    //if(!@$codigo_produto){
-        //$produto_servico_list_request=array("pagina"=>$pagAtual,"registros_por_pagina"=>100,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
         $dados=$produto->ListarProdutos($produto_servico_list_request);
         $detalhes=$dados->produto_servico_cadastro;
         
-        //echo '<pre>';print_r($dados->total_de_paginas);
         echo '<span class=tituloProd>Páginas </span>';
         for($g=1;$g <= $dados->total_de_paginas;$g++){
             echo '<button class=paginacao>'.$g.'</button>&nbsp&nbsp';
