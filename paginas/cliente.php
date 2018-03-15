@@ -26,6 +26,13 @@
         Flash::addFlash('Registro salvo com sucesso.');
     }
     
+    $tagLista=array('Fornecedor','Cliente','Transportadora','Funcionário');
+    if(@$_GET['tags']=='undefined'){
+        $tagsArray=null;
+    }else{
+        @$tagsArray=explode(',',$_GET['tags']);
+    }
+    
 ////////// Clientes ////////////
    if($act=='list'){    
         //// Listar Clientes ////

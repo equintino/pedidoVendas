@@ -83,10 +83,10 @@
                     var cnpj_cpf=$(this).attr('cnpj_cpf');
                     var contato=$(this).attr('contato');
                     var email=$(this).attr('email');
-                    if(email.indexOf('Undefined') != '-1'){
+                    /*if(email.indexOf('Undefined') != '-1'){
                         alert('Este cliente não possui e-mail');
                         die;
-                    }
+                    }*/
                     $(location).attr('href','index.php?pagina=pedido&act=cad&codigo_cliente='+codigo_cliente+'&razao='+razao+'&cnpj_cpf='+cnpj_cpf+'&contato='+contato+'&email='+email+'')
                 })
             })
@@ -127,13 +127,24 @@
                     });
                 }
             })
-            link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'';          
+            var tags;
+            $('input:checked').each(function(){
+                if(!tags){
+                    tags = $(this).attr('name');
+                }else{
+                    tags += ','+$(this).attr('name');
+                }
+            })
+            link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'';          
             $('.tudo').hide()
             $('.tituloProd').text('Aguarde...')
             $(location).attr('href',link)
         })
         
         $('.tituloProd').text('Páginas ');
+        //$('.total').text()
+        $('.total').text('Registros '+contador+' de '+total+'')
+        //alert($('.listaCliente .tudo').attr('contador'));
     })
 </script>
 <style>
@@ -216,6 +227,12 @@
         text-shadow: 2px 2px 2px white;
         font-weight: bolder;
     }
+    .filtroRag{
+        padding: 20px;
+    }
+    .filtroRag span{
+        margin-top: 30px;
+    }
 </style>
 <div id="menu">
     <?php if($act!='cad' && $seleciona!=1):?>
@@ -251,7 +268,7 @@
     if(!$omie)$omie=0;
     $clientes_cadastro_chave=array("codigo_cliente_omie"=>$omie,
 "codigo_cliente_integracao"=>$codigo);
-    $dados=$cliente->ConsultarCliente($clientes_cadastro_chave); 
+    $dados=$cliente->ConsultarCliente($clientes_cadastro_chave);
 ?>
 <table>
     <tr><th colspan="2">Dados do Cliente</th></tr>
@@ -322,6 +339,21 @@
     for($g=1;$g <= $dados->total_de_paginas;$g++){
             echo '<button class=paginacao>'.$g.'</button>&nbsp&nbsp';
     }
+    foreach($tagLista as $item){
+        if($tagsArray){
+            if(in_array($item, $tagsArray)){
+                $checked='checked';
+            }else{
+                $checked=null;
+            }
+        }else{
+            $checked=null;
+        }
+        echo '<span class=filtroRag><input type=checkbox name="'.$item.'" '.$checked.' />'.$item.'</span>';
+    }
+    if(!$tagsArray){
+        $tagsArray=$tagLista;
+    }
 ?>
 <div class="head"><?php if($seleciona!=1){
         echo 'Lista de Clientes Cadastrados';
@@ -329,15 +361,32 @@
         echo 'Slecione Um Cliente Abaixo';
     }; ?> <span class="pag">(pág.<?= $dados->pagina ?>/<?= $dados->total_de_paginas ?>)</span>
 </div>
-<div class="total">total de registros <?= $dados->total_de_registros ?></div>
+<?php 
+    /*echo '<pre>';
+    $tagLista=array();
+    foreach($dados->clientes_cadastro as $item){
+        foreach($item->tags as $item){
+            $tag=$item->tag;
+            //print_r($tag);
+        }
+    }*/
+    //die; 
+?>
+<div class="total"><script> var total='<?= $dados->total_de_registros ?>'</script></div>
 <table class="listaCliente">
-    <tr><th>Razão Social/Nome</th><th>CNPJ/CPF</th><!--<th>Contato</th>--><th>E-mail</th></tr>
-    <?php 
-    foreach($dados->clientes_cadastro as $cliente): ?>
-        <tr class="razaosocial tudo" linha="<?= $cliente->codigo_cliente_omie ?>" razao='<?= $cliente->razao_social ?>' cnpj_cpf='<?= $cliente->cnpj_cpf ?>' email="<?= $cliente->email ?>"><td class="rs"><?= mb_strtoupper($cliente->razao_social,'utf-8').'<!--<br><font size=1px>('.$cliente->codigo_cliente_integracao.')</font>-->' ?></td><td align=center ><?= $cliente->cnpj_cpf ?></td><td align=center ><div><?php echo @$cliente->email ?></div></td><?php if(@$seleciona!=1):?><td class="edicao"><img title="Altera" height="12px" src="../web/img/editar.png" codigo="<?= $cliente->codigo_cliente_omie ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $cliente->codigo_cliente_omie ?>" razao="<?= mb_strtoupper($cliente->razao_social,'utf-8') ?>" /></td><?php endif ?></tr>
-    <?php endforeach; ?>
+    <tr><th>Razão Social/Nome</th><th>CNPJ/CPF</th><!--<th>Contato</th><th>E-mail</th>--></tr>
+<?php 
+    $contador=0;
+    foreach($dados->clientes_cadastro as $cliente): 
+        foreach($cliente->tags as $tipo):
+                if(in_array($tipo->tag, $tagsArray)): $contador++;?>
+                    <tr class="razaosocial tudo" linha="<?= $cliente->codigo_cliente_omie ?>" razao='<?= $cliente->razao_social ?>' cnpj_cpf='<?= $cliente->cnpj_cpf ?>' email="<?= $cliente->email ?>"><td class="rs"><?= mb_strtoupper($cliente->razao_social,'utf-8').'<!--<br><font size=1px>('.$cliente->codigo_cliente_integracao.')</font>-->' ?></td><td align=center ><?= $cliente->cnpj_cpf ?></td><!--<td align=center ><div><?php echo @$cliente->email ?></div></td>--><?php if(@$seleciona!=1):?><td class="edicao"><img title="Altera" height="12px" src="../web/img/editar.png" codigo="<?= $cliente->codigo_cliente_omie ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $cliente->codigo_cliente_omie ?>" razao="<?= mb_strtoupper($cliente->razao_social,'utf-8') ?>" /></td><?php endif ?></tr>
+    <?php endif; 
+        endforeach; 
+    endforeach;
+?>
 </table>
-
+<script>var contador='<?= $contador ?>'</script>
 <?php elseif($act=='excl'): ?>
 
 

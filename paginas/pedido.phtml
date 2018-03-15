@@ -130,12 +130,12 @@
             if($('#pnl1 input').val()){
                 var resp=confirm('Você já adcionou itens a este pedido, estes dados serão descartados. Deseja continuar?');
                 if(resp){
-                    $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&pagAtual=1')
+                    $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&pagAtual=1&tags=undefined')
                 }else{
                     return false;
                 }
             }else{
-                $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&pagAtual=1')
+                $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&pagAtual=1&tags=undefined')
             }
         })
         $(document).keyup(function(e){
@@ -143,12 +143,12 @@
                 if($('form').hasClass('#pnl1') || $('#pnl1 input').val()){
                     var resp=confirm('Você já adcionou itens a este pedido, estes dados serão descartados. Deseja continuar?');
                     if(resp){
-                        $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&pagAtual=1')
+                        $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&pagAtual=1&tags=undefined')
                     }else{
                         return false;
                     }
                 }else{
-                    $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&pagAtual=1')
+                    $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&pagAtual=1&tags=undefined')
                 }
             }else if(e.which==115){
                 $('.bnt').each(function(){
@@ -177,7 +177,7 @@
                     }
                 })
                 $('#pnl4 .novo4 input[name=numero_parcela1]').val(0)
-                $('#pnl4 .novo4 input[name=data_vencimento1]').val($('.tabela input[name=dPrevisao]').val())
+                //$('#pnl4 .novo4 input[name=data_vencimento1]').val($('.tabela input[name=dPrevisao]').val())
                 $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
                 $('#pnl4 .novo4 input[name=percentual1]').val(100)
             }else if(selecao=='1 '){
@@ -275,7 +275,7 @@
                 $('#pnl4 .novo4 input[name=percentual1]').val(100)
                 
             }
-            $('.tabela input[name=dPrevisao]').val($('#pnl4 .novo4 input[name=data_vencimento1]').val())
+            //$('.tabela input[name=dPrevisao]').val($('#pnl4 .novo4 input[name=data_vencimento1]').val())
         })
         $('.tabela td select[name=fPagamento]').change(function(){
             if($(this).val()=='credito' || $(this).val()=='debito'){
@@ -730,7 +730,7 @@
 <form class="fPedido" method="post" action="../paginas/add.php?act=cad&pagina=pedido">
 <table class="tabela">
     <tr><td colspan="4">Cliente</td><td align="center">Previsão Faturamento</td></tr>
-    <tr><td colspan="4" class="razao"><input type="hidden" name="cCliente" value="<?= $cCliente ?>" /><input name="cliente" type="text" size=53 value="<?= $razao ?>" required /> <img src="../web/img/lupa.png" height="14px" title="Pesquisar cliente"/><span class="tecla"> (F2)</span></td><td class="previsao"><input name="dPrevisao" type="text" value="<?= date('d/m/Y') ?>" /></td></tr>
+    <tr><td colspan="4" class="razao"><input type="hidden" name="cCliente" value="<?= $cCliente ?>" /><input name="cliente" type="text" size=53 value="<?= $razao ?>" required /> <img src="../web/img/lupa.png" height="14px" title="Pesquisar cliente"/><span class="tecla"> (F2)</span></td><td class="previsao"><input disabled name="dPrevisao" type="text" value="<?= date('d/m/Y') ?>" /><input name="dPrevisao" type="hidden" value="<?= date('d/m/Y') ?>" /></td></tr>
     <tr><td><font size=2px>CNPJ/CPF</font></td><!--<td>Tabela de Preço</td>--><tr>
     <tr><td class="cnpj"><input type="text" name="cnpj_cpf" value="<?= $cnpj_cpf ?>"/></td>
         <!--<td><select name='cCodIntTabPreco'>   
