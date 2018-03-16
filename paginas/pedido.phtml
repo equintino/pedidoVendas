@@ -28,18 +28,19 @@
         var conf2=null;
         $('#botoes .bnt').click(function(){
             if(!$('.razao input').val()){
-                alert('Preenche campo "CLIENTE"');
+                //alert('Preenche campo "CLIENTE"');
                 $('.razao input').focus();
-                return false;
+                //return false;
             }else if(!$('.cnpj input').val()){
-                alert('Preenche campo "CNPJ/CPF"');
+                //alert('Preenche campo "CNPJ/CPF"');
                 $('.cnpj input').focus();
-                return false;
+                //return false;
             }             
             if($(this).text()=='Novo Ítem'){
                 if(!$('#pnl1 table input[name=codigo_produto'+item+']').val()){
                     alert('Não foi inserido nenhum dado no NOVO ÍTEM.');
                     $('#pnl1 table input[name=codigo_produto'+item+']').css('background','rgba(216, 0, 0,0.1)').focus()
+                    alert($('#pnl1 table tr .lupa img').attr('busca'));//[busca='+item+']').trigger('click')
                     die;
                 }
                 item++;
