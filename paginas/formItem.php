@@ -56,7 +56,7 @@
                 })
                 $(this).click(function(){
                     descricao=$(this).attr('descricao');
-                    cProduto=$(this).attr('codigo_produto');
+                    cProduto=$(this).attr('codigo');
                     vUnitario=$(this).attr('valor_unitario');
                     qEstoque=$(this).attr('quantidade_estoque');
                     cfop=$(this).attr('cfop');
@@ -140,7 +140,7 @@
         font-size: 15px;
     }
     .jItem, .head, .head1{
-        width: 1290px;
+        width: 1000px;
     }
     .head1 th{
         background: green;
@@ -166,13 +166,13 @@
         z-index: 1;
     }
     .col1{
-        width: 135px;
+        width: 125px;
     }
     .col2{
-        width: 200px;
+        //width: 200px;
     }
     .col3{
-        width: 270px;
+        width: 70px;
     }
     .head1 .col4{
         width: 90px;
@@ -240,16 +240,17 @@
                 <?php
                     $w=$row=0;
                     $col=1;
+                    //echo '<pre>';print_r($detalhes);die;
                     foreach($detalhes as $prod){
                         if($w==0){
                             foreach($prod as $key => $item){
-                                if(!strstr($key,'aliquo') && !strstr($key,'altura') && !strstr($key,'bloqueado') && !strstr($key,'cest') && !strstr($key,'familia') && !strstr($key,'cst') && !strstr($key,'dias') && !stristr($key,'dadosib') && !stristr($key,'csosn') && !stristr($key,'importado') && !stristr($key,'inativo') && !stristr($key,'largura') && !stristr($key,'peso') && !stristr($key,'profundidade') && !stristr($key,'red') && !stristr($key,'recomendacoes') && !stristr($key,'imagens') && !stristr($key,'integracao') && !stristr($key,'marca') && !stristr($key,'cfop') && !stristr($key,'produto') && !stristr($key,'minimo') && !stristr($key,'internas') && !stristr($key,'tipo')){
+                                if(!strstr($key,'aliquo') && !strstr($key,'altura') && !strstr($key,'bloqueado') && !strstr($key,'cest') && !strstr($key,'familia') && !strstr($key,'cst') && !strstr($key,'dias') && !stristr($key,'dadosib') && !stristr($key,'csosn') && !stristr($key,'importado') && !stristr($key,'inativo') && !stristr($key,'largura') && !stristr($key,'peso') && !stristr($key,'profundidade') && !stristr($key,'red') && !stristr($key,'recomendacoes') && !stristr($key,'imagens') && !stristr($key,'integracao') && !stristr($key,'marca') && !stristr($key,'cfop') && !stristr($key,'produto') && !stristr($key,'minimo') && !stristr($key,'internas') && !stristr($key,'tipo') && !stristr($key,'quantidade_estoque') && !stristr($key,'ean') && !stristr($key,'ncm') && !stristr($key,'unidade') && !stristr($key,'detalhada')){
                                     if($key=='descricao'){
                                         echo '<th class="descricao col'.$col.'">DESCRIÇÃO DO PRODUTO</th>';
-                                    }elseif($key=='quantidade_estoque'){
-                                        echo '<th class="col'.$col.'">ESTOQUE</th>';
                                     }elseif($key=='valor_unitario'){
                                         echo '<th class="col'.$col.'">VL.UNITÁRIO</th>';
+                                    }elseif($key=='codigo'){
+                                        echo '<th  width="10%" class="col'.$col.'">CÓDIGO</th>';
                                     }else{
                                         echo '<th class="col'.$col.'">'.mb_strtoupper(str_replace('_',' ',$key),'utf-8').'</th>';
                                     }
@@ -274,11 +275,13 @@
                 }
                 echo '>';
                 foreach($prod as $key => $item){
-                    if(!strstr($key,'aliquo') && !strstr($key,'altura') && !strstr($key,'bloqueado') && !strstr($key,'cest') && !strstr($key,'familia') && !strstr($key,'cst') && !strstr($key,'dias') && !stristr($key,'dadosib') && !stristr($key,'csosn') && !stristr($key,'importado') && !stristr($key,'inativo') && !stristr($key,'largura') && !stristr($key,'peso') && !stristr($key,'profundidade') && !stristr($key,'red') && !stristr($key,'recomendacoes') && !stristr($key,'imagens') && !stristr($key,'integracao') && !stristr($key,'marca') && !stristr($key,'cfop') && !stristr($key,'produto') && !stristr($key,'minimo') && !stristr($key,'internas') && !stristr($key,'tipo')){
-                        if(stristr($key,'detalhada') || stristr($key,'obs_interna')){
-                            echo '<td class="col'.$col.'" align=center>'.substr(mb_strtoupper(str_replace('_',' ',$item),'utf-8'),0,40).'...</td>';
+                    if(!strstr($key,'aliquo') && !strstr($key,'altura') && !strstr($key,'bloqueado') && !strstr($key,'cest') && !strstr($key,'familia') && !strstr($key,'cst') && !strstr($key,'dias') && !stristr($key,'dadosib') && !stristr($key,'csosn') && !stristr($key,'importado') && !stristr($key,'inativo') && !stristr($key,'largura') && !stristr($key,'peso') && !stristr($key,'profundidade') && !stristr($key,'red') && !stristr($key,'recomendacoes') && !stristr($key,'imagens') && !stristr($key,'integracao') && !stristr($key,'marca') && !stristr($key,'cfop') && !stristr($key,'produto') && !stristr($key,'minimo') && !stristr($key,'internas') && !stristr($key,'tipo') && !stristr($key,'quantidade_estoque') && !stristr($key,'ean') && !stristr($key,'ncm') && !stristr($key,'unidade') && !stristr($key,'detalhada')){
+                        if(/*stristr($key,'detalhada') || */stristr($key,'obs_interna')){
+                            echo '<td class="col'.$col.'" align=center>'.$item.'</td>';/*substr(mb_strtoupper(str_replace('_',' ',$item),'utf-8'),0,40)* $item'</td>';*/
                         }elseif(stristr($key,'valor')){
                             echo '<td class="col'.$col.'" align=right>'.number_format($item,'2',',','.').'</td>';
+                        }elseif(stristr($key,'codigo')){
+                            echo '<td class="col'.$col.'" align=center><div width=10px>'.$item.'</div></td>';
                         }else{
                             echo '<td class="col'.$col.'" align=center>'.mb_strtoupper(str_replace('_',' ',$item),'utf-8').'</td>';
                         }
