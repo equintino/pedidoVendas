@@ -57,7 +57,7 @@
             }
         })
         busca();
-        $('#pnl1 table input[name=codigo_produto'+item+']').trigger('focus')
+        //$('#pnl1 table tr .lupa').trigger()
         $('#pnl2').css('display','none')          
         $('#pnl3').css('display','none')          
         $('#pnl4').css('display','none')
@@ -363,6 +363,8 @@
                     }
                 }
             })
+            $('#pnl1 table input[name=codigo_produto'+item+']').trigger('focus')
+            $('#pnl1 table tr .lupa img[busca='+j+']').trigger('click')
             quadroInferior();
         }
             //// quadro inferior ////
