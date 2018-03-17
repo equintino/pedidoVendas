@@ -152,6 +152,8 @@
         
         
         $('.tabela td select[name=parcela]').change(function(){
+            //alert('mudou');
+                //alert();
             var selecao=$(this).val().substr(0,2);
             if(selecao=='A '){
                 $('#pnl4 .novo4').each(function(){
@@ -160,6 +162,7 @@
                     }
                 })
                 $('#pnl4 .novo4 input[name=numero_parcela1]').val(0)
+                $('#pnl4 .novo4 input[name=data_vencimento1]').val($('.previsao input[name=dPrevisao]:hidden').val())
                 $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
                 $('#pnl4 .novo4 input[name=percentual1]').val(100)
             }else if(selecao=='1 '){
@@ -172,12 +175,41 @@
                 $('#pnl4 .novo4 input[name=data_vencimento1]').val(data(1))
                 $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
                 $('#pnl4 .novo4 input[name=percentual1]').val(100)
-            }else if(selecao!='Pa' && selecao!='In'){
+            }else /*if(selecao!='Pa' && selecao!='In')*/{
                 $('#pnl4 .novo4').each(function(){
                     if($(this).attr('linha')>1){
                         $(this).remove()
                     }
                 })
+                /*
+                var now = new Date();
+                var numeroMes=new Array('01','02','03','04','05','06','07','08','09','10','11','12','01','02');
+                function mesDias(mesDia){
+                    switch(mesDia){
+                        case 0:
+                        case 2:
+                        case 4:
+                        case 6:
+                        case 7:
+                        case 9:
+                        case 11:
+                        case 12:
+                            var mesDe=31;
+                            break;
+                        case 3:
+                        case 5:
+                        case 8:
+                        case 10:
+                            var mesDe=30;
+                            break;
+                        case 1:
+                        case 13:
+                            var mesDe=28;
+                            break;
+                    }
+                    return mesDe;
+                }*/
+                
                 var percent=100/selecao;
                 for(var x=1;x<parseInt(selecao)+1;x++){
                     if(x!=1){
@@ -189,7 +221,7 @@
                     $('#pnl4 .novo4 input[name=valor'+x+']').val(calcula('/',$('.autoQuadro td[nome=vPedido]').text(),selecao))
                     $('#pnl4 .novo4 input[name=percentual'+x+']').val(percent)
                 }
-            }else if(selecao=='Pa'){
+            }/*else if(selecao=='Pa'){
                 $('#pnl4 .novo4').each(function(){
                     if($(this).attr('linha')>1){
                         $(this).remove()
@@ -256,7 +288,7 @@
                 $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
                 $('#pnl4 .novo4 input[name=percentual1]').val(100)
                 
-            }
+            }*/
         })
         $('.tabela td select[name=fPagamento]').change(function(){
             if($(this).val()=='credito' || $(this).val()=='debito'){
@@ -565,7 +597,13 @@
         var now=new Date();
         var numeroMes=new Array('01','02','03','04','05','06','07','08','09','10','11','12');
         m=now.getMonth()+parseInt(fator);
-        return now.getDate()+'/'+numeroMes[m]+'/'+now.getFullYear();
+        if(m > '11'){
+            m = m - 12;
+            var a=now.getFullYear()+1;
+        }else{
+            a=now.getFullYear();   
+        }
+        return now.getDate()+'/'+numeroMes[m]+'/'+a;
     }
 </script>
 <style>
@@ -794,14 +832,14 @@
     <tr><td>
             <select name="cod_vend">
                 <option value=""></option>
-                <?php foreach($vend->cadastro as $key => $item): ?>
+                <?php foreach($vend as $key => $item): ?>
                 <option value="<?= $item->codigo ?>"><?= $item->nome ?></option>
                 <?php endforeach; ?>
             </select>
         </td><td>
             <select name="parcela" disabled>
                 <option value=""></option>
-                <?php foreach($parcela->cadastros as $key => $item): ?>
+                <?php foreach($parcela as $key => $item): ?>
                 <option value="<?= $item->cDescricao.','.$item->cCodigo.','.$item->nQtdeParc ?>"><?= $item->cDescricao ?></option>
                 <?php endforeach; ?>
             </select>
@@ -887,9 +925,7 @@
                             <input type='hidden' name='<?= $key ?>' value="<?= '1.01.03' ?>"/>
                         <?php elseif($item=='Banco'): ?>
                             <td width=20px><select name='codigo_conta_corrente'>
-                            <?php foreach($conta as $key => $item): ?>
-                                    <option value='<?= $item->nCodCC ?>'><?= $item->descricao ?></option>
-                            <?php endforeach; ?>
+                                    <option value='<?= $nCodCC ?>'><?= $descricao ?></option>
                             </td></select>
                         <?php elseif($item=='Etapa'): ?>
                             <td width='20px'><select name='etapa'>
@@ -899,7 +935,7 @@
                                         <option value='<?= $item->cCodigo ?>'><?= $item->cDescricao ?></option>
                                 <?php endif; endforeach; ?>
                             </td></select>
-                        <?php elseif($item=='Dados Adicionais para a Nota Fiscal'): ?>                                <td><input size=50px type=text name='dados_adcionais_nf' /></td>
+                        <?php elseif($item=='Dados Adicionais para a Nota Fiscal'): ?>                                <td><textarea cols=40 rows="1" name='dados_adcionais_nf' /></textarea></td>
                         <?php endif; ?>
                     <?php /*$ref++;*/ endforeach; ?>
                     </tr>

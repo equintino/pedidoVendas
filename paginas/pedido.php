@@ -3,6 +3,9 @@
     include '../paginas/janela.php';
 
     @$excl=$_GET['excl'];
+    @$contaAtualiza=$_GET['contaAtualiza'];
+    @$vendedorAtualiza=$_GET['vendedorAtualiza'];
+    
     if(array_key_exists('razao', $_GET)){
         $razao=$_GET['razao'];
     }else{
@@ -56,23 +59,49 @@
     header('Location:index.php?pagina=produto&act=list');*/
        die;
    }
+   
    ////// Classes //////
-   $contas=new ContaCorrenteCadastroJsonClient();
-   $contaListarRequest=array('pagina'=>'1','registros_por_pagina'=>'50');
-   //$consulta=array("cCodInt"=>"");
-   $conta=$contas->PesquisarContaCorrente($contaListarRequest)->conta_corrente_lista;
-   //echo '<pre>';
-   //print_r($conta[0]);//die;
+   if($contaAtualiza==1){
+        $contas=new ContaCorrenteCadastroJsonClient();
+        $contaListarRequest=array('pagina'=>'1','registros_por_pagina'=>'50');
+        $conta=$contas->PesquisarContaCorrente($contaListarRequest)->conta_corrente_lista;
+        $nCodCC=$conta[0]->nCodCC;
+        $descricao=$conta[0]->descricao;
+   }else{
+       $nCodCC='740899824';
+       $descricao='Santander';
+   }
    
-   $vendedor=new VendedoresCadastroJsonClient();
-   $vendListarRequest=array("pagina"=>"1","registros_por_pagina"=>"100","apenas_importado_api"=>"N");
-   $vend=$vendedor->ListarVendedores($vendListarRequest);
-   //echo '<pre>';print_r($vend);die;
+   if($vendedorAtualiza==1){
+        $vendedor=new VendedoresCadastroJsonClient();
+        $vendListarRequest=array("pagina"=>"1","registros_por_pagina"=>"50","apenas_importado_api"=>"N");
+        $vend=$vendedor->ListarVendedores($vendListarRequest)->cadastro;
+   }else{
+        $vendedorLista=array('740394323'=>'Jadeylson','740395328'=>'Angela','740395810'=>'Moises','742241153'=>'Sergio','756282022'=>'Adriano');
+        $vend=array();
+        foreach($vendedorLista as $key => $item){
+            $vendedores=new vendedores();
+            $vendedores->codigo=$key;
+            $vendedores->nome=$item;
+            array_push($vend, $vendedores);
+        }
+   }
    
-   $parc=new FormasPagVendasJsonClient();
+    $dadosParcelas=array(array('cCodigo'=>'000','cDescricao'=>'A Vista','nQtdeParc'=>'1'),array('cCodigo'=>'001','cDescricao'=>'1 Parcela','nQtdeParc'=>'1'),array('cCodigo'=>'002','cDescricao'=>'2 Parcelas','nQtdeParc'=>'2'),array('cCodigo'=>'003','cDescricao'=>'3 Parcelas','nQtdeParc'=>'3'),array('cCodigo'=>'004','cDescricao'=>'4 Parcelas','nQtdeParc'=>'4'),array('cCodigo'=>'005','cDescricao'=>'5 Parcelas','nQtdeParc'=>'5'),array('cCodigo'=>'006','cDescricao'=>'6 Parcelas','nQtdeParc'=>'6'),array('cCodigo'=>'007','cDescricao'=>'7 Parcelas','nQtdeParc'=>'7'),array('cCodigo'=>'008','cDescricao'=>'8 Parcelas','nQtdeParc'=>'8'),array('cCodigo'=>'009','cDescricao'=>'9 Parcelas','nQtdeParc'=>'9'),array('cCodigo'=>'010','cDescricao'=>'10 Parcelas','nQtdeParc'=>'10'));
+    $parcela=array();
+    foreach($dadosParcelas as $item){
+        $detalheParc=new parcela();
+        $detalheParc->cCodigo=$item['cCodigo'];
+        $detalheParc->cDescricao=$item['cDescricao'];
+        $detalheParc->nQtdeParc=$item['nQtdeParc'];
+        array_push($parcela, $detalheParc);
+    }
+        //echo '<pre>';print_r($parcela);die;
+   
+   /*$parc=new FormasPagVendasJsonClient();
    $parcelaListarRequest=array("pagina"=>1,"registros_por_pagina"=>100);
-   $parcela=$parc->ListarFormasPagVendas($parcelaListarRequest);
-   //echo '<pre>';print_r($parcela);die;
+   $parcela=$parc->ListarFormasPagVendas($parcelaListarRequest)->cadastros;
+   echo '<pre>';print_r($parcela);die;*/
    
    $clientes_list_request=array("pagina"=>1,"registros_por_pagina"=>100);
    $clientes=new ClientesCadastroJsonClient();
