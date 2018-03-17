@@ -304,8 +304,18 @@
                             boxShadow: '2px 2px 2px gray'
                         })
                     }).mouseup(function(){
-                        if(!conf2 && $('#pnl1 table span').length != 1){
+                        /*$('#pnl1 table input').each(function(){
+                            var cod_prod=$(this).attr('name');
+                            alert(cod_prod.substr(0,cod_prod.length-1));
+                        })*/
+                        //alert(conf2);
+                        if(!conf2 && $('#pnl1 table span').length != 1 && $('#pnl1 table input').val().length != 0){
                             if(confirm('Confirma a exclusão do ítem '+$(this).text()+'?')){
+                                /*if($(this).text()==1){
+                                    $(this).each(function(){
+                                        alert($('#pnl1 ta'))
+                                    })
+                                }*/
                                 $('#item'+$(this).text()).remove();
                                 $('.autoQuadro td').each(function(){
                                     if($(this).attr('nome')=='tItem'){
@@ -344,7 +354,23 @@
                             }else{
                                 die;
                             }
+                        }else if($('#pnl1 table .item').length==1 && $('#pnl1 table input').val().length != 0){
+                            if(confirm('Confirma a exclusão do ítem '+$(this).text()+'?')){
+                                $('#pnl1 td input').each(function(){
+                                    $(this).val('')
+                                })
+                                die;;
+                            }
                         }
+                        /*else{
+                            if(confirm('Confirma a exclusão do ítem '+$(this).text()+'?')){
+                                $('#pnl1 td input').each(function(){
+                                    $(this).val('')
+                                })
+                            }else{
+                                return false;
+                            }
+                        }*/
                     })
                 })
             })

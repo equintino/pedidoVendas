@@ -13,13 +13,17 @@
                     $('#mascara').css({'width':larguraTela,'height':alturaTela});
                     $('#mascara').fadeIn(1000);	
                     $('#mascara').fadeTo("slow",0.8);
-                    //var left = ($(window).width() /2) - ( $(id).width() / 1 );
-                    //var top = ($(window).height() / 2) - ( $(id).height() / 1 );
-					
+                    //var left = ($(window).width() / 8);// - ( $(id).width() / 1 );
+                    var top = ($(window).height() / 16);// - ( $(id).height() / 1 );
+                    //var meio=$(document).width()/2;
+                    //alert([left,top]);
+                    //alert($(document).width(meio));
                     $(id).css({
-                        top: '50px',
-                        left:'80px'
-                        //margin: auto;
+                        top: top,
+                        left: '50px',
+                        margin: 'auto',
+                        width: '1010px',
+                        //border: 'solid blue'
                     });			
                     //inserido 
                     href = $(this).attr("href");
