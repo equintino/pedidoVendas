@@ -52,12 +52,12 @@
             }
             body{
                 background: #000; 
-                color: #454545; 
+                //color: #454545; 
                 font: 12pt serif;
                 font-weight: 600;
                 //border: solid red;
                 width: 105mm;
-                margin: auto;
+                //margin: auto;
             }
             #texto{
                 width: 100%; 
@@ -65,10 +65,10 @@
             }
             .conteudo{
                 //margin-top: 10px;
-                width: 95mm;
-                height: 297mm;
+                //width: 95mm;
+                //height: 297mm;
                 //border: solid red;
-                background: #f3f6ac;
+                background: white;//#f3f6ac;
                 padding: 20px;
             }
             h3{
@@ -145,15 +145,15 @@
             
             @media print{
                 .conteudo {
-                    -webkit-column-count: 1; /* Chrome, Safari, Opera */
-                    -moz-column-count: 1; /* Firefox */
-                    column-count: 1;
+                    //-webkit-column-count: 1; /* Chrome, Safari, Opera */
+                    //-moz-column-count: 1; /* Firefox */
+                    //column-count: 1;
                 }
             }
         </style>
 <?php
     //echo '<pre>';print_r($pedido_venda_produto);
-    $tItens=$pedido_venda_produto->cabecalho->quantidade_itens;
+    @$tItens=$pedido_venda_produto->cabecalho->quantidade_itens;
     
     //echo '<pre>';print_r($pedido_venda_produto->det);
     //print_r($_POST);die;

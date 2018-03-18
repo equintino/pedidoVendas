@@ -57,13 +57,14 @@
                 $(this).click(function(){
                     descricao=$(this).attr('descricao');
                     cProduto=$(this).attr('codigo');
+                    cOmie=$(this).attr('codigo_produto');
                     vUnitario=$(this).attr('valor_unitario');
                     qEstoque=$(this).attr('quantidade_estoque');
                     cfop=$(this).attr('cfop');
                     ncm=$(this).attr('ncm');
                     ean=$(this).attr('ean');
                     unidade=$(this).attr('unidade');
-                    
+                    //alert([cProduto,cOmie]);
                     $('#pnl1 table input[name]').each(function(){
                         var name=$(this).attr('name');
                         if(name.substr(0,name.length-1)=='codigo_produto'){
@@ -75,6 +76,7 @@
                     })
                     linha=linha.substring(4,5);
                     $('#pnl1 table #item'+linha+' input').each(function(){
+                        //alert($(this).attr('name'));
                         var z=$(this).attr('name');
                         switch(z.substr(0,z.length-1)){
                             case 'codigo_produto':
@@ -108,6 +110,9 @@
                                break;
                             case 'unidade':
                                $(this).val(unidade);
+                               break;
+                            case 'cOmie':
+                               $(this).val(cOmie);
                                break;
                         }
                     })

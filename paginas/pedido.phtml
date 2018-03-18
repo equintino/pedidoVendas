@@ -44,7 +44,7 @@
                     die;
                 }
                 item++;
-                   $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto'+item+'" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" /></td><td><input type="text" name="quantidade'+item+'" autocomplete="off" required linha='+item+' /></td><td><input type="text" name="vUnitarioItem'+item+'" /></td><td><input type="text" name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" name="pDescontoItem'+item+'" linha='+item+' /></td><td><input type="text" name="obs_item'+item+'" linha='+item+' /></td><td><input type="text" name="cfop'+item+'" linha='+item+' /></td><td><input type="text" name="ncm'+item+'" linha='+item+' /></td><td><input type="text" name="ean'+item+'" linha='+item+' /></td><td><input type="text" name="unidade'+item+'" linha='+item+' /></td><!--<td><select name=loja'+item+' ><option value=loja1>Loja 1</option><option value=loja2>Loja 2</option></select></td>--><td><input type="hidden" name="vTotalItem'+item+'" linha='+item+' /></td></span></tr>')
+                   $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto'+item+'" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" /></td><td><input type="text" name="quantidade'+item+'" autocomplete="off" required linha='+item+' /></td><td><input type="text" name="vUnitarioItem'+item+'" /></td><td><input type="text" name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" name="pDescontoItem'+item+'" linha='+item+' /></td><td><textarea cols=25 name="obs_item'+item+'" linha='+item+' /></textares></td><td><input type="hidden" name="cfop'+item+'" linha='+item+' /></td><td><input type="hidden" name="ncm'+item+'" linha='+item+' /></td><td><input type="hidden" name="ean'+item+'" linha='+item+' /></td><td><input type="hidden" name="unidade'+item+'" linha='+item+' /></td><td><input type="hidden" name="vTotalItem'+item+'" linha='+item+' /></td><input type=hidden name="cOmie'+item+'" /></span></tr>')
                     itemExclusao();
                     busca();
                     $('#pnl1 table input[name=codigo_produto'+item+']').trigger('focus')
@@ -137,7 +137,7 @@
                 $('.bnt').each(function(){
                     if($(this).text()=='Novo Ítem'){
                         $(this).trigger('click')
-                        alert($('#pnl1 input').attr('name'));
+                        //alert($('#pnl1 input').attr('name'));
                     }
                 })
                 if(!pagAtual){
@@ -290,7 +290,7 @@
                 
             }*/
         })
-        $('.tabela td select[name=fPagamento]').change(function(){
+        /*$('.tabela td select[name=fPagamento]').change(function(){
             if($(this).val()=='credito' || $(this).val()=='debito'){
                 $('.doc').show();
                 $('.doc').keyup(function(){
@@ -302,7 +302,7 @@
                 $('.doc input').val('');
                 $('#pnl3 table .novo3 input[name=dados_adcionais_nf]').val('');
             }
-        })
+        })*/
         ///// funcoes ////
         function itemExclusao(){
             var corItem='rgba(255,0,0,0.7)';
@@ -379,6 +379,14 @@
                                         $(this).attr('linha',z)
                                     }
                                 })
+                                //alert('entrei');
+                                z=1;
+                                $('#pnl1 textarea').each(function(){
+                                    nome=$(this).attr('name');
+                                    $(this).attr('name',nome.substr(0,nome.length-1)+z);
+                                    //alert($(this).attr('name'));
+                                    z++;
+                                })
                                 item=$('#pnl1 table .item').length;
                                 conf2=null;
                                 $('#pnl1 td input[name=quantidade1]').trigger('click')
@@ -447,13 +455,13 @@
             $('#pnl1 td input').each(function(){
                 var str=$(this).attr('name');
                 if(str.substr(0,str.length-1)=='quantidade'){
-                    $(this).mask('00000');
+                    $(this).mask('0000000');
                     $(this).bind('keyup click', function(){
                         pedLinha=$(this).attr('linha');
-                        var algarismo1=qEstoque.length;
-                        var algarismo2=$(this).val().length;
-                        var zero=algarismo1-algarismo2;
-                        switch(zero){
+                        //var algarismo1=qEstoque.length;
+                        //var algarismo2=$(this).val().length;
+                        //var zero=algarismo1-algarismo2;
+                        /*switch(zero){
                             case 1:
                                 $(this).mask('00');
                                 zero='0';
@@ -473,19 +481,19 @@
                             default:
                                 $(this).mask('0');
                                 zero='';
-                        }
-                        quantidade=zero+$(this).val();
+                        }*/
+                        quantidade=$(this).val();
                         vUnitarioItem=($('#pnl1 tr[id=item'+pedLinha+'] input[name=vUnitarioItem'+pedLinha+']').val());
                         vTotalItem=calcula('*',vUnitarioItem,quantidade);
                         $($('#pnl1 tr[id=item'+pedLinha+'] input[name=vTotalItem'+pedLinha+  ']')).val(numeroParaMoeda(vTotalItem));
                         qEstoque=$(this).attr('qestoque');
-                        if(quantidade > qEstoque){
+                        /*if(quantidade > qEstoque){
                             alert('Quantidade em Estoque '+qEstoque+'');
                             vTotalItem=calcula('*',vUnitarioItem,qEstoque);
                             $($('#pnl1 tr[id=item'+pedLinha+'] input[name=vTotalItem'+pedLinha+']')).val(numeroParaMoeda(vTotalItem));
                             $($('#pnl1 tr[id=item'+pedLinha+'] input[name=quantidade'+pedLinha+']')).val(qEstoque);
                             
-                        }
+                        }*/
                         preencheTotais();
                     })                         
                 }else if(str.substr(0,str.length-1)=='pDescontoItem'){
@@ -775,6 +783,11 @@
     .tecla{
         font-size: 13px;
     }
+    #pnl1 table td textArea{
+        height: 25px;
+        //width: 700px;
+        //border: solid blue;
+    }
 </style>
 </head>
 <body>
@@ -873,12 +886,12 @@
                     <?php foreach($variaveis2['Ítens de Venda'] as $key => $item): ?>
                         <?php if($item=='Desconto'): ?>
                             <td><?= $item ?>(%)</td>
-                        <?php else: ?>
+                        <?php elseif($item != 'CFOP' && $item != 'NCM' && $item != 'EAN' && $item != 'Unidade'): ?>
                             <td><?= $item ?></td>
                         <?php endif ?>
                     <?php endforeach; ?>
                     </tr>
-                    <tr id=item1><span class=novo><td class=lupa></td><td class=item>1</td><td><input type="text" name="codigo_produto1" linha=1 required/></td><td><input type="text" name="descricao1" /></td><td><input type="text" name="quantidade1" autocomplete="off" linha=1 required /></td><td><input type="text" name="vUnitarioItem1" /></td><td><input type="text" name="vTotalItem1" linha=1 disabled /></td><td><input type="text" name="pDescontoItem1" linha=1 /></td><td><input type="text" name="obs_item1" linha=1 /></td><td><input type="text" name="cfop1" linha=1 /></td><td><input type="text" name="ncm1" linha=1 /></td><td><input type="text" name="ean1" linha=1 /></td><td><input type="text" name="unidade1" linha=1 /></td><td><input type="hidden" name="vTotalItem1" linha=1 /></td></span></tr>
+                    <tr id=item1><span class=novo><td class=lupa></td><td class=item>1</td><td><input type="text" name="codigo_produto1" linha=1 required/></td><td><input type="text" name="descricao1" /></td><td><input type="text" name="quantidade1" autocomplete="off" linha=1 required /></td><td><input type="text" name="vUnitarioItem1" /></td><td><input type="text" name="vTotalItem1" linha=1 disabled /></td><td><input type="text" name="pDescontoItem1" linha=1 /></td><td><textarea rows="1" cols="25" name="obs_item1" linha=1 /></textarea></td><td><input type="hidden" name="cfop1" linha=1 /></td><td><input type="hidden" name="ncm1" linha=1 /></td><td><input type="hidden" name="ean1" linha=1 /></td><td><input type="hidden" name="unidade1" linha=1 /></td><td><input type="hidden" name="vTotalItem1" linha=1 /></td><input type=hidden name=cOmie1 /></span></tr>
                 </table>
             </div>
         </div>
@@ -915,7 +928,7 @@
                 <table>
                     <tr>
                     <?php foreach($variaveis2['Informações Adcionais'] as $key => $item): ?>
-                    <td><?= $item ?></td>
+                    <td><?php if($key != 'dados_adcionais_nf') echo $item ?></td>
                     <?php endforeach; ?>
                     </tr>
                     <tr class='novo3'>
@@ -935,7 +948,7 @@
                                         <option value='<?= $item->cCodigo ?>'><?= $item->cDescricao ?></option>
                                 <?php endif; endforeach; ?>
                             </td></select>
-                        <?php elseif($item=='Dados Adicionais para a Nota Fiscal'): ?>                                <td><textarea cols=40 rows="1" name='dados_adcionais_nf' /></textarea></td>
+                        <?php elseif($key=='dados_adcionais_nf'): ?>                                <tr><td colspan="3">Dados Adcionais para a Nota Fiscal<br><textarea cols=40 rows="3" name='dados_adcionais_nf' /></textarea></td></tr>
                         <?php endif; ?>
                     <?php /*$ref++;*/ endforeach; ?>
                     </tr>
