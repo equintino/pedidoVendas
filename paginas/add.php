@@ -367,8 +367,8 @@
         //echo '<pre>';print_r($lista_parcelas);die;
         $pedido_venda_produto->lista_parcelas=$lista_parcelas;
         
-        //echo '<pre>';print_r($pedido_venda_produto);die;
-        include 'imprime.php';die;
+        echo '<pre>';print_r($pedido_venda_produto);die;
+        include 'imprime.php';//die;
         $pedido->IncluirPedido($pedido_venda_produto);
         //header('Location:../web/index.php?pagina=pedido&act=cad');
         die;

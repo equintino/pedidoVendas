@@ -221,7 +221,11 @@
 <div id="dadosItem"></div>
 <?php
     include '../model/ProdutosCadastroJsonClient.php';
+    include '../model/ProdutosCaracteristicasJsonClient.php';
+    
     $produto=new ProdutosCadastroJsonClient();
+    $caracteristica=new ProdutosCaracteristicasJsonClient();
+    
     if(key_exists('pagAtual', $_GET)){
         $pagAtual=$_GET['pagAtual'];
     }else{
@@ -246,7 +250,23 @@
                     $w=$row=0;
                     $col=1;
                     //echo '<pre>';print_r($detalhes);die;
-                    foreach($detalhes as $prod){
+                    foreach($detalhes as $prod){ 
+    
+                    $prcListarCaractRequest=array('nPagina'=>'1','nRegPorPagina'=>'50','nCodProd'=>$prod->codigo_produto);
+                    @$caract=$caracteristica->ListarCaractProduto($prcListarCaractRequest)->listaCaracteristicas;
+                    if(count($caract)!= 0){
+                        foreach($caract as $itemCaract){
+                            if(strtoupper($itemCaract->cNomeCaract)=='LOJA'){
+                                //echo $itemCaract->cNomeCaract;
+                                $loja=$itemCaract->cConteudo;
+                            }else{
+                                $loja=null;
+                            }
+                        }
+                    }else{
+                        $loja=null;
+                    }
+                    //echo '<pre>';print_r($caract);die;
                         if($w==0){
                             foreach($prod as $key => $item){
                                 if(!strstr($key,'aliquo') && !strstr($key,'altura') && !strstr($key,'bloqueado') && !strstr($key,'cest') && !strstr($key,'familia') && !strstr($key,'cst') && !strstr($key,'dias') && !stristr($key,'dadosib') && !stristr($key,'csosn') && !stristr($key,'importado') && !stristr($key,'inativo') && !stristr($key,'largura') && !stristr($key,'peso') && !stristr($key,'profundidade') && !stristr($key,'red') && !stristr($key,'recomendacoes') && !stristr($key,'imagens') && !stristr($key,'integracao') && !stristr($key,'marca') && !stristr($key,'cfop') && !stristr($key,'produto') && !stristr($key,'minimo') && !stristr($key,'internas') && !stristr($key,'tipo') && !stristr($key,'quantidade_estoque') && !stristr($key,'ean') && !stristr($key,'ncm') && !stristr($key,'unidade') && !stristr($key,'detalhada')){
@@ -286,7 +306,8 @@
                         }elseif(stristr($key,'valor')){
                             echo '<td class="col'.$col.'" align=right>'.number_format($item,'2',',','.').'</td>';
                         }elseif(stristr($key,'codigo')){
-                            echo '<td class="col'.$col.'" align=center><div width=10px>'.$item.'</div></td>';
+                            echo '<td class="col'.$col.'" loja="'.$loja.'" align=center><div width=10px>'.$item;
+                            if($loja){ echo '('.$loja.')';}else{echo '</div></td>';}
                         }else{
                             echo '<td class="col'.$col.'" align=center>'.mb_strtoupper(str_replace('_',' ',$item),'utf-8').'</td>';
                         }

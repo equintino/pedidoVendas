@@ -43,6 +43,9 @@
     $pedido=new PedidoVendaProdutoJsonClient();
     $cliente=new ClientesCadastroJsonClient();
     
+    //$caracteristica->ListarCaractProduto($prcListarCaractRequest);
+    //echo '<pre>';print_r($caracteristica);die;
+    
     $pvpListarRequest=array('pagina'=>'1','registros_por_pagina'=>'50');
     //echo '<pre>';print_r($pedido->ListarPedidos($pvpListarRequest)->pedido_venda_produto);die;
     if(!isset($quant))
