@@ -83,11 +83,16 @@
                     var cnpj_cpf=$(this).attr('cnpj_cpf');
                     var contato=$(this).attr('contato');
                     var email=$(this).attr('email');
+                    var endereco=$(this).attr('endereco');
+                    var numero=$(this).attr('numero');
+                    var bairro=$(this).attr('bairro');
+                    var cep=$(this).attr('cep');
+                    var cidade=$(this).attr('cidade');
                     /*if(email.indexOf('Undefined') != '-1'){
                         alert('Este cliente não possui e-mail');
                         die;
                     }*/
-                    $(location).attr('href','index.php?pagina=pedido&act=cad&codigo_cliente='+codigo_cliente+'&razao='+razao+'&cnpj_cpf='+cnpj_cpf+'&contato='+contato+'&email='+email+'')
+                    $(location).attr('href','index.php?pagina=pedido&act=cad&codigo_cliente='+codigo_cliente+'&razao='+razao+'&cnpj_cpf='+cnpj_cpf+'&contato='+contato+'&email='+email+'&endereco='+endereco+'&endereco_numero='+numero+'&bairro='+bairro+'&cep='+cep+'&cidade='+cidade+'')
                 })
             })
         }      
@@ -380,7 +385,7 @@
     foreach($dados->clientes_cadastro as $cliente): 
         foreach($cliente->tags as $tipo):
                 if(in_array($tipo->tag, $tagsArray)): $contador++;?>
-                    <tr class="razaosocial tudo" linha="<?= $cliente->codigo_cliente_omie ?>" razao='<?= $cliente->razao_social ?>' cnpj_cpf='<?= $cliente->cnpj_cpf ?>' email="<?= $cliente->email ?>"><td class="rs"><?= mb_strtoupper($cliente->razao_social,'utf-8').'<!--<br><font size=1px>('.$cliente->codigo_cliente_integracao.')</font>-->' ?></td><td align=center ><?= $cliente->cnpj_cpf ?></td><!--<td align=center ><div><?php echo @$cliente->email ?></div></td>--><?php if(@$seleciona!=1):?><td class="edicao"><img title="Altera" height="12px" src="../web/img/editar.png" codigo="<?= $cliente->codigo_cliente_omie ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $cliente->codigo_cliente_omie ?>" razao="<?= mb_strtoupper($cliente->razao_social,'utf-8') ?>" /></td><?php endif ?></tr>
+                    <tr class="razaosocial tudo" linha="<?= $cliente->codigo_cliente_omie ?>" razao='<?= $cliente->razao_social ?>' cnpj_cpf='<?= $cliente->cnpj_cpf ?>' email="<?= $cliente->email ?>" endereco="<?= $cliente->endereco ?>" numero="<?= $cliente->endereco_numero ?>" bairro="<?= $cliente->bairro ?>" cep="<?= $cliente->cep ?>" cidade="<?= $cliente->cidade ?>"><td class="rs"><?= mb_strtoupper($cliente->razao_social,'utf-8').'<!--<br><font size=1px>('.$cliente->codigo_cliente_integracao.')</font>-->' ?></td><td align=center ><?= $cliente->cnpj_cpf ?></td><!--<td align=center ><div><?php echo @$cliente->email ?></div></td>--><?php if(@$seleciona!=1):?><td class="edicao"><img title="Altera" height="12px" src="../web/img/editar.png" codigo="<?= $cliente->codigo_cliente_omie ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $cliente->codigo_cliente_omie ?>" razao="<?= mb_strtoupper($cliente->razao_social,'utf-8') ?>" /></td><?php endif ?></tr>
     <?php endif; 
         endforeach; 
     endforeach;

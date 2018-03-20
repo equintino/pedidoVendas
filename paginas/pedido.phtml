@@ -1,12 +1,12 @@
-<html>
+<!DOCTYPE html>
 <head>
   <script src="https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
 <script>
     arr=new Array();
     $(document).ready(function(){
-        $('.botao :reset').trigger('click')
+        //$('.botao :reset').trigger('click')
         $('.botao input').mouseover(function(){
-            $(this).css('cursor','pointer')
+            $(this).css('cursor','pointer');
         })
         $('.botao').css({
             float: 'left',
@@ -22,32 +22,32 @@
         
         $('#botoes .bnt,.outrosItens span').mouseover(function(){
             $(this).css('cursor','pointer')
-        })  
+        }) 
         var item=1;
         var conf=null;
         var conf2=null;
         $('#botoes .bnt').click(function(){
             if(!$('.razao input').val()){
                 alert('Preenche campo "CLIENTE"');
-                $('.razao input').focus();
+                $('.razao input').focus()
                 return false;
             }else if(!$('.cnpj input').val()){
                 alert('Preenche campo "CNPJ/CPF"');
-                $('.cnpj input').focus();
+                $('.cnpj input').focus()
                 return false;
             }            
             if($(this).text()=='Novo Ítem'){
                 if(!$('#pnl1 table input[name=codigo_produto'+item+']').val()){
-                    $('#pnl1 table input[name=codigo_produto'+item+']').css('background','rgba(216, 0, 0,0.1)').focus()
+                    $('#pnl1 table input[name=codigo_produto'+item+']').css('background','rgba(216, 0, 0,0.1)').focus();
                     busca();
-                    $('#pnl1 table tr .lupa img[busca='+item+']').trigger('click')
+                    $('#pnl1 table tr .lupa img[busca='+item+']').trigger('click');
                     die;
                 }
                 item++;
-                   $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto'+item+'" autocomplete="off" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" autocomplete="off" required /></td><td><input type="text" name="quantidade'+item+'" autocomplete="off" required linha='+item+' /></td><td><input type="text" name="vUnitarioItem'+item+'" autocomplete="off" required /></td><td><input type="text" name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" name="pDescontoItem'+item+'" autocomplete="off" linha='+item+' /></td><td><textarea cols=25 name="obs_item'+item+'" linha='+item+' /></textares></td><td><input type="hidden" name="cfop'+item+'" linha='+item+' /></td><td><input type="hidden" name="ncm'+item+'" linha='+item+' /></td><td><input type="hidden" name="ean'+item+'" linha='+item+' /></td><td><input type="hidden" name="unidade'+item+'" linha='+item+' /></td><td><input type="hidden" name="vTotalItem'+item+'" linha='+item+' /></td><input type=hidden name="cOmie'+item+'" /></span></tr>')
+                   $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto'+item+'" autocomplete="off" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" autocomplete="off" required /></td><td><input type="text" name="quantidade'+item+'" autocomplete="off" required linha='+item+' /></td><td><input type="text" name="vUnitarioItem'+item+'" autocomplete="off" required /></td><td><input type="text" name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" name="pDescontoItem'+item+'" autocomplete="off" linha='+item+' /></td><td><textarea cols=25 name="obs_item'+item+'" linha='+item+' /></textares></td><td><input type="hidden" name="cfop'+item+'" linha='+item+' /></td><td><input type="hidden" name="ncm'+item+'" linha='+item+' /></td><td><input type="hidden" name="ean'+item+'" linha='+item+' /></td><td><input type="hidden" name="unidade'+item+'" linha='+item+' /></td><td><input type="hidden" name="vTotalItem'+item+'" linha='+item+' /></td><input type=hidden name="cOmie'+item+'" /></span></tr>');
                     itemExclusao();
                     busca();
-                    $('#pnl1 table input[name=codigo_produto'+item+']').trigger('focus')
+                    $('#pnl1 table input[name=codigo_produto'+item+']').trigger('focus');
             }else if($(this).text()=='Excluir Ítem'){
                 if($('#pnl1 table input').val()){
                     alert('Clique no Nº do Ítem para excluir.');
@@ -56,15 +56,8 @@
                     }
                 }
             }
-        })
+        });
         busca();
-        //$('#pnl1 table tr .lupa').trigger()
-        $('#pnl2').css('display','none')          
-        $('#pnl3').css('display','none')          
-        $('#pnl4').css('display','none')
-        $('#pnl5').css('display','none')           
-        $('#pnl6').css('display','none')
-       
         $('.outrosItens span').click(function(){
             $(this).css({
                 position: 'relative',
@@ -84,36 +77,35 @@
                         boxShadow: '0 2px 0 gray',
                         textShadow: '2px 2px 2px white',
                         color: 'black'
-                    })
+                    });
                 }
-            })
-            $('#pnl1, #pnl2, #pnl3, #pnl4, #pnl5, #pnl6').css('display','none')
-            if($(this).text()=='Itens de Venda'){
-                $('#pnl1').css('display','block')
-            }else if($(this).text()=='Frete/Despesas'){
-                $('#pnl2').css('display','block')
-            }else if($(this).text()=='Informações Adcionais'){
-                $('#pnl3').css('display','block')
-            }else if($(this).text()=='Parcelas'){
-                $('#pnl4').css('display','block')
-                $('.tabela select[name=parcela]').removeAttr('disabled')
-            }else if($(this).text()=='E-mail para Cliente'){
-                $('#pnl5').css('display','block')
-            }else if($(this).text()=='Observação'){
-                $('#pnl6').css('display','block')
-            }           
+            });
+            $('#pnl1, #pnl2, #pnl3, #pnl4, #pnl5, #pnl6').css('display','none');
+            if($(this).text() === 'Itens de Venda'){
+                $('#pnl1').css('display','block');
+            }else if($(this).text() === 'Frete/Despesas'){
+                $('#pnl2').css('display','block');
+            }else if($(this).text() === 'Informações Adcionais'){
+                $('#pnl3').css('display','block');
+            }else if($(this).text() === 'Parcelas'){
+                $('#pnl4').css('display','block');
+                $('.tabela select[name=parcela]').removeAttr('disabled');
+            }else if($(this).text() === 'E-mail para Cliente'){
+                $('#pnl5').css('display','block');
+            }/*else if($(this).text() == 'Observação'){
+                $('#pnl6').css('display','block');
+            }*/
         })
-        $('.pagina').text('PRÉ-VENDA')
-        $('.tabela img').click(function(){
-            if($('#pnl1 input').val()){
+        $('table.tabela img').click(function(){
+            if($('div#pnl1 input').val()){
                 var resp=confirm('Você já adcionou itens a este pedido, estes dados serão descartados. Deseja continuar?');
                 if(resp){
-                    $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&pagAtual=1&tags=undefined')
+                    $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&pagAtual=1&tags=undefined;')
                 }else{
                     return false;
                 }
             }else{
-                $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&pagAtual=1&tags=undefined')
+                $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&pagAtual=1&tags=undefined');
             }
         })
         $(document).keydown(function(e){
@@ -137,7 +129,6 @@
                 $('.bnt').each(function(){
                     if($(this).text()=='Novo Ítem'){
                         $(this).trigger('click')
-                        //alert($('#pnl1 input').attr('name'));
                     }
                 })
                 if(!pagAtual){
@@ -148,12 +139,8 @@
                 $("a[rel=modal]").trigger("click") 
             }
         })
-        $('.previsao input').mask('00/00/0000');
-        
-        
+        //$('.previsao input').mask('00/00/0000');
         $('.tabela td select[name=parcela]').change(function(){
-            //alert('mudou');
-                //alert();
             var selecao=$(this).val().substr(0,2);
             if(selecao=='A '){
                 $('#pnl4 .novo4').each(function(){
@@ -175,45 +162,15 @@
                 $('#pnl4 .novo4 input[name=data_vencimento1]').val(data(1))
                 $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
                 $('#pnl4 .novo4 input[name=percentual1]').val(100)
-            }else /*if(selecao!='Pa' && selecao!='In')*/{
+            }else{
                 $('#pnl4 .novo4').each(function(){
                     if($(this).attr('linha')>1){
                         $(this).remove()
                     }
                 })
-                /*
-                var now = new Date();
-                var numeroMes=new Array('01','02','03','04','05','06','07','08','09','10','11','12','01','02');
-                function mesDias(mesDia){
-                    switch(mesDia){
-                        case 0:
-                        case 2:
-                        case 4:
-                        case 6:
-                        case 7:
-                        case 9:
-                        case 11:
-                        case 12:
-                            var mesDe=31;
-                            break;
-                        case 3:
-                        case 5:
-                        case 8:
-                        case 10:
-                            var mesDe=30;
-                            break;
-                        case 1:
-                        case 13:
-                            var mesDe=28;
-                            break;
-                    }
-                    return mesDe;
-                }*/
-                
                 var percent=100/selecao;
                 for(var x=1;x<parseInt(selecao)+1;x++){
                     if(x!=1){
-                        /// adciona nova parcela ///
                         $('#pnl4 table').append($('<tr linha='+x+' class=novo4><td><input size=1px type=text name=numero_parcela'+x+' /></td><td><input size=10px type=text name=data_vencimento'+x+' /></td><td><input size=10px type=text name=valor'+x+' /></td><td><input size=10px type=text name=percentual'+x+' /></td>'))
                     }
                     $('#pnl4 .novo4 input[name=numero_parcela'+x+']').val(x)
@@ -221,88 +178,39 @@
                     $('#pnl4 .novo4 input[name=valor'+x+']').val(calcula('/',$('.autoQuadro td[nome=vPedido]').text(),selecao))
                     $('#pnl4 .novo4 input[name=percentual'+x+']').val(percent)
                 }
-            }/*else if(selecao=='Pa'){
-                $('#pnl4 .novo4').each(function(){
-                    if($(this).attr('linha')>1){
-                        $(this).remove()
-                    }
-                })
-                var now = new Date();
-                var numeroMes=new Array('01','02','03','04','05','06','07','08','09','10','11','12','01','02');
-                function mesDias(mesDia){
-                    switch(mesDia){
-                        case 0:
-                        case 2:
-                        case 4:
-                        case 6:
-                        case 7:
-                        case 9:
-                        case 11:
-                        case 12:
-                            var mesDe=31;
-                            break;
-                        case 3:
-                        case 5:
-                        case 8:
-                        case 10:
-                            var mesDe=30;
-                            break;
-                        case 1:
-                        case 13:
-                            var mesDe=28;
-                            break;
-                    }
-                    return mesDe;
-                }
-                
-                
-                selecao2=$(this).val().substr(5,2);//,now.getMonth()]);
-                if(parseInt(selecao2)+parseInt(now.getDate()) <= mesDias(now.getMonth())){
-                    data_vencimento=parseInt(selecao2)+parseInt(now.getDate())+'/'+numeroMes[now.getMonth()]+'/'+now.getFullYear();
-                }else if(selecao2-(mesDias(now.getMonth())-now.getDate()) < mesDias(now.getMonth()+1)){
-                    var d=selecao2-(mesDias(now.getMonth())-now.getDate());
-                    var m=numeroMes[now.getMonth()+1];
-                    var a=now.getFullYear();
-                    
-                    if(now.getMonth()+1 == 12){ /// confere se é dezembro
-                        var a=a+1;
-                    }
-                    
-                    data_vencimento=d+'/'+m+'/'+a;
-                }else{
-                    var d=selecao2-(mesDias(now.getMonth())-now.getDate()) - mesDias(now.getMonth()+1);
-                    if(d==0){
-                        d='01';
-                    }
-                    var m=numeroMes[now.getMonth()+2];
-                    var a=now.getFullYear();
-                    
-                    if(now.getMonth()+2 == 12 || now.getMonth()+2 == 13){ /// confere se é dezembro
-                        var a=a+1;
-                    }
-                    
-                    data_vencimento=d+'/'+m+'/'+a;
-                }
-                $('#pnl4 .novo4 input[name=numero_parcela1]').val(1)
-                $('#pnl4 .novo4 input[name=data_vencimento1]').val(data_vencimento)
-                $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
-                $('#pnl4 .novo4 input[name=percentual1]').val(100)
-                
-            }*/
+            }
         })
-        /*$('.tabela td select[name=fPagamento]').change(function(){
+        $('#dados:first').on("submit", function(){
+            var vendedor=$('.tabela .vendedor :selected').text();
+            $('.vendedor input[name=vendedor]').val(vendedor);
+            if($('.tabela td select[name=fPagamento]').val()=='credito' || $('.tabela td select[name=fPagamento]').val() == 'debito'){
+                //alert($('#pnl3 tr.dados_adcionais_nf td textarea').val());
+                if($('#pnl3 tr.dados_adcionais_nf td textarea').val()==''){
+                    var dados=confirm('Não foi inserido o número do documento referente ao cartão. Deseja continuar assim mesmo?');
+                    if(!dados){
+                        $('.doc input').css('background','rgba(216, 0, 0,0.1)').focus();
+                        return false;
+                        die;
+                    }
+                }
+            }
+            $(location).attr('href','index.php?pagina=pedido&act=cad')
+        })
+        $('.tabela td select[name=fPagamento]').change(function(){
             if($(this).val()=='credito' || $(this).val()=='debito'){
                 $('.doc').show();
                 $('.doc').keyup(function(){
                     var doc=$('.doc input').val();
-                    $('#pnl3 table .novo3 input[name=dados_adcionais_nf]').val(doc);
+                    $('#pnl3 tr.dados_adcionais_nf td textarea').val(doc)
                 })
             }else{
                 $('.doc').hide();
                 $('.doc input').val('');
-                $('#pnl3 table .novo3 input[name=dados_adcionais_nf]').val('');
+                $('#pnl3 tr.dados_adcionais_nf td textarea').val('')
             }
-        })*/
+        })
+        $('.pagina').text('PRÉ-VENDA');
+        
         ///// funcoes ////
         function itemExclusao(){
             var corItem='rgba(255,0,0,0.7)';
@@ -336,18 +244,8 @@
                             boxShadow: '2px 2px 2px gray'
                         })
                     }).mouseup(function(){
-                        /*$('#pnl1 table input').each(function(){
-                            var cod_prod=$(this).attr('name');
-                            alert(cod_prod.substr(0,cod_prod.length-1));
-                        })*/
-                        //alert(conf2);
                         if(!conf2 && $('#pnl1 table span').length != 1 && $('#pnl1 table input').val().length != 0){
                             if(confirm('Confirma a exclusão do ítem '+$(this).text()+'?')){
-                                /*if($(this).text()==1){
-                                    $(this).each(function(){
-                                        alert($('#pnl1 ta'))
-                                    })
-                                }*/
                                 $('#item'+$(this).text()).remove();
                                 $('.autoQuadro td').each(function(){
                                     if($(this).attr('nome')=='tItem'){
@@ -379,12 +277,10 @@
                                         $(this).attr('linha',z)
                                     }
                                 })
-                                //alert('entrei');
                                 z=1;
                                 $('#pnl1 textarea').each(function(){
                                     nome=$(this).attr('name');
                                     $(this).attr('name',nome.substr(0,nome.length-1)+z);
-                                    //alert($(this).attr('name'));
                                     z++;
                                 })
                                 item=$('#pnl1 table .item').length;
@@ -402,15 +298,6 @@
                                 die;;
                             }
                         }
-                        /*else{
-                            if(confirm('Confirma a exclusão do ítem '+$(this).text()+'?')){
-                                $('#pnl1 td input').each(function(){
-                                    $(this).val('')
-                                })
-                            }else{
-                                return false;
-                            }
-                        }*/
                     })
                 })
             })
@@ -432,22 +319,6 @@
             })
             $('#pnl1 table input[name=codigo_produto'+item+']').trigger('focus')
             $('#pnl1 table tr .lupa img[busca='+j+']').trigger('click')
-            /*$('#pnl1 table tr .lupa img[busca='+j+']').click(function(){
-                die;
-                if(!$('.razao input').val()){
-                    var resp=alert('Preenche campo "CLIENTE"');
-                    if(!resp){
-                        $('.razao input').focus();
-                        die;
-                    }
-                    //return false;
-                }else if(!$('.cnpj input').val()){
-                    alert('Preenche campo "CNPJ/CPF"');
-                    $('.cnpj input').focus();
-                    die;
-                    return false;
-                }
-            })*/
             quadroInferior();
         }
             //// quadro inferior ////
@@ -458,42 +329,11 @@
                     $(this).mask('0000000');
                     $(this).bind('keyup click', function(){
                         pedLinha=$(this).attr('linha');
-                        //var algarismo1=qEstoque.length;
-                        //var algarismo2=$(this).val().length;
-                        //var zero=algarismo1-algarismo2;
-                        /*switch(zero){
-                            case 1:
-                                $(this).mask('00');
-                                zero='0';
-                                break;
-                            case 2:
-                                $(this).mask('000');
-                                zero='00';
-                                break;
-                            case 3:
-                                $(this).mask('0000');
-                                zero='000';
-                                break;
-                            case 4:
-                                $(this).mask('00000');
-                                zero='0000';
-                                break;
-                            default:
-                                $(this).mask('0');
-                                zero='';
-                        }*/
                         quantidade=$(this).val();
                         vUnitarioItem=($('#pnl1 tr[id=item'+pedLinha+'] input[name=vUnitarioItem'+pedLinha+']').val());
                         vTotalItem=calcula('*',vUnitarioItem,quantidade);
                         $($('#pnl1 tr[id=item'+pedLinha+'] input[name=vTotalItem'+pedLinha+  ']')).val(numeroParaMoeda(vTotalItem));
                         qEstoque=$(this).attr('qestoque');
-                        /*if(quantidade > qEstoque){
-                            alert('Quantidade em Estoque '+qEstoque+'');
-                            vTotalItem=calcula('*',vUnitarioItem,qEstoque);
-                            $($('#pnl1 tr[id=item'+pedLinha+'] input[name=vTotalItem'+pedLinha+']')).val(numeroParaMoeda(vTotalItem));
-                            $($('#pnl1 tr[id=item'+pedLinha+'] input[name=quantidade'+pedLinha+']')).val(qEstoque);
-                            
-                        }*/
                         preencheTotais();
                     })                         
                 }else if(str.substr(0,str.length-1)=='pDescontoItem'){
@@ -636,6 +476,9 @@
     .head{
         text-align: center;
         font-size: 25px;
+    }
+    #pnl2, #pnl3, #pnl4, #pnl5, #pnl6{
+        display: none;
     }
     .pag{
         font-size: 12px;
@@ -785,16 +628,29 @@
     }
     #pnl1 table td textArea{
         height: 25px;
-        //width: 700px;
-        //border: solid blue;
+    }
+    #confirmado{
+        float: right;
+        margin-top: -40px;
+        margin-right: 20px;
+        color: red;
+        animation: blinker 1s linear infinite;
+    }
+    .blink_me {
+    }
+
+    @keyframes blinker {
+      50% {
+        opacity: 0.3;
+      }
     }
 </style>
 </head>
 <body>
 <div id="menu">
     <ul>
-        <!--<li><a href=<?= Utils::createLink('pedido',array('act'=>'cad')); ?>>Incluir</a></li>-->
-        <!--<li><a href=<?= Utils::createLink('pedido',array('act'=>'list')); ?>>Listar</a></li>-->
+        <!--<li><a href=<?php //Utils::createLink('pedido',array('act'=>'cad')); ?>>Incluir</a></li>-->
+        <!--<li><a href=<?php  //Utils::createLink('pedido',array('act'=>'list')); ?>>Listar</a></li>-->
     </ul>
     <?php if($act!='cad'){?>
     <div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por produtos" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por produtos" /></div>
@@ -803,10 +659,12 @@
 <div class="conteudo">
 <?php if($act=='cad'): ?>
 <h1>Inclusão de Pedido de Venda</h1>
-<form class="fPedido" method="post" action="../paginas/add.php?act=cad&pagina=pedido">
+<span id=confirmado></span>
+<form id="dados" class="fPedido" method="post" action='../paginas/add.php?act=cad&pagina=pedido' target="_blank" >
 <table class="tabela">
     <tr><td colspan="4">Cliente</td><td align="center">Previsão Faturamento</td></tr>
-    <tr><td colspan="4" class="razao"><input type="hidden" name="cCliente" value="<?= $cCliente ?>" /><input name="cliente" type="text" size=53 value="<?= $razao ?>" required /> <img src="../web/img/lupa.png" height="14px" title="Pesquisar cliente"/><span class="tecla"> (F2)</span></td><td class="previsao"><input disabled name="dPrevisao" type="text" value="<?= date('d/m/Y') ?>" /><input name="dPrevisao" type="hidden" value="<?= date('d/m/Y') ?>" /></td></tr>
+    <?php //print_r($_GET) ?>
+    <tr><td colspan="4" class="razao"><input type="hidden" name="cCliente" value="<?= $cCliente ?>" /><input name="cliente" type="text" size=53 value="<?= $razao ?>" required /> <img src="../web/img/lupa.png" height="14px" title="Pesquisar cliente"/><span class="tecla"> (F2)</span></td><td class="previsao"><input disabled name="dPrevisao" type="text" value="<?= date('d/m/Y') ?>" /><input name="dPrevisao" type="hidden" value="<?= date('d/m/Y') ?>" /></td></tr>     <input type="hidden" name="endereco" value="<?= $_GET['endereco'] ?>" /><input type="hidden" name="endereco_numero" value="<?= $_GET['endereco_numero'] ?>" /><input type="hidden" name="endereco" value="<?= $_GET['endereco'] ?>" /><input type="hidden" name="bairro" value="<?= $_GET['bairro'] ?>" /><input type="hidden" name="cidade" value="<?= $_GET['cidade'] ?>" /><input type="hidden" name="cep" value="<?= $_GET['cep'] ?>" />
     <tr><td><font size=2px>CNPJ/CPF</font></td><!--<td>Tabela de Preço</td>--><tr>
     <tr><td class="cnpj"><input type="text" name="cnpj_cpf" required value="<?= $cnpj_cpf ?>"/></td>
         <!--<td><select name='cCodIntTabPreco'>   
@@ -842,7 +700,7 @@
     <!-- Fim do Quadro -->
 <table class="tabela">
     <tr><td>Vendedor</td><td>Número de Parcelas</td><td>Forma de Pagamento</td></tr>
-    <tr><td>
+    <tr><td class='vendedor'><input type="hidden" name="vendedor" />
             <select name="cod_vend" required>
                 <option value=""></option>
                 <?php foreach($vend as $key => $item): ?>
@@ -948,7 +806,7 @@
                                         <option value='<?= $item->cCodigo ?>'><?= $item->cDescricao ?></option>
                                 <?php endif; endforeach; ?>
                             </td></select>
-                        <?php elseif($key=='dados_adcionais_nf'): ?>                                <tr><td colspan="3">Dados Adcionais para a Nota Fiscal<br><textarea cols=40 rows="3" name='dados_adcionais_nf' /></textarea></td></tr>
+                        <?php elseif($key=='dados_adcionais_nf'): ?>                                <tr class="dados_adcionais_nf"><td colspan="3">Dados Adcionais para a Nota Fiscal<br><textarea cols=40 rows="3" name='dados_adcionais_nf'/></textarea></td></tr>
                         <?php endif; ?>
                     <?php /*$ref++;*/ endforeach; ?>
                     </tr>

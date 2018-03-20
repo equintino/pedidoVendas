@@ -5,8 +5,8 @@
         
         <script>
             $(document).ready(function(){
-                window.print();
-                window.location='../web/index.php?pagina=pedido&act=cad';
+                //window.print();
+                //window.location='../web/index.php?pagina=pedido&act=cad';
             })
             
             /* estudar
@@ -65,7 +65,7 @@
             }
             .conteudo{
                 //margin-top: 10px;
-                //width: 95mm;
+                width: 85mm;
                 //height: 297mm;
                 //border: solid red;
                 background: white;//#f3f6ac;
@@ -73,15 +73,19 @@
             }
             h3{
                 text-align: center;
-                margin: 10px 0 10px 0;
+                //margin: 10px 0 10px 0;
             }
             .endereco{
                 text-align: center;
+                font-size: 10px;
             }
             .cnpj{
                 margin-top: 10px;
+            }
+            .cnpj,.ie{
                 font-weight: 900;
                 color: black;
+                font-size: 13px;
             }
             hr{
                 margin-top: 8px;
@@ -90,7 +94,7 @@
                 text-align: center;
                 margin-top: 8px;
             }
-            .coo{
+            .pedido{
                 float: right;
             }
             .titulo1{
@@ -126,7 +130,7 @@
             }
             .total, .vTotal{
                 //font-weight: 900;
-                color: black
+                //color: black
             }
             .vTotal{
                 float: right;
@@ -142,6 +146,12 @@
                 clear: both;
                 margin-top: 20px;
             }
+            .dCliente{
+                font-style: italic;
+            }
+            .campos, .dCliente{
+                font-size: 12px;
+            }
             
             @media print{
                 .conteudo {
@@ -150,8 +160,43 @@
                     //column-count: 1;
                 }
             }
+            @page{
+                size: auto;
+                margin: 0mm;
+            }
         </style>
 <?php
+    include '../model/EmpresasCadastroJsonClient.php';
+    @$pedido=$_GET['pedido'];
+    @$vendedor=$_POST['vendedor'];
+    
+    $emp=new EmpresasCadastroJsonClient();
+    $empresas_list_request=array("pagina"=>1,"registros_por_pagina"=>100,"apenas_importado_api"=>"N");
+    $empresa=$emp->ListarEmpresas($empresas_list_request)->empresas_cadastro;
+    
+    //echo '<pre>';
+    foreach($empresa as $item){
+        //print_r($item);
+        $bairro=$item->bairro;
+        $cep=$item->cep;
+        $cidade=$item->cidade;
+        $cnpj=$item->cnpj;
+        $codigo_empresa=$item->codigo_empresa;
+        $complemento=$item->complemento;
+        $email=$item->email;
+        $endereco=$item->endereco;
+        $endereco_numero=$item->endereco_numero;
+        $estado=$item->estado;
+        $inscricao_estadual=$item->inscricao_estadual;
+        $nome_fantasia=$item->nome_fantasia;
+        $razao_social=$item->razao_social;
+        $telefone1_ddd=$item->telefone1_ddd;
+        $telefone1_numero=$item->telefone1_numero;
+        $website=$item->website;
+    }
+    //echo $website;
+    //die;
+    
     //echo '<pre>';print_r($pedido_venda_produto);
     @$tItens=$pedido_venda_produto->cabecalho->quantidade_itens;
     
@@ -171,18 +216,25 @@
     </head>
     <body>
         <div class="conteudo">
-            <h3>Nome do Estabelecimento</h3>
-            <div class="endereco">Endereço, Número - Bairro<br>Rio de Janeiro - RJ CEP 00000-000</div>
-            <div class="cnpj">CNPJ: 00.000.000/0000-00<br></div>
-            <div class="ie">IE: 000.000.000.000<br></div>
-            <div class="IM">IM:0.000.000-0</div>
+            <h3><?= $razao_social ?></h3>
+            <div class="endereco"><?= $endereco ?>, <?= $endereco_numero ?> - <?= $complemento ?> - <?= $bairro ?><br><?= $estado ?> - CEP <?= $cep ?> / Tel. (<?= $telefone1_ddd ?>) <?= $telefone1_numero ?></div>
+            <div class="cnpj">CNPJ: <?= $cnpj ?><br></div>
+            <div class="ie">IE: <?= $inscricao_estadual ?><br></div>
+            <!--<div class="IM">IM:0.000.000-0</div>-->
             <hr>
             <span class="data"><?= date('d/m/Y h:m:s') ?></span>
             <!--O CCF significa Contador de Cupom Fiscal, que serve como um contador da impressora fiscal que conta os cupons fiscais emitidos pela impressora fiscal.
 
             O COO, Contador de Ordem de Operação, é o número mais destacado em negrito. Este número é o número do Cupom Fiscal. Os números do CCO registram o primeiro e o último documento emitidos no dia-->
-            <span class="ccf">CCF: 000000</span>
-            <span class="coo">COO: 000000</span>
+            <span class="pedido">Pedido: <?= preg_replace('/^0+/','',$numero_pedido) ?></span><br>
+            <span>Vendedor: <?= @$vendedor ?></span><br>
+            <hr>
+            <span class="campos">Cliente: </span><span class="dCliente"><?= $_POST['cliente'] ?></span><br>
+            <span class="campos">Endereço: </span><span class="dCliente"><?= $_POST['endereco'] ?></span><br>
+            <span class="campos">Bairro: </span><span class="dCliente"><?= $_POST['bairro'] ?></span>&nbsp&nbsp&nbsp <span class="campos">Cep: </span><span class="dCliente"><?= substr($_POST['cep'],0,4).'-'.substr($_POST['cep'],5,3) ?></span><br>
+            <span class="campos">Cidade: </span><span class="dCliente"><?= $_POST['cidade'] ?></span><br>
+            <span class="campos">CPF/CNPJ: </span><span class="dCliente"><?= $_POST['cnpj_cpf'] ?></span><br>
+            <hr>
             <h2>CUPOM FISCAL</h2>
             <div class="titulo1">
                 <span>ÍTEM &nbsp&nbsp&nbspCODIGO</span><span class="descricao">DESCRIÇÃO<br></span>

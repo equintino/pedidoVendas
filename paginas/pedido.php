@@ -5,6 +5,8 @@
     @$excl=$_GET['excl'];
     @$contaAtualiza=$_GET['contaAtualiza'];
     @$vendedorAtualiza=$_GET['vendedorAtualiza'];
+    @$correiosAtualiza=$_GET['$correiosAtualiza'];
+    @$etapaAtualiza=$_GET['$etapaAtualiza'];
     
     if(array_key_exists('razao', $_GET)){
         $razao=$_GET['razao'];
@@ -74,7 +76,7 @@
        $nCodCC='740899824';
        $descricao='Santander';
    }
-   
+   //$vendedorAtualiza=1;
    if($vendedorAtualiza==1){
         $vendedor=new VendedoresCadastroJsonClient();
         $vendListarRequest=array("pagina"=>"1","registros_por_pagina"=>"50","apenas_importado_api"=>"N");
@@ -99,35 +101,37 @@
         $detalheParc->nQtdeParc=$item['nQtdeParc'];
         array_push($parcela, $detalheParc);
     }
-        //echo '<pre>';print_r($parcela);die;
-   
-   /*$parc=new FormasPagVendasJsonClient();
-   $parcelaListarRequest=array("pagina"=>1,"registros_por_pagina"=>100);
-   $parcela=$parc->ListarFormasPagVendas($parcelaListarRequest)->cadastros;
-   echo '<pre>';print_r($parcela);die;*/
-   
-   $clientes_list_request=array("pagina"=>1,"registros_por_pagina"=>100);
-   $clientes=new ClientesCadastroJsonClient();
-   $cliente=$clientes->ListarClientes($clientes_list_request)->clientes_cadastro;
-   foreach($cliente as $item){
-       if($item->tags[0]='Transportadora'){
-           if($item->nome_fantasia=='Correios'){
-               $correios=$item;
+    //$correiosAtualiza=1;
+    if($correiosAtualiza==1){
+        $clientes_list_request=array("pagina"=>1,"registros_por_pagina"=>100);
+        $clientes=new ClientesCadastroJsonClient();
+        $cliente=$clientes->ListarClientes($clientes_list_request)->clientes_cadastro;
+        foreach($cliente as $item){
+           if($item->tags[0]='Transportadora'){
+               if($item->nome_fantasia=='Correios'){
+                   $correios=$item;
+                   break;
+               }
            }
-       }
-   }
-   
-   $etapas=new EtapasFaturamentoJsonClient();
-   $etaproListarRequest=array("pagina"=>1,"registros_por_pagina"=>100);
-   $etapa=$etapas->ListarEtapasFaturamento($etaproListarRequest)->cadastros;
-   //foreach($etapa as $item){
-       //print_r($item);die;
-   //}
-   $selEtapa=($etapa[2]->etapas);
-   
-   $tabPreco=new TabelaPrecosJsonClient();
-   $tprListarRequest=array("nPagina"=>1,"nRegPorPagina"=>20);
-   $tabelaPreco=$tabPreco->ListarTabelasPreco($tprListarRequest)->listaTabelasPreco;
+        }
+    }else{
+        $correios=array('bairro'=>'CIDADE NOVA','cep'=>'20210900','cidade'=>'RIO DE JANEIRO (RJ)','cidade_ibge'=>'3304557','cnae'=>'5310501','cnpj_cpf'=>'34.028.316/0002-94','codigo_cliente_integracao'=>'','codigo_cliente_omie'=>'743699622','codigo_pais'=>'1058','complemento'=>'','endereco'=>'AV PRESIDENTE VARGAS','endereco_numero'=>'3077','estado'=>'RJ','exterior'=>'N','info'=>array('cImpAPI'=>'N','dAlt'=>'18/01/2018','dInc'=>'18/01/2018','hAlt'=>'16:57:03','hInc'=>'16:42:18','uAlt'=>'P000065360'),'uInc'=>'P000065360','inscricao_estadual'=>'','inscricao_municipal'=>'','nome_fantasia'=>'Correios','pessoa_fisica'=>'N','razao_social'=>'EMPRESA BRASILEIRA DE CORREIOS E TELEGRAFOS','tags'=>array('Transportadora',array('tag'=>'Transportadora')),'telefone1_ddd'=>'21','telefone1_numero'=>'2503-8152');
+    }
+    
+    //$etapaAtualiza=1;
+    if($etapaAtualiza==1){
+        $etapas=new EtapasFaturamentoJsonClient();
+        $etaproListarRequest=array("pagina"=>1,"registros_por_pagina"=>100);
+        $etapa=$etapas->ListarEtapasFaturamento($etaproListarRequest)->cadastros;
+        $selEtapa=($etapa[2]->etapas);
+    }else{
+        $selEtapa=array(array('cCodigo'=>'00','cDescrPadrao'=>'Proposta','cDescricao'=>'Pedido de Venda'),array('cCodigo'=>'10','cDescrPadrao'=>'Pedido de Venda','cDescricao'=>'Pedido de Venda'),array('cCodigo'=>'20','cDescrPadrao'=>'Separar Estoque','cDescricao'=>'Separar Estoque'),array('cCodigo'=>'50','cDescrPadrao'=>'Faturar','cDescricao'=>'Faturar'),array('cCodigo'=>'60','cDescrPadrao'=>'Faturado','cDescricao'=>'Faturado'),array('cCodigo'=>'70','cDescrPadrao'=>'Entrega','cDescricao'=>'Entrega'),array('cCodigo'=>'80','cDescrPadrao'=>'','cDescricao'=>''));
+    }
+    echo '<pre>';print_r($selEtapa);die;
+
+    $tabPreco=new TabelaPrecosJsonClient();
+    $tprListarRequest=array("nPagina"=>1,"nRegPorPagina"=>20);
+    $tabelaPreco=$tabPreco->ListarTabelasPreco($tprListarRequest)->listaTabelasPreco;
             //foreach($tabelaPreco as $key => $item): ?>
             <?php //die;//endforeach;
    //echo '<pre>';print_r($tabelaPreco);//die;//cCodIntTabPreco cNome

@@ -13,6 +13,7 @@
 <?php
     $act=$_GET['act'];
     @$pagina=$_GET['pagina'];
+    //echo '<pre>';print_r([$_GET,$_POST]);//die;
     
     if($act=='atualiza'){
         include 'criaClasses.php';
@@ -368,8 +369,9 @@
         $pedido_venda_produto->lista_parcelas=$lista_parcelas;
         
         echo '<pre>';print_r($pedido_venda_produto);die;
-        include 'imprime.php';//die;
-        $pedido->IncluirPedido($pedido_venda_produto);
+        $resultado=$pedido->IncluirPedido($pedido_venda_produto);
+        $numero_pedido=$resultado->numero_pedido;
+        include 'imprime.php';
         //header('Location:../web/index.php?pagina=pedido&act=cad');
         die;
         /*
