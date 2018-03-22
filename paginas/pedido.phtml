@@ -112,7 +112,6 @@
             }
         })
         $(document).keydown(function(e){
-            //alert(e.which);//116(f5)113(f2)114(f3)
             if(e.which==113){
                 if($('form').hasClass('#pnl1') || $('#pnl1 input').val()){
                     var resp=confirm('Você já adcionou itens a este pedido, estes dados serão descartados. Deseja continuar?');
@@ -127,10 +126,6 @@
             }else if(e.which==112){
                 return false;
             }else if(e.which==115){
-                return false;
-            }else if(e.which==116){
-                return false;
-            }else if(e.which==114){
                 $('.bnt').each(function(){
                     if($(this).text()=='Novo Ítem'){
                         $(this).trigger('click')
@@ -142,6 +137,10 @@
                 link='../paginas/formItem.php?codigo_produto='+codigo_produto+'&pagAtual='+pagAtual+'';
                 $('a[rel=modal]').attr('href',link);
                 $("a[rel=modal]").trigger("click")
+                return false;
+            }else if(e.which==116){
+                return false;
+            }else if(e.which==114){
                 return false;
             }
         })
@@ -186,6 +185,7 @@
                 }
             }
         })
+        var segue=null;
         $('#dados:first').on("submit", function(){
             var vendedor=$('.tabela .vendedor :selected').text();
             $('.vendedor input[name=vendedor]').val(vendedor);
@@ -195,11 +195,39 @@
                     if(!dados){
                         $('.doc input').css('background','rgba(216, 0, 0,0.1)').focus();
                         return false;
-                        die;
                     }
                 }
             }
-            $(location).attr('href','index.php?pagina=pedido&act=cad&enviado=1')
+            $('#pnl1 textarea').each(function(){
+                if(!$(this).val()){
+                    var linha=$(this).attr('linha');
+                    var codProd=$('#pnl1 input[name=codigo_produto'+linha+']').val();
+                    if(segue!=1){
+                        perg=confirm('Não foi inserido o serial para o ítem '+codProd+'. Deseja continuar assim mesmo?');
+                        if(!perg){
+                            $(this).css('background','rgba(216, 0, 0,0.1)').focus()
+                            return false;
+                        }
+                    }
+                }
+            })
+            if(perg){
+                if($('#pnl4 input').val()==''){
+                    alert('Defina as parcelas.');
+                    $('.outrosItens span').each(function(){
+                        if($(this).val()==''){
+                            if($(this).text()=='Parcelas'){
+                                $(this).trigger('click')
+                            }
+                        }
+                    })
+                    segue=1;
+                    return false;
+                }
+                $(location).attr('href','index.php?pagina=pedido&act=cad&enviado=1')
+            }else{
+                return false;
+            }
         })
         $('.tabela td select[name=fPagamento]').change(function(){
             if($(this).val()=='credito' || $(this).val()=='debito'){
@@ -360,15 +388,11 @@
                 }
             })
             $('#serial').hide()
-            $('#pnl1 textarea').click(function(){
+            $('#pnl1 textarea').focus(function(){
                 linhaSerial=$(this).attr('linha');
-                //alert(linhaSerial);
                 $('#serial').show()
                 $('#serial textarea').focus()
                 $('#serial textarea').blur(function(){
-                    /*$('span#transf').click(function(){
-                        alert($(this).text());
-                    })*/
                     if($(this).val()!=''){
                         var msg=confirm('Transfere o serial para campo?');
                         if(msg){
@@ -754,7 +778,14 @@
             <select name="cod_vend" required>
                 <option value=""></option>
                 <?php foreach($vend as $key => $item): ?>
-                <option value="<?= $item->codigo ?>"><?= $item->nome ?></option>
+                <?php 
+                    if(mb_strtoupper(trim($item->nome),'utf-8') == mb_strtoupper(trim($login,'utf-8'))){
+                        $selected='selected=\'selected\'';
+                    }else{
+                        $selected='';
+                    }
+                ?>
+                <option value="<?= $item->codigo ?>" <?= $selected ?> ><?= $item->nome ?></option>
                 <?php endforeach; ?>
             </select>
             <img height=15px src="../web/img/atualiza.png" title="Atualiza lista de vendedores"/>
@@ -785,7 +816,7 @@
     </div>
         <div id='pnl1'>
             <div id='botoes'>
-                <span class="tecla">(F3) </span><span class='bnt'>Novo Ítem</span><span class='bnt'>Excluir Ítem</span><span class='loja'></span>
+                <span class="tecla">(F4) </span><span class='bnt'>Novo Ítem</span><span class='bnt'>Excluir Ítem</span><span class='loja'></span>
             </div>
             <div class="divVendas dItem">
                 <table>

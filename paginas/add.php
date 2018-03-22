@@ -116,11 +116,7 @@
                 die;
         }elseif($act=='cad'){
             $produto_servico_cadastro=$_POST;
-            //[{%22codigo_produto_integracao%22:%22123456%22,%22codigo_produto%22:%22%22,%22descricao%22:%22Produto%20de%20teste%22,%22unidade%22:%22UN%22,%22ncm%22:%229504.10.99%22,%22valor_unitario%22:%22100.99%22}],%22app_key%22:%223303943460%22,%22app_secret%22:%228edb08391b6af27936d3daf0ca8aa07d%22}
-            //[descricao_status] => Produto cadastrado com sucesso! )
-            //$produto_servico_cadastro=array("codigo_produto_integracao" => "15185297955","codigo_produto"=>"","descricao" => "Produto de teste","unidade" => "UN","ncm" => '9504.10.99',"valor_unitario"=>"100.99");
             if($status=$produto->IncluirProduto($produto_servico_cadastro)){
-            //if($status==null)$status->descricao_status=0;
             if($status->descricao_status!='Produto cadastrado com sucesso!'){
                 echo "Não foi possível efetuar o cadastro.";
                 echo '<br>';
@@ -148,52 +144,10 @@
         include '../config/OmieAppAuth.php';
         include '../model/PedidoVendaProdutoJsonClient.php';
         $pedido=new PedidoVendaProdutoJsonClient();
-        //echo '<pre>';print_r($_POST);
         $parCod=explode(',', $_POST['parcela']);
-        //print_r($parCod[1]);die;
-        //$parc=substr($_POST['parcela'],0,2);
-        /*if($parc == 'Pa'){
-            $parc=substr($_POST['parcela'],5,2);
-            $parcela=1;
-            $cParcela='001';
-        }else{*/
-            /*switch (strlen(trim($parc))){
-                case 1:
-                    $zero='00';
-                    break;
-                case 2:
-                    $zero='0';
-                    break;
-                case 3:
-                    $zero='';
-                    break;
-            }
-            $cParcela=$zero.$parc;*/
-            //echo $parcela;die;
-            $parcela=$parCod[2];
-            //echo $parcela;die;
-            //$vlr=$parc_=0;
-            //echo intval(30);die;
-            //for($x=0;$x<$parc;$x++){
-                //echo $x.'<br>';
-                //$vlr += intval(30);
-                //$parc_.$x = 1;
-                //echo ($parc_).($x).'<br>';//die;
-                //echo $vlr.'<br>';
-            //}
-                //echo $parc1.'<br>';die;
-            $parc=null;
-        //}
+        $parcela=$parCod[2];
+        $parc=null;
         $cParcela=$parCod[1];
-        //print_r([$parcela,$cParcela]);die;
-        //echo strlen($parc).$cParcela;die;
-        
-            /*
-            [codigo_cliente_integracao] => 
-            [codigo_empresa] => 740225718
-            [codigo_empresa_integracao] => 
-            [codigo_pedido] => 742241154
-            [importado_api] => */
         
         ///// cabecalho /////
         $cabecalho=new cabecalho();
@@ -209,20 +163,17 @@
         $cabecalho->quantidade_itens=$_POST['tItem'];
         
         
-        //echo $parcela;die;
         $parcelas=array();
         for($x=0;$x<$parcela;$x++){
             $y=$x+1;
             if(!$parc){
                 $parc=$y*30;
             }
-            //echo $_POST['valor'.$y.''];die;
             $lista_parcelas=new lista_parcelas();
             array_push($parcelas,array('data_vencimento'=>$_POST['data_vencimento'.$y.''],'numero_parcela'=>$y,'percentual'=>$_POST['percentual'.$y.''],'quantidade_dias'=>$parc,'valor'=>str_replace(',','.',$_POST['valor'.$y.''])));
             $parc=null;
         }
         $lista_parcelas->parcela=$parcelas;
-        //echo '<pre>';print_r($lista_parcelas);die;
                 
         $det=array();
         for($x=1;$x <= $_POST['tItem'];$x++){
@@ -231,29 +182,12 @@
             $produto=new produto();
             $inf_adic=new inf_adic();
             
-            //print_r(nl2br($_POST['obs_item'.$x.'']));die;
         
             array_push($det,array('ide'=>$ide,'observacao'=>$observacao,'produto'=>$produto,'inf_adic'=>$inf_adic));
             $ide->codigo_item='';
             $ide->codigo_item_integracao=$_POST['codigo_produto'.$x.''];
 
-            //$observacao->obs_item=$_POST['obs_item'.$x.''];//.','.$_POST['obs_item'.$x.''];
-        
-        
-        /*
-        [cfop] => 5.405
-        [codigo] => 783
-        [codigo_tabela_preco] => 742240473
-        [ean] => 7898930919331
-        [ncm] => 8528.52.20
-        [unidade] => PC
-        [valor_deducao] => 0
-        
-         */        
-        
-        
             ///// produto //////
-            //echo '<pre>';print_r($_POST);die;
             $produto->codigo_produto=$_POST['cOmie'.$x.''];
             $produto->descricao=$_POST['descricao'.$x.''];
             $produto->quantidade=$_POST['quantidade'.$x.''];
@@ -267,7 +201,6 @@
             $produto->ncm=$_POST['ncm'.$x.''];
             $produto->unidade=$_POST['unidade'.$x.''];
             $produto->percentual_desconto=$_POST['pDescontoItem'.$x.''];
-            //$produto->codigo_tabela_preco=$_POST['cCodIntTabPreco'.$x.''];
             
             $inf_adic->dados_adicionais_item=nl2br($_POST['obs_item'.$x.'']);
             
@@ -279,46 +212,6 @@
             $produto->valor_total=$vTotal;
         }
         
-        //// Observação ////
-        ///????? $observacao=new observacao();
-        ///????? $observacao->obs_item=$_POST['observacao'];
-        
-        //// Imposto ////
-        /*
-        $imposto=new imposto();
-        $imposto->icms_sn=$_POST['icmsSn'];
-        $imposto->icms=$_POST['icms'];
-        $imposto->icms_st=$_POST['icmsSt'];
-        $imposto->icms_ie=$_POST['icmsIe'];
-        $imposto->ipi=$_POST['ipi'];
-        $imposto->pis_padrao=$_POST['pisPadrao'];
-        $imposto->pis_st=$_POST['pisSt'];
-        $imposto->cofins_padrao=$_POST['cofinsPadrao'];
-        $imposto->cofins_st=$_POST['cofinsSt'];
-        $imposto->inss=$_POST['inss'];
-        $imposto->csll=$_POST['csll'];
-        $imposto->irrf=$_POST['irrf'];
-        $imposto->iss=$_POST['iss'];
-        */
-        
-        /*
-            [especie_volumes] => 
-            [marca_volumes] => 
-            [modalidade] => 9
-            [numeracao_volumes] =>                                                        
-            [numero_lacre] => 
-            [outras_despesas] => 0
-            [peso_bruto] => 0
-            [peso_liquido] => 0
-            [placa] => 
-            [placa_estado] => 
-            [registro_transportador] => 
-            [valor_frete] => 0
-            [valor_seguro] => 0
-            [veiculo_proprio] => 
-        */
-        
-        
         //// Frete ////
         $frete=new frete();
         $frete->codigo_transportadora=$_POST['codigo_transportadora'];
@@ -326,25 +219,7 @@
         $frete->quantidade_volumes=$_POST['qvolume'];
         $frete->modalidade=substr($_POST['tfrete'],0,1);
         
-        
-        
-        /*
-        [codProj] => 0
-            [codVend] => 742241153
-            [consumidor_final] => N
-            [contato] => 
-            [dados_adicionais_nf] => 
-            [enviar_email] => 
-            [numero_contrato] => 
-            [numero_pedido_cliente] => 
-            [utilizar_emails] => 
-         * 
-         */
-        
-        
         //// Informacoes Adcionais //////
-        //$_POST['codigo_categoria']="1.01.03";
-        //$_POST['codigo_conta_corrente']=740899824;//1229930303;
         $informacoes_adicionais=new informacoes_adicionais();
         $informacoes_adicionais->codigo_categoria=$_POST['codigo_categoria'];
         $informacoes_adicionais->codigo_conta_corrente=$_POST['codigo_conta_corrente'];
@@ -357,22 +232,18 @@
         //// Total Pedido ////
         $tPedido=new total_pedido();
         
-               // echo '<pre>';
-        //print_r([$cabecalho,$det,$produto,$observacao]);die;
         
         $pedido_venda_produto=new pedido_venda_produto();
         $pedido_venda_produto->cabecalho=$cabecalho;
         $pedido_venda_produto->det=$det;
         $pedido_venda_produto->frete=$frete;
         $pedido_venda_produto->informacoes_adicionais=$informacoes_adicionais;
-        //$pedido_venda_produto->observacoes=$observacao;
         $pedido_venda_produto->lista_parcelas=$lista_parcelas;
         
         //echo '<pre>';print_r([$_POST,$pedido_venda_produto]);die;
-        //$resultado=$pedido->IncluirPedido($pedido_venda_produto);
+        $resultado=$pedido->IncluirPedido($pedido_venda_produto);
         @$numero_pedido=$resultado->numero_pedido;
         include 'imprime.php';
-        //header('Location:../web/index.php?pagina=pedido&act=cad');
         die;
         /*
     

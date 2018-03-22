@@ -1,9 +1,8 @@
 <meta charset="utf-8" >
 <?php
     include '../paginas/janela.php';
-    //print_r($valida=new valida_cookies());
-    //print_r(OMIE_APP_KEY);
-
+    
+    @$login=$_COOKIE['login'];
     @$excl=$_GET['excl'];
     @$enviado=$_GET['enviado'];
     @$contaAtualiza=$_GET['contaAtualiza'];
@@ -188,6 +187,5 @@
                                     'aliq_pis','base_pis','cod_sit_trib_pis','tipo_calculo_pis','valor_pis'
                                 )
                         )
-                    );
-    //{"aliquota_cofins":0,"aliquota_ibpt":0,"aliquota_icms":0,"aliquota_pis":0,"bloqueado":"N","cest":"","cfop":"","codInt_familia":"","codigo":"1000","codigo_familia":0,"codigo_produto":1229930876,"codigo_produto_integracao":"","csosn_icms":"","cst_cofins":"","cst_icms":"","cst_pis":"","dadosIbpt":{"aliqEstadual":0,"aliqFederal":0,"aliqMunicipal":0,"chave":"","fonte":"","valido_ate":"","valido_de":"","versao":""},"descr_detalhada":"","descricao":"Mouse sem fio Microsoft","descricao_familia":"","ean":"","estoque_minimo":10,"importado_api":"N","inativo":"N","ncm":"9504.10.99","obs_internas":"","peso_bruto":0,"peso_liq":0,"quantidade_estoque":10,"recomendacoes_fiscais":{"cupom_fiscal":"N","id_cest":"","id_preco_tabelado":0,"origem_mercadoria":""},"red_base_icms":0,"tipoItem":"00","unidade":"UN","valor_unitario":150}            
+                    );      
 ?>
