@@ -15,9 +15,6 @@
                 document.cookie='login='+login+';path=/';
                 document.cookie='senha='+senha+';path=/';
             })
-            //$('form input').attr('name','login').val();
-            //alert($(':text').attr('name','senha').val());
-            //$(':submit').trigger('click');
         })
     </script>
 </head>
@@ -35,10 +32,10 @@
                 <form action="main.php" name='formlogin' id="signinForm" class="signinForm" method="post" >   
                 <ul>
                     <li>
-                        <input type="text" name="login" id="uname_log" placeholder="OMIE_APP_KEY" class="required requiredField Email fg-input text fg-fw" autofocus />
+                        <input type="text" name="login" id="uname_log" placeholder="Login" class="required requiredField Email fg-input text fg-fw" autofocus />
                     </li>
                     <li>
-                        <input type="password" name="senha" id="password_log" value="" placeholder="OMIE_APP_SECRET" class="required requiredField  fg-input text fg-fw" />
+                        <input type="password" name="senha" id="password_log" value="" placeholder="Senha" class="required requiredField  fg-input text fg-fw" />
                     </li>
                     <li>
                         <div class="clear"></div>

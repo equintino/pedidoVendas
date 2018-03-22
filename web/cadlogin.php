@@ -1,27 +1,18 @@
 <meta charset="UTF-8">
 <?php
     include '../validacao/valida_cookies.php';
-    
-    $nome=$_POST['nome'];
-    $login=$_POST['login'];
-    $email=$_POST['email'];
-    $senha=$_POST['senha'];
-    $setor=$_POST['setor'];
-    $funcao=$_POST['funcao'];
-    
     $criptografia = new valida_cookies(); 
     $dao = new UserDao();
     $user = new User();
-
-    $senha=($criptografia->criptografia($senha));
-    
-    $user->setNome($nome);
-    $user->setLogin($login);
-    $user->setSenha($senha);
-    $user->setemail($email);
-    $user->setSetor($setor);
-    $user->setFuncao($funcao);
-    
+    foreach($_POST as $key => $item){
+        if($key!='senha2'&&$key!='senha'){
+            $classe='set'.$key;
+            $user->$classe($item);
+        }elseif($key=='senha'){
+            $classe='set'.$key;
+            $user->$classe($criptografia->criptografia($item));            
+        }
+    }    
     $dao->save($user);
     
     $string="Location: ../index.html";

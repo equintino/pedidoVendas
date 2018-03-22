@@ -41,11 +41,17 @@ final class UserMapper {
         if (array_key_exists('email', $properties)){
             $user->setEmail($properties['email']);
         }
-        if (array_key_exists('setor', $properties)){
-            $user->setSetor($properties['setor']);
+        if (array_key_exists('loja', $properties)){
+            $user->setLoja($properties['loja']);
         }
         if (array_key_exists('funcao', $properties)){
             $user->setFuncao($properties['funcao']);
+        }
+        if (array_key_exists('OMIE_APP_KEY', $properties)){
+            $user->setOMIE_APP_KEY($properties['OMIE_APP_KEY']);
+        }
+        if (array_key_exists('OMIE_APP_SECRET', $properties)){
+            $user->setOMIE_APP_SECRET($properties['OMIE_APP_SECRET']);
         }
     }
 }

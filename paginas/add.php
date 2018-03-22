@@ -13,7 +13,6 @@
 <?php
     $act=$_GET['act'];
     @$pagina=$_GET['pagina'];
-    //echo '<pre>';print_r([$_GET,$_POST]);//die;
     
     if($act=='atualiza'){
         include 'criaClasses.php';
@@ -231,6 +230,8 @@
             $observacao=new observacao();
             $produto=new produto();
             $inf_adic=new inf_adic();
+            
+            //print_r(nl2br($_POST['obs_item'.$x.'']));die;
         
             array_push($det,array('ide'=>$ide,'observacao'=>$observacao,'produto'=>$produto,'inf_adic'=>$inf_adic));
             $ide->codigo_item='';
@@ -268,7 +269,7 @@
             $produto->percentual_desconto=$_POST['pDescontoItem'.$x.''];
             //$produto->codigo_tabela_preco=$_POST['cCodIntTabPreco'.$x.''];
             
-            $inf_adic->dados_adicionais_item=$_POST['obs_item'.$x.''];
+            $inf_adic->dados_adicionais_item=nl2br($_POST['obs_item'.$x.'']);
             
                 
             /// calculando ///
@@ -365,12 +366,11 @@
         $pedido_venda_produto->frete=$frete;
         $pedido_venda_produto->informacoes_adicionais=$informacoes_adicionais;
         //$pedido_venda_produto->observacoes=$observacao;
-        //echo '<pre>';print_r($lista_parcelas);die;
         $pedido_venda_produto->lista_parcelas=$lista_parcelas;
         
-        echo '<pre>';print_r($pedido_venda_produto);die;
-        $resultado=$pedido->IncluirPedido($pedido_venda_produto);
-        $numero_pedido=$resultado->numero_pedido;
+        //echo '<pre>';print_r([$_POST,$pedido_venda_produto]);die;
+        //$resultado=$pedido->IncluirPedido($pedido_venda_produto);
+        @$numero_pedido=$resultado->numero_pedido;
         include 'imprime.php';
         //header('Location:../web/index.php?pagina=pedido&act=cad');
         die;

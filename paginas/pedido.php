@@ -1,12 +1,16 @@
 <meta charset="utf-8" >
 <?php
     include '../paginas/janela.php';
+    //print_r($valida=new valida_cookies());
+    //print_r(OMIE_APP_KEY);
 
     @$excl=$_GET['excl'];
+    @$enviado=$_GET['enviado'];
     @$contaAtualiza=$_GET['contaAtualiza'];
     @$vendedorAtualiza=$_GET['vendedorAtualiza'];
     @$correiosAtualiza=$_GET['$correiosAtualiza'];
     @$etapaAtualiza=$_GET['$etapaAtualiza'];
+    @$tabelaPrecoAtualiza=$_GET['$tabelaPrecoAtualiza'];
     
     if(array_key_exists('razao', $_GET)){
         $razao=$_GET['razao'];
@@ -33,6 +37,11 @@
     }else{
         $email=null;
     }
+    if(array_key_exists('enviado', $_GET)){
+        echo '<script>var enviado=1</script>';
+    }else{
+        echo '<script>var enviado=null</script>';
+    }
     if($excl==1){
         print_r($_GET);die;
     }
@@ -44,12 +53,8 @@
     
     $pedido=new PedidoVendaProdutoJsonClient();
     $cliente=new ClientesCadastroJsonClient();
-    
-    //$caracteristica->ListarCaractProduto($prcListarCaractRequest);
-    //echo '<pre>';print_r($caracteristica);die;
-    
+        
     $pvpListarRequest=array('pagina'=>'1','registros_por_pagina'=>'50');
-    //echo '<pre>';print_r($pedido->ListarPedidos($pvpListarRequest)->pedido_venda_produto);die;
     if(!isset($quant))
         $quant=0;
     
@@ -115,7 +120,11 @@
            }
         }
     }else{
-        $correios=array('bairro'=>'CIDADE NOVA','cep'=>'20210900','cidade'=>'RIO DE JANEIRO (RJ)','cidade_ibge'=>'3304557','cnae'=>'5310501','cnpj_cpf'=>'34.028.316/0002-94','codigo_cliente_integracao'=>'','codigo_cliente_omie'=>'743699622','codigo_pais'=>'1058','complemento'=>'','endereco'=>'AV PRESIDENTE VARGAS','endereco_numero'=>'3077','estado'=>'RJ','exterior'=>'N','info'=>array('cImpAPI'=>'N','dAlt'=>'18/01/2018','dInc'=>'18/01/2018','hAlt'=>'16:57:03','hInc'=>'16:42:18','uAlt'=>'P000065360'),'uInc'=>'P000065360','inscricao_estadual'=>'','inscricao_municipal'=>'','nome_fantasia'=>'Correios','pessoa_fisica'=>'N','razao_social'=>'EMPRESA BRASILEIRA DE CORREIOS E TELEGRAFOS','tags'=>array('Transportadora',array('tag'=>'Transportadora')),'telefone1_ddd'=>'21','telefone1_numero'=>'2503-8152');
+        $transportadora_=array('bairro'=>'CIDADE NOVA','cep'=>'20210900','cidade'=>'RIO DE JANEIRO (RJ)','cidade_ibge'=>'3304557','cnae'=>'5310501','cnpj_cpf'=>'34.028.316/0002-94','codigo_cliente_integracao'=>'','codigo_cliente_omie'=>'743699622','codigo_pais'=>'1058','complemento'=>'','endereco'=>'AV PRESIDENTE VARGAS','endereco_numero'=>'3077','estado'=>'RJ','exterior'=>'N','info'=>array('cImpAPI'=>'N','dAlt'=>'18/01/2018','dInc'=>'18/01/2018','hAlt'=>'16:57:03','hInc'=>'16:42:18','uAlt'=>'P000065360'),'uInc'=>'P000065360','inscricao_estadual'=>'','inscricao_municipal'=>'','nome_fantasia'=>'Correios','pessoa_fisica'=>'N','razao_social'=>'EMPRESA BRASILEIRA DE CORREIOS E TELEGRAFOS','tags'=>array('Transportadora',array('tag'=>'Transportadora')),'telefone1_ddd'=>'21','telefone1_numero'=>'2503-8152');
+            $correios=new cliente();
+        foreach($transportadora_ as $key => $item){
+            $correios->$key=$item;
+        }
     }
     
     //$etapaAtualiza=1;
@@ -125,22 +134,25 @@
         $etapa=$etapas->ListarEtapasFaturamento($etaproListarRequest)->cadastros;
         $selEtapa=($etapa[2]->etapas);
     }else{
-        $selEtapa=array(array('cCodigo'=>'00','cDescrPadrao'=>'Proposta','cDescricao'=>'Pedido de Venda'),array('cCodigo'=>'10','cDescrPadrao'=>'Pedido de Venda','cDescricao'=>'Pedido de Venda'),array('cCodigo'=>'20','cDescrPadrao'=>'Separar Estoque','cDescricao'=>'Separar Estoque'),array('cCodigo'=>'50','cDescrPadrao'=>'Faturar','cDescricao'=>'Faturar'),array('cCodigo'=>'60','cDescrPadrao'=>'Faturado','cDescricao'=>'Faturado'),array('cCodigo'=>'70','cDescrPadrao'=>'Entrega','cDescricao'=>'Entrega'),array('cCodigo'=>'80','cDescrPadrao'=>'','cDescricao'=>''));
+        $selEtapa_=array(array('cCodigo'=>'00','cDescrPadrao'=>'Proposta','cDescricao'=>'Pedido de Venda'),array('cCodigo'=>'10','cDescrPadrao'=>'Pedido de Venda','cDescricao'=>'Pedido de Venda'),array('cCodigo'=>'20','cDescrPadrao'=>'Separar Estoque','cDescricao'=>'Separar Estoque'),array('cCodigo'=>'50','cDescrPadrao'=>'Faturar','cDescricao'=>'Faturar'),array('cCodigo'=>'60','cDescrPadrao'=>'Faturado','cDescricao'=>'Faturado'),array('cCodigo'=>'70','cDescrPadrao'=>'Entrega','cDescricao'=>'Entrega'),array('cCodigo'=>'80','cDescrPadrao'=>'','cDescricao'=>''));
+        $selEtapa=array();
+        foreach($selEtapa_ as $item){
+                $selEtapa2=new etapas();
+            foreach($item as $key => $item2){
+                $selEtapa2->$key=$item2;
+            }
+            array_push($selEtapa, $selEtapa2);
+        }
     }
-    echo '<pre>';print_r($selEtapa);die;
-
-    $tabPreco=new TabelaPrecosJsonClient();
-    $tprListarRequest=array("nPagina"=>1,"nRegPorPagina"=>20);
-    $tabelaPreco=$tabPreco->ListarTabelasPreco($tprListarRequest)->listaTabelasPreco;
-            //foreach($tabelaPreco as $key => $item): ?>
-            <?php //die;//endforeach;
-   //echo '<pre>';print_r($tabelaPreco);//die;//cCodIntTabPreco cNome
+    //$tabelaPrecoAtualiza=1;
+    if($tabelaPrecoAtualiza==1){
+        $tabPreco=new TabelaPrecosJsonClient();
+        $tprListarRequest=array("nPagina"=>1,"nRegPorPagina"=>20);
+        $tabelaPreco=$tabPreco->ListarTabelasPreco($tprListarRequest)->listaTabelasPreco;
+    }
    
-   $form_pag=array('dinheiro'=>'Dinheiro','credito'=>'Cartão de Crédito','debito'=>'Cartão de Débito');
-   
-   //echo '<pre>';
-   //print_r($form_pag);die;
-   
+    $form_pag=array('dinheiro'=>'Dinheiro','credito'=>'Cartão de Crédito','debito'=>'Cartão de Débito');
+      
    //////// Variáveis ////////  
     $variaveis1=array('tItem'=>'Total de Ítens','mercadorias'=>'Mercadorias','vDesconto'=>'Desconto',/*'ipi'=>'IPI','icmsSt'=>'ICMS ST',*/'vPedido'=>'Valor do Pedido');//valores preenchidos automaticamente
     $variaveis2=array(

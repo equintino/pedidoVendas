@@ -20,6 +20,8 @@ class valida_cookies{
     public $senha;
     public $setor;
     public $index;
+    private $OMIE_APP_KEY;
+    private $OMIE_APP_SECRET;
     
     function __construct(){
     }
@@ -46,6 +48,18 @@ class valida_cookies{
     }
     public function getIndex(){
         return $this->index;
+    }
+    public function setOMIE_APP_KEY($OMIE_APP_KEY){
+        $this->OMIE_APP_KEY = $OMIE_APP_KEY;
+    }
+    public function getOMIE_APP_KEY(){
+        return $this->OMIE_APP_KEY;
+    }
+    public function setOMIE_APP_SECRET($OMIE_APP_SECRET){
+        $this->OMIE_APP_SECRET = $OMIE_APP_SECRET;
+    }
+    public function getOMIE_APP_SECRET(){
+        return $this->OMIE_APP_SECRET;
     }
     public static function limpaCookies(){
 	setcookie("login"," ", time() + (86400 * 30),"/");
@@ -76,7 +90,13 @@ class valida_cookies{
         $user = $dao->find($search);
         $senha = self::criptografia($_COOKIE['senha']);
         foreach($user as $key => $item){
+            define('OMIE_APP_KEY',$item->getOMIE_APP_KEY());
+            define('OMIE_APP_SECRET',$item->getOMIE_APP_SECRET());
+            
             $senhaDb = @$item->getSenha();
+            $file = fopen('config/OmieAppAuth.php','w+');
+            $escreve = fwrite($file, '<?php define("OMIE_APP_KEY","'.OMIE_APP_KEY.'"); define("OMIE_APP_SECRET","'.OMIE_APP_SECRET.'");');
+            fclose($file);
             if($senhaDb== $senha){
                 $this->popup("Bem-Vindo ".$this->getlogin().".",'sim');
                 //exit;
@@ -85,6 +105,7 @@ class valida_cookies{
                 exit;
             }
         }
+            
         if(!$user){  
             $this->popup('Usuário não cadastrado.','cad'); 
         }

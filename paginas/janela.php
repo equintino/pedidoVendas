@@ -75,6 +75,10 @@
                     $("#mascara").hide();
                     $(".window").hide();
  		});
+                $('.vendedor img').click(function(){
+                    alert('Será necessário resetar o formulário.');
+                    $(location).attr('href','index.php?pagina=pedido&act=cad&vendedorAtualiza=1')
+                })
             });
 	</script>
         <style type="text/css">

@@ -147,9 +147,23 @@
         })
         
         $('.tituloProd').text('Páginas ');
-        //$('.total').text()
         $('.total').text('Registros '+contador+' de '+total+'')
-        //alert($('.listaCliente .tudo').attr('contador'));
+        
+        $('.recarrega').css('cursor','pointer')
+        $('.recarrega').click(function(){
+            var tags;
+            $('input:checked').each(function(){
+                if(!tags){
+                    tags = $(this).attr('name');
+                }else{
+                    tags += ','+$(this).attr('name');
+                }
+            })
+            link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'';
+            $('.tudo').hide()
+            $('.tituloProd').text('Aguarde...')
+            $(location).attr('href',link)     
+        })
     })
 </script>
 <style>
@@ -237,6 +251,10 @@
     }
     .filtroRag span{
         margin-top: 30px;
+    }
+    .recarrega{
+        float:left;
+        padding: 5px;
     }
 </style>
 <div id="menu">
@@ -339,6 +357,7 @@
 </form>
 <?php elseif($act=='list'): ?>
 <script>var pagAtual='<?= $pagAtual ?>'</script>
+<div class=recarrega><img src="../web/img/atualiza.png" height="18px" title="Recarregar esta página."/></div>
 <span class=tituloProd>Páginas </span>
 <?php
     for($g=1;$g <= $dados->total_de_paginas;$g++){

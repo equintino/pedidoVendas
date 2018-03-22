@@ -5,7 +5,7 @@
         
         <script>
             $(document).ready(function(){
-                //window.print();
+                window.print();
                 //window.location='../web/index.php?pagina=pedido&act=cad';
             })
             
@@ -51,29 +51,22 @@
                 margin: 0;
             }
             body{
-                background: #000; 
-                //color: #454545; 
+                background: #000;
                 font: 12pt serif;
                 font-weight: 600;
-                //border: solid red;
                 width: 105mm;
-                //margin: auto;
             }
             #texto{
                 width: 100%; 
                 margin: auto;
             }
             .conteudo{
-                //margin-top: 10px;
                 width: 85mm;
-                //height: 297mm;
-                //border: solid red;
-                background: white;//#f3f6ac;
+                background: white;
                 padding: 20px;
             }
             h3{
                 text-align: center;
-                //margin: 10px 0 10px 0;
             }
             .endereco{
                 text-align: center;
@@ -126,11 +119,6 @@
             }
             .vlUnit2{
                 margin-left: 60px;
-                //float: right;
-            }
-            .total, .vTotal{
-                //font-weight: 900;
-                //color: black
             }
             .vTotal{
                 float: right;
@@ -167,32 +155,54 @@
         </style>
 <?php
     include '../model/EmpresasCadastroJsonClient.php';
+    include '../model/empresa.php';
+    
     @$pedido=$_GET['pedido'];
     @$vendedor=$_POST['vendedor'];
+    @$empresaAtualiza=$_GET['empresaAtualiza'];
     
-    $emp=new EmpresasCadastroJsonClient();
-    $empresas_list_request=array("pagina"=>1,"registros_por_pagina"=>100,"apenas_importado_api"=>"N");
-    $empresa=$emp->ListarEmpresas($empresas_list_request)->empresas_cadastro;
-    
-    //echo '<pre>';
-    foreach($empresa as $item){
-        //print_r($item);
-        $bairro=$item->bairro;
-        $cep=$item->cep;
-        $cidade=$item->cidade;
-        $cnpj=$item->cnpj;
-        $codigo_empresa=$item->codigo_empresa;
-        $complemento=$item->complemento;
-        $email=$item->email;
-        $endereco=$item->endereco;
-        $endereco_numero=$item->endereco_numero;
-        $estado=$item->estado;
-        $inscricao_estadual=$item->inscricao_estadual;
-        $nome_fantasia=$item->nome_fantasia;
-        $razao_social=$item->razao_social;
-        $telefone1_ddd=$item->telefone1_ddd;
-        $telefone1_numero=$item->telefone1_numero;
-        $website=$item->website;
+    //$empresaAtualiza=1;
+    if($empresaAtualiza==1){
+        $emp=new EmpresasCadastroJsonClient();
+        $empresas_list_request=array("pagina"=>1,"registros_por_pagina"=>100,"apenas_importado_api"=>"N");
+        $empresa=$emp->ListarEmpresas($empresas_list_request)->empresas_cadastro;
+
+        foreach($empresa as $item){
+            $bairro=$item->bairro;
+            $cep=$item->cep;
+            $cidade=$item->cidade;
+            $cnpj=$item->cnpj;
+            $codigo_empresa=$item->codigo_empresa;
+            $complemento=$item->complemento;
+            $email=$item->email;
+            $endereco=$item->endereco;
+            $endereco_numero=$item->endereco_numero;
+            $estado=$item->estado;
+            $inscricao_estadual=$item->inscricao_estadual;
+            $nome_fantasia=$item->nome_fantasia;
+            $razao_social=$item->razao_social;
+            $telefone1_ddd=$item->telefone1_ddd;
+            $telefone1_numero=$item->telefone1_numero;
+            $website=$item->website;
+        }
+    }else{
+        $empresa=new empresa();
+        $bairro=$empresa->bairro;
+        $cep=$empresa->cep;
+        $cidade=$empresa->cidade;
+        $cnpj=$empresa->cnpj;
+        $codigo_empresa=$empresa->codigo_empresa;
+        $complemento=$empresa->complemento;
+        $email=$empresa->email;
+        $endereco=$empresa->endereco;
+        $endereco_numero=$empresa->endereco_numero;
+        $estado=$empresa->estado;
+        $inscricao_estadual=$empresa->inscricao_estadual;
+        $nome_fantasia=$empresa->nome_fantasia;
+        $razao_social=$empresa->razao_social;
+        $telefone1_ddd=$empresa->telefone1_ddd;
+        $telefone1_numero=$empresa->telefone1_numero;
+        $website=$empresa->website;
     }
     //echo $website;
     //die;
@@ -249,8 +259,9 @@
                 $dados_adcionais_item=$pedido_venda_produto->det[$i-1]['inf_adic']->dados_adicionais_item;
                 $vUnitario=number_format($pedido_venda_produto->det[$i-1]['produto']->valor_unitario,'2',',','.');
                 $vTotalItem=number_format($pedido_venda_produto->det[$i-1]['produto']->valor_mercadoria,'2',',','.');
+                //print_r($dados_adcionais_item));die;
             ?>
-                <span><?= '00'.$i.'</span><span class=cod>'.$codigo.'</span><span class=desc>'.$descricao.' ('.$dados_adcionais_item.')' ?><br></span>
+                <span><?= '00'.$i.'</span><span class=cod>'.$codigo.'</span><span class=desc>'.$descricao.'<br>'.$dados_adcionais_item ?><br></span>
                 <span class="quant">&nbsp&nbsp<?= $quantidade.'</span> &nbsp&nbsp&nbsp&nbsp&nbsp X <span class=vlUnit2>'.$vUnitario.'</span><span class=vTotalItem2>'.$vTotalItem ?></span>
             <?php endfor; ?>
             </div><br>

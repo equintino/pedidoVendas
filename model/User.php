@@ -9,8 +9,10 @@ final class User {
     private $login;
     private $senha;
     private $email;
-    private $setor;
+    private $loja;
     private $funcao;
+    private $OMIE_APP_KEY;
+    private $OMIE_APP_SECRET;
 
     public function __construct() {
         $this->setDeleted(false);
@@ -48,17 +50,29 @@ final class User {
     public function getEmail(){
         return $this->email;
     }
-    public function setSetor($setor){
-        $this->setor = $setor;
+    public function setLoja($loja){
+        $this->loja = $loja;
     }
-    public function getSetor(){
-        return $this->setor;
+    public function getloja(){
+        return $this->loja;
     }
     public function setFuncao($funcao){
         $this->funcao = $funcao;
     }
     public function getFuncao(){
         return $this->funcao;
+    }
+    public function setOMIE_APP_KEY($OMIE_APP_KEY){
+        $this->OMIE_APP_KEY = $OMIE_APP_KEY;
+    }
+    public function getOMIE_APP_KEY(){
+        return $this->OMIE_APP_KEY;
+    }
+    public function setOMIE_APP_SECRET($OMIE_APP_SECRET){
+        $this->OMIE_APP_SECRET = $OMIE_APP_SECRET;
+    }
+    public function getOMIE_APP_SECRET(){
+        return $this->OMIE_APP_SECRET;
     }
     public function getDeleted() {
         return $this->deleted;

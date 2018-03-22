@@ -1,5 +1,8 @@
 <meta charset="utf-8" >
 <?php
+    //include '../dao/UserDao.php';
+    //include '../validacao/valida_cookies.php';
+
     @$excl=$_GET['excl'];
     @$pagAtual=$_GET['pagAtual'];
     if($excl==1){

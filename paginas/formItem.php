@@ -129,6 +129,15 @@
               $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         }).focus()
+        $('.recarrega').css('cursor','pointer')
+        $('.recarrega').click(function(){
+            link='../paginas/formItem.php?codigo_produto='+codigo_produto+'&pagAtual='+pagAtual+'';
+            $('a[rel=modal]').attr('href',link);
+            
+            $('.listaProduto').hide();
+            $('.tituloProd').text('Aguarde...');
+            $("a[rel=modal]").trigger("click")
+        })
     })
 </script>
 <style>
@@ -220,14 +229,18 @@
     button:hover{
         cursor: pointer;
     }
+    .recarrega{
+        float:left;
+        padding: 5px;
+    }
 </style>
 <div id="dadosItem"></div>
 <?php
     include '../model/ProdutosCadastroJsonClient.php';
-    include '../model/ProdutosCaracteristicasJsonClient.php';
-    
+    //include '../model/ProdutosCaracteristicasJsonClient.php';
+    $loja=null;
     $produto=new ProdutosCadastroJsonClient();
-    $caracteristica=new ProdutosCaracteristicasJsonClient();
+    //$caracteristica=new ProdutosCaracteristicasJsonClient();
     
     if(key_exists('pagAtual', $_GET)){
         $pagAtual=$_GET['pagAtual'];
@@ -243,6 +256,7 @@
             echo '<button class=paginacao>'.$g.'</button>&nbsp&nbsp';
         }
         ?>
+<div class=recarrega><img src="../web/img/atualiza.png" height="18px" title="Recarregar esta página."/></div>
     <div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por clientes" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por clientes" /></div>
     <div class='tudo'>
         <div class='cima'></div>
@@ -254,9 +268,9 @@
                     $col=1;
                     foreach($detalhes as $prod){ 
     
-                    $prcListarCaractRequest=array('nPagina'=>'1','nRegPorPagina'=>'50','nCodProd'=>$prod->codigo_produto);
+                    //$prcListarCaractRequest=array('nPagina'=>'1','nRegPorPagina'=>'50','nCodProd'=>$prod->codigo_produto);
                     //@$caract=$caracteristica->ListarCaractProduto($prcListarCaractRequest)->listaCaracteristicas;
-                    if(count(@$caract)!= 0){
+                    /*if(count(@$caract)!= 0){
                         foreach($caract as $itemCaract){
                             if(strtoupper($itemCaract->cNomeCaract)=='LOJA'){
                                 //echo $itemCaract->cNomeCaract;
@@ -267,7 +281,7 @@
                         }
                     }else{
                         $loja=null;
-                    }
+                    }*/
                         if($w==0){
                             foreach($prod as $key => $item){
                                 if(!strstr($key,'aliquo') && !strstr($key,'altura') && !strstr($key,'bloqueado') && !strstr($key,'cest') && !strstr($key,'familia') && !strstr($key,'cst') && !strstr($key,'dias') && !stristr($key,'dadosib') && !stristr($key,'csosn') && !stristr($key,'importado') && !stristr($key,'inativo') && !stristr($key,'largura') && !stristr($key,'peso') && !stristr($key,'profundidade') && !stristr($key,'red') && !stristr($key,'recomendacoes') && !stristr($key,'imagens') && !stristr($key,'integracao') && !stristr($key,'marca') && !stristr($key,'cfop') && !stristr($key,'produto') && !stristr($key,'minimo') && !stristr($key,'internas') && !stristr($key,'tipo') && !stristr($key,'quantidade_estoque') && !stristr($key,'ean') && !stristr($key,'ncm') && !stristr($key,'unidade') && !stristr($key,'detalhada')){
