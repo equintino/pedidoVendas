@@ -1,5 +1,5 @@
 <?php 
- class dao{
+ class dao {
    private $db = null;
    public function __destruct(){
       $this->db = null;
@@ -47,6 +47,10 @@
         $this->executeStatement($statement, array(':id' => $id
         ));
         return $statement->rowCount() == 1;
+   }
+   public function drop($tabela){
+        $sql = 'DROP TABLE `'.$tabela.'`';
+        $statement = $this->getDb()->prepare($sql)->execute();     
    }
    public function getDb() {
         if ($this->db !== null) {

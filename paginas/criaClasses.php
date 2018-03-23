@@ -97,7 +97,7 @@
             return $texto;
         }
         private function texto4($variaveis){
-            $texto="<?php \r\n class CRUD extends dao{\r\n";
+            $texto="<?php \r\n class CRUD extends Dao{\r\n";
             $texto .= '   public function insert(Model $model){
                 date_default_timezone_set("Brazil/East");
                 $now = mktime (date(\'H\'), date(\'i\'), date(\'s\'), date("m")  , date("d"), date("Y"));

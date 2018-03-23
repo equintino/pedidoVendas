@@ -140,6 +140,55 @@
  public function setexterior($exterior ){
 	$this->exterior=$exterior;
  }
+ private $cImpAPI;
+ public function getcImpAPI(){
+	return $this->cImpAPI;
+ }
+ public function setcImpAPI($cImpAPI ){
+	$this->cImpAPI=$cImpAPI;
+ }
+ private $dAlt;
+ public function getdAlt(){
+	return $this->dAlt;
+ }
+ public function setdAlt($dAlt ){
+	$this->dAlt=$dAlt;
+ }
+ private $dInc;
+ public function getdInc(){
+	return $this->dInc;
+ }
+ public function setdInc($dInc ){
+	$this->dInc=$dInc;
+ }
+ private $hAlt;
+ public function gethAlt(){
+	return $this->hAlt;
+ }
+ public function sethAlt($hAlt ){
+	$this->hAlt=$hAlt;
+ }
+ private $hInc;
+ public function gethInc(){
+	return $this->hInc;
+ }
+ public function sethInc($hInc ){
+	$this->hInc=$hInc;
+ }
+ private $uAlt;
+ public function getuAlt(){
+	return $this->uAlt;
+ }
+ public function setuAlt($uAlt ){
+	$this->uAlt=$uAlt;
+ }
+ private $uInc;
+ public function getuInc(){
+	return $this->uInc;
+ }
+ public function setuInc($uInc ){
+	$this->uInc=$uInc;
+ }
  private $inscricao_estadual;
  public function getinscricao_estadual(){
 	return $this->inscricao_estadual;
@@ -175,6 +224,13 @@
  public function setrazao_social($razao_social ){
 	$this->razao_social=$razao_social;
  }
+ private $tag;
+ public function gettag(){
+	return $this->tag;
+ }
+ public function settag($tag ){
+	$this->tag=$tag;
+ }
  private $telefone1_ddd;
  public function gettelefone1_ddd(){
 	return $this->telefone1_ddd;
@@ -195,5 +251,61 @@
  }
  public function settipo_atividade($tipo_atividade ){
 	$this->tipo_atividade=$tipo_atividade;
+ }
+ private $contato;
+ public function getcontato(){
+	return $this->contato;
+ }
+ public function setcontato($contato ){
+	$this->contato=$contato;
+ }
+ private $optante_simples_nacional;
+ public function getoptante_simples_nacional(){
+	return $this->optante_simples_nacional;
+ }
+ public function setoptante_simples_nacional($optante_simples_nacional ){
+	$this->optante_simples_nacional=$optante_simples_nacional;
+ }
+ private $telefone2_ddd;
+ public function gettelefone2_ddd(){
+	return $this->telefone2_ddd;
+ }
+ public function settelefone2_ddd($telefone2_ddd ){
+	$this->telefone2_ddd=$telefone2_ddd;
+ }
+ private $telefone2_numero;
+ public function gettelefone2_numero(){
+	return $this->telefone2_numero;
+ }
+ public function settelefone2_numero($telefone2_numero ){
+	$this->telefone2_numero=$telefone2_numero;
+ }
+ private $fax_ddd;
+ public function getfax_ddd(){
+	return $this->fax_ddd;
+ }
+ public function setfax_ddd($fax_ddd ){
+	$this->fax_ddd=$fax_ddd;
+ }
+ private $fax_numero;
+ public function getfax_numero(){
+	return $this->fax_numero;
+ }
+ public function setfax_numero($fax_numero ){
+	$this->fax_numero=$fax_numero;
+ }
+ private $homepage;
+ public function gethomepage(){
+	return $this->homepage;
+ }
+ public function sethomepage($homepage ){
+	$this->homepage=$homepage;
+ }
+ private $observacao;
+ public function getobservacao(){
+	return $this->observacao;
+ }
+ public function setobservacao($observacao ){
+	$this->observacao=$observacao;
  }
  }

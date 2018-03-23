@@ -39,7 +39,7 @@ final class index{
         'Excecao' => '../excecao/Excecao.php',
         'Flash' => '../flash/Flash.php',
         'Dao' => '../dao/dao.php',
-        'CURD' => '../dao/CRUD.php',
+        //'CRUD' => '../dao/CRUD.php',
         'Model' => '../model/model.php',
         'modelMapper' => '../mapping/modelMapper.php',
         'ModelSearchCriteria' => '../dao/ModelSearchCriteria.php',

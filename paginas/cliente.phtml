@@ -415,26 +415,35 @@
 
 
 <?php elseif($act=='atualiza'): ?>
-<form method="POST" action="../paginas/add.php?act=alt&pagina=cliente" name="alt">
-<?php foreach($dados->clientes_cadastro as $item):
-        foreach($item as $key => $item2):
+<form method="POST" action="../paginas/add.php?act=atualiza&pagina=cliente" name="alt">
+    <?php //echo '<pre>';print_r($dados->clientes_cadastro[0]);die; ?>
+<?php foreach($dados->clientes_cadastro[0] as $key => $item):
+        //echo $key.' -> '.$item;die;
+        //foreach($item as $key => $item2):
             if($key=='info'):
-                foreach($item2 as $key2 => $item3):
+                foreach($item as $key2 => $item2):
         ?>
-                    <br>----> info -> <?= $key2 ?> -> <?= $item3 ?>
+                    <?= $key2 ?><input name="<?= $key2 ?>" value="<?= $item2 ?>" />
                 <?php endforeach; ?>
                 <br><br>
             <?php elseif($key=='tags'):
-                foreach($item2 as $item4): ?>
-                    <br>----> tags -> <?= $item4->tag ?>
+                foreach($item as $item3): ?>
+                    tag<input name="tag" value="<?= $item3->tag ?>" />
                 <?php endforeach; ?>
                 <br><br>
             <?php else: ?>
-                <input name="<?= $key ?>" type="text" value="<?= $item2 ?>" /><br>
+                <?= $key ?><input name="<?= $key ?>" type="text" value="<?= $item ?>" /><br>
             <?php endif;
-            echo '<input type="submit" value="Salvar" />';
-        endforeach; die;
+        //endforeach; die;
     endforeach; ?>
+        <input type="text" name="contato" value="***" />
+        <input type="text" name="optante_simples_nacional" value="***" />
+        <input type="text" name="telefone2_ddd" />
+        <input type="text" name="telefone2_numero" />
+        <input type="text" name="fax_ddd" />
+        <input type="text" name="fax_numero" />
+        <input type="text" name="homepage" />
+        <input type="text" name="observacao" />
 <input type="submit" value="Salvar" /> 
 </form>               
 <?php endif; ?>

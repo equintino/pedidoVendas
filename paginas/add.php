@@ -31,7 +31,7 @@
             $model = new Model();
             $CRUD = new CRUD();
 
-
+            echo '<pre>';print_r($_POST);die;
             foreach($_POST as $key => $item){
                 $classe='set'.$key;
                 $model->$classe($item);
@@ -52,6 +52,7 @@
             $CRUD->grava($model);
             //Utils::redirect('cadastro',array('act'=>'cad','gravado'=>'ok')); 
         }else{
+            //echo '<pre>';print_r($_POST);die;
             $arquivo = new criaClsses();
             $arquivo->tabela='tb_cliente';
             $arquivo->novoArquivo($_POST);
@@ -68,6 +69,7 @@
         print_r($model);
         //print_r(count($_POST));
         //$CRUD->criaTabela();
+        
         die;
     }
     if($pagina=='cliente'){

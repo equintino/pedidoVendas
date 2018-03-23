@@ -1,7 +1,6 @@
 <?php 
  class modelMapper{
   public static function map(Model $model, array $properties){
-      //print_r($properties);die;
 	if (array_key_exists('id', $properties)){
 	  $model->setid($properties['id']);
 	}
@@ -62,6 +61,27 @@
 	if (array_key_exists('exterior', $properties)){
 	  $model->setexterior($properties['exterior']);
 	}
+	if (array_key_exists('cImpAPI', $properties)){
+	  $model->setcImpAPI($properties['cImpAPI']);
+	}
+	if (array_key_exists('dAlt', $properties)){
+	  $model->setdAlt($properties['dAlt']);
+	}
+	if (array_key_exists('dInc', $properties)){
+	  $model->setdInc($properties['dInc']);
+	}
+	if (array_key_exists('hAlt', $properties)){
+	  $model->sethAlt($properties['hAlt']);
+	}
+	if (array_key_exists('hInc', $properties)){
+	  $model->sethInc($properties['hInc']);
+	}
+	if (array_key_exists('uAlt', $properties)){
+	  $model->setuAlt($properties['uAlt']);
+	}
+	if (array_key_exists('uInc', $properties)){
+	  $model->setuInc($properties['uInc']);
+	}
 	if (array_key_exists('inscricao_estadual', $properties)){
 	  $model->setinscricao_estadual($properties['inscricao_estadual']);
 	}
@@ -77,6 +97,9 @@
 	if (array_key_exists('razao_social', $properties)){
 	  $model->setrazao_social($properties['razao_social']);
 	}
+	if (array_key_exists('tag', $properties)){
+	  $model->settag($properties['tag']);
+	}
 	if (array_key_exists('telefone1_ddd', $properties)){
 	  $model->settelefone1_ddd($properties['telefone1_ddd']);
 	}
@@ -85,6 +108,30 @@
 	}
 	if (array_key_exists('tipo_atividade', $properties)){
 	  $model->settipo_atividade($properties['tipo_atividade']);
+	}
+	if (array_key_exists('contato', $properties)){
+	  $model->setcontato($properties['contato']);
+	}
+	if (array_key_exists('optante_simples_nacional', $properties)){
+	  $model->setoptante_simples_nacional($properties['optante_simples_nacional']);
+	}
+	if (array_key_exists('telefone2_ddd', $properties)){
+	  $model->settelefone2_ddd($properties['telefone2_ddd']);
+	}
+	if (array_key_exists('telefone2_numero', $properties)){
+	  $model->settelefone2_numero($properties['telefone2_numero']);
+	}
+	if (array_key_exists('fax_ddd', $properties)){
+	  $model->setfax_ddd($properties['fax_ddd']);
+	}
+	if (array_key_exists('fax_numero', $properties)){
+	  $model->setfax_numero($properties['fax_numero']);
+	}
+	if (array_key_exists('homepage', $properties)){
+	  $model->sethomepage($properties['homepage']);
+	}
+	if (array_key_exists('observacao', $properties)){
+	  $model->setobservacao($properties['observacao']);
 	}
   } 
  }
