@@ -51,6 +51,7 @@
         return $row;
    }
    public function grava(Model $model){
+        set_time_limit(3600);
         if ($model->getid() === null) {
             return $this->insert($model);
         }

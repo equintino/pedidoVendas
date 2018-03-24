@@ -107,7 +107,7 @@
                 $model->setcriado($now);  
                 $sql=$this->criaTabela(\''.$this->tabela.'\');
                 $this->execute($sql, $model);   
-                $this->execute(\'ALTER TABLE `tb_cliente` ADD UNIQUE(`cnpj_cpf`)\', $model);
+                //$this->execute(\'ALTER TABLE `tb_cliente` ADD UNIQUE(`cnpj_cpf`)\', $model);
                 $sql = \'INSERT INTO '.$this->tabela.' (';
                   foreach($variaveis as $item){
                     $texto .= '`'.$item.'`,';

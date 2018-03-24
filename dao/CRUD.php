@@ -8,7 +8,7 @@
                 $model->setcriado($now);  
                 $sql=$this->criaTabela('tb_cliente');
                 $this->execute($sql, $model);   
-                $this->execute('ALTER TABLE `tb_cliente` ADD UNIQUE(`cnpj_cpf`)', $model);
+                //$this->execute('ALTER TABLE `tb_cliente` ADD UNIQUE(`cnpj_cpf`)', $model);
                 $sql = 'INSERT INTO tb_cliente (`bairro`,`cep`,`cidade`,`cidade_ibge`,`cnae`,`cnpj_cpf`,`codigo_cliente_integracao`,`codigo_cliente_omie`,`codigo_pais`,`complemento`,`email`,`endereco`,`endereco_numero`,`estado`,`exterior`,`cImpAPI`,`dAlt`,`dInc`,`hAlt`,`hInc`,`uAlt`,`uInc`,`info`,`inscricao_estadual`,`inscricao_municipal`,`nome_fantasia`,`pessoa_fisica`,`razao_social`,`tags`,`telefone1_ddd`,`telefone1_numero`,`tipo_atividade`,`cod_API`,`contato`,`optante_simples_nacional`,`telefone2_ddd`,`telefone2_numero`,`fax_ddd`,`fax_numero`,`homepage`,`observacao`,`id`,`excluido`,`criado`) VALUES (:bairro,:cep,:cidade,:cidade_ibge,:cnae,:cnpj_cpf,:codigo_cliente_integracao,:codigo_cliente_omie,:codigo_pais,:complemento,:email,:endereco,:endereco_numero,:estado,:exterior,:cImpAPI,:dAlt,:dInc,:hAlt,:hInc,:uAlt,:uInc,:info,:inscricao_estadual,:inscricao_municipal,:nome_fantasia,:pessoa_fisica,:razao_social,:tags,:telefone1_ddd,:telefone1_numero,:tipo_atividade,:cod_API,:contato,:optante_simples_nacional,:telefone2_ddd,:telefone2_numero,:fax_ddd,:fax_numero,:homepage,:observacao,:id,:excluido,:criado)';
 	$search = new ModelSearchCriteria();
                 $search->settabela($model->gettabela());

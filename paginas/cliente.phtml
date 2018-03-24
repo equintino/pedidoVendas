@@ -104,6 +104,22 @@
             })
         }) 
         $('.pagina').text('CLIENTE')
+        $('.mGeral').text('ATUALIZAR TABELA').css({
+            cursor:'pointer'
+        }).bind('mouseover',function(){
+            $(this).css({
+                background: '#4e9bae',
+                color: 'white'
+            }).mouseleave(function(){
+                $(this).css({
+                   background:'none',
+                   color: 'black'
+               })
+            })
+        })
+        $('.mGeral').click(function(){
+            $(location).attr('href','../web/index.php?pagina=atualizando&act=atualiza&seleciona=1')
+        })
         $(".procura2 input").on("keyup", function(){
             var value = $(this).val().toLowerCase();
             $(".listaCliente .tudo").filter(function(){

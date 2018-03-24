@@ -245,7 +245,7 @@
             <span class="campos">Cidade: </span><span class="dCliente"><?= $_POST['cidade'] ?></span><br>
             <span class="campos">CPF/CNPJ: </span><span class="dCliente"><?= $_POST['cnpj_cpf'] ?></span><br>
             <hr>
-            <h2>CUPOM FISCAL</h2>
+            <!--<h2>CUPOM FISCAL</h2>-->
             <div class="titulo1">
                 <span>ÍTEM &nbsp&nbsp&nbspCODIGO</span><span class="descricao">DESCRIÇÃO<br></span>
                 <span class='qtd'>QTD.</span><span class=vlUnit>VL. UNIT(R$)</span><span class='vlItem'>VL. ÍTEM(R$)</span>

@@ -232,9 +232,8 @@
         $pedido_venda_produto->informacoes_adicionais=$informacoes_adicionais;
         $pedido_venda_produto->lista_parcelas=$lista_parcelas;
         
-        //echo '<pre>';print_r([$_POST,$pedido_venda_produto]);die;
         $resultado=$pedido->IncluirPedido($pedido_venda_produto);
-        //@$numero_pedido=$resultado->numero_pedido;
+        @$numero_pedido=$resultado->numero_pedido;
         include 'imprime.php';
         die;
         /*

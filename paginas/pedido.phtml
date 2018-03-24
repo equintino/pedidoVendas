@@ -185,7 +185,6 @@
                 }
             }
         })
-        //var segue=null;
         $('#dados').on("submit", function(event){
             var vendedor=$('.tabela .vendedor :selected').text();
             $('.vendedor input[name=vendedor]').val(vendedor);
@@ -198,29 +197,25 @@
                     }
                 }
             }
+            var campo=1;
             $('#pnl1 textarea').each(function(event){
-                if(!$(this).val()){
+                campo++;
+                if(!$(this).val()||$(this).val()==' '){
                     var linha=$(this).attr('linha');
                     var codProd=$('#pnl1 input[name=codigo_produto'+linha+']').val();
-                    //if(segue!=1){
-                        var perg=confirm('Não foi inserido o serial para o ítem '+codProd+'. Deseja continuar assim mesmo?');
-                        
-                        //if(!perg){
+                        perg=confirm('Não foi inserido o serial para o ítem '+codProd+'. Deseja continuar assim mesmo?');
+                        if(!perg){
                             $(this).css('background','rgba(216, 0, 0,0.1)').focus()
-                            //alert($(':submit').val(false));
                             return false;
-                            //alert(perg);  
-                            event.preventDefault();
-                            //die;
-                        //}
-                        /*if(!perg){
-                            alert('cheguei aqui');
-                            return false;
-                        }*/
-                    //}
+                        }
+                }else{
+                    if(item==campo){
+                        perg=1;
+                        return true;
+                    }
                 }
             })
-            //if(perg){
+            if(perg){
                 if($('#pnl4 input').val()==''){
                     alert('Defina as parcelas.');
                     $('.outrosItens span').each(function(){
@@ -230,10 +225,13 @@
                             }
                         }
                     })
-                    //segue=1;
                     return false;
                 }
                 $(location).attr('href','index.php?pagina=pedido&act=cad&enviado=1')
+            }else{
+                //alert('passei por aqui');
+                return false;
+            }
         })
         $('.tabela td select[name=fPagamento]').change(function(){
             if($(this).val()=='credito' || $(this).val()=='debito'){
@@ -248,7 +246,6 @@
                 $('#pnl3 tr.dados_adcionais_nf td textarea').val('')
             }
         })
-        //$('#pnl1 textarea').css('border','solid red')
         $('.pagina').text('PRÉ-VENDA');
         
         ///// funcoes ////
