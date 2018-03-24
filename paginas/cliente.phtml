@@ -1,5 +1,6 @@
 <script>
     $(document).ready(function(){
+        tipoBusca="<?= $tipoBusca ?>";
         $('#saldo').css({
             float:'right',
             position: 'relative',
@@ -133,14 +134,16 @@
                 }
             })
             var tags;
+            var tipoBusca;
             $('input:checked').each(function(){
                 if(!tags){
                     tags = $(this).attr('name');
                 }else{
                     tags += ','+$(this).attr('name');
                 }
+                tipoBusca=$(':checked[name=tipoBusca]').val();
             })
-            link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'';          
+            link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'&tipoBusca='+tipoBusca+'';         
             $('.tudo').hide()
             $('.tituloProd').text('Aguarde...')
             $(location).attr('href',link)
@@ -158,11 +161,46 @@
                 }else{
                     tags += ','+$(this).attr('name');
                 }
+                tipoBusca=$(':checked[name=tipoBusca]').val();
             })
-            link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'';
+            link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'&tipoBusca='+tipoBusca+'';
             $('.tudo').hide()
             $('.tituloProd').text('Aguarde...')
             $(location).attr('href',link)     
+        })
+        $('.procura2 img').click(function(){
+            var tags;
+            var tipoBusca;
+            $('input:checked').each(function(){
+                if(!tags){
+                    tags = $(this).attr('name');
+                }else{
+                    tags += ','+$(this).attr('name');
+                }
+                tipoBusca=$(':checked[name=tipoBusca]').val();
+            })
+            var buscaPor=$('.procura2 input').val();
+            link='../web/index.php?pagina=cliente&act=list&seleciona=1&tags='+tags+'&tipoBusca='+tipoBusca+'&buscaPor='+buscaPor+'';
+            $('.tituloProd').text('Aguarde...')
+            $(location).attr('href',link)
+        })
+        $(document).keydown(function(e){
+            if(e.keyCode==13){
+                var tags;
+                var tipoBusca;
+                $('input:checked').each(function(){
+                    if(!tags){
+                        tags = $(this).attr('name');
+                    }else{
+                        tags += ','+$(this).attr('name');
+                    }
+                    tipoBusca=$(':checked[name=tipoBusca]').val();
+                })
+                var buscaPor=$('.procura2 input').val();
+                link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'&tipoBusca='+tipoBusca+'&buscaPor='+buscaPor+'';
+                $('.tituloProd').text('Aguarde...')
+                $(location).attr('href',link)
+            }
         })
     })
 </script>
@@ -232,6 +270,10 @@
         float: right;
         margin: 10px;
     }
+    .procura2 .tipoBusca{
+        margin-top: 5px;
+        padding: 0 20px;
+    }
     #menu{
         width: 1030px;
     }
@@ -258,11 +300,28 @@
     }
 </style>
 <div id="menu">
-    <?php if($act!='cad' && $seleciona!=1):?>
+    <?php if($act!='cad' && $seleciona!=1 && $act != 'atualiza'):?>
         <div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por clientes" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por clientes" /></div>
 </div>
-    <?php else: ?>
-        <div class="procura2"><input autofocus type="text" name="procura" title="Pesquisar por clientes" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por clientes" /></div>
+    <?php else:
+        switch($tipoBusca){
+            case 'servidor':
+                $servidor='checked';
+                $local=null;
+                break;
+            case 'local':
+                $local='checked';
+                $servidor=null;
+                break;
+            default :
+                $local='checked';
+                $servidor=null;
+                break;
+        }
+    ?>
+<div class="procura2"><input autofocus type="text" name="procura" title="Pesquisar por clientes" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por clientes" /><br>
+    <div class="tipoBusca"><input title="Tipo de busca" type="radio" name="tipoBusca" value="local" <?= $local ?>/>Local &nbsp&nbsp&nbsp<input title="Tipo de busca" type="radio" name="tipoBusca" value="servidor" <?= $servidor ?>/>Servidor</div>
+        </div>
     <?php endif; ?>
 <div class="conteudo">
 <?php if($act=='cad'): ?>
@@ -360,8 +419,10 @@
 <div class=recarrega><img src="../web/img/atualiza.png" height="18px" title="Recarregar esta página."/></div>
 <span class=tituloProd>Páginas </span>
 <?php
-    for($g=1;$g <= $dados->total_de_paginas;$g++){
-            echo '<button class=paginacao>'.$g.'</button>&nbsp&nbsp';
+    if($tipoBusca=='servidor'){
+        for($g=1;$g <= $dados->total_de_paginas;$g++){
+                echo '<button class=paginacao>'.$g.'</button>&nbsp&nbsp';
+        }
     }
     foreach($tagLista as $item){
         if($tagsArray){
@@ -375,7 +436,7 @@
         }
         echo '<span class=filtroRag><input type=checkbox name="'.$item.'" '.$checked.' />'.$item.'</span>';
     }
-    if(!$tagsArray){
+    if(!@$tagsArray[1]){
         $tagsArray=$tagLista;
     }
 ?>
@@ -383,68 +444,46 @@
         echo 'Lista de Clientes Cadastrados';
     }else{ 
         echo 'Slecione Um Cliente Abaixo';
-    }; ?> <span class="pag">(pág.<?= $dados->pagina ?>/<?= $dados->total_de_paginas ?>)</span>
+    } 
+    if($tipoBusca=='servidor'){
+        $paginaAtual=$dados->pagina;
+        $totalPagina=$dados->total_de_paginas;
+        $totalRegistro=$dados->total_de_registros;
+        $dados_=$dados->clientes_cadastro;
+    }else{
+        $paginaAtual=1;
+        $totalPagina=1;
+        $totalRegistro=$dao->totalLinhas($search)['id'];
+    }
+    ?> 
+    <span class="pag">(pág.<?= $paginaAtual ?>/<?= $totalPagina ?>)</span>
 </div>
-<?php 
-    /*echo '<pre>';
-    $tagLista=array();
-    foreach($dados->clientes_cadastro as $item){
-        foreach($item->tags as $item){
-            $tag=$item->tag;
-            //print_r($tag);
-        }
-    }*/
-    //die; 
-?>
-<div class="total"><script> var total='<?= $dados->total_de_registros ?>'</script></div>
+<div class="total"><script> var total='<?= $totalRegistro; ?>'</script></div>
 <table class="listaCliente">
-    <tr><th>Razão Social/Nome</th><th>CNPJ/CPF</th><!--<th>Contato</th><th>E-mail</th>--></tr>
+    <tr><th>Razão Social/Nome</th><th>CNPJ/CPF</th></tr>
 <?php 
     $contador=0;
-    foreach($dados->clientes_cadastro as $cliente): 
-        foreach($cliente->tags as $tipo):
-                if(in_array($tipo->tag, $tagsArray)): $contador++;?>
-                    <tr class="razaosocial tudo" linha="<?= $cliente->codigo_cliente_omie ?>" razao='<?= $cliente->razao_social ?>' cnpj_cpf='<?= $cliente->cnpj_cpf ?>' email="<?= $cliente->email ?>" endereco="<?= $cliente->endereco ?>" numero="<?= $cliente->endereco_numero ?>" bairro="<?= $cliente->bairro ?>" cep="<?= $cliente->cep ?>" cidade="<?= $cliente->cidade ?>"><td class="rs"><?= mb_strtoupper($cliente->razao_social,'utf-8').'<!--<br><font size=1px>('.$cliente->codigo_cliente_integracao.')</font>-->' ?></td><td align=center ><?= $cliente->cnpj_cpf ?></td><!--<td align=center ><div><?php echo @$cliente->email ?></div></td>--><?php if(@$seleciona!=1):?><td class="edicao"><img title="Altera" height="12px" src="../web/img/editar.png" codigo="<?= $cliente->codigo_cliente_omie ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $cliente->codigo_cliente_omie ?>" razao="<?= mb_strtoupper($cliente->razao_social,'utf-8') ?>" /></td><?php endif ?></tr>
-    <?php endif; 
-        endforeach; 
-    endforeach;
-?>
+    if($tipoBusca=='servidor'){
+        foreach($dados_ as $cliente): 
+            foreach($cliente->tags as $tipo):
+                    if(in_array($tipo->tag, $tagsArray)): $contador++;?>
+                        <tr class="razaosocial tudo" linha="<?= $cliente->codigo_cliente_omie ?>" razao='<?= $cliente->razao_social ?>' cnpj_cpf='<?= $cliente->cnpj_cpf ?>' email="<?= $cliente->email ?>" endereco="<?= $cliente->endereco ?>" numero="<?= $cliente->endereco_numero ?>" bairro="<?= $cliente->bairro ?>" cep="<?= $cliente->cep ?>" cidade="<?= $cliente->cidade ?>"><td class="rs"><?= mb_strtoupper($cliente->razao_social,'utf-8').'<!--<br><font size=1px>('.$cliente->codigo_cliente_integracao.')</font>-->' ?></td><td align=center ><?= $cliente->cnpj_cpf ?></td><!--<td align=center ><div><?php echo @$cliente->email ?></div></td>--><?php if(@$seleciona!=1):?><td class="edicao"><img title="Altera" height="12px" src="../web/img/editar.png" codigo="<?= $cliente->codigo_cliente_omie ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $cliente->codigo_cliente_omie ?>" razao="<?= mb_strtoupper($cliente->razao_social,'utf-8') ?>" /></td><?php endif ?></tr>
+        <?php endif; 
+            endforeach; 
+        endforeach;
+    }elseif($tipoBusca == 'local'){
+        foreach($dados_ as $cliente): $contador++;?>
+        <tr class="razaosocial tudo" linha="<?= $cliente->getcodigo_cliente_omie() ?>" razao='<?= $cliente->getrazao_social() ?>' cnpj_cpf='<?= $cliente->getcnpj_cpf() ?>' email="<?= $cliente->getemail() ?>" endereco="<?= $cliente->getendereco() ?>" numero="<?= $cliente->getendereco_numero() ?>" bairro="<?= $cliente->getbairro() ?>" cep="<?= $cliente->getcep() ?>" cidade="<?= $cliente->getcidade() ?>">
+            <td class="rs"><?= mb_strtoupper($cliente->getrazao_social(),'utf-8').'<!--<br><font size=1px>('.$cliente->getcodigo_cliente_integracao().')</font>-->' ?></td><td align=center ><?= $cliente->getcnpj_cpf() ?></td>          </tr>
+        <?php endforeach; 
+    }
+        ?>
 </table>
 <script>var contador='<?= $contador ?>'</script>
 <?php elseif($act=='excl'): ?>
 
 
 <?php elseif($act=='atualiza'): ?>
-<form method="POST" action="../paginas/add.php?act=atualiza&pagina=cliente" name="alt">
-    <?php //echo '<pre>';print_r($dados->clientes_cadastro[0]);die; ?>
-<?php foreach($dados->clientes_cadastro[0] as $key => $item):
-        //echo $key.' -> '.$item;die;
-        //foreach($item as $key => $item2):
-            if($key=='info'):
-                foreach($item as $key2 => $item2):
-        ?>
-                    <?= $key2 ?><input name="<?= $key2 ?>" value="<?= $item2 ?>" />
-                <?php endforeach; ?>
-                <br><br>
-            <?php elseif($key=='tags'):
-                foreach($item as $item3): ?>
-                    tag<input name="tag" value="<?= $item3->tag ?>" />
-                <?php endforeach; ?>
-                <br><br>
-            <?php else: ?>
-                <?= $key ?><input name="<?= $key ?>" type="text" value="<?= $item ?>" /><br>
-            <?php endif;
-        //endforeach; die;
-    endforeach; ?>
-        <input type="text" name="contato" value="***" />
-        <input type="text" name="optante_simples_nacional" value="***" />
-        <input type="text" name="telefone2_ddd" />
-        <input type="text" name="telefone2_numero" />
-        <input type="text" name="fax_ddd" />
-        <input type="text" name="fax_numero" />
-        <input type="text" name="homepage" />
-        <input type="text" name="observacao" />
-<input type="submit" value="Salvar" /> 
-</form>               
+             
 <?php endif; ?>
 </div>

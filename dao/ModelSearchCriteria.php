@@ -32,14 +32,6 @@
                   $this->criado=$criado;
                   return $this;
               }
-   private $cod_API;
-               public function getcod_API(){
-                return $this->cod_API;
-              }
-              public function setcod_API($cod_API){
-                  $this->cod_API = $cod_API;
-                  return $this;
-              }
    private $bairro;
                public function getbairro(){
                 return $this->bairro;
@@ -216,6 +208,14 @@
                   $this->uInc = $uInc;
                   return $this;
               }
+   private $info;
+               public function getinfo(){
+                return $this->info;
+              }
+              public function setinfo($info){
+                  $this->info = $info;
+                  return $this;
+              }
    private $inscricao_estadual;
                public function getinscricao_estadual(){
                 return $this->inscricao_estadual;
@@ -256,12 +256,12 @@
                   $this->razao_social = $razao_social;
                   return $this;
               }
-   private $tag;
-               public function gettag(){
-                return $this->tag;
+   private $tags;
+               public function gettags(){
+                return $this->tags;
               }
-              public function settag($tag){
-                  $this->tag = $tag;
+              public function settags($tags){
+                  $this->tags = $tags;
                   return $this;
               }
    private $telefone1_ddd;
@@ -286,6 +286,14 @@
               }
               public function settipo_atividade($tipo_atividade){
                   $this->tipo_atividade = $tipo_atividade;
+                  return $this;
+              }
+   private $cod_API;
+               public function getcod_API(){
+                return $this->cod_API;
+              }
+              public function setcod_API($cod_API){
+                  $this->cod_API = $cod_API;
                   return $this;
               }
    private $contato;

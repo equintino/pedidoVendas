@@ -6,12 +6,11 @@
         private $filename2='../mapping/modelMapper.php';
         private $filename3='../dao/ModelSearchCriteria.php';
         private $filename4='../dao/CRUD.php';
-        public function novoArquivo($POST){
+        public function novoArquivo($campos){
             $mode='w+';
-            $variaveis = array('cod_API');
-            foreach($POST as $key => $item){
-                $variaveis[] = $key;
-            }  
+            foreach($campos as $item){
+                $variaveis[] = $item;
+            }
             $handle = fopen($this->filename1, $mode); 
             $texto=$this->texto1($variaveis);
             fwrite($handle, $texto); 
@@ -28,6 +27,8 @@
             $texto=$this->texto4($variaveis);
             fwrite($handle, $texto); 
             fclose($handle);
+            
+            return $variaveis;
         }
         private function padrao(){
             $padrao=array('id','tabela','excluido','criado');
@@ -105,7 +106,8 @@
                 $model->setexcluido(0);
                 $model->setcriado($now);  
                 $sql=$this->criaTabela(\''.$this->tabela.'\');
-                $this->execute($sql, $model);
+                $this->execute($sql, $model);   
+                $this->execute(\'ALTER TABLE `tb_cliente` ADD UNIQUE(`cnpj_cpf`)\', $model);
                 $sql = \'INSERT INTO '.$this->tabela.' (';
                   foreach($variaveis as $item){
                     $texto .= '`'.$item.'`,';

@@ -15,10 +15,6 @@
     @$pagina=$_GET['pagina'];
     
     if($act=='atualiza'){
-        include 'criaClasses.php';
-    
-        /// Cria classes se não existir ///
-        if(file_exists('../model/model.php')&&file_exists('../dao/ModelSearchCriteria.php')&&file_exists('../dao/CRUD.php')&&file_exists('../mapping/modelMapper.php')){
         
             include '../config/Config.php';
             include '../excecao/Excecao.php';
@@ -31,7 +27,6 @@
             $model = new Model();
             $CRUD = new CRUD();
 
-            echo '<pre>';print_r($_POST);die;
             foreach($_POST as $key => $item){
                 $classe='set'.$key;
                 $model->$classe($item);
@@ -51,12 +46,7 @@
             //die;
             $CRUD->grava($model);
             //Utils::redirect('cadastro',array('act'=>'cad','gravado'=>'ok')); 
-        }else{
-            //echo '<pre>';print_r($_POST);die;
-            $arquivo = new criaClsses();
-            $arquivo->tabela='tb_cliente';
-            $arquivo->novoArquivo($_POST);
-        }
+        
         echo '<pre>';
         $model = new Model();
 

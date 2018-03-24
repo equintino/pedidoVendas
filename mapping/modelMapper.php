@@ -13,9 +13,6 @@
 	if (array_key_exists('criado', $properties)){
 	  $model->setcriado($properties['criado']);
 	}
-	if (array_key_exists('cod_API', $properties)){
-	  $model->setcod_API($properties['cod_API']);
-	}
 	if (array_key_exists('bairro', $properties)){
 	  $model->setbairro($properties['bairro']);
 	}
@@ -82,6 +79,9 @@
 	if (array_key_exists('uInc', $properties)){
 	  $model->setuInc($properties['uInc']);
 	}
+	if (array_key_exists('info', $properties)){
+	  $model->setinfo($properties['info']);
+	}
 	if (array_key_exists('inscricao_estadual', $properties)){
 	  $model->setinscricao_estadual($properties['inscricao_estadual']);
 	}
@@ -97,8 +97,8 @@
 	if (array_key_exists('razao_social', $properties)){
 	  $model->setrazao_social($properties['razao_social']);
 	}
-	if (array_key_exists('tag', $properties)){
-	  $model->settag($properties['tag']);
+	if (array_key_exists('tags', $properties)){
+	  $model->settags($properties['tags']);
 	}
 	if (array_key_exists('telefone1_ddd', $properties)){
 	  $model->settelefone1_ddd($properties['telefone1_ddd']);
@@ -108,6 +108,9 @@
 	}
 	if (array_key_exists('tipo_atividade', $properties)){
 	  $model->settipo_atividade($properties['tipo_atividade']);
+	}
+	if (array_key_exists('cod_API', $properties)){
+	  $model->setcod_API($properties['cod_API']);
 	}
 	if (array_key_exists('contato', $properties)){
 	  $model->setcontato($properties['contato']);

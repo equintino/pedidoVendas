@@ -7,6 +7,7 @@
    public function encontre(ModelSearchCriteria $search = null){
             set_time_limit(3600);
             ini_set('memory_limit', '-1');
+            //echo '<pre>';print_r($search);die;
         $result = array();
         foreach ($this->query($this->getEncontreSql($search)) as $row){
             $model = new Model();
@@ -27,6 +28,20 @@
         $model = new Model();
         modelMapper::map($model, $row);
         return $model;
+   }
+   public function encontrePorTag(ModelSearchCriteria $search=null){
+        $result = array();
+        foreach($search->gettags() as $item){
+            if($item != 'tipoBusca'){
+                $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND tags like "%'.$item.'%"')->fetchAll();
+                foreach($row as $item){
+                    $model = new Model();
+                    modelMapper::map($model, $item);
+                    $result[$model->getid()] = $model;
+                }
+            }
+        }
+        return $result;       
    }
    public function totalLinhas(ModelSearchCriteria $search=null){
            $row = $this->query("SELECT id FROM `".$search->gettabela()."` WHERE `excluido` =  '0' ORDER BY id DESC ")->fetch();
@@ -50,7 +65,17 @@
    }
    public function drop($tabela){
         $sql = 'DROP TABLE `'.$tabela.'`';
-        $statement = $this->getDb()->prepare($sql)->execute();     
+        $statement = $this->getDb()->prepare($sql)->execute(); 
+   }
+   public function showTabela($tabela){
+        $sql = 'SHOW TABLES';
+        $statement = $this->getDb()->query($sql, PDO::FETCH_ASSOC)->fetchAll();
+        foreach($statement as $key => $item){
+            if($item['Tables_in_pedidovendas']==$tabela){
+                return 1;
+            }
+        }
+        return null;
    }
    public function getDb() {
         if ($this->db !== null) {
@@ -91,8 +116,16 @@
         // TODO log error, send email, etc.);
         throw new Excecao('DB error [' . $errorInfo[0] . ', ' . $errorInfo[1] . ']: ' . $errorInfo[2]);
    }
-   private function getEncontreSql(ModelSearchCriteria $search = null) {             
-       $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" ';
+   private function getEncontreSql(ModelSearchCriteria $search = null) {        
+       if(preg_match('/[0-9]/',$search->getrazao_social())){
+           //echo 'contem número';
+           $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND cnpj_cpf like "%'.$search->getrazao_social().'%"';
+       }elseif(!preg_match('/[0-9]/',$search->getrazao_social())){
+           $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND razao_social like "%'.$search->getrazao_social().'%"';
+           //echo 'não contém número';
+       }else{
+            $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" ';
+       }
         return $sql;
   }
 }

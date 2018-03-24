@@ -28,13 +28,6 @@
 	 public function setcriado($criado){
 		$this->criado=$criado;
  	}
- private $cod_API;
- public function getcod_API(){
-	return $this->cod_API;
- }
- public function setcod_API($cod_API ){
-	$this->cod_API=$cod_API;
- }
  private $bairro;
  public function getbairro(){
 	return $this->bairro;
@@ -189,6 +182,13 @@
  public function setuInc($uInc ){
 	$this->uInc=$uInc;
  }
+ private $info;
+ public function getinfo(){
+	return $this->info;
+ }
+ public function setinfo($info ){
+	$this->info=$info;
+ }
  private $inscricao_estadual;
  public function getinscricao_estadual(){
 	return $this->inscricao_estadual;
@@ -224,12 +224,12 @@
  public function setrazao_social($razao_social ){
 	$this->razao_social=$razao_social;
  }
- private $tag;
- public function gettag(){
-	return $this->tag;
+ private $tags;
+ public function gettags(){
+	return $this->tags;
  }
- public function settag($tag ){
-	$this->tag=$tag;
+ public function settags($tags ){
+	$this->tags=$tags;
  }
  private $telefone1_ddd;
  public function gettelefone1_ddd(){
@@ -251,6 +251,13 @@
  }
  public function settipo_atividade($tipo_atividade ){
 	$this->tipo_atividade=$tipo_atividade;
+ }
+ private $cod_API;
+ public function getcod_API(){
+	return $this->cod_API;
+ }
+ public function setcod_API($cod_API ){
+	$this->cod_API=$cod_API;
  }
  private $contato;
  public function getcontato(){
