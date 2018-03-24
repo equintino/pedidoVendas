@@ -227,7 +227,7 @@
     <body>
         <div class="conteudo">
             <h3><?= $razao_social ?></h3>
-            <div class="endereco"><?= $endereco ?>, <?= $endereco_numero ?> - <?= $complemento ?> - <?= $bairro ?><br><?= $estado ?> - CEP <?= $cep ?> / Tel. (<?= $telefone1_ddd ?>) <?= $telefone1_numero ?></div>
+            <div class="endereco">Tel. (<?= $telefone1_ddd ?>) <?= $telefone1_numero ?> / <?= $website ?></div>
             <div class="cnpj">CNPJ: <?= $cnpj ?><br></div>
             <div class="ie">IE: <?= $inscricao_estadual ?><br></div>
             <!--<div class="IM">IM:0.000.000-0</div>-->
@@ -236,7 +236,7 @@
             <!--O CCF significa Contador de Cupom Fiscal, que serve como um contador da impressora fiscal que conta os cupons fiscais emitidos pela impressora fiscal.
 
             O COO, Contador de Ordem de Operação, é o número mais destacado em negrito. Este número é o número do Cupom Fiscal. Os números do CCO registram o primeiro e o último documento emitidos no dia-->
-            <span class="pedido">Pedido: <?= preg_replace('/^0+/','',$numero_pedido) ?></span><br>
+            <span class="pedido">Pedido: <?= preg_replace('/^0+/','',@$numero_pedido) ?></span><br>
             <span>Vendedor: <?= @$vendedor ?></span><br>
             <hr>
             <span class="campos">Cliente: </span><span class="dCliente"><?= $_POST['cliente'] ?></span><br>
@@ -261,8 +261,9 @@
                 $vTotalItem=number_format($pedido_venda_produto->det[$i-1]['produto']->valor_mercadoria,'2',',','.');
                 //print_r($dados_adcionais_item));die;
             ?>
-                <span><?= '00'.$i.'</span><span class=cod>'.$codigo.'</span><span class=desc>'.$descricao.'<br>'.$dados_adcionais_item ?><br></span>
-                <span class="quant">&nbsp&nbsp<?= $quantidade.'</span> &nbsp&nbsp&nbsp&nbsp&nbsp X <span class=vlUnit2>'.$vUnitario.'</span><span class=vTotalItem2>'.$vTotalItem ?></span>
+                <span><?= '00'.$i.'</span><span class=cod>'.$codigo.'</span><span class=desc>'.$descricao ?><br></span>
+                <span class="quant">&nbsp&nbsp<?= $quantidade.'</span> &nbsp&nbsp&nbsp&nbsp&nbsp X <span class=vlUnit2>'.$vUnitario.'</span><span class=vTotalItem2>'.$vTotalItem ?></span><br>
+                <div class="seriais"><?= nl2br($dados_adcionais_item) ?></div>
             <?php endfor; ?>
             </div><br>
             <span class=desconto>(Desconto) -<?= $vDesconto ?></span><br>

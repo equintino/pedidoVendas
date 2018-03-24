@@ -194,7 +194,7 @@
             $produto->unidade=$_POST['unidade'.$x.''];
             $produto->percentual_desconto=$_POST['pDescontoItem'.$x.''];
             
-            $inf_adic->dados_adicionais_item=nl2br($_POST['obs_item'.$x.'']);
+            $inf_adic->dados_adicionais_item=$_POST['obs_item'.$x.''];
             
                 
             /// calculando ///
@@ -234,7 +234,7 @@
         
         //echo '<pre>';print_r([$_POST,$pedido_venda_produto]);die;
         $resultado=$pedido->IncluirPedido($pedido_venda_produto);
-        @$numero_pedido=$resultado->numero_pedido;
+        //@$numero_pedido=$resultado->numero_pedido;
         include 'imprime.php';
         die;
         /*
