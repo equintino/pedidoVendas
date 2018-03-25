@@ -1,9 +1,9 @@
-<!DOCUMENT html>
+<html>
 <head>
 <script>
     $(document).ready(function() {
         $('.btn-theme').click(function(){
-            $('#aguarde, #blanket').css('display','none');
+            //$('#aguarde, #blanket').css('display','none');
         });
     });
     function carregando(){
@@ -13,7 +13,6 @@
 <style>
     #blanket,#aguarde {
     position: fixed;
-    display: none;
     }
     #blanket {
         left: 0;
@@ -41,11 +40,10 @@
 </style>
 <?php
     function redirecionar($tempo,$url, $mensagem){
-       header("Refresh: $tempo; url=$url");
-       //echo '<center>'.$mensagem.  '</center><br/>';
-       //echo '<center><img src="endereço_da_imagem" alt="" /><br/><br/><tt>A REDIRECCIONAR</tt></center>';  
+        header("Refresh: $tempo; url=$url"); 
     }
     redirecionar('5','../web/index.php?pagina=cliente&act=atualiza&seleciona=1','mensagem a mostrar');
+    
 ?>
 </head>
 <body onload="carregando()">

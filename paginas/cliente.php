@@ -70,6 +70,7 @@
         header('Location:index.php?pagina=cliente&act=list');
     }elseif($act=='atualiza'){
         //include '../paginas/atualizando.php';
+        //die;
         $clientes_list_request=array('pagina'=>'1','registros_por_pagina'=>'1','apenas_importado_api'=>'N');
         $dados=$cliente->ListarClientes($clientes_list_request);
         $paginas=$dados->total_de_paginas;
