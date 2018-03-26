@@ -162,12 +162,7 @@
 </div>
 <div id="painel"></div>
 </form>
-<?php elseif($act=='cons'):
-    @$codigo_produto=$_GET['codigo'];
-    if(!$codigo_produto)$codigo_produto=0;
-    $produto_servico_cadastro_chave=array("codigo_produto"=>$codigo_produto,"codigo_produto_integracao"=>"","codigo"=>"");
-    $dados=$produtos->ConsultarProduto($produto_servico_cadastro_chave);
-?>
+<?php elseif($act=='cons'): ?>
 <table>
     <tr><th colspan="2">Detalhes do Produto</th></tr>
     <?php foreach($dados as $key => $item): ?>
@@ -193,12 +188,7 @@
         </td></tr>
     <?php endforeach; ?>
 </table>
-<?php elseif($act=='alt'): 
-    @$codigo_produto=$_GET['codigo'];
-    if(!$codigo_produto)$codigo_produto=0;
-    $produto_servico_cadastro_chave=array("codigo_produto"=>$codigo_produto,"codigo_produto_integracao"=>"","codigo"=>"");
-    $dados=$produtos->ConsultarProduto($produto_servico_cadastro_chave);
-?>
+<?php elseif($act=='alt'): ?>
 <form method="POST" action="../paginas/add.php?act=alt&pagina=produto" name="alt">
 <table>
     <tr><th colspan="2">Detalhe do Produto</th></tr>
@@ -230,10 +220,7 @@
 </table>
 <input type="submit" value="Salvar" /> 
 </form>
-<?php elseif($act=='list'): 
-    $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>50,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
-    $dados=$produtos->ListarProdutos($produto_servico_list_request);
-?>
+<?php elseif($act=='list'): ?>
 <div class="head">Lista de Produtos Cadastrados <span class="pag">(pág.<?= $dados->pagina ?>/<?= $dados->total_de_paginas ?>)</span>
 </div>
 <div class="total">total de registros <?= $dados->total_de_registros ?></div>

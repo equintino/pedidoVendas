@@ -1,6 +1,11 @@
 <!DOCUMENT html>
 <head>
 <meta charset="utf-8" >
+<script>
+    /*$(document).ready(function(){
+        $(location).attr('href','../web/index.php?pagina=cliente&act=list&seleciona=1')
+    })*/        
+</script>
 </head>
 <body>
 <?php
@@ -69,7 +74,13 @@
         $cliente->ExcluirCliente($clientes_cadastro_chave);
         header('Location:index.php?pagina=cliente&act=list');
     }elseif($act=='atualiza'){
-        //include '../paginas/atualizando.php';
+        if($seleciona==0){
+            include '../paginas/atualizando.php';
+            die;
+        }elseif($seleciona==2){
+            echo '<script>var seleciona=2</script>';
+            include '../paginas/atualizando.php';
+        }
         //die;
         $clientes_list_request=array('pagina'=>'1','registros_por_pagina'=>'1','apenas_importado_api'=>'N');
         $dados=$cliente->ListarClientes($clientes_list_request);
@@ -148,9 +159,9 @@
         
         if($gravado){
             echo 'Atualização de Cleintes realizada com sucesso.';
-            header('Location:index.php?pagina=cliente&act=list&seleciona=1');
+            echo '<script>window.location.assign(\'index.php?pagina=cliente&act=list&seleciona=1\')</script>';
         }
-        die;
+        //die;
     }
 ?>
 </body>

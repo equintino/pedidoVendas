@@ -1,15 +1,20 @@
 <html>
 <head>
-<script>
-    $(document).ready(function() {
-        $('.btn-theme').click(function(){
-            //$('#aguarde, #blanket').css('display','none');
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            if(seleciona!=2){
+                $(location).attr('href','../web/index.php?pagina=cliente&act=atualiza&seleciona=2')
+            }
+            //alert('oi');
+            /*$('.btn-theme').click(function(){
+                //$('#aguarde, #blanket').css('display','none');
+            });*/
         });
-    });
-    function carregando(){
-        document.getElementById('blanket').style.display = 'block';document.getElementById('aguarde').style.display = 'block';
-    }
-</script>
+        function carregando(){
+            document.getElementById('blanket').style.display = 'block';document.getElementById('aguarde').style.display = 'block';
+        }
+    </script>
 <style>
     #blanket,#aguarde {
     position: fixed;
@@ -39,15 +44,14 @@
     }
 </style>
 <?php
-    function redirecionar($tempo,$url, $mensagem){
+    /*function redirecionar($tempo,$url, $mensagem){
         header("Refresh: $tempo; url=$url"); 
-    }
-    redirecionar('5','../web/index.php?pagina=cliente&act=atualiza&seleciona=1','mensagem a mostrar');
-    
+    }*/
+    //redirecionar('5','../web/index.php?pagina=cliente&act=atualiza&seleciona=1','mensagem a mostrar');
 ?>
 </head>
 <body onload="carregando()">
     <div id="blanket"></div>
-    <div id="aguarde">Aguarde... <br>Atualizando Tabela de Clientes.</div> 
+    <div id="aguarde">Aguarde por 5 minutos... <br>Atualizando Tabela de Clientes.</div> 
 </body>
 </html>

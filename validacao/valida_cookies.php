@@ -1,8 +1,17 @@
 <html>
     <head>
+        <?php
+            /*if($_GET['pagina']=='atualizando'){
+                function redirecionar($tempo,$url, $mensagem){
+                    header("Refresh: $tempo; url=$url"); 
+                }
+                redirecionar('5','../web/index.php?pagina=cliente&act=atualiza&seleciona=1','mensagem a mostrar');        
+            }*/
+        ?>
     </head>
     <body bgcolor=#4cb1f1>
 <?php
+    $teste='teste';
     $userdao='dao/UserDao.php';
     $userserachcriteria='dao/UserSearchCriteria.php';
     $config='config/Config.php';

@@ -7,7 +7,6 @@
    public function encontre(ModelSearchCriteria $search = null){
             set_time_limit(3600);
             ini_set('memory_limit', '-1');
-            //echo '<pre>';print_r($search);die;
         $result = array();
         foreach ($this->query($this->getEncontreSql($search)) as $row){
             $model = new Model();

@@ -15,7 +15,7 @@
     }    
     $dao->save($user);
     
-    $string="Location: ../index.html";
-    header($string);
+    //$string="Location: ../index.html";
+    //header($string);
 ?>
 <script>window.location.assign("../index.html")</script>
