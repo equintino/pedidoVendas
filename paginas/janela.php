@@ -1,7 +1,7 @@
 <html>
     <head>
         <title>Janela modal</title>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.1/jquery.min.js"></script> 
+        <script type="text/javascript" src="../web/js/jquery-3.2.1.min.js"></script>
 	<script type="text/javascript">
             $(document).ready(function(){
 		$("a[rel=modal]").click( function(ev){
@@ -55,7 +55,7 @@
                             })
                     })
                     $('#pnl1 table tr .lupa img').click(function(){
-                        pagAtual=1;
+                        var pagAtual;
                         //$('.tudo').hide();
                         //$('.tituloProd').text('Aguarde...');
                         /*if(!pagAtual){
@@ -95,7 +95,6 @@
 		z-index:9900;
 		padding:10px;
 		border-radius:10px;
-                
             }
             #mascara{
 		position:absolute;
@@ -120,4 +119,4 @@
 	<!-- mascara para cobrir o site -->	
 	<div id="mascara"></div>
     </body>
-</html> 
+</html>
