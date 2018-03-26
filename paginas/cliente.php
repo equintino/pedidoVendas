@@ -97,10 +97,8 @@
         for($x=1;$x<$paginas;$x++){
             $clientes_list_request=array('pagina'=>$x,'registros_por_pagina'=>'50','apenas_importado_api'=>'N');
             $dados=$cliente->ListarClientes($clientes_list_request);
-            //echo '<pre>';print_r($dados->clientes_cadastro);
             $result = array();
             $campos = array();
-            //print_r(is_object($dados));
             if(is_object($dados)){
                 foreach($dados->clientes_cadastro as $row){
                     if($y==1){
@@ -122,7 +120,6 @@
                         }
                             // apaga e cria nova tabela //
                         include '../dao/CRUD.php';
-                        //print_r($dao);die;
                         $dao = new CRUD();
                         $dao->drop('tb_cliente');
                     }

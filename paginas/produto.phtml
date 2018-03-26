@@ -225,10 +225,10 @@
 </div>
 <div class="total">total de registros <?= $dados->total_de_registros ?></div>
 <table>
-    <tr><th>Código</th><th>Cód. Int.</th><th>Produto</th><th>Quant. em Estoque/Mínimo</th></tr>
+    <tr><th>Código</th><th>Descrição</th><th>Valor</th></tr>
     <?php 
     foreach($dados->produto_servico_cadastro as $produto): ?>
-    <tr class="razaosocial" linha="<?= $produto->codigo_produto ?>"><td><?= $produto->codigo_produto ?></td><td><?= $produto->codigo_produto_integracao ?></td><td class="rs"><?= mb_strtoupper($produto->descricao,'utf-8') ?></td><td align=center ><?php if($produto->quantidade_estoque < $produto->estoque_minimo){echo '<font color=red>'.$produto->quantidade_estoque.'</font>/'.$produto->estoque_minimo;}else{echo $produto->quantidade_estoque.'/'.$produto->estoque_minimo;} ?></td><td class="edicao"><img title="Altera" height="12px" src="../web/img/editar.png" codigo="<?= $produto->codigo_produto ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $produto->codigo_produto ?>" razao="<?= mb_strtoupper($produto->descricao,'utf-8') ?>" /></td></tr>
+    <tr class="razaosocial" linha="<?= $produto->codigo_produto ?>"><td><?= $produto->codigo ?></td><td class="rs"><?= mb_strtoupper($produto->descricao,'utf-8') ?></td><td align=center ><?= number_format($produto->valor_unitario,'2',',','.') ?></td><td class="edicao"><img title="Altera" height="12px" src="../web/img/editar.png" codigo="<?= $produto->codigo_produto ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $produto->codigo_produto ?>" razao="<?= mb_strtoupper($produto->descricao,'utf-8') ?>" /></td></tr>
     <?php endforeach; ?>
 </table>
 <?php endif; ?>

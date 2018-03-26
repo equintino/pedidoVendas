@@ -15,6 +15,17 @@
         }
         return $result;
    }
+   public function encontre2(ProdutoSearchCriteria $search = null){
+            set_time_limit(3600);
+            ini_set('memory_limit', '-1');
+        $result = array();
+        foreach ($this->query($this->getEncontreSql2($search)) as $row){
+            $modelProduto = new modelProduto();
+            ProdutoMapper::map($modelProduto, $row);
+            $result[$modelProduto->getid()] = $modelProduto;
+        }
+        return $result;
+   }
    public function encontrePorId(ModelSearchCriteria $search=null){
         if($search->getid() != null){
            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" and id = ' . (int) $search->getid())->fetch();
@@ -55,6 +66,14 @@
             return $this->insert($model);
         }
         return $this->update($model);
+   }
+   public function grava2(modelProduto $modelProduto){
+        //echo '<pre>';print_r($modelProduto);
+        set_time_limit(3600);
+        if ($modelProduto->getid() === null) {
+            return $this->insert($modelProduto);
+        }
+        return $this->update($modelProduto);
    }
    public function exclui($id) {
         $sql = 'delete from `'.$model->gettabela().'` WHERE id = :id';
@@ -99,6 +118,16 @@
         }
         return $model;
    }
+   public function execute2($sql,modelProduto $modelProduto){
+        $statement = $this->getDb()->prepare($sql);
+        $this->executeStatement($statement, $this->getParams($modelProduto));
+        $search=new ModelSearchCriteria();        
+        $search->settabela($modelProduto->gettabela());
+        if (!$modelProduto->getid()) {
+            //return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));
+        }
+        return $modelProduto;
+   }
    private function executeStatement(PDOStatement $statement, array $params){
         if (!$statement->execute($params)){
             self::throwDbError($this->getDb()->errorInfo());
@@ -122,6 +151,18 @@
            $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND cnpj_cpf like "%'.$search->getrazao_social().'%"';
        }elseif(!preg_match('/[0-9]/',$search->getrazao_social())){
            $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND razao_social like "%'.$search->getrazao_social().'%"';
+           //echo 'não contém número';
+       }else{
+            $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" ';
+       }
+        return $sql;
+  }
+   private function getEncontreSql2(ProdutoSearchCriteria $search = null) {        
+       if(preg_match('/[0-9]/',$search->getcodigo())){
+           //echo 'contem número';
+           $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo like "%'.$search->getcodigo().'%"';
+       }elseif(!preg_match('/[0-9]/',$search->getcodigo())){
+           $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND descricao like "%'.$search->getcodigo().'%"';
            //echo 'não contém número';
        }else{
             $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" ';

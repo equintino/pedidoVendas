@@ -1,6 +1,8 @@
 <meta charset="utf-8" >
 <?php
     @$excl=$_GET['excl'];
+    @$tipoBusca=$_GET['tipoBusca'];
+    @$buscaPor=$_GET['buscaPor'];
     if($excl==1){
         print_r($_GET);die;
     }
@@ -33,9 +35,34 @@
         if(!$codigo_produto)$codigo_produto=0;
         $produto_servico_cadastro_chave=array("codigo_produto"=>$codigo_produto,"codigo_produto_integracao"=>"","codigo"=>"");
         $dados=$produtos->ConsultarProduto($produto_servico_cadastro_chave);
-    }elseif($act=='list'){ 
-        $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>50,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
-        $dados=$produtos->ListarProdutos($produto_servico_list_request);
+    }elseif($act=='list'){  
+        //// Listar Produtos ////
+        $tipoBusca='local';
+        if($tipoBusca=='servidor'){
+            $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>50,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
+            $dados=$produtos->ListarProdutos($produto_servico_list_request);
+            $paginas=$dados->total_de_paginas;
+            $registrosTotal=$dados->total_de_registros;
+            //echo '<pre>';print_r($dados->produto_servico_cadastro);
+        }else{
+            $dao = new Dao();
+            $search = new ProdutoSearchCriteria();
+            $search->settabela('tb_produto');
+            $search->setcodigo($buscaPor);
+                $dados=$dao->encontre2($search);
+            //echo '<pre>';print_r($dados_);die;
+            if(@$buscaPor){
+                //$dados_=$dao->encontre2($search);
+            }/*else{
+                $dados=null;
+                if(@!$tagsArray[1]){
+                    $search->settags($tagLista);
+                }else{
+                    $search->settags($tagsArray);
+                }
+                $dados_=$dao->encontrePorTag($search);
+            }*/
+        }
     }elseif($act=='atualiza'){
         $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>1,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
         $dados=$produtos->ListarProdutos($produto_servico_list_request);
@@ -50,14 +77,17 @@
                 foreach($dados as $item){
                     foreach($item as $key => $item_){
                         if($key=='dadosIbpt'){
+                            $campos[]='dadosIbpt';
                             foreach($item_ as $key2 => $item2){
                                 $campos[]=$key2;
                             }
                         }elseif($key=='imagens'){
+                            $campos[]='imagens';
                             foreach($item_ as $item2){
                                 $campos[]='url_imagem';
                             }
                         }elseif($key=='recomendacoes_fiscais'){
+                            $campos[]='recomendacoes_fiscais';
                             foreach($item_ as $key2 => $item2){
                                 $campos[]=$key2;
                             }
@@ -66,13 +96,48 @@
                         }
                     }
                 }
+                if(!file_exists('../model/modelProduto.php') || !file_exists('../dao/ProdutoSearchCriteria.php') || !file_exists('../dao/CRUDProduto.php') || !file_exists('../mapping/ProdutoMapper.php')){
+                    include 'criaClasses2.php';
+                    $arquivo = new criaClsses2();
+                    $arquivo->tabela='tb_produto';
+                    $variaveis=$arquivo->novoArquivo($campos);
+                }   
+                    // apaga e cria nova tabela //
+                include '../dao/CRUDProduto.php';
+                $dao2=new CRUDProduto();
+                $dao2->drop('tb_produto');
+            
             }
-            if(!file_exists('../model/modelProduto.php') || !file_exists('../dao/ProdutoSearchCriteria.php') || !file_exists('../dao/CRUDProduto.php') || !file_exists('../mapping/ProdutoMapper.php')){
-                echo 'não tem';
-                die;
+            $modelProduto = new modelProduto();
+            foreach($dados as $item){
+                foreach($item as $key => $item_){
+                    if($key == 'dadosIbpt'){
+                        foreach($item_ as $key2 => $item2){
+                            $classe='set'.$key2;
+                            $modelProduto->$classe($item2);
+                        } 
+                    }elseif($key == 'recomendacoes_fiscais'){
+                        foreach($item_ as $key2 => $item2){
+                            $classe='set'.$key2;
+                            $modelProduto->$classe($item2);
+                        }
+                    }elseif($key == 'imagens'){
+                        if(@$item_[0]->url_imagem){
+                            @$modelProduto->seturl_imagem($item_[0]->url_imagem);
+                        }
+                    }else{
+                        $classe='set'.$key;
+                        $modelProduto->$classe($item_);
+                    }
+                }
             }
+            //echo 'Atualização de número '.$y;
+            $gravado=$dao2->grava2($modelProduto);
             $y++;
-            echo '<pre>';print_r($campos);die;
-        }die;
+        }
+        if($gravado){
+            echo 'Atualização de Produtos realizada com sucesso.';
+            echo '<script>window.location.assign(\'index.php?pagina=produto&act=list&seleciona=1\')</script>';
+        }
     }
 ?>
