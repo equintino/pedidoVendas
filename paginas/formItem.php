@@ -11,8 +11,10 @@
         var tipoBusca=$('.procura .tipoBusca input:checked').val();
         if(tipoBusca=='servidor'){
             $('.loja').hide()
+            //$('.procura input').focus()
         }else if(tipoBusca=='local'){
             $('.loja').show()
+            //$('.procura input').focus()
         }
         $('.procura input[name=tipoBusca]:radio').click(function(){
             if($(this).val()=='local'){
@@ -22,9 +24,38 @@
                 $('.paginacao, .listaProduto').show()
                 $('.loja').hide()
             }
+            $('.procura input[name=procura]').focus()
             tipoBusca=$(this).val();
             if(tipoBusca=='local'){
 
+            }
+        })
+        $('.procura img').click(function(){
+            if(tipoBusca=='local'){
+                buscaProduto=$('.procura input[name=procura]').val();
+                link='../paginas/formItem.php?tipoBusca='+tipoBusca+'&buscaProduto+'+buscaProduto+'';
+                $('.listaProduto').hide()
+                $('.tituloProd').text('Aguarde...');
+                $('a[rel=modal]').attr('href',link);
+                $("a[rel=modal]").trigger("click")
+            }
+        })
+        $(document).keydown(function(e){
+            if(e.keyCode=='13'){
+                alert($('.procura input:focus').val());
+                if(tipoBusca=='local'){
+                    buscaProduto=$('.procura input[name=procura]').val();
+                    link='../paginas/formItem.php?tipoBusca='+tipoBusca+'&buscaProduto+'+buscaProduto+'';
+                    $('.tituloProd').text('Aguarde...');
+                    $('a[rel=modal]').attr('href',link);
+                    $("a[rel=modal]").trigger("click")
+                }else{
+                    if(tipoBusca=='servidor'){
+                        return false;
+                    }
+                }
+            }else{
+                return false;
             }
         })
         $('button').each(function(){
@@ -156,6 +187,7 @@
             $('.tituloProd').text('Aguarde...');
             $("a[rel=modal]").trigger("click")
         })
+        $('.procura input[name=procura]').focus()
     })
 </script>
 <style>
@@ -195,8 +227,9 @@
         height: 565px;
         overflow-y: scroll;
         overflow-x: hidden;
-        top: -40px;
+        top: -15px;
         z-index: 1;
+        //border: solid red;
     }
     .col1{
         width: 125px;
@@ -247,7 +280,7 @@
         position: relative;
         float: right;
         //clear: both;
-        top: -38px;
+        top: -10px;
         //border: solid yellow;
     }
     button:hover{
@@ -274,16 +307,19 @@
 </style>
 <div id="dadosItem"></div>
 <?php
-    //echo '<pre>';print_r($_GET);die;
+    include '../dao/dao.php';
+    include '../dao/ProdutoSearchCriteria.php';
+    include '../config/Config.php';
     include '../model/ProdutosCadastroJsonClient.php';
+    include '../model/modelProduto.php';
+    include '../mapping/ProdutoMapper.php';
     $loja=null;
     $produto=new ProdutosCadastroJsonClient();
     
     if(key_exists('pagAtual', $_GET)){
         $pagAtual=$_GET['pagAtual'];
-    }/*else{
-        $pagAtual=1;
-    }*/
+    }
+    @$buscaProduto=$_GET['buscaProduto'];
     
     if(key_exists('tipoBusca', $_GET)){
         $tipoBusca=$_GET['tipoBusca'];
@@ -319,15 +355,37 @@
         $dados=$produto->ListarProdutos($produto_servico_list_request);
         $detalhes=$dados->produto_servico_cadastro;
     }else{
-        die;
+        //print_r($_GET);
+        //print_r($buscaProduto);
+        $dao = new Dao();
+        $search = new ProdutoSearchCriteria();
+        $search->settabela('tb_produto');
+        $search->setcodigo($buscaProduto);
+        $detalhes=$dao->encontre2($search);
+        //echo '<pre>';print_r($detalhes[1]);die;
+        
+        /*if(@$buscaPor){
+            $dados_=$dao->encontre($search);
+        }else{
+            $dados=null;
+            if(@!$tagsArray[1]){
+                $search->settags($tagLista);
+            }else{
+                $search->settags($tagsArray);
+            }
+            $dados_=$dao->encontrePorTag($search);
+        }*/
+        //die;
     }
 
     echo '<span class=tituloProd>Páginas </span>';
-    for($g=1;$g <= $dados->total_de_paginas;$g++){
-        echo '<button class=paginacao>'.$g.'</button>&nbsp&nbsp';
+    if($tipoBusca=='servidor'){
+        for($g=1;$g <= $dados->total_de_paginas;$g++){
+            echo '<button class=paginacao>'.$g.'</button>&nbsp&nbsp';
+        }
     }
     ?>
-<form method="post" action="../paginas/formItem.php?" > 
+<!--<form method="post" action="../paginas/formItem.php?" >-->
     <div class="procura">
         <span class="loja">
             <label><b>LOJA:</b> </label>
@@ -339,7 +397,7 @@
                     </select>
             <?php //endfor ?>
         </span>
-        <input autofocus type="text" name="procura" title="Pesquisar por clientes" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por clientes" /><br>
+        <input autofocus type="text" name="procura" title="Pesquisar por produtos" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por produtos" /><br>
         <div class="tipoBusca"><input title="Tipo de busca" type="radio" name="tipoBusca" value="local" <?= $local ?>/><b> Local</b> &nbsp&nbsp&nbsp<input title="Tipo de busca" type="radio" name="tipoBusca" value="servidor" <?= $servidor ?>/> <b>Servidor</b></div>
     </div>
     <div class='tudo'>
@@ -350,45 +408,57 @@
                 <?php
                     $w=$row=0;
                     $col=1;
-                    foreach($detalhes as $prod){ 
-    
-                    //$prcListarCaractRequest=array('nPagina'=>'1','nRegPorPagina'=>'50','nCodProd'=>$prod->codigo_produto);
-                    //@$caract=$caracteristica->ListarCaractProduto($prcListarCaractRequest)->listaCaracteristicas;
-                    /*if(count(@$caract)!= 0){
-                        foreach($caract as $itemCaract){
-                            if(strtoupper($itemCaract->cNomeCaract)=='LOJA'){
-                                //echo $itemCaract->cNomeCaract;
-                                $loja=$itemCaract->cConteudo;
+                    if($tipoBusca=='local'){
+                        echo '<th  width="10%" class="col1">CÓDIGO</th>';
+                        echo '<th class="descricao col2">DESCRIÇÃO DO PRODUTO</th>';
+                        echo '<th class="col3">VL.UNITÁRIO</th></tr></thead>';
+                        //echo '<pre>';print_r($detalhes[1]);//die;
+                        //echo strstr($detalhes[1],'aliquo');die;
+                        foreach($detalhes as  $item){
+                            echo '<tr class=listaProduto><td class="col1" align=center><div width=10px>'.$item->getcodigo().'</td>';
+                            echo '<td class="col2" align=center>'.$item->getdescricao().'</td>';
+                            echo '<td class="col3" align=right>'.number_format($item->getvalor_unitario(),'2',',','.').'</td></tr>';
+                        }
+                    }elseif($tipoBusca=='servidor'){
+                        foreach($detalhes as $prod){ 
+                            //$prcListarCaractRequest=array('nPagina'=>'1','nRegPorPagina'=>'50','nCodProd'=>$prod->codigo_produto);
+                            //@$caract=$caracteristica->ListarCaractProduto($prcListarCaractRequest)->listaCaracteristicas;
+                            /*if(count(@$caract)!= 0){
+                                foreach($caract as $itemCaract){
+                                    if(strtoupper($itemCaract->cNomeCaract)=='LOJA'){
+                                        //echo $itemCaract->cNomeCaract;
+                                        $loja=$itemCaract->cConteudo;
+                                    }else{
+                                        $loja=null;
+                                    }
+                                }
                             }else{
                                 $loja=null;
-                            }
-                        }
-                    }else{
-                        $loja=null;
-                    }*/
-                        if($w==0){
-                            foreach($prod as $key => $item){
-                                if(!strstr($key,'aliquo') && !strstr($key,'altura') && !strstr($key,'bloqueado') && !strstr($key,'cest') && !strstr($key,'familia') && !strstr($key,'cst') && !strstr($key,'dias') && !stristr($key,'dadosib') && !stristr($key,'csosn') && !stristr($key,'importado') && !stristr($key,'inativo') && !stristr($key,'largura') && !stristr($key,'peso') && !stristr($key,'profundidade') && !stristr($key,'red') && !stristr($key,'recomendacoes') && !stristr($key,'imagens') && !stristr($key,'integracao') && !stristr($key,'marca') && !stristr($key,'cfop') && !stristr($key,'produto') && !stristr($key,'minimo') && !stristr($key,'internas') && !stristr($key,'tipo') && !stristr($key,'quantidade_estoque') && !stristr($key,'ean') && !stristr($key,'ncm') && !stristr($key,'unidade') && !stristr($key,'detalhada')){
-                                    if($key=='descricao'){
-                                        echo '<th class="descricao col'.$col.'">DESCRIÇÃO DO PRODUTO</th>';
-                                    }elseif($key=='valor_unitario'){
-                                        echo '<th class="col'.$col.'">VL.UNITÁRIO</th>';
-                                    }elseif($key=='codigo'){
-                                        echo '<th  width="10%" class="col'.$col.'">CÓDIGO</th>';
-                                    }else{
-                                        echo '<th class="col'.$col.'">'.mb_strtoupper(str_replace('_',' ',$key),'utf-8').'</th>';
+                            }*/
+                            if($w==0){
+                                foreach($prod as $key => $item){
+                                    if(!strstr($key,'aliquo') && !strstr($key,'altura') && !strstr($key,'bloqueado') && !strstr($key,'cest') && !strstr($key,'familia') && !strstr($key,'cst') && !strstr($key,'dias') && !stristr($key,'dadosib') && !stristr($key,'csosn') && !stristr($key,'importado') && !stristr($key,'inativo') && !stristr($key,'largura') && !stristr($key,'peso') && !stristr($key,'profundidade') && !stristr($key,'red') && !stristr($key,'recomendacoes') && !stristr($key,'imagens') && !stristr($key,'integracao') && !stristr($key,'marca') && !stristr($key,'cfop') && !stristr($key,'produto') && !stristr($key,'minimo') && !stristr($key,'internas') && !stristr($key,'tipo') && !stristr($key,'quantidade_estoque') && !stristr($key,'ean') && !stristr($key,'ncm') && !stristr($key,'unidade') && !stristr($key,'detalhada')){
+                                        if($key=='descricao'){
+                                            echo '<th class="descricao col'.$col.'">DESCRIÇÃO DO PRODUTO</th>';
+                                        }elseif($key=='valor_unitario'){
+                                            echo '<th class="col'.$col.'">VL.UNITÁRIO</th>';
+                                        }elseif($key=='codigo'){
+                                            echo '<th  width="10%" class="col'.$col.'">CÓDIGO</th>';
+                                        }else{
+                                            echo '<th class="col'.$col.'">'.mb_strtoupper(str_replace('_',' ',$key),'utf-8').'</th>';
+                                        }
+                                        $col++;
                                     }
-                                    $col++;
                                 }
+                                //echo '</tr>';
+                                $w=1;
+                                goto s;
                             }
-                            echo '</tr>';
-                            $w=1;
-                            goto s;
-                        }
-                        s:
-                        $col=1;
-                        $z=0;
-                ?>
+                            s:
+                            $col=1;
+                            $z=0;
+                    ?>
+                    </tr>
                 </thead>
             <?php
                 echo '<tr class="listaProduto" row="'.$row.'" ';
@@ -422,20 +492,10 @@
 
         <!--<tr cProduto="<?= $prod->codigo_produto ?>" vUnitario="<?= $vUnitario ?>" qEstoque="<?= $prod->quantidade_estoque ?>" descricao="<?= $prod->descricao ?>" cfop='<?= $prod->cfop ?>' ean='<?= $prod->ean ?>' ncm='<?= $prod->ncm ?>' unidade='<?= $prod->unidade ?>' dados_produto=dados_produto><td align="center" ><?= $prod->descricao ?></td><td align="center"><?= $prod->quantidade_estoque ?></td><td align='right'><?= $vUnitario ?></td></tr>-->
     <?php } ?>
-    <?php /*       }
-        }else{
-            $produto_servico_cadastro_chave=array("codigo_produto"=> $codigo_produto,"codigo_produto_integracao"=> "","codigo"=> "");
-            $prod=$produto->ConsultarProduto($produto_servico_cadastro_chave);
-            $vUnitario=number_format($prod->valor_unitario,'2',',','.');
-            //echo '<pre>';
-            //print_r($prod);
-    ?>
-        <tr cProduto="<?= $prod->codigo_produto ?>" vUnitario="<?= $vUnitario ?>" qEstoque="<?= $prod->quantidade_estoque ?>" descricao="<?= $prod->descricao ?>" dados_produto=dados_produto><td align="center" ><?= $prod->descricao ?></td><td align="center"><?= $prod->quantidade_estoque ?></td><td align='right'><?= $vUnitario ?></td></tr>
-    <?php } */
-    ?>
+    <?php } ?>
             </table>
         </div>
     </div>
-</form>
+<!--</form>-->
 <!--div id="aqui">atencao</div>-->
 <?php //echo '<pre>';print_r($dados_produto); ?>
