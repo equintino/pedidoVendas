@@ -33,7 +33,7 @@
         $('.procura img').click(function(){
             if(tipoBusca=='local'){
                 buscaProduto=$('.procura input[name=procura]').val();
-                link='../paginas/formItem.php?tipoBusca='+tipoBusca+'&buscaProduto+'+buscaProduto+'';
+                link='../paginas/formItem.php?tipoBusca='+tipoBusca+'&buscaProduto='+buscaProduto+'';
                 $('.listaProduto').hide()
                 $('.tituloProd').text('Aguarde...');
                 $('a[rel=modal]').attr('href',link);
@@ -42,10 +42,10 @@
         })
         $(document).keydown(function(e){
             if(e.keyCode=='13'){
-                alert($('.procura input:focus').val());
+                //alert($('.procura input:focus').val());
                 if(tipoBusca=='local'){
                     buscaProduto=$('.procura input[name=procura]').val();
-                    link='../paginas/formItem.php?tipoBusca='+tipoBusca+'&buscaProduto+'+buscaProduto+'';
+                    link='../paginas/formItem.php?tipoBusca='+tipoBusca+'&buscaProduto='+buscaProduto+'';
                     $('.tituloProd').text('Aguarde...');
                     $('a[rel=modal]').attr('href',link);
                     $("a[rel=modal]").trigger("click")
@@ -54,8 +54,6 @@
                         return false;
                     }
                 }
-            }else{
-                return false;
             }
         })
         $('button').each(function(){
@@ -105,6 +103,7 @@
                 $(this).css('background','white')
             })
             $(this).click(function(){
+                alert($(this));
                 descricao=$(this).attr('descricao');
                 cProduto=$(this).attr('codigo');
                 cOmie=$(this).attr('codigo_produto');
@@ -355,14 +354,11 @@
         $dados=$produto->ListarProdutos($produto_servico_list_request);
         $detalhes=$dados->produto_servico_cadastro;
     }else{
-        //print_r($_GET);
-        //print_r($buscaProduto);
         $dao = new Dao();
         $search = new ProdutoSearchCriteria();
         $search->settabela('tb_produto');
         $search->setcodigo($buscaProduto);
         $detalhes=$dao->encontre2($search);
-        //echo '<pre>';print_r($detalhes[1]);die;
         
         /*if(@$buscaPor){
             $dados_=$dao->encontre($search);

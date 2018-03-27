@@ -157,9 +157,8 @@
        }
         return $sql;
   }
-   private function getEncontreSql2(ProdutoSearchCriteria $search = null) {        
+   private function getEncontreSql2(ProdutoSearchCriteria $search = null) {
        if(preg_match('/[0-9]/',$search->getcodigo())){
-           //echo 'contem número';
            $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo like "%'.$search->getcodigo().'%"';
        }elseif(!preg_match('/[0-9]/',$search->getcodigo())){
            $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND descricao like "%'.$search->getcodigo().'%"';
@@ -167,6 +166,7 @@
        }else{
             $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" ';
        }
+       //echo '<pre>';print_r($sql);die;
         return $sql;
   }
 }
