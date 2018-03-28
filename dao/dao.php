@@ -60,6 +60,13 @@
         }
         return $row;
    }
+   public function totalLinhas2(ProdutoSearchCriteria $search=null){
+        $row = $this->query("SELECT id FROM `".$search->gettabela()."` WHERE `excluido` =  '0' ORDER BY id DESC ")->fetch();
+        if (!$row) {
+            return null;
+        }
+        return $row;
+   }
    public function grava(Model $model){
         set_time_limit(3600);
         if ($model->getid() === null) {
@@ -157,16 +164,15 @@
        }
         return $sql;
   }
-   private function getEncontreSql2(ProdutoSearchCriteria $search = null) {
-       if(preg_match('/[0-9]/',$search->getcodigo())){
-           $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo like "%'.$search->getcodigo().'%"';
-       }elseif(!preg_match('/[0-9]/',$search->getcodigo())){
-           $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND descricao like "%'.$search->getcodigo().'%"';
-           //echo 'não contém número';
+   private function getEncontreSql2(ProdutoSearchCriteria $search = null){
+       $codigo=str_replace(' ','%',$search->getcodigo());
+       if(preg_match('/[0-9]/',$codigo)){
+           $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo like "%'.$codigo.'%"';
+       }elseif(!preg_match('/[0-9]/',$codigo)){
+           $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND descricao like "%'.$codigo.'%"';
        }else{
             $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" ';
        }
-       //echo '<pre>';print_r($sql);die;
         return $sql;
   }
 }
