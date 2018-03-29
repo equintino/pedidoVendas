@@ -11,21 +11,12 @@
     })
 </script>
 <?php
-    //include '../dao/dao.php';
-    //include '../dao/ProdutoSearchCriteria.php';
-    //include '../config/Config.php';
-    //include '../config/OmieAppAuth.php';
-    //include '../model/ProdutosCadastroJsonClient.php';
-    //include '../model/modelProduto.php';
-    //include '../mapping/ProdutoMapper.php';
-    //include '../excecao/Excecao.php';
     include '../dao/ModelSearchCriteria.php';
     if($act=='atualiza'){
         $produtos=new ProdutosCadastroJsonClient();
 
         $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>1,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
         $dados=$produtos->ListarProdutos($produto_servico_list_request);
-        //echo '<pre>';print_r($dados);die;
         $paginas=$dados->total_de_paginas;
         $registroa=$dados->total_de_registros;
         $y=1;
@@ -63,7 +54,6 @@
                     $arquivo->tabela='tb_produto';
                     $variaveis=$arquivo->novoArquivo($campos);
                 }   
-                    // apaga e cria nova tabela //
                 include '../dao/CRUDProduto.php';
                 $dao2=new CRUDProduto();
                 $dao2->drop('tb_produto');
@@ -92,15 +82,11 @@
                     }
                 }
             }
-    //echo '<pre>';print_r($modelProduto);die;
-            //echo 'Atualização de número '.$y;
             $gravado=$dao2->grava2($modelProduto);
             $y++;
         }
         if($gravado){
             echo 'Atualização de Produtos realizada com sucesso.';
-            //echo '<script>window.location.assign(\'index.php?pagina=produto&act=list&seleciona=1\')</script>';
         }
     }
 ?>
-

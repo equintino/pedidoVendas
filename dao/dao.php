@@ -53,6 +53,16 @@
         }
         return $result;       
    }
+   public function encontrePorLoja(ProdutoSearchCriteria $search=null){
+        $result = array();
+        $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND `loja` like "%'.$search->getloja().'%"')->fetchAll();
+        foreach($row as $item){
+            $modelProduto = new modelProduto();
+            ProdutoMapper::map($modelProduto, $item);
+            $result[$modelProduto->getid()] = $modelProduto;
+        }
+        return $result;
+   }
    public function totalLinhas(ModelSearchCriteria $search=null){
            $row = $this->query("SELECT id FROM `".$search->gettabela()."` WHERE `excluido` =  '0' ORDER BY id DESC ")->fetch();
         if (!$row) {
@@ -164,15 +174,15 @@
        }
         return $sql;
   }
-   private function getEncontreSql2(ProdutoSearchCriteria $search = null){
-       $codigo=str_replace(' ','%',$search->getcodigo());
-       if(preg_match('/[0-9]/',$codigo)){
-           $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo like "%'.$codigo.'%"';
-       }elseif(!preg_match('/[0-9]/',$codigo)){
-           $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND descricao like "%'.$codigo.'%"';
-       }else{
+    private function getEncontreSql2(ProdutoSearchCriteria $search = null){
+        $codigo=str_replace(' ','%',$search->getcodigo());
+        if(preg_match('/[0-9]/',$codigo)){
+            $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo like "%'.$codigo.'%"';
+        }elseif(!preg_match('/[0-9]/',$codigo)){
+            $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND descricao like "%'.$codigo.'%"';
+        }else{
             $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" ';
-       }
+        }
         return $sql;
-  }
+    }
 }

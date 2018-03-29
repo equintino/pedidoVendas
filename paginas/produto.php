@@ -43,13 +43,12 @@
             $dados=$produtos->ListarProdutos($produto_servico_list_request);
             $paginas=$dados->total_de_paginas;
             $registrosTotal=$dados->total_de_registros;
-            //echo '<pre>';print_r($dados->produto_servico_cadastro);
         }else{
             $dao = new Dao();
             $search = new ProdutoSearchCriteria();
             $search->settabela('tb_produto');
             $search->setcodigo($buscaPor);
-                $dados=$dao->encontre2($search);
+            $dados=$dao->encontre2($search);
             //echo '<pre>';print_r($dados_);die;
             if(@$buscaPor){
                 //$dados_=$dao->encontre2($search);
@@ -66,6 +65,7 @@
     }elseif($act=='atualiza'){
         $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>1,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
         $dados=$produtos->ListarProdutos($produto_servico_list_request);
+        
         $paginas=$dados->total_de_paginas;
         $registroa=$dados->total_de_registros;
         $y=1;
@@ -131,13 +131,62 @@
                     }
                 }
             }
+            
+            //echo '<pre>';print_r($modelProduto);die;
+            //$cod_prod=($dados->produto_servico_cadastro);
+            //goto caract;
+            //die;
+            $caracteristica= new ProdutosCaracteristicasJsonClient();
+            //foreach($cod_prod as $item){
+                $prcListarCaractRequest=array("nPagina"=>1,"nRegPorPagina"=>50,"nCodProd"=>$modelProduto->getcodigo_produto());
+                $conteudo=$caracteristica->ListarCaractProduto($prcListarCaractRequest);
+                echo '<pre>';print_r($conteudo->listaCaracteristicas);
+                foreach($conteudo->listaCaracteristicas as $item3){
+                    if(strtoupper($item3->cNomeCaract)==strtoupper('loja')){
+                        //echo $item3->cConteudo.'<br>';
+                        $modelProduto->setloja($item3->cConteudo);
+                    }
+                }
+            //}
+            echo '<pre>';print_r($modelProduto);
             //echo 'Atualização de número '.$y;
             $gravado=$dao2->grava2($modelProduto);
             $y++;
         }
         if($gravado){
             echo 'Atualização de Produtos realizada com sucesso.';
-            echo '<script>window.location.assign(\'index.php?pagina=produto&act=list&seleciona=1\')</script>';
+            //echo '<script>window.location.assign(\'index.php?pagina=produto&act=list&seleciona=1\')</script>';
+        }die;
+    }elseif($act=='atualiza2'){
+        //caract:
+        $caracteristica= new ProdutosCaracteristicasJsonClient();
+        foreach($cod_prod as $item){
+            $prcListarCaractRequest=array("nPagina"=>1,"nRegPorPagina"=>50,"nCodProd"=>$item->codigo_produto);
+            $conteudo=$caracteristica->ListarCaractProduto($prcListarCaractRequest);
+            echo '<pre>';print_r(@$conteudo->listaCaracteristicas);
+            foreach(@$conteudo->listaCaracteristicas as $item2){
+                echo $item2->cNomeCaract.'<br>';
+                if(strtoupper($item2->cNomeCaract)==strtoupper('loja')){
+                    print_r($item2->cConteudo);die;
+                }
+            }
+        
+        }die;
+    }
+    function buscaTagLoja($codigo){
+        $cod_prod=($dados->produto_servico_cadastro);
+        echo '<pre>';print_r($cod_prod);die;
+        //goto caract;
+        //die;
+        $caracteristica= new ProdutosCaracteristicasJsonClient();
+        foreach($cod_prod as $item){
+            $prcListarCaractRequest=array("nPagina"=>1,"nRegPorPagina"=>50,"nCodProd"=>$item->codigo_produto);
+            $conteudo=$caracteristica->ListarCaractProduto($prcListarCaractRequest);
+            foreach(@$conteudo->listaCaracteristicas as $item){
+                if(strtoupper($item->cNomeCaract)==strtoupper('loja')){
+                    $loja=$item->cConteudo;
+                }
+            }
         }
     }
 ?>

@@ -218,6 +218,22 @@
                 $(location).attr('href',link)
             }
         })
+        $('.tipoBusca input').click(function(){
+            var tags;
+            tipoBusca=$(this).val();
+            $('input:checked').each(function(){
+                if(!tags){
+                    tags = $(this).attr('name');
+                }else{
+                    tags += ','+$(this).attr('name');
+                }
+                tipoBusca=$(':checked[name=tipoBusca]').val();
+            })
+            link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'&tipoBusca='+tipoBusca+'';
+            $('.tudo').hide()
+            $('.tituloProd').text('Aguarde...')
+            $(location).attr('href',link) 
+        })
     })
 </script>
 <style>
@@ -263,7 +279,7 @@
         align-content: center;
     }
     table th{
-        background: black;
+        background: green;
         color: white;
         font-size: 20px;
         padding: 2px;
@@ -330,8 +346,8 @@
                 $servidor=null;
                 break;
             default :
-                $local='checked';
-                $servidor=null;
+                $servidor='checked';
+                $local=null;
                 break;
         }
     ?>
@@ -431,11 +447,10 @@
 <input type="submit" value="Salvar" /> 
 </form>
 <?php elseif($act=='list'): ?>
-<script>var pagAtual='<?= $pagAtual ?>'</script>
 <div class=recarrega><img src="../web/img/atualiza.png" height="18px" title="Recarregar esta página."/></div>
 <span class=tituloProd>Páginas </span>
 <?php
-    if($tipoBusca=='servidor'){
+    if($tipoBusca=='servidor' || !$tipoBusca){
         for($g=1;$g <= $dados->total_de_paginas;$g++){
                 echo '<button class=paginacao>'.$g.'</button>&nbsp&nbsp';
         }
@@ -456,30 +471,28 @@
         $tagsArray=$tagLista;
     }
 ?>
-<div class="head"><?php if($seleciona!=1){
+<div class="head">
+<?php 
+    if($seleciona!=1){
         echo 'Lista de Clientes Cadastrados';
     }else{ 
         echo 'Slecione Um Cliente Abaixo';
     } 
-    if($tipoBusca=='servidor'){
-        $paginaAtual=$dados->pagina;
-        $totalPagina=$dados->total_de_paginas;
-        $totalRegistro=$dados->total_de_registros;
-        $dados_=$dados->clientes_cadastro;
-    }else{
+    if($tipoBusca=='local'){
         $paginaAtual=1;
         $totalPagina=1;
         $totalRegistro=$dao->totalLinhas($search)['id'];
     }
-    ?> 
+?> 
     <span class="pag">(pág.<?= $paginaAtual ?>/<?= $totalPagina ?>)</span>
+    <script>var pagAtual='<?= $paginaAtual ?>'</script>
 </div>
 <div class="total"><script> var total='<?= $totalRegistro; ?>'</script></div>
 <table class="listaCliente">
     <tr><th>Razão Social/Nome</th><th>CNPJ/CPF</th></tr>
 <?php 
     $contador=0;
-    if($tipoBusca=='servidor'){
+    if($tipoBusca=='servidor' || !$tipoBusca){
         foreach($dados_ as $cliente): 
             foreach($cliente->tags as $tipo):
                     if(in_array($tipo->tag, $tagsArray)): $contador++;?>

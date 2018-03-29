@@ -13,6 +13,9 @@
 	if (array_key_exists('criado', $properties)){
 	  $modelProduto->setcriado($properties['criado']);
 	}
+	if (array_key_exists('loja', $properties)){
+	  $modelProduto->setloja($properties['loja']);
+	}
 	if (array_key_exists('aliquota_cofins', $properties)){
 	  $modelProduto->setaliquota_cofins($properties['aliquota_cofins']);
 	}

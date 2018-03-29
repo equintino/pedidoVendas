@@ -8,6 +8,7 @@
         private $filename4='../dao/CRUDProduto.php';
         public function novoArquivo($campos){
             $mode='w+';
+            $variaveis=array('loja');
             foreach($campos as $item){
                 $variaveis[] = $item;
             }
@@ -107,7 +108,7 @@
                 $modelProduto->setcriado($now);  
                 $sql=$this->criaTabela(\''.$this->tabela.'\');
                 $this->execute2($sql, $modelProduto);   
-                //$this->execute2(\'ALTER TABLE `tb_cliente` ADD UNIQUE(`cnpj_cpf`)\', $modelProduto);
+                //$this->execute2(\'ALTER TABLE `tb_produto` ADD UNIQUE(`cnpj_cpf`)\', $modelProduto);
                 $sql = \'INSERT INTO '.$this->tabela.' (';
                   foreach($variaveis as $item){
                     $texto .= '`'.$item.'`,';

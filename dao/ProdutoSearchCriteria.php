@@ -32,6 +32,14 @@
                   $this->criado=$criado;
                   return $this;
               }
+   private $loja;
+               public function getloja(){
+                return $this->loja;
+              }
+              public function setloja($loja){
+                  $this->loja = $loja;
+                  return $this;
+              }
    private $aliquota_cofins;
                public function getaliquota_cofins(){
                 return $this->aliquota_cofins;

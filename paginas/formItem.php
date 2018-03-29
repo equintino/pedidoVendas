@@ -35,7 +35,7 @@
 
             }
         })
-        $('.procura img').click(function(){
+        /*$('.procura img').click(function(){
             if(tipoBusca=='local'){
                 buscaProduto=encodeURIComponent($('.procura input[name=procura]').val());
                 link='../paginas/formItem.php?tipoBusca='+tipoBusca+'&buscaProduto='+buscaProduto+'';
@@ -45,21 +45,21 @@
                 $("a[rel=modal]").trigger("click")
             }
         })
-        $(document).keydown(function(e){
-            if(e.keyCode=='13'){
-                if(tipoBusca=='local'){
-                    buscaProduto=encodeURIComponent($('.procura input[name=procura]').val());
-                    link='../paginas/formItem.php?tipoBusca='+tipoBusca+'&buscaProduto='+buscaProduto+'';
-                    $('.tituloProd').text('Aguarde...');
-                    $('a[rel=modal]').attr('href',link);
-                    $("a[rel=modal]").trigger("click")
-                }else{
-                    if(tipoBusca=='servidor'){
-                        //return false;
+        $('.procura input[name=procura').focus(function(){
+            $(document).keydown(function(e){
+                if(e.keyCode=='13'){
+                    if(tipoBusca=='local'){
+                        buscaProduto=encodeURIComponent($('.procura input[name=procura]').val());
+                        link='../paginas/formItem.php?tipoBusca='+tipoBusca+'&buscaProduto='+buscaProduto+'';
+                        $('.listaProduto').hide()
+                        $('.tituloProd').text('Aguarde...');
+                        $('a[rel=modal]').attr('href',link);
+                        $("a[rel=modal]").trigger("click")
                     }
                 }
-            }
-        })
+            })
+        })*/
+        
         $('button').each(function(){
             if($(this).text()==pagAtual){
                 $(this).css({
@@ -191,7 +191,7 @@
             $("a[rel=modal]").trigger("click")
         })
         $('.procura input[name=procura]').focus()
-        $('.atualizaProduto span').click(function(){
+        /*$('.atualizaProduto span').click(function(){
             var pergAtualiza=confirm('O processo não poderá ser interrompido, pode demorar uns 5 minutos, Deseja continuar?');
             if(pergAtualiza){
                 link='../paginas/formItem.php?act=atualiza&codigo_produto='+codigo_produto+'&pagAtual='+pagAtual+'&tipoBusca='+tipoBusca+'';
@@ -202,10 +202,27 @@
                 $('#boxes .window2').css('display','block')
             }
             //alert('clicou');
-        })
+        })*/
         if(act=='atualiza'){
             $('#boxes .window2').css('display','block')
         }
+        if(tipoBusca=='local'){
+            $('.cont').text(cont);
+        }
+        $('.procura select[name=loja]').change(function(){
+            loja=$(this).val();
+            if(loja != ''){
+                link='../paginas/formItem.php?tipoBusca=local&loja='+loja+'';
+                $('a[rel=modal]').attr('href',link);
+                $('.listaProduto').hide();
+                $("a[rel=modal]").trigger("click")
+            }
+        })
+        $('span.loja select[name=loja] option').each(function(){
+            if($(this).attr('value')==loja){
+                $(this).attr('selected','selected')
+            }
+        })
     })
 </script>
 <style>
@@ -316,15 +333,15 @@
         margin-top: 10px;
     }
     .atualizaProduto{
-        margin-left: 150px;
+        /*margin-left: 150px;
         color: red;
         text-align: center;
-        font-style: italic;
+        font-style: italic;*/
     }
     .atualizaProduto span:hover{
-        cursor: pointer;
+        /*cursor: pointer;
         background: #8de572;
-        text-shadow: 2px -2px 2px white;
+        text-shadow: 2px -2px 2px white;*/
     }
 </style>
 <div id="dadosItem"></div>
@@ -346,6 +363,12 @@
         $act=null;
     }
     echo '<script>var act="'.$act.'"</script>';
+    if(key_exists('loja', $_GET)){
+        $loja=$_GET['loja'];
+    }else{
+        $loja=null;
+    }
+    echo '<script>var loja="'.$loja.'"</script>';
     if(key_exists('pagAtual', $_GET)){
         $pagAtual=$_GET['pagAtual'];
     }
@@ -385,15 +408,31 @@
         $registros=$dados->registros;
         $totalRegistros=$dados->total_de_registros;
         $detalhes=$dados->produto_servico_cadastro;
-    }elseif($act != 'atualiza'){
+    }elseif($act != 'atualiza' && !$loja){
         $dao = new Dao();
         $search = new ProdutoSearchCriteria();
         $search->settabela('tb_produto');
         $search->setcodigo($buscaProduto);
         $detalhes=$dao->encontre2($search);
         //echo '<pre>';print_r($detalhes);die;
-        $totalRegistros=$dao->totalLinhas2($search)['id'];
+        $totalRegistros=$dao->totalLinhas2($search)['id']+1;
         $registros=null;
+    }elseif($loja){
+        $dao = new Dao();
+        $search = new ProdutoSearchCriteria();
+        $search->settabela('tb_produto');
+        $search->setloja(strtoupper($loja));
+        @$detalhes=$dao->encontrePorLoja($search);
+        /*switch($loja){
+            case 'cachambi':
+                $cachambi='selected';
+                //$bonsucesso='';
+                break;
+            case 'bonsucesso':
+                $bonsucesso='selected';
+                //$cachambi='';
+                break;
+        }*/
     }
     echo '<span class=tituloProd>Páginas </span>';
     if($tipoBusca=='servidor'){
@@ -402,24 +441,26 @@
         }
     }
     ?>
+<from>
     <div class="procura">
         <span class="loja">
             <label><b>LOJA:</b> </label>
             <select name="loja">
-                <option value=""></option>
-                <option value="cachambi">Cachambi</option>
-                <option value="bonsucesso">Bonsucesso</option>
+                <option value="" ></option>
+                <option value="cachambi" >Cachambi</option>
+                <option value="bonsucesso" >Bonsucesso</option>
             </select>
         </span>
         <input autofocus type="text" name="procura" title="Pesquisar por produtos" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por produtos" /><br>
         <div class="tipoBusca"><input title="Tipo de busca" type="radio" name="tipoBusca" value="local" <?= $local ?>/><b> Local</b> &nbsp&nbsp&nbsp<input title="Tipo de busca" type="radio" name="tipoBusca" value="servidor" <?= $servidor ?>/> <b>Servidor</b></div>
     </div>
     <?php if($act != 'atualiza'): ?>
-    <div class="paginas">Registros <?= $registros ?> de <?= $totalRegistros ?>
+    <div class="paginas">Registros <span class="cont"><?= $registros ?></span> de <?= $totalRegistros ?>
         <?php if($tipoBusca=='local'): ?>
-            <span class="atualizaProduto">para atualizar a tabela de produtos na busca LOCAL <span>clique aqui.</span></span>
+            <!--<span class="atualizaProduto">para atualizar a tabela de produtos na busca LOCAL <span>clique aqui.</span></span>-->
         <?php endif; endif;?>
     </div>
+</form>
     <div class='tudo'>
         <div class='cima'></div>
         <div class='jTabela'>
@@ -508,7 +549,7 @@
                 <!--<input type="button" value="Fechar" class="close2"/>-->
             </div>
                 <!--<img src="mensagem.jpg" width="650" height="655" /><br />-->
-                <?php include '../paginas/aguarde.php' ?>
+                <?php //include '../paginas/aguarde.php' ?>
 	</div>
             <!-- Fim Janela Modal-->
     </div>

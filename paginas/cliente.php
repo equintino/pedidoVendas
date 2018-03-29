@@ -23,6 +23,7 @@
        $act=null;
     }
     echo '<script>var act="'.$act.'"</script>';
+    
     if(array_key_exists('seleciona', $_GET)){
         $seleciona=$_GET['seleciona'];
         echo '<script>var seleciona='.$_GET['seleciona'].'</script>';
@@ -46,11 +47,23 @@
         @$tagsArray=explode(',',$_GET['tags']);
     }
 ////////// Clientes ////////////
-    if($act=='list'){   
+    if($act=='list'){
+    //print_r([$_GET,$tipoBusca,$pagAtual]);die;
         //// Listar Clientes ////
-        if($tipoBusca=='servidor'){
-            $clientes_list_request=array('pagina'=>$pagAtual,'registros_por_pagina'=>'100','apenas_importado_api'=>'N');
+        if($tipoBusca=='servidor' || !$tipoBusca){
+            if(!$pagAtual){
+                $clientes_list_request=array('pagina'=>1,'registros_por_pagina'=>'50','apenas_importado_api'=>'N');
+                $totalPagina=$cliente->ListarClientes($clientes_list_request)->total_de_paginas;
+                $clientes_list_request=array('pagina'=>$totalPagina,'registros_por_pagina'=>'50','apenas_importado_api'=>'N');
+            }else{
+                $clientes_list_request=array('pagina'=>$pagAtual,'registros_por_pagina'=>'50','apenas_importado_api'=>'N');
+            }
             $dados=$cliente->ListarClientes($clientes_list_request);
+            $paginaAtual=$dados->pagina;
+            $totalPagina=$dados->total_de_paginas;
+            $totalRegistro=$dados->total_de_registros;
+            
+            $dados_=$dados->clientes_cadastro;
         }else{
             $dao = new Dao();
             $search = new ModelSearchCriteria();
