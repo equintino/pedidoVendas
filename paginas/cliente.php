@@ -1,11 +1,6 @@
 <!DOCUMENT html>
 <head>
 <meta charset="utf-8" >
-<script>
-    /*$(document).ready(function(){
-        $(location).attr('href','../web/index.php?pagina=cliente&act=list&seleciona=1')
-    })*/        
-</script>
 </head>
 <body>
 <?php
@@ -48,7 +43,6 @@
     }
 ////////// Clientes ////////////
     if($act=='list'){
-    //print_r([$_GET,$tipoBusca,$pagAtual]);die;
         //// Listar Clientes ////
         if($tipoBusca=='servidor' || !$tipoBusca){
             if(!$pagAtual){
@@ -94,19 +88,15 @@
             echo '<script>var seleciona=2</script>';
             include '../paginas/atualizando.php';
         }
-        //die;
         $clientes_list_request=array('pagina'=>'1','registros_por_pagina'=>'1','apenas_importado_api'=>'N');
         $dados=$cliente->ListarClientes($clientes_list_request);
         $paginas=$dados->total_de_paginas;
-        //echo '<pre>';print_r($dados);die;
         if(@!$y){
             $y=1;
         }
         if(@!$x){
             $x=1;
         }
-        //$x=2;
-        //$y=1;
         for($x=1;$x<$paginas;$x++){
             $clientes_list_request=array('pagina'=>$x,'registros_por_pagina'=>'50','apenas_importado_api'=>'N');
             $dados=$cliente->ListarClientes($clientes_list_request);
@@ -152,26 +142,17 @@
                             }
                         }
                     }
-                    //echo 'Atualização de número '.$y;
                     $gravado=$dao->grava($model);
                     $y++;
                 }
             }
         }
-        /*$resposta="<script> var prompt('A primeira página foi concluída com sucesso. Deseja continuar?')</script>";
-        
-        if($resposta){
-            echo 'voce respondeu sim.';
-        }else{
-            echo 'voce respondeu não.';
-        }*/
         echo '<div id=cont></div><br>';
         
         if($gravado){
             echo 'Atualização de Cleintes realizada com sucesso.';
             echo '<script>window.location.assign(\'index.php?pagina=cliente&act=list&seleciona=1\')</script>';
         }
-        //die;
     }
 ?>
 </body>

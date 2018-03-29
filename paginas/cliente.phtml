@@ -39,6 +39,8 @@
         $('.procura img').mouseover(function(){
             $(this).css('cursor','pointer')
         })
+        
+        /// conferir este campo ///
         $('.procura').keyup(function(e){
               var code = e.which;
               if(code==13)e.preventDefault();
@@ -55,6 +57,7 @@
                 $(location).attr('href','index.php?pagina=cliente&act=cons&codigo='+codigo+'')
               }
         })
+        //// conferir este campo acima ////
         
         if(seleciona!=1){
             $('.razaosocial').mouseover(function(){
@@ -89,10 +92,6 @@
                     var bairro=$(this).attr('bairro');
                     var cep=$(this).attr('cep');
                     var cidade=$(this).attr('cidade');
-                    /*if(email.indexOf('Undefined') != '-1'){
-                        alert('Este cliente não possui e-mail');
-                        die;
-                    }*/
                     $(location).attr('href','index.php?pagina=pedido&act=cad&codigo_cliente='+codigo_cliente+'&razao='+razao+'&cnpj_cpf='+cnpj_cpf+'&contato='+contato+'&email='+email+'&endereco='+endereco+'&endereco_numero='+numero+'&bairro='+bairro+'&cep='+cep+'&cidade='+cidade+'')
                 })
             })
@@ -104,7 +103,7 @@
             })
         }) 
         $('.pagina').text('CLIENTE')
-        $('.mGeral').text('ATUALIZAR TABELA').css({
+        /*$('.mGeral').text('ATUALIZAR TABELA').css({
             cursor:'pointer'
         }).bind('mouseover',function(){
             $(this).css({
@@ -119,7 +118,7 @@
         })
         $('.mGeral').click(function(){
             $(location).attr('href','../web/index.php?pagina=cliente&act=atualiza&seleciona=0')
-        })
+        })*/
         $(".procura2 input").on("keyup", function(){
             var value = $(this).val().toLowerCase();
             $(".listaCliente .tudo").filter(function(){
@@ -185,23 +184,38 @@
             $(location).attr('href',link)     
         })
         $('.procura2 img').click(function(){
-            var tags;
-            var tipoBusca;
-            $('input:checked').each(function(){
-                if(!tags){
-                    tags = $(this).attr('name');
+            if($(':checked[name=tipoBusca]').val()=='local'){
+                if($('.procura2 input').val()){
+                    var tipoBusca;
+                    var tags=null;
+                    $('input:checked').each(function(){
+                        tipoBusca=$(':checked[name=tipoBusca]').val();
+                    })
+                    var buscaPor=$('.procura2 input').val();
+                    link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'&tipoBusca='+tipoBusca+'&buscaPor='+buscaPor+'';
+                    $('.tituloProd').text('Aguarde...')
+                    $(location).attr('href',link)                        
                 }else{
-                    tags += ','+$(this).attr('name');
+                    var tags;
+                    var tipoBusca;
+                    $('input:checked').each(function(){
+                        if(!tags){
+                            tags = $(this).attr('name');
+                        }else{
+                            tags += ','+$(this).attr('name');
+                        }
+                        tipoBusca=$(':checked[name=tipoBusca]').val();
+                    })
+                    var buscaPor=$('.procura2 input').val();
+                    link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'&tipoBusca='+tipoBusca+'&buscaPor='+buscaPor+'';
+                    $('.tituloProd').text('Aguarde...')
+                    $(location).attr('href',link)
                 }
-                tipoBusca=$(':checked[name=tipoBusca]').val();
-            })
-            var buscaPor=$('.procura2 input').val();
-            link='../web/index.php?pagina=cliente&act=list&seleciona=1&tags='+tags+'&tipoBusca='+tipoBusca+'&buscaPor='+buscaPor+'';
-            $('.tituloProd').text('Aguarde...')
-            $(location).attr('href',link)
-        })
-        $(document).keydown(function(e){
-            if(e.keyCode==13){
+            }else if($('.procura2 input').val()){
+                alert('Este tipo de pesquisa só em modo LOCAL.');
+                $('.procura2 input[name=procura]').val('').focus();
+                $('.listaCliente .tudo').hide()
+            }else{
                 var tags;
                 var tipoBusca;
                 $('input:checked').each(function(){
@@ -216,6 +230,57 @@
                 link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'&tipoBusca='+tipoBusca+'&buscaPor='+buscaPor+'';
                 $('.tituloProd').text('Aguarde...')
                 $(location).attr('href',link)
+            }
+        })
+        $(document).keydown(function(e){
+            if(e.keyCode==13){
+                if($(':checked[name=tipoBusca]').val()=='local'){
+                    if($('.procura2 input').val()){
+                        var tipoBusca;
+                        var tags=null;
+                        $('input:checked').each(function(){
+                            tipoBusca=$(':checked[name=tipoBusca]').val();
+                        })
+                        var buscaPor=$('.procura2 input').val();
+                        link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'&tipoBusca='+tipoBusca+'&buscaPor='+buscaPor+'';
+                        $('.tituloProd').text('Aguarde...')
+                        $(location).attr('href',link)                        
+                    }else{
+                        var tags;
+                        var tipoBusca;
+                        $('input:checked').each(function(){
+                            if(!tags){
+                                tags = $(this).attr('name');
+                            }else{
+                                tags += ','+$(this).attr('name');
+                            }
+                            tipoBusca=$(':checked[name=tipoBusca]').val();
+                        })
+                        var buscaPor=$('.procura2 input').val();
+                        link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'&tipoBusca='+tipoBusca+'&buscaPor='+buscaPor+'';
+                        $('.tituloProd').text('Aguarde...')
+                        $(location).attr('href',link)
+                    }
+                }else if($('.procura2 input').val()){
+                    alert('Este tipo de pesquisa só em modo LOCAL.');
+                    $('.procura2 input[name=procura]').val('').focus();
+                    $('.listaCliente .tudo').hide()
+                }else{
+                    var tags;
+                    var tipoBusca;
+                    $('input:checked').each(function(){
+                        if(!tags){
+                            tags = $(this).attr('name');
+                        }else{
+                            tags += ','+$(this).attr('name');
+                        }
+                        tipoBusca=$(':checked[name=tipoBusca]').val();
+                    })
+                    var buscaPor=$('.procura2 input').val();
+                    link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'&tipoBusca='+tipoBusca+'&buscaPor='+buscaPor+'';
+                    $('.tituloProd').text('Aguarde...')
+                    $(location).attr('href',link)
+                }
             }
         })
         $('.tipoBusca input').click(function(){
