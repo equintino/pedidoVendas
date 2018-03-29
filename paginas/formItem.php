@@ -1,20 +1,13 @@
 <head>
-    <!--<script type="text/javascript" src="../web/js/jquery-3.2.1.min.js"></script>-->
 <meta charset="utf-8" />
-<?php
-    //$codigo_produto=$_GET['codigo_produto'];
-    //echo $codigo_produto;
-?>
 </head>
 <script>
     $(document).ready(function(){        
         var tipoBusca=$('.procura .tipoBusca input:checked').val();
         if(tipoBusca=='servidor'){
             $('.loja').hide()
-            //$('.procura input').focus()
         }else if(tipoBusca=='local'){
             $('.loja').show()
-            //$('.procura input').focus()
         }
         $('.procura input[name=tipoBusca]:radio').click(function(){
             if($(this).val()=='local'){
@@ -23,7 +16,6 @@
                 tipoBusca='local';
                 $('.recarrega').trigger('click')
             }else if($(this).val()=='servidor'){
-                //$('.listaProduto').hide()
                 $('.paginacao, .listaProduto').show()
                 $('.loja').hide()
                 tipoBusca='servidor';
@@ -35,7 +27,7 @@
 
             }
         })
-        /*$('.procura img').click(function(){
+        $('.procura img').click(function(){
             if(tipoBusca=='local'){
                 buscaProduto=encodeURIComponent($('.procura input[name=procura]').val());
                 link='../paginas/formItem.php?tipoBusca='+tipoBusca+'&buscaProduto='+buscaProduto+'';
@@ -45,7 +37,7 @@
                 $("a[rel=modal]").trigger("click")
             }
         })
-        $('.procura input[name=procura').focus(function(){
+        /*$('.procura input[name=procura').focus(function(){
             $(document).keydown(function(e){
                 if(e.keyCode=='13'){
                     if(tipoBusca=='local'){
@@ -469,7 +461,7 @@
                 <?php
                     $w=$row=0;
                     $col=1;
-                    $cont=1;
+                    $cont=0;
                     if($tipoBusca=='local'){
                         echo '<th  width="10%" class="col1">CÓDIGO</th>';
                         echo '<th class="descricao col2">DESCRIÇÃO DO PRODUTO</th>';
