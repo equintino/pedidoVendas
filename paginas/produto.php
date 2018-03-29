@@ -140,7 +140,8 @@
             //foreach($cod_prod as $item){
                 $prcListarCaractRequest=array("nPagina"=>1,"nRegPorPagina"=>50,"nCodProd"=>$modelProduto->getcodigo_produto());
                 $conteudo=$caracteristica->ListarCaractProduto($prcListarCaractRequest);
-                echo '<pre>';print_r($conteudo->listaCaracteristicas);
+                echo ($y*100/$registroa).'%';
+                //echo '<pre>';print_r($conteudo->listaCaracteristicas);
                 foreach($conteudo->listaCaracteristicas as $item3){
                     if(strtoupper($item3->cNomeCaract)==strtoupper('loja')){
                         //echo $item3->cConteudo.'<br>';
@@ -148,7 +149,8 @@
                     }
                 }
             //}
-            echo '<pre>';print_r($modelProduto);
+            echo ($y*100/$registroa).'%';
+            //echo '<pre>';print_r($modelProduto);
             //echo 'Atualização de número '.$y;
             $gravado=$dao2->grava2($modelProduto);
             $y++;
