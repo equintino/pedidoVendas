@@ -136,5 +136,8 @@
 	if (array_key_exists('observacao', $properties)){
 	  $model->setobservacao($properties['observacao']);
 	}
+	if (array_key_exists('contribuinte', $properties)){
+	  $model->setcontribuinte($properties['contribuinte']);
+	}
   } 
  }

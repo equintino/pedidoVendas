@@ -2,12 +2,10 @@
 <head>
   <script src="../web/js/jquery.mask.min.js"></script>
 <script>
-    //arr=new Array();
     $(document).ready(function(){
         if(enviado){
             alert('Pedido de Venda Enviado.');
         }
-        //$('.botao :reset').trigger('click')
         $('.botao input').mouseover(function(){
             $(this).css('cursor','pointer');
         })
@@ -95,9 +93,7 @@
                 $('.tabela select[name=parcela]').removeAttr('disabled');
             }else if($(this).text() === 'E-mail para Cliente'){
                 $('#pnl5').css('display','block');
-            }/*else if($(this).text() == 'Observação'){
-                $('#pnl6').css('display','block');
-            }*/
+            }
         })
         $('table.tabela .razao img').click(function(){
             if($('div#pnl1 input').val()){
@@ -126,26 +122,17 @@
             }else if(e.which==112){
                 return false;
             }else if(e.which==115){
-                //alert(e.which);
                 $('.bnt').each(function(){
                     if($(this).text()=='Novo Ítem'){
                         $(this).trigger('click')
                     }
                 })
-                /*if(!pagAtual){
-                    var pagAtual=1;
-                }*/
-                //link='../paginas/formItem.php?';//codigo_produto='+codigo_produto+'';
-                //$('a[rel=modal]').attr('href',link);
-                //$("a[rel=modal]").trigger("click")
-                //return false;
             }else if(e.which==116){
                 return false;
             }else if(e.which==114){
                 return false;
             }
         })
-        //$('.previsao input').mask('00/00/0000');
         $('.tabela td select[name=parcela]').change(function(){
             var selecao=$(this).val().substr(0,2);
             if(selecao=='A '){
@@ -204,16 +191,19 @@
                 if(!$(this).val()||$(this).val()==' '){
                     var linha=$(this).attr('linha');
                     var codProd=$('#pnl1 input[name=codigo_produto'+linha+']').val();
-                        perg=confirm('Não foi inserido o serial para o ítem '+codProd+'. Deseja continuar assim mesmo?');
-                        if(!perg){
-                            $(this).css('background','rgba(216, 0, 0,0.1)').focus()
-                            return false;
-                        }
+                    perg=confirm('Não foi inserido o serial para o ítem '+codProd+'. Deseja continuar assim mesmo?');
+                    if(!perg){
+                        $(this).css('background','rgba(216, 0, 0,0.1)').focus()
+                        return false;
+                    }
                 }else{
                     if(item==campo){
                         perg=1;
                         return true;
                     }
+                }
+                if(item==1){
+                    perg=1;
                 }
             })
             if(perg){
@@ -230,7 +220,6 @@
                 }
                 $(location).attr('href','index.php?pagina=pedido&act=cad&enviado=1')
             }else{
-                //alert('passei por aqui');
                 return false;
             }
         })

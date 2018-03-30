@@ -39,19 +39,20 @@
         })
         /*$('.procura input[name=procura').focus(function(){
             $(document).keydown(function(e){
-                if(e.keyCode=='13'){
-                    if(tipoBusca=='local'){
-                        buscaProduto=encodeURIComponent($('.procura input[name=procura]').val());
-                        link='../paginas/formItem.php?tipoBusca='+tipoBusca+'&buscaProduto='+buscaProduto+'';
-                        $('.listaProduto').hide()
-                        $('.tituloProd').text('Aguarde...');
-                        $('a[rel=modal]').attr('href',link);
-                        $("a[rel=modal]").trigger("click")
+                if($('.window').is(':visible')){
+                    if(e.keyCode=='13'){
+                        if(tipoBusca=='local'){
+                            buscaProduto=encodeURIComponent($('.procura input[name=procura]').val());
+                            link='../paginas/formItem.php?tipoBusca='+tipoBusca+'&buscaProduto='+buscaProduto+'';
+                            $('.listaProduto').hide()
+                            $('.tituloProd').text('Aguarde...');
+                            $('a[rel=modal]').attr('href',link);
+                            $("a[rel=modal]").trigger("click")
+                        }
                     }
                 }
             })
         })*/
-        
         $('button').each(function(){
             if($(this).text()==pagAtual){
                 $(this).css({
@@ -60,7 +61,6 @@
                 });
             }
         })
-        
         $('button').focus(function(){
             pagAtual=$(this).text();
             $('button').each(function(){
@@ -87,8 +87,8 @@
             $('.cima').scrollLeft(pos)
                        
         })
-        $('.jTabela table').clone().appendTo('.cima')
-        $('.cima').scrollTop('3')
+        //$('.jTabela table').clone().appendTo('.cima')
+        //$('.cima').scrollTop('3')
         
         $('.listaProduto').mouseover(function(){
             $(this).css({
@@ -170,7 +170,6 @@
             var value = $(this).val().toLowerCase();
             $(".listaProduto").filter(function(){
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                //alert(cont);
             });
         }).focus()
         $('.recarrega').css('cursor','pointer')
@@ -407,7 +406,7 @@
         $search->setcodigo($buscaProduto);
         $detalhes=$dao->encontre2($search);
         //echo '<pre>';print_r($detalhes);die;
-        $totalRegistros=$dao->totalLinhas2($search)['id']+1;
+        $totalRegistros=$dao->totalLinhas2($search)['id'];
         $registros=null;
     }elseif($loja){
         $dao = new Dao();
@@ -415,6 +414,7 @@
         $search->settabela('tb_produto');
         $search->setloja(strtoupper($loja));
         @$detalhes=$dao->encontrePorLoja($search);
+        $totalRegistros=$dao->totalLinhas2($search)['id'];
         /*switch($loja){
             case 'cachambi':
                 $cachambi='selected';

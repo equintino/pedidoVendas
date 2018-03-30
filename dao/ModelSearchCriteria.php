@@ -360,4 +360,12 @@
                   $this->observacao = $observacao;
                   return $this;
               }
+   private $contribuinte;
+               public function getcontribuinte(){
+                return $this->contribuinte;
+              }
+              public function setcontribuinte($contribuinte){
+                  $this->contribuinte = $contribuinte;
+                  return $this;
+              }
 }

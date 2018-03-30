@@ -118,7 +118,7 @@
                             include 'criaClasses.php';
                             $arquivo = new criaClsses();
                             $arquivo->tabela='tb_cliente';
-                            array_push($campos,'cod_API','contato','optante_simples_nacional','telefone2_ddd','telefone2_numero','fax_ddd','fax_numero','homepage','observacao');
+                            array_push($campos,'cod_API','contato','optante_simples_nacional','telefone2_ddd','telefone2_numero','fax_ddd','fax_numero','homepage','observacao','contribuinte');
                             $variaveis=$arquivo->novoArquivo($campos);
                         }
                             // apaga e cria nova tabela //

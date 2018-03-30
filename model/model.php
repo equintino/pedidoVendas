@@ -315,4 +315,11 @@
  public function setobservacao($observacao ){
 	$this->observacao=$observacao;
  }
+ private $contribuinte;
+ public function getcontribuinte(){
+	return $this->contribuinte;
+ }
+ public function setcontribuinte($contribuinte ){
+	$this->contribuinte=$contribuinte;
+ }
  }
