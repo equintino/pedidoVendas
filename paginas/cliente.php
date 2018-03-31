@@ -1,4 +1,4 @@
-<!DOCUMENT html>
+<!DOCTYPE html>
 <head>
 <meta charset="utf-8" >
 </head>
@@ -41,6 +41,16 @@
     }else{
         @$tagsArray=explode(',',$_GET['tags']);
     }
+    
+    //// função em segundo plano ////
+    function execInBackground($cmd){
+        if (substr(php_uname(), 0, 7) == "Windows"){
+            pclose(popen("start /B ". $cmd, "r"));
+        }else{
+            exec($cmd);//. " > /dev/null &");
+        }
+    }
+    
 ////////// Clientes ////////////
     if($act=='list'){
         //// Listar Clientes ////
@@ -81,6 +91,9 @@
         $cliente->ExcluirCliente($clientes_cadastro_chave);
         header('Location:index.php?pagina=cliente&act=list');
     }elseif($act=='atualiza'){
+        //include '../paginas/primeiroPlano.php';
+        //execInBackground('php -f ../paginas/segundoPlanoClienteTotal.php >> ../paginas/segundoPlanoIndex.txt &');
+        
         if($seleciona==0){
             include '../paginas/atualizando.php';
             die;
@@ -153,6 +166,8 @@
             echo 'Atualização de Cleintes realizada com sucesso.';
             echo '<script>window.location.assign(\'index.php?pagina=cliente&act=list&seleciona=1\')</script>';
         }
+         
+        echo '<script>window.location.assign(\'../web/index.php?pagina=cliente&act=list&seleciona=1\')</script>';
     }
 ?>
 </body>

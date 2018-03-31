@@ -1,6 +1,7 @@
 <meta charset="utf-8" >
 <?php
     include '../paginas/janela.php';
+    include '../dao/CRUD.php';
     
     @$login=$_COOKIE['login'];
     @$excl=$_GET['excl'];
@@ -10,6 +11,7 @@
     @$correiosAtualiza=$_GET['$correiosAtualiza'];
     @$etapaAtualiza=$_GET['$etapaAtualiza'];
     @$tabelaPrecoAtualiza=$_GET['$tabelaPrecoAtualiza'];
+    @$origem=$_GET['origem'];
     
     if(array_key_exists('razao', $_GET)){
         $razao=$_GET['razao'];
@@ -52,6 +54,53 @@
     
     $pedido=new PedidoVendaProdutoJsonClient();
     $cliente=new ClientesCadastroJsonClient();
+    
+    if(@$origem=='cliente'){
+        $codigo=null;
+        $clientes_cadastro_chave=array("codigo_cliente_omie"=>$cCliente,
+"codigo_cliente_integracao"=>$codigo);
+        $dados=$cliente->ConsultarCliente($clientes_cadastro_chave);
+        
+        //echo '<pre>';print_r($dados);
+        $dao = new CRUD();
+        $search=new ModelSearchCriteria();
+        $search->settabela('tb_cliente');
+        $search->setrazao_social($dados->razao_social);
+        $dadosLocal=$dao->encontre($search);
+        
+        //echo '<pre>';print_r($dadosLocal);die;
+        
+        //$resultado=array();
+        $model = new Model();
+        foreach($dados as $key => $item){
+            if($key != 'info' && $key != 'tags'){
+                $classe='set'.$key;
+                $model->$classe($item);
+                //$resultado[]=$model->$classe($item);
+            }elseif($key == 'info'){
+                foreach($item as $key2 => $item2){
+                    $classe='set'.$key2;
+                    $model->$classe($item2);
+                }
+            }elseif($key == 'tags'){
+                foreach($item as $item_){
+                    $model->settags($item_->tag.',');
+                }
+            }
+        }
+        $model->settabela('tb_cliente');
+        if($dadosLocal){
+            foreach($dadosLocal as $item){
+                $alteracao=$item->getdAlt();
+                $model->setid($item->getid());
+            }
+            if($model->getdAlt() > $alteracao){
+                $gravado=$dao->grava($model);
+            }
+        }else{
+            $gravado=$dao->grava($model);
+        }
+    }
         
     $pvpListarRequest=array('pagina'=>'1','registros_por_pagina'=>'50');
     if(!isset($quant))

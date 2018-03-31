@@ -7,6 +7,7 @@
         private $filename3='../dao/ModelSearchCriteria.php';
         private $filename4='../dao/CRUD.php';
         public function novoArquivo($campos){
+            $variaveis=array('modificado','inscricao_suframa','produtor_rural','recomendacao_atraso','logradouro','importado_api','bloqueado');
             $mode='w+';
             foreach($campos as $item){
                 $variaveis[] = $item;

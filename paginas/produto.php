@@ -3,6 +3,7 @@
     @$excl=$_GET['excl'];
     @$tipoBusca=$_GET['tipoBusca'];
     @$buscaPor=$_GET['buscaPor'];
+    
     if($excl==1){
         print_r($_GET);die;
     }

@@ -92,7 +92,7 @@
                     var bairro=$(this).attr('bairro');
                     var cep=$(this).attr('cep');
                     var cidade=$(this).attr('cidade');
-                    $(location).attr('href','index.php?pagina=pedido&act=cad&codigo_cliente='+codigo_cliente+'&razao='+razao+'&cnpj_cpf='+cnpj_cpf+'&contato='+contato+'&email='+email+'&endereco='+endereco+'&endereco_numero='+numero+'&bairro='+bairro+'&cep='+cep+'&cidade='+cidade+'')
+                    $(location).attr('href','../web/index.php?pagina=pedido&act=cad&codigo_cliente='+codigo_cliente+'&razao='+razao+'&cnpj_cpf='+cnpj_cpf+'&contato='+contato+'&email='+email+'&endereco='+endereco+'&endereco_numero='+numero+'&bairro='+bairro+'&cep='+cep+'&cidade='+cidade+'&origem=cliente')
                 })
             })
         }      

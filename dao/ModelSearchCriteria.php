@@ -32,6 +32,62 @@
                   $this->criado=$criado;
                   return $this;
               }
+   private $modificado;
+               public function getmodificado(){
+                return $this->modificado;
+              }
+              public function setmodificado($modificado){
+                  $this->modificado = $modificado;
+                  return $this;
+              }
+   private $inscricao_suframa;
+               public function getinscricao_suframa(){
+                return $this->inscricao_suframa;
+              }
+              public function setinscricao_suframa($inscricao_suframa){
+                  $this->inscricao_suframa = $inscricao_suframa;
+                  return $this;
+              }
+   private $produtor_rural;
+               public function getprodutor_rural(){
+                return $this->produtor_rural;
+              }
+              public function setprodutor_rural($produtor_rural){
+                  $this->produtor_rural = $produtor_rural;
+                  return $this;
+              }
+   private $recomendacao_atraso;
+               public function getrecomendacao_atraso(){
+                return $this->recomendacao_atraso;
+              }
+              public function setrecomendacao_atraso($recomendacao_atraso){
+                  $this->recomendacao_atraso = $recomendacao_atraso;
+                  return $this;
+              }
+   private $logradouro;
+               public function getlogradouro(){
+                return $this->logradouro;
+              }
+              public function setlogradouro($logradouro){
+                  $this->logradouro = $logradouro;
+                  return $this;
+              }
+   private $importado_api;
+               public function getimportado_api(){
+                return $this->importado_api;
+              }
+              public function setimportado_api($importado_api){
+                  $this->importado_api = $importado_api;
+                  return $this;
+              }
+   private $bloqueado;
+               public function getbloqueado(){
+                return $this->bloqueado;
+              }
+              public function setbloqueado($bloqueado){
+                  $this->bloqueado = $bloqueado;
+                  return $this;
+              }
    private $bairro;
                public function getbairro(){
                 return $this->bairro;

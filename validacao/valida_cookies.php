@@ -71,8 +71,9 @@ class valida_cookies{
         return $this->OMIE_APP_SECRET;
     }
     public static function limpaCookies(){
-	setcookie("login"," ", time() + (86400 * 30),"/");
-	setcookie("senha"," ", time() + (86400 * 30),"/");
+	//@setcookie("login"," ", time() + (86400 * 30),"/");
+	//@setcookie("senha"," ", time() + (86400 * 30),"/");
+        echo '<script>document.cookie="login=;path=/";document.cookie="senha=;path=/";</script>';
     }
     public function semLogin(){
         $this->popup('Você deve entrar com o usuário.','semlogin');
@@ -166,7 +167,7 @@ class valida_cookies{
         echo "</table>";
         echo "</td></tr></table>";
         echo "</form>";
-        echo "</html></body>";
+        echo "</body></html>";
         exit;
     }
 }

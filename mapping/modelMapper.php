@@ -13,6 +13,27 @@
 	if (array_key_exists('criado', $properties)){
 	  $model->setcriado($properties['criado']);
 	}
+	if (array_key_exists('modificado', $properties)){
+	  $model->setmodificado($properties['modificado']);
+	}
+	if (array_key_exists('inscricao_suframa', $properties)){
+	  $model->setinscricao_suframa($properties['inscricao_suframa']);
+	}
+	if (array_key_exists('produtor_rural', $properties)){
+	  $model->setprodutor_rural($properties['produtor_rural']);
+	}
+	if (array_key_exists('recomendacao_atraso', $properties)){
+	  $model->setrecomendacao_atraso($properties['recomendacao_atraso']);
+	}
+	if (array_key_exists('logradouro', $properties)){
+	  $model->setlogradouro($properties['logradouro']);
+	}
+	if (array_key_exists('importado_api', $properties)){
+	  $model->setimportado_api($properties['importado_api']);
+	}
+	if (array_key_exists('bloqueado', $properties)){
+	  $model->setbloqueado($properties['bloqueado']);
+	}
 	if (array_key_exists('bairro', $properties)){
 	  $model->setbairro($properties['bairro']);
 	}
