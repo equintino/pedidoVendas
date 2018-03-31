@@ -35,6 +35,13 @@
  public function setloja($loja ){
 	$this->loja=$loja;
  }
+ private $videos;
+ public function getvideos(){
+	return $this->videos;
+ }
+ public function setvideos($videos ){
+	$this->videos=$videos;
+ }
  private $aliquota_cofins;
  public function getaliquota_cofins(){
 	return $this->aliquota_cofins;

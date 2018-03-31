@@ -8,7 +8,7 @@
         private $filename4='../dao/CRUDProduto.php';
         public function novoArquivo($campos){
             $mode='w+';
-            $variaveis=array('loja');
+            $variaveis=array('loja','videos');
             foreach($campos as $item){
                 $variaveis[] = $item;
             }

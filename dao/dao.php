@@ -175,14 +175,18 @@
         return $sql;
   }
     private function getEncontreSql2(ProdutoSearchCriteria $search = null){
+        //echo '<pre>';print_r($search);die;
         $codigo=str_replace(' ','%',$search->getcodigo());
-        if(preg_match('/[0-9]/',$codigo)){
+        if($search->getcodigo_produto()){
+            $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo_produto = "'.$search->getcodigo_produto().'"';
+        }elseif(preg_match('/[0-9]/',$codigo) && !$search->getcodigo_produto()){
             $sql = 'SELECT `id`,`descricao`,`codigo`,`codigo_produto`,`valor_unitario`,`quantidade_estoque`,`cfop`,`ncm`,`ean`,`unidade` FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo like "%'.$codigo.'%"';
         }elseif(!preg_match('/[0-9]/',$codigo)){
             $sql = 'SELECT `id`,`descricao`,`codigo`,`codigo_produto`,`valor_unitario`,`quantidade_estoque`,`cfop`,`ncm`,`ean`,`unidade` FROM `'.$search->gettabela().'` WHERE excluido = "0" AND descricao like "%'.$codigo.'%"';
         }else{
             $sql = 'SELECT `id`,`descricao`,`codigo`,`codigo_produto`,`valor_unitario`,`quantidade_estoque`,`cfop`,`ncm`,`ean`,`unidade` FROM `'.$search->gettabela().'` WHERE excluido = "0" ';
         }
+        //echo $sql;die;
         return $sql;
     }
 }

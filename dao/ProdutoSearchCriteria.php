@@ -40,6 +40,14 @@
                   $this->loja = $loja;
                   return $this;
               }
+   private $videos;
+               public function getvideos(){
+                return $this->videos;
+              }
+              public function setvideos($videos){
+                  $this->videos = $videos;
+                  return $this;
+              }
    private $aliquota_cofins;
                public function getaliquota_cofins(){
                 return $this->aliquota_cofins;

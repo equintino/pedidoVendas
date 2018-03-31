@@ -133,8 +133,17 @@
         // Mostra o número de visitas
         $codigo_pedido_integracao=file_get_contents('numeroPedido.txt');
         
-        include '../config/OmieAppAuth.php';
+        //include '../config/OmieAppAuth.php';
+        include '../model/ProdutosCadastroJsonClient.php';
         include '../model/PedidoVendaProdutoJsonClient.php';
+        include '../model/modelProduto.php';
+        include '../dao/dao.php';
+        include '../dao/CRUDProduto.php';
+        include '../dao/ProdutoSearchCriteria.php';
+        include '../config/Config.php';
+        include '../mapping/ProdutoMapper.php';
+        include '../dao/ModelSearchCriteria.php';
+        
         $pedido=new PedidoVendaProdutoJsonClient();
         $parCod=explode(',', $_POST['parcela']);
         $parcela=$parCod[2];
@@ -202,6 +211,7 @@
             $vTotal=ModelValidador::removePonto($_POST['vTotalItem'.$x.''])-$vDescontoItem;
             $produto->valor_desconto=$vDescontoItem;
             $produto->valor_total=$vTotal;
+            //echo '<pre>';print_r($produto);die;
         }
         
         //// Frete ////
@@ -232,7 +242,45 @@
         $pedido_venda_produto->informacoes_adicionais=$informacoes_adicionais;
         $pedido_venda_produto->lista_parcelas=$lista_parcelas;
         
+        foreach($pedido_venda_produto->det as $item){
+            //echo '<pre>';($item['produto']->codigo_produto);
+            $dao = new CRUDProduto();
+            $search = new ProdutoSearchCriteria();
+            $search->settabela('tb_produto');
+            $search->setcodigo_produto($item['produto']->codigo_produto);
+            $prodLocal=$dao->encontre2($search);
+            
+            if(!$prodLocal){
+                $produtos=new ProdutosCadastroJsonClient();
+                $produto_servico_cadastro_chave=array("codigo_produto"=>$item['produto']->codigo_produto,"codigo_produto_integracao"=>"","codigo"=>"");
+                $dados=$produtos->ConsultarProduto($produto_servico_cadastro_chave);
+                $modelProduto = new modelProduto();
+                foreach($dados as $key => $item2){
+                    if($key == 'dadosIbpt'){
+                        foreach($item2 as $key2 => $item3){
+                            $classe='set'.$key2;
+                            $modelProduto->$classe($item3);
+                        }
+                    }elseif($key == 'recomendacoes_fiscais'){
+                        foreach($item2 as $key2 => $item3){
+                            $classe='set'.$key2;
+                            $modelProduto->$classe($item3);
+                        }
+                    }elseif($key == 'imagens'){
+                        if(@$item_[0]->url_imagem){
+                            @$modelProduto->seturl_imagem($item_[0]->url_imagem);
+                        }
+                    }else{
+                        $classe='set'.$key;
+                        $modelProduto->$classe($item2);
+                    }
+                }
+                $dao->grava2($modelProduto);
+            }
+        }
+        //echo '<pre>';print_r($pedido_venda_produto->det);die;
         $resultado=$pedido->IncluirPedido($pedido_venda_produto);
+        
         @$numero_pedido=$resultado->numero_pedido;
         include 'imprime.php';
         die;
