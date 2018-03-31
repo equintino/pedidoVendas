@@ -34,6 +34,27 @@
 	if (array_key_exists('bloqueado', $properties)){
 	  $model->setbloqueado($properties['bloqueado']);
 	}
+	if (array_key_exists('codInt', $properties)){
+	  $model->setcodInt($properties['codInt']);
+	}
+	if (array_key_exists('comissao', $properties)){
+	  $model->setcomissao($properties['comissao']);
+	}
+	if (array_key_exists('fatura_pedido', $properties)){
+	  $model->setfatura_pedido($properties['fatura_pedido']);
+	}
+	if (array_key_exists('visualiza_pedido', $properties)){
+	  $model->setvisualiza_pedido($properties['visualiza_pedido']);
+	}
+	if (array_key_exists('nome', $properties)){
+	  $model->setnome($properties['nome']);
+	}
+	if (array_key_exists('inativo', $properties)){
+	  $model->setinativo($properties['inativo']);
+	}
+	if (array_key_exists('codigo', $properties)){
+	  $model->setcodigo($properties['codigo']);
+	}
 	if (array_key_exists('bairro', $properties)){
 	  $model->setbairro($properties['bairro']);
 	}

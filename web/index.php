@@ -22,7 +22,7 @@ final class index{
   public function handlerException(Exception $ex){
     $extra = array('mensagem' => $ex->getMessage());
     if ($ex instanceof Excecao) {
-            header('HTTP/1.0 404 Not Found');
+            //header('HTTP/1.0 404 Not Found');
             $this->carregaPagina('404', $extra);
         } else {
               header('HTTP/1.1 500 Internal Server Error');

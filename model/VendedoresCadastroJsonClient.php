@@ -148,6 +148,10 @@ class cadastro{
 	 * @var string
 	 */
 	public $inativo;
+        public $comissao;
+        public $email;
+        public $fatura_pedido;
+        public $visualiza_pedido;
 }
 
 

@@ -19,6 +19,9 @@
 	if (array_key_exists('videos', $properties)){
 	  $modelProduto->setvideos($properties['videos']);
 	}
+	if (array_key_exists('modificado', $properties)){
+	  $modelProduto->setmodificado($properties['modificado']);
+	}
 	if (array_key_exists('aliquota_cofins', $properties)){
 	  $modelProduto->setaliquota_cofins($properties['aliquota_cofins']);
 	}

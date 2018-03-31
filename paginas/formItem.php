@@ -27,6 +27,11 @@
 
             }
         })
+        $('.procura img').mouseover(function(){
+            if(tipoBusca=='local'){
+                $(this).css('cursor','pointer')
+            }
+        })
         $('.procura img').click(function(){
             if(tipoBusca=='local'){
                 buscaProduto=encodeURIComponent($('.procura input[name=procura]').val());
@@ -119,7 +124,6 @@
                 })
                 linha=linha.substring(4,5);
                 $('#pnl1 table #item'+linha+' input').each(function(){
-                    //alert($(this).attr('name'));
                     var z=$(this).attr('name');
                     switch(z.substr(0,z.length-1)){
                         case 'codigo_produto':
@@ -347,7 +351,6 @@
     $loja=null;
     $produto=new ProdutosCadastroJsonClient();
     
-    //print_r($_GET);die;
     if(key_exists('act', $_GET)){
         $act=$_GET['act'];
     }else{

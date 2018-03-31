@@ -143,6 +143,7 @@
         include '../config/Config.php';
         include '../mapping/ProdutoMapper.php';
         include '../dao/ModelSearchCriteria.php';
+        include '../model/ProdutosCaracteristicasJsonClient.php';
         
         $pedido=new PedidoVendaProdutoJsonClient();
         $parCod=explode(',', $_POST['parcela']);
@@ -242,20 +243,43 @@
         $pedido_venda_produto->informacoes_adicionais=$informacoes_adicionais;
         $pedido_venda_produto->lista_parcelas=$lista_parcelas;
         
+        $modelProduto = new modelProduto();
         foreach($pedido_venda_produto->det as $item){
-            //echo '<pre>';($item['produto']->codigo_produto);
-            $dao = new CRUDProduto();
+            $codProduto=$item['produto']->codigo_produto;
+            $dao2 = new CRUDProduto();
             $search = new ProdutoSearchCriteria();
             $search->settabela('tb_produto');
-            $search->setcodigo_produto($item['produto']->codigo_produto);
-            $prodLocal=$dao->encontre2($search);
+            $search->setcodigo_produto($codProduto);
+            $prodLocal=$dao2->encontre2($search);
+            foreach($prodLocal as $item_){
+                $lojaLocal=$item_->getloja();
+                $idLocal=$item_->getid();
+            }
+            if(!$lojaLocal){
+                $caracteristica= new ProdutosCaracteristicasJsonClient();
+                $prcListarCaractRequest=array("nPagina"=>1,"nRegPorPagina"=>50,"nCodProd"=>$codProduto);
+                $conteudo=$caracteristica->ListarCaractProduto($prcListarCaractRequest);
+                if(is_object($conteudo)){
+                    foreach($conteudo->listaCaracteristicas as $item_2){
+                        if(strtoupper($item_2->cNomeCaract)==strtoupper('loja')){
+                            $loja=$item_2->cConteudo;
+                        }else{
+                            $loja=null;
+                        }
+                    }
+                }else{
+                    $loja=null;
+                }
+            }else{
+                $loja=null;
+            }
             
-            if(!$prodLocal){
+            if(!@$prodLocal || $loja){
                 $produtos=new ProdutosCadastroJsonClient();
-                $produto_servico_cadastro_chave=array("codigo_produto"=>$item['produto']->codigo_produto,"codigo_produto_integracao"=>"","codigo"=>"");
-                $dados=$produtos->ConsultarProduto($produto_servico_cadastro_chave);
-                $modelProduto = new modelProduto();
-                foreach($dados as $key => $item2){
+                $produto_servico_cadastro_chave=array("codigo_produto"=>$codProduto,"codigo_produto_integracao"=>"","codigo"=>"");
+                $dadosRemoto=$produtos->ConsultarProduto($produto_servico_cadastro_chave);
+                $verif=1;
+                foreach($dadosRemoto as $key => $item2){
                     if($key == 'dadosIbpt'){
                         foreach($item2 as $key2 => $item3){
                             $classe='set'.$key2;
@@ -267,15 +291,17 @@
                             $modelProduto->$classe($item3);
                         }
                     }elseif($key == 'imagens'){
-                        if(@$item_[0]->url_imagem){
-                            @$modelProduto->seturl_imagem($item_[0]->url_imagem);
+                        if(@$item2[0]->url_imagem){
+                            @$modelProduto->seturl_imagem($item2[0]->url_imagem);
                         }
                     }else{
                         $classe='set'.$key;
                         $modelProduto->$classe($item2);
                     }
                 }
-                $dao->grava2($modelProduto);
+                $modelProduto->setloja($loja);
+                $modelProduto->setid($idLocal);
+                $dao2->grava2($modelProduto);
             }
         }
         //echo '<pre>';print_r($pedido_venda_produto->det);die;

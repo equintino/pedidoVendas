@@ -48,6 +48,14 @@
                   $this->videos = $videos;
                   return $this;
               }
+   private $modificado;
+               public function getmodificado(){
+                return $this->modificado;
+              }
+              public function setmodificado($modificado){
+                  $this->modificado = $modificado;
+                  return $this;
+              }
    private $aliquota_cofins;
                public function getaliquota_cofins(){
                 return $this->aliquota_cofins;

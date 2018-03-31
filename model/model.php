@@ -77,6 +77,55 @@
  public function setbloqueado($bloqueado ){
 	$this->bloqueado=$bloqueado;
  }
+ private $codInt;
+ public function getcodInt(){
+	return $this->codInt;
+ }
+ public function setcodInt($codInt ){
+	$this->codInt=$codInt;
+ }
+ private $comissao;
+ public function getcomissao(){
+	return $this->comissao;
+ }
+ public function setcomissao($comissao ){
+	$this->comissao=$comissao;
+ }
+ private $fatura_pedido;
+ public function getfatura_pedido(){
+	return $this->fatura_pedido;
+ }
+ public function setfatura_pedido($fatura_pedido ){
+	$this->fatura_pedido=$fatura_pedido;
+ }
+ private $visualiza_pedido;
+ public function getvisualiza_pedido(){
+	return $this->visualiza_pedido;
+ }
+ public function setvisualiza_pedido($visualiza_pedido ){
+	$this->visualiza_pedido=$visualiza_pedido;
+ }
+ private $nome;
+ public function getnome(){
+	return $this->nome;
+ }
+ public function setnome($nome ){
+	$this->nome=$nome;
+ }
+ private $inativo;
+ public function getinativo(){
+	return $this->inativo;
+ }
+ public function setinativo($inativo ){
+	$this->inativo=$inativo;
+ }
+ private $codigo;
+ public function getcodigo(){
+	return $this->codigo;
+ }
+ public function setcodigo($codigo ){
+	$this->codigo=$codigo;
+ }
  private $bairro;
  public function getbairro(){
 	return $this->bairro;

@@ -134,7 +134,28 @@
         $vendedor=new VendedoresCadastroJsonClient();
         $vendListarRequest=array("pagina"=>"1","registros_por_pagina"=>"50","apenas_importado_api"=>"N");
         $vend=$vendedor->ListarVendedores($vendListarRequest)->cadastro;
+        
+        $dao2=new CRUD();
+        $dao2->drop('tb_vendedor');
+        foreach($vend as $item){
+            $model=new Model();
+            $model->setcodInt($item->codInt);
+            $model->setcodigo($item->codigo);
+            $model->setcomissao($item->comissao);
+            $model->setemail($item->email);
+            $model->setfatura_pedido($item->fatura_pedido);
+            $model->setinativo($item->inativo);
+            $model->setnome($item->nome);
+            $model->setvisualiza_pedido($item->visualiza_pedido);
+            
+            $dao2->grava3($model);
+        }
    }else{
+        $dao2=new CRUD();
+        $search=new ModelSearchCriteria();
+        $search->settabela('tb_vendedor');
+        $vendedores=$dao2->encontre($search);
+        echo '<pre>';print_r($vendedores);die;
         $vendedorLista=array('740394323'=>'Jadeylson','740395328'=>'Angela','740395810'=>'Moises','742241153'=>'Sergio','756282022'=>'Adriano');
         $vend=array();
         foreach($vendedorLista as $key => $item){

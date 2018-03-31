@@ -85,12 +85,18 @@
         return $this->update($model);
    }
    public function grava2(modelProduto $modelProduto){
-        //echo '<pre>';print_r($modelProduto);
         set_time_limit(3600);
         if ($modelProduto->getid() === null) {
             return $this->insert($modelProduto);
         }
         return $this->update($modelProduto);
+   }
+   public function grava3(Model $model){
+        set_time_limit(3600);
+        if ($model->getid() === null) {
+            return $this->insert3($model);
+        }
+        return $this->update3($model);
    }
    public function exclui($id) {
         $sql = 'delete from `'.$model->gettabela().'` WHERE id = :id';
@@ -144,6 +150,16 @@
             //return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));
         }
         return $modelProduto;
+   }
+   public function execute3($sql,Model $model){
+        $statement = $this->getDb()->prepare($sql);
+        $this->executeStatement($statement, $this->getParams3($model));
+        $search=new ModelSearchCriteria();        
+        $search->settabela($model->gettabela());
+        if (!$model->getid()) {
+            //return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));
+        }
+        return $model;
    }
    private function executeStatement(PDOStatement $statement, array $params){
         if (!$statement->execute($params)){
