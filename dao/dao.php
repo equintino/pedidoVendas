@@ -63,6 +63,16 @@
         }
         return $result;
    }
+   public function encontrePorVendedor(ModelSearchCriteria $search=null){
+        $result = array();
+        $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" ')->fetchAll();
+        foreach($row as $item){
+            $model = new Model();
+            modelMapper::map($model, $item);
+            $result[$model->getid()] = $model;
+        }
+        return $result;
+   }
    public function totalLinhas(ModelSearchCriteria $search=null){
            $row = $this->query("SELECT id FROM `".$search->gettabela()."` WHERE `excluido` =  '0' ORDER BY id DESC ")->fetch();
         if (!$row) {
