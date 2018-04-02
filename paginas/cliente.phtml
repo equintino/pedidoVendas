@@ -546,7 +546,7 @@
     if($tipoBusca=='local'){
         $paginaAtual=1;
         $totalPagina=1;
-        $totalRegistro=$dao->totalLinhas($search)['id'];
+        $totalRegistro=$dao->totalLinhas($search);
     }
 ?> 
     <span class="pag">(pág.<?= $paginaAtual ?>/<?= $totalPagina ?>)</span>

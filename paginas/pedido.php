@@ -56,21 +56,17 @@
     $cliente=new ClientesCadastroJsonClient();
     
     if(@$origem=='cliente'){
+        $dao = new CRUD();
+        $search=new ModelSearchCriteria();
+        $search->settabela('tb_cliente');
+        $search->setrazao_social($_GET['razao']);
+        $dadosLocal=$dao->encontre($search);
+        
         $codigo=null;
         $clientes_cadastro_chave=array("codigo_cliente_omie"=>$cCliente,
 "codigo_cliente_integracao"=>$codigo);
         $dados=$cliente->ConsultarCliente($clientes_cadastro_chave);
-        
-        //echo '<pre>';print_r($dados);
-        $dao = new CRUD();
-        $search=new ModelSearchCriteria();
-        $search->settabela('tb_cliente');
-        $search->setrazao_social($dados->razao_social);
-        $dadosLocal=$dao->encontre($search);
-        
-        //echo '<pre>';print_r($dadosLocal);die;
-        
-        //$resultado=array();
+
         $model = new Model();
         foreach($dados as $key => $item){
             if($key != 'info' && $key != 'tags'){

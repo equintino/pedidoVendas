@@ -409,7 +409,7 @@
         $search->setcodigo($buscaProduto);
         $detalhes=$dao->encontre2($search);
         //echo '<pre>';print_r($detalhes);die;
-        $totalRegistros=$dao->totalLinhas2($search)['id'];
+        $totalRegistros=$dao->totalLinhas2($search);
         $registros=null;
     }elseif($loja){
         $dao = new Dao();
@@ -417,7 +417,7 @@
         $search->settabela('tb_produto');
         $search->setloja(strtoupper($loja));
         @$detalhes=$dao->encontrePorLoja($search);
-        $totalRegistros=$dao->totalLinhas2($search)['id'];
+        $totalRegistros=$dao->totalLinhas2($search);
         /*switch($loja){
             case 'cachambi':
                 $cachambi='selected';

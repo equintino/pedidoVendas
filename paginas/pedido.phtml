@@ -135,7 +135,13 @@
         })
         $('.tabela td select[name=parcela]').change(function(){
             var selecao=$(this).val().substr(0,2);
-            if(selecao=='A '){
+            if($('.tabela td select[name=fPagamento]').val()=='debito'||$('.tabela td select[name=fPagamento]').val()=='dinheiro'){
+                $('.tabela select[name=parcela] option').each(function(){
+                    $(this).removeAttr('selected');
+                    if($(this).val()=='A Vista,000,1'){
+                        $(this).attr('selected','selected')
+                    }
+                })
                 $('#pnl4 .novo4').each(function(){
                     if($(this).attr('linha')>1){
                         $(this).remove()
@@ -145,31 +151,52 @@
                 $('#pnl4 .novo4 input[name=data_vencimento1]').val($('.previsao input[name=dPrevisao]:hidden').val())
                 $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
                 $('#pnl4 .novo4 input[name=percentual1]').val(100)
-            }else if(selecao=='1 '){
-                $('#pnl4 .novo4').each(function(){
-                    if($(this).attr('linha')>1){
-                        $(this).remove()
-                    }
-                })
-                $('#pnl4 .novo4 input[name=numero_parcela1]').val(1)
-                $('#pnl4 .novo4 input[name=data_vencimento1]').val(data(1))
-                $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
-                $('#pnl4 .novo4 input[name=percentual1]').val(100)
             }else{
-                $('#pnl4 .novo4').each(function(){
-                    if($(this).attr('linha')>1){
-                        $(this).remove()
+                if($('.tabela select[name=parcela] :selected').val()=='A Vista,000,1'){
+                    $('.tabela select[name=parcela] option').each(function(){
+                        $(this).removeAttr('selected');
+                        if($(this).val()=='1 Parcela,001,1'){
+                            $(this).attr('selected','selected')
+                        }
+                    })
+                }
+                /*if(selecao=='A '){
+                    $('#pnl4 .novo4').each(function(){
+                        if($(this).attr('linha')>1){
+                            $(this).remove()
+                        }
+                    })
+                    $('#pnl4 .novo4 input[name=numero_parcela1]').val(0)
+                    $('#pnl4 .novo4 input[name=data_vencimento1]').val($('.previsao input[name=dPrevisao]:hidden').val())
+                    $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
+                    $('#pnl4 .novo4 input[name=percentual1]').val(100)
+                }else*/ 
+                if(selecao=='1 '){
+                    $('#pnl4 .novo4').each(function(){
+                        if($(this).attr('linha')>1){
+                            $(this).remove()
+                        }
+                    })
+                    $('#pnl4 .novo4 input[name=numero_parcela1]').val(1)
+                    $('#pnl4 .novo4 input[name=data_vencimento1]').val(data(1))
+                    $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
+                    $('#pnl4 .novo4 input[name=percentual1]').val(100)
+                }else{
+                    $('#pnl4 .novo4').each(function(){
+                        if($(this).attr('linha')>1){
+                            $(this).remove()
+                        }
+                    })
+                    var percent=100/selecao;
+                    for(var x=1;x<parseInt(selecao)+1;x++){
+                        if(x!=1){
+                            $('#pnl4 table').append($('<tr linha='+x+' class=novo4><td><input size=1px type=text name=numero_parcela'+x+' /></td><td><input size=10px type=text name=data_vencimento'+x+' /></td><td><input size=10px type=text name=valor'+x+' /></td><td><input size=10px type=text name=percentual'+x+' /></td>'))
+                        }
+                        $('#pnl4 .novo4 input[name=numero_parcela'+x+']').val(x)
+                        $('#pnl4 .novo4 input[name=data_vencimento'+x+']').val(data(x))
+                        $('#pnl4 .novo4 input[name=valor'+x+']').val(calcula('/',$('.autoQuadro td[nome=vPedido]').text(),selecao))
+                        $('#pnl4 .novo4 input[name=percentual'+x+']').val(percent)
                     }
-                })
-                var percent=100/selecao;
-                for(var x=1;x<parseInt(selecao)+1;x++){
-                    if(x!=1){
-                        $('#pnl4 table').append($('<tr linha='+x+' class=novo4><td><input size=1px type=text name=numero_parcela'+x+' /></td><td><input size=10px type=text name=data_vencimento'+x+' /></td><td><input size=10px type=text name=valor'+x+' /></td><td><input size=10px type=text name=percentual'+x+' /></td>'))
-                    }
-                    $('#pnl4 .novo4 input[name=numero_parcela'+x+']').val(x)
-                    $('#pnl4 .novo4 input[name=data_vencimento'+x+']').val(data(x))
-                    $('#pnl4 .novo4 input[name=valor'+x+']').val(calcula('/',$('.autoQuadro td[nome=vPedido]').text(),selecao))
-                    $('#pnl4 .novo4 input[name=percentual'+x+']').val(percent)
                 }
             }
         })
@@ -235,9 +262,51 @@
                 $('.doc input').val('');
                 $('#pnl3 tr.dados_adcionais_nf td textarea').val('')
             }
+            if($(this).val()=='debito' || $(this).val() == 'dinheiro'){
+                //$('.tabela select[name=parcela] option[value="A Vista,000,1"]').attr('selected','selected');
+                $('.tabela select[name=parcela] option').each(function(){
+                    $(this).removeAttr('selected');
+                    if($(this).val()=='A Vista,000,1'){
+                        $(this).attr('selected','selected')
+                        //$('.tabela select[name=parcela]').attr('disabled','disabled')
+                    }
+                })
+                        //alert($('.tabela select[name=parcela] :selected').val());
+                $('#pnl4 .novo4').each(function(){
+                    if($(this).attr('linha')>1){
+                        $(this).remove()
+                    }
+                })
+                $('#pnl4 .novo4 input[name=numero_parcela1]').val(0)
+                $('#pnl4 .novo4 input[name=data_vencimento1]').val($('.previsao input[name=dPrevisao]:hidden').val())
+                $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
+                $('#pnl4 .novo4 input[name=percentual1]').val(100)
+            }else{
+                if($('.tabela select[name=parcela] :selected').val()=='A Vista,000,1'){
+                    $('.tabela select[name=parcela] option').each(function(){
+                        $(this).removeAttr('selected');
+                        if($(this).val()=='1 Parcela,001,1'){
+                            $(this).attr('selected','selected')
+                        }
+                    })
+                    $('#pnl4 .novo4').each(function(){
+                        if($(this).attr('linha')>1){
+                            $(this).remove()
+                        }
+                    })
+                    $('#pnl4 .novo4 input[name=numero_parcela1]').val(1)
+                    $('#pnl4 .novo4 input[name=data_vencimento1]').val(data(1))
+                    $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
+                    $('#pnl4 .novo4 input[name=percentual1]').val(100)
+                }
+            }
         })
         $('.pagina').text('PRÉ-VENDA');
-        
+        $('#novoPedido').click(function(){
+            if(!confirm('Se houver algum dado no pedido será descartado.')){
+                return false;
+            }
+        })
         ///// funcoes ////
         function itemExclusao(){
             var corItem='rgba(255,0,0,0.7)';
@@ -607,7 +676,7 @@
     #botoes{
         margin-top: 10px;
     }
-    #botoes .bnt{
+    #botoes .bnt, .novoPedido{
         margin: 5px;
         background: orange;
         color: white;
@@ -616,10 +685,10 @@
         font-weight: 700;
         box-shadow: 2px 2px 2px gray;
     }
-    #botoes .bnt:hover{
+    #botoes .bnt:hover, .novoPedido:hover{
         background: #c97a08;
     }
-    #botoes .bnt:active{
+    #botoes .bnt:active, .novoPedido:active{
         position: relative;
         top: 3px;
     }
@@ -700,6 +769,11 @@
     #transf:hover{
         cursor: pointer;
     }
+    .novoPedido{
+        cursor: pointer;
+        float: right;
+    }
+    
     .blink_me {
     }
     @keyframes blinker {
@@ -724,6 +798,7 @@
 </div>
 <div class="conteudo">
 <?php if($act=='cad'): ?>
+    <a id="novoPedido" href="../web/index.php?pagina=pedido&act=cad"><div class="novoPedido">Novo Pedido</div></a> 
 <h1>Inclusão de Pedido de Venda</h1>
 <span id=confirmado></span>
 <form id="dados" class="fPedido" method="post" action='../paginas/add.php?act=cad&pagina=pedido' target="_blank" >

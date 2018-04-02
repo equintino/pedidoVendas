@@ -74,18 +74,18 @@
         return $result;
    }
    public function totalLinhas(ModelSearchCriteria $search=null){
-           $row = $this->query("SELECT id FROM `".$search->gettabela()."` WHERE `excluido` =  '0' ORDER BY id DESC ")->fetch();
+           $row = $this->query("SELECT id FROM `".$search->gettabela()."` WHERE `excluido` =  '0' ORDER BY id DESC ")->fetchAll();
         if (!$row) {
             return null;
         }
-        return $row;
+        return count($row);
    }
    public function totalLinhas2(ProdutoSearchCriteria $search=null){
-        $row = $this->query("SELECT id FROM `".$search->gettabela()."` WHERE `excluido` =  '0' ORDER BY id DESC ")->fetch();
+        $row = $this->query("SELECT id FROM `".$search->gettabela()."` WHERE `excluido` =  '0' ORDER BY id DESC ")->fetchAll();
         if (!$row) {
             return null;
         }
-        return $row;
+        return count($row);
    }
    public function grava(Model $model){
         set_time_limit(3600);
