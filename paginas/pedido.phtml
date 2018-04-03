@@ -134,33 +134,21 @@
             }
         })
         $('.tabela td select[name=parcela]').change(function(){
-            var selecao=$(this).val().substr(0,2);
-            if($('.tabela td select[name=fPagamento]').val()=='debito'||$('.tabela td select[name=fPagamento]').val()=='dinheiro'){
-                $('.tabela select[name=parcela] option').each(function(){
-                    $(this).removeAttr('selected');
-                    if($(this).val()=='A Vista,000,1'){
-                        $(this).attr('selected','selected')
-                    }
-                })
-                $('#pnl4 .novo4').each(function(){
-                    if($(this).attr('linha')>1){
-                        $(this).remove()
-                    }
-                })
-                $('#pnl4 .novo4 input[name=numero_parcela1]').val(0)
-                $('#pnl4 .novo4 input[name=data_vencimento1]').val($('.previsao input[name=dPrevisao]:hidden').val())
-                $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
-                $('#pnl4 .novo4 input[name=percentual1]').val(100)
-            }else{
-                if($('.tabela select[name=parcela] :selected').val()=='A Vista,000,1'){
+            $('.outrosItens span').each(function(){
+                if($(this).text()=='Parcelas'){
+                    $(this).trigger('click')
+                }
+            })
+            var numParc=$('.tabela select[name=parcela] :selected').val();
+            var formPag=$('.tabela td select[name=fPagamento] :selected').val();
+            if(formPag=='debito' || formPag=='dinheiro'){
+                if(numParc != 'A Vista,000,1'){
                     $('.tabela select[name=parcela] option').each(function(){
                         $(this).removeAttr('selected');
-                        if($(this).val()=='1 Parcela,001,1'){
+                        if($(this).val()=='A Vista,000,1'){
                             $(this).attr('selected','selected')
                         }
-                    })
-                }
-                /*if(selecao=='A '){
+                    })                
                     $('#pnl4 .novo4').each(function(){
                         if($(this).attr('linha')>1){
                             $(this).remove()
@@ -170,8 +158,15 @@
                     $('#pnl4 .novo4 input[name=data_vencimento1]').val($('.previsao input[name=dPrevisao]:hidden').val())
                     $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
                     $('#pnl4 .novo4 input[name=percentual1]').val(100)
-                }else*/ 
-                if(selecao=='1 '){
+                }
+            }else if(formPag=='credito'){
+                if(numParc=='A Vista,000,1' || numParc==''){
+                    $('.tabela select[name=parcela] option').each(function(){
+                        $(this).removeAttr('selected');
+                        if($(this).val()=='1 Parcela,001,1'){
+                            $(this).attr('selected','selected')
+                        }
+                    })
                     $('#pnl4 .novo4').each(function(){
                         if($(this).attr('linha')>1){
                             $(this).remove()
@@ -182,28 +177,46 @@
                     $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
                     $('#pnl4 .novo4 input[name=percentual1]').val(100)
                 }else{
-                    $('#pnl4 .novo4').each(function(){
-                        if($(this).attr('linha')>1){
-                            $(this).remove()
+                    var selecao=$(this).val().substr(0,2);
+                    if(selecao=='1 '){
+                        $('#pnl4 .novo4').each(function(){
+                            if($(this).attr('linha')>1){
+                                $(this).remove()
+                            }
+                        })
+                        $('#pnl4 .novo4 input[name=numero_parcela1]').val(1)
+                        $('#pnl4 .novo4 input[name=data_vencimento1]').val(data(1))
+                        $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
+                        $('#pnl4 .novo4 input[name=percentual1]').val(100)
+                    }else{
+                        $('#pnl4 .novo4').each(function(){
+                            if($(this).attr('linha')>1){
+                                $(this).remove()
+                            }
+                        })
+                        var percent=100/selecao;
+                        for(var x=1;x<parseInt(selecao)+1;x++){
+                            if(x!=1){
+                                $('#pnl4 table').append($('<tr linha='+x+' class=novo4><td><input size=1px type=text name=numero_parcela'+x+' /></td><td><input size=10px type=text name=data_vencimento'+x+' /></td><td><input size=10px type=text name=valor'+x+' /></td><td><input size=10px type=text name=percentual'+x+' /></td>'))
+                            }
+                            $('#pnl4 .novo4 input[name=numero_parcela'+x+']').val(x)
+                            $('#pnl4 .novo4 input[name=data_vencimento'+x+']').val(data(x))
+                            $('#pnl4 .novo4 input[name=valor'+x+']').val(calcula('/',$('.autoQuadro td[nome=vPedido]').text(),selecao))
+                            $('#pnl4 .novo4 input[name=percentual'+x+']').val(percent)
                         }
-                    })
-                    var percent=100/selecao;
-                    for(var x=1;x<parseInt(selecao)+1;x++){
-                        if(x!=1){
-                            $('#pnl4 table').append($('<tr linha='+x+' class=novo4><td><input size=1px type=text name=numero_parcela'+x+' /></td><td><input size=10px type=text name=data_vencimento'+x+' /></td><td><input size=10px type=text name=valor'+x+' /></td><td><input size=10px type=text name=percentual'+x+' /></td>'))
-                        }
-                        $('#pnl4 .novo4 input[name=numero_parcela'+x+']').val(x)
-                        $('#pnl4 .novo4 input[name=data_vencimento'+x+']').val(data(x))
-                        $('#pnl4 .novo4 input[name=valor'+x+']').val(calcula('/',$('.autoQuadro td[nome=vPedido]').text(),selecao))
-                        $('#pnl4 .novo4 input[name=percentual'+x+']').val(percent)
                     }
                 }
+            }else{
+                alert('Defina a forma de pagamento.');
+                $('.tabela td select[name=fPagamento]').css('background','rgba(216, 0, 0,0.1)').focus()
             }
         })
         $('#dados').on("submit", function(event){
             var vendedor=$('.tabela .vendedor :selected').text();
             $('.vendedor input[name=vendedor]').val(vendedor);
-            if($('.tabela td select[name=fPagamento]').val()=='credito' || $('.tabela td select[name=fPagamento]').val() == 'debito'){
+            var numParc=$('.tabela select[name=parcela] :selected').val();
+            var formPag=$('.tabela td select[name=fPagamento] :selected').val();
+            if(formPag=='credito' || formPag == 'debito'){
                 if($('#pnl3 tr.dados_adcionais_nf td textarea').val()==''){
                     var dados=confirm('Não foi inserido o número do documento referente ao cartão. Deseja continuar assim mesmo?');
                     if(!dados){
@@ -212,38 +225,42 @@
                     }
                 }
             }
-            var campo=1;
+            var campo=0;
             $('#pnl1 textarea').each(function(event){
                 campo++;
+                perg=null;
                 if(!$(this).val()||$(this).val()==' '){
                     var linha=$(this).attr('linha');
                     var codProd=$('#pnl1 input[name=codigo_produto'+linha+']').val();
                     perg=confirm('Não foi inserido o serial para o ítem '+codProd+'. Deseja continuar assim mesmo?');
                     if(!perg){
+                        $('.outrosItens span').each(function(){
+                            if($(this).text()=='Itens de Venda'){
+                                $(this).trigger('click')
+                            }
+                        })
                         $(this).css('background','rgba(216, 0, 0,0.1)').focus()
                         return false;
                     }
                 }else{
                     if(item==campo){
-                        perg=1;
-                        return true;
+                        perg=true;
+                        return false;
                     }
-                }
-                if(item==1){
-                    perg=1;
                 }
             })
             if(perg){
-                if($('#pnl4 input').val()==''){
-                    alert('Defina as parcelas.');
-                    $('.outrosItens span').each(function(){
-                        if($(this).val()==''){
-                            if($(this).text()=='Parcelas'){
-                                $(this).trigger('click')
-                            }
-                        }
-                    })
-                    return false;
+                $('.tabela select[name=parcela]').removeAttr('disabled');
+                if(formPag=='dinheiro' || formPag=='debito'){
+                    if(numParc != 'A Vista,000,1'){
+                        alert('A forma de pagamento não condiz com parcelas.');
+                        return false;
+                    }
+                }else if(formPag=='credito'){
+                    if(numParc == 'A Vista,000,1' || numParc ==''){
+                        alert('A forma de pagamento não condiz com parcelas.');
+                        return false;
+                    }
                 }
                 $(location).attr('href','index.php?pagina=pedido&act=cad&enviado=1')
             }else{
@@ -251,38 +268,43 @@
             }
         })
         $('.tabela td select[name=fPagamento]').change(function(){
-            if($(this).val()=='credito' || $(this).val()=='debito'){
+            var formPag=$('.tabela td select[name=fPagamento] :selected').val();
+            if(formPag == 'credito' || formPag == 'debito'){
                 $('.doc').show();
                 $('.doc').keyup(function(){
                     var doc=$('.doc input').val();
                     $('#pnl3 tr.dados_adcionais_nf td textarea').val(doc)
                 })
-            }else{
+            }else if(formPag == 'dinheiro' || formPag == ''){
                 $('.doc').hide();
                 $('.doc input').val('');
                 $('#pnl3 tr.dados_adcionais_nf td textarea').val('')
             }
-            if($(this).val()=='debito' || $(this).val() == 'dinheiro'){
+            if(formPag == 'debito' || formPag == 'dinheiro'){// $(this).val()=='debito' || $(this).val() == 'dinheiro'){
                 //$('.tabela select[name=parcela] option[value="A Vista,000,1"]').attr('selected','selected');
-                $('.tabela select[name=parcela] option').each(function(){
-                    $(this).removeAttr('selected');
-                    if($(this).val()=='A Vista,000,1'){
-                        $(this).attr('selected','selected')
-                        //$('.tabela select[name=parcela]').attr('disabled','disabled')
-                    }
-                })
-                        //alert($('.tabela select[name=parcela] :selected').val());
-                $('#pnl4 .novo4').each(function(){
-                    if($(this).attr('linha')>1){
-                        $(this).remove()
-                    }
-                })
-                $('#pnl4 .novo4 input[name=numero_parcela1]').val(0)
-                $('#pnl4 .novo4 input[name=data_vencimento1]').val($('.previsao input[name=dPrevisao]:hidden').val())
-                $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
-                $('#pnl4 .novo4 input[name=percentual1]').val(100)
-            }else{
-                if($('.tabela select[name=parcela] :selected').val()=='A Vista,000,1'){
+                //$('.tabela select[name=parcela]').removeAttr('selected');
+                if($('.tabela select[name=parcela] :selected').val() != 'A Vista,000,1'){
+                    $('.tabela select[name=parcela] option').each(function(){
+                        if($(this).val()=='A Vista,000,1'){
+                            $(this).attr('selected','selected')
+                            //$('.tabela select[name=parcela]').attr('disabled','disabled')
+                        }
+                    })
+                            //alert($('.tabela select[name=parcela] :selected').val());
+                    $('#pnl4 .novo4').each(function(){
+                        if($(this).attr('linha')>1){
+                            $(this).remove()
+                        }
+                    })
+                    $('#pnl4 .novo4 input[name=numero_parcela1]').val(0)
+                    $('#pnl4 .novo4 input[name=data_vencimento1]').val($('.previsao input[name=dPrevisao]:hidden').val())
+                    $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
+                    $('#pnl4 .novo4 input[name=percentual1]').val(100)
+                }
+            }else if(formPag == 'credito'){
+                numParc=$('.tabela select[name=parcela] :selected').val();
+                //alert(numParc);
+                if(numParc == 'A Vista,000,1' || numParc == ''){
                     $('.tabela select[name=parcela] option').each(function(){
                         $(this).removeAttr('selected');
                         if($(this).val()=='1 Parcela,001,1'){
@@ -303,7 +325,7 @@
         })
         $('.pagina').text('PRÉ-VENDA');
         $('#novoPedido').click(function(){
-            if(!confirm('Se houver algum dado no pedido será descartado.')){
+            if(!confirm('O formulário será limpo.')){
                 return false;
             }
         })
@@ -804,9 +826,9 @@
 <form id="dados" class="fPedido" method="post" action='../paginas/add.php?act=cad&pagina=pedido' target="_blank" >
 <table class="tabela">
     <tr><td colspan="4">Cliente</td><td align="center">Previsão Faturamento</td></tr>
-    <tr><td colspan="4" class="razao"><input type="hidden" name="cCliente" value="<?= $cCliente ?>" /><input name="cliente" type="text" size=53 value="<?= $razao ?>" required /> <img src="../web/img/lupa.png" height="14px" title="Pesquisar cliente"/><span class="tecla"> (F2)</span></td><td class="previsao"><input disabled name="dPrevisao" type="text" value="<?= date('d/m/Y') ?>" /><input name="dPrevisao" type="hidden" value="<?= date('d/m/Y') ?>" /></td></tr>     <input type="hidden" name="endereco" value="<?= $_GET['endereco'] ?>" /><input type="hidden" name="endereco_numero" value="<?= $_GET['endereco_numero'] ?>" /><input type="hidden" name="endereco" value="<?= $_GET['endereco'] ?>" /><input type="hidden" name="bairro" value="<?= $_GET['bairro'] ?>" /><input type="hidden" name="cidade" value="<?= $_GET['cidade'] ?>" /><input type="hidden" name="cep" value="<?= $_GET['cep'] ?>" />
+    <tr><td colspan="4" class="razao"><input type="hidden" name="cCliente" value="<?= $cCliente ?>" /><input tabindex="1" name="cliente" type="text" size=53 value="<?= $razao ?>" required /> <img src="../web/img/lupa.png" height="14px" title="Pesquisar cliente"/><span class="tecla"> (F2)</span></td><td class="previsao"><input disabled name="dPrevisao" type="text" value="<?= date('d/m/Y') ?>" /><input name="dPrevisao" type="hidden" value="<?= date('d/m/Y') ?>" /></td></tr>     <input type="hidden" name="endereco" value="<?= $_GET['endereco'] ?>" /><input type="hidden" name="endereco_numero" value="<?= $_GET['endereco_numero'] ?>" /><input type="hidden" name="endereco" value="<?= $_GET['endereco'] ?>" /><input type="hidden" name="bairro" value="<?= $_GET['bairro'] ?>" /><input type="hidden" name="cidade" value="<?= $_GET['cidade'] ?>" /><input type="hidden" name="cep" value="<?= $_GET['cep'] ?>" />
     <tr><td><font size=2px>CNPJ/CPF</font></td><!--<td>Tabela de Preço</td>--><tr>
-    <tr><td class="cnpj"><input type="text" name="cnpj_cpf" required value="<?= $cnpj_cpf ?>"/></td>
+    <tr><td class="cnpj"><input tabindex="2" type="text" name="cnpj_cpf" required value="<?= $cnpj_cpf ?>"/></td>
         <!--<td><select name='cCodIntTabPreco'>   
         </select></td>-->
     </tr>
@@ -857,14 +879,14 @@
             </select>
             <img height=15px src="../web/img/atualiza.png" title="Atualiza lista de vendedores"/>
         </td><td>
-            <select name="parcela" disabled required>
+            <select name="parcela" tabindex="4" disabled required>
                 <option value=""></option>
                 <?php foreach($parcela as $key => $item): ?>
                 <option value="<?= $item->cDescricao.','.$item->cCodigo.','.$item->nQtdeParc ?>"><?= $item->cDescricao ?></option>
                 <?php endforeach; ?>
             </select>
         </td><td>
-            <select class='fPag' name="fPagamento" required>
+            <select class='fPag' tabindex="3" name="fPagamento" required>
                 <option value=""></option>
                 <?php foreach($form_pag as $key => $item): ?>
                 <option value="<?= $key ?>"><?= $item ?></option>

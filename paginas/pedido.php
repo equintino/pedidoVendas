@@ -225,7 +225,7 @@
         $tabelaPreco=$tabPreco->ListarTabelasPreco($tprListarRequest)->listaTabelasPreco;
     }
    
-    $form_pag=array('dinheiro'=>'Dinheiro','credito'=>'Cartão de Crédito','debito'=>'Cartão de Débito');
+    $form_pag=array('dinheiro'=>'Dinheiro','debito'=>'Cartão de Débito','credito'=>'Cartão de Crédito');
       
    //////// Variáveis ////////  
     $variaveis1=array('tItem'=>'Total de Ítens','mercadorias'=>'Mercadorias','vDesconto'=>'Desconto',/*'ipi'=>'IPI','icmsSt'=>'ICMS ST',*/'vPedido'=>'Valor do Pedido');//valores preenchidos automaticamente

@@ -53,8 +53,9 @@
             body{
                 background: #000;
                 font: 12pt serif;
-                font-weight: 600;
+                font-weight: 900;
                 width: 105mm;
+                text-transform: uppercase;
             }
             #texto{
                 width: 100%; 
@@ -76,9 +77,9 @@
                 margin-top: 10px;
             }
             .cnpj,.ie{
-                font-weight: 900;
-                color: black;
-                font-size: 13px;
+                //font-weight: 900;
+                //color: black;
+                //font-size: 13px;
             }
             hr{
                 margin-top: 8px;
@@ -135,10 +136,14 @@
                 margin-top: 20px;
             }
             .dCliente{
-                font-style: italic;
+                //font-style: italic;
             }
             .campos, .dCliente{
-                font-size: 12px;
+                //font-size: 12px;
+            }
+            .rodape{
+                //margin-top: 30px;
+                text-align: center;
             }
             
             @media print{
@@ -253,7 +258,7 @@
             <hr>
             <div class="titulo2">
             <?php for($i=1;$i<=$tItens;$i++): 
-                $codigo=$pedido_venda_produto->det[$i-1]['produto']->codigo_produto;
+                $codigo=$pedido_venda_produto->det[$i-1]['produto']->codigo_produto_integracao;
                 $descricao=$pedido_venda_produto->det[$i-1]['produto']->descricao;
                 $quantidade=$pedido_venda_produto->det[$i-1]['produto']->quantidade;
                 $dados_adcionais_item=$pedido_venda_produto->det[$i-1]['inf_adic']->dados_adicionais_item;
@@ -272,6 +277,9 @@
                 <span class="total">TOTAL</span>
                 <span class="vTotal">R$ <?= $vPedido ?></span>
             </div>
+            <br><br>
+            <hr>
+            <div class="rodape">DEUS SEJA LOUVADO!</div>
         </div>
         <!--<button onclick='window.print()'>Imprimir</button>-->
     </body>
