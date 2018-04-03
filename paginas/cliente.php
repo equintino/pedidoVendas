@@ -35,7 +35,11 @@
         Flash::addFlash('Registro salvo com sucesso.');
     }
     
-    $tagLista=array('Fornecedor','Cliente','Transportadora','Funcionário');
+    if(@$_COOKIE['funcao']=='administrador'){
+        $tagLista=array('Fornecedor','Cliente','Transportadora','Funcionário');
+    }else{
+        $tagLista=array('Cliente','Transportadora','Funcionário');
+    }
     if(@$_GET['tags']=='undefined'){
         $tagsArray=null;
     }else{

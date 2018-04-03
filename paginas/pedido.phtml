@@ -9,17 +9,6 @@
         $('.botao input').mouseover(function(){
             $(this).css('cursor','pointer');
         })
-        $('.botao').css({
-            float: 'left',
-            marginTop: '4px',
-            marginLeft: '745px'
-        })
-        $('.botao input').css({
-            borderRadius: '0 0 5px 5px',
-            fontWeight: '600',
-            color: '#111f46',
-            padding: '1px 4px'
-        })
         
         $('#botoes .bnt,.outrosItens span').mouseover(function(){
             $(this).css('cursor','pointer')
@@ -45,7 +34,7 @@
                     die;
                 }
                 item++;
-                   $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" name="codigo_produto'+item+'" autocomplete="off" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" autocomplete="off" required /></td><td><input type="text" name="quantidade'+item+'" autocomplete="off" required linha='+item+' /></td><td><input type="text" name="vUnitarioItem'+item+'" autocomplete="off" required /></td><td><input type="text" name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" name="pDescontoItem'+item+'" autocomplete="off" linha='+item+' /></td><td><textarea cols=25 rows=1 name="obs_item'+item+'" linha='+item+' /></textares></td><td><input type="hidden" name="cfop'+item+'" linha='+item+' /></td><td><input type="hidden" name="ncm'+item+'" linha='+item+' /></td><td><input type="hidden" name="ean'+item+'" linha='+item+' /></td><td><input type="hidden" name="unidade'+item+'" linha='+item+' /></td><td><input type="hidden" name="vTotalItem'+item+'" linha='+item+' /></td><input type=hidden name="cOmie'+item+'" /></span></tr>');
+                   $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" size=10px name="codigo_produto'+item+'" autocomplete="off" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" autocomplete="off" required /></td><td><input type="text" size=2px name="quantidade'+item+'" autocomplete="off" required linha='+item+' /></td><td><input type="text" size=8px name="vUnitarioItem'+item+'" autocomplete="off" required /></td><td><input type="text" size=8px name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" size=2px name="pDescontoItem'+item+'" autocomplete="off" linha='+item+' /></td><td><textarea cols=25 rows=1 name="obs_item'+item+'" linha='+item+' /></textares></td><td><input type="hidden" name="cfop'+item+'" linha='+item+' /></td><td><input type="hidden" name="ncm'+item+'" linha='+item+' /></td><td><input type="hidden" name="ean'+item+'" linha='+item+' /></td><td><input type="hidden" name="unidade'+item+'" linha='+item+' /></td><td><input type="hidden" name="vTotalItem'+item+'" linha='+item+' /></td><input type=hidden name="cOmie'+item+'" /></span></tr>');
                     itemExclusao();
                     busca();
                     $('#pnl1 table input[name=codigo_produto'+item+']').trigger('focus');
@@ -623,12 +612,13 @@
         float: right;
     }
     .fPedido{
-        width: 980px;
+        //width: 980px;
     }
     .tabela{
         padding: 5px;
         font-size: 15px;
         width: 685px;
+        margin: 5px 40px;
     }
     .tabela th{
         background: black;
@@ -644,6 +634,7 @@
         background: rgba(216, 0, 0,0.1);
         border-radius: 5px;
         width: 530px;
+        margin-left: 120px;
     }
     .fTotais table{
         margin: auto;
@@ -655,14 +646,23 @@
     fieldset legend{
         font-size: 15px;
     }
+    .iVendas legend{
+        margin-left: 20px;
+    }
+    #pnl1 .divVendas{
+        margin-left: -7px;
+        //border: solid red;        
+    }
     .divVendas{
-        width: 710px;
-        height: 200px;
-        overflow: auto;
+        width: 870px;
+        height: 220px;
         margin-top: 10px;
     }
+    #pnl2 .divVendas, #pnl3 .divVendas, #pnl4 .divVendas, #pnl5 .divVendas{
+        margin: 19px 43px;
+        //border: solid red;
+    }
     .divVendas table{
-        width: 900px;
         white-space: nowrap;
     }
     .divVendas table td{
@@ -673,7 +673,7 @@
         height: 170px;
     }
     .outrosItens{
-        margin-left: 5px;
+        margin-left: 48px;
         padding: 8px 0;
     }
     .outrosItens span{
@@ -695,17 +695,30 @@
         color: white;
         text-shadow: 2px 2px 2px black;
     }
+    .botao{
+        float: left;
+        margin-top: -4px;
+        margin-left: 745px;
+    }
+    .botao input{
+        border-radius: 0 0 5px 5px;
+        font-weight: 600;
+        color: #111f46;
+        padding: 1px 4px;
+    }
     #botoes{
-        margin-top: 10px;
+        margin: 10px 20px;
+        //border: solid red;
     }
     #botoes .bnt, .novoPedido{
-        margin: 5px;
+        margin: -2px 4px;
         background: orange;
         color: white;
         padding: 3px 8px;
         text-shadow: 1px 1px 1px gray;
         font-weight: 700;
         box-shadow: 2px 2px 2px gray;
+        //border: solid red;
     }
     #botoes .bnt:hover, .novoPedido:hover{
         background: #c97a08;
@@ -738,7 +751,12 @@
         background: #ccc;
     }
     .conteudo form, .conteudo h1{
-        margin-left: 120px;
+        margin-left: 40px;
+        //border: solid green;
+    }
+    .conteudo{
+        height: 580px;
+        //border: solid green;
     }
     .conteudo h1{
         font-size: 38px;
@@ -751,6 +769,15 @@
     }
     #pnl4 .divVendas table{
         width: 100px;
+    }
+    #pnl1 fieldset{
+        //padding: 10px 20px;
+        width: 920px;
+        height: 220px;
+        //padding: 10px 20px;
+        margin: 15px 5px;
+        overflow-x: hidden;
+        overflow-y: scroll;
     }
     #pnl4 fieldset{
         padding: 10px 20px;
@@ -820,7 +847,6 @@
 </div>
 <div class="conteudo">
 <?php if($act=='cad'): ?>
-    <a id="novoPedido" href="../web/index.php?pagina=pedido&act=cad"><div class="novoPedido">Novo Pedido</div></a> 
 <h1>Inclusão de Pedido de Venda</h1>
 <span id=confirmado></span>
 <form id="dados" class="fPedido" method="post" action='../paginas/add.php?act=cad&pagina=pedido' target="_blank" >
@@ -907,6 +933,8 @@
             <div id='botoes'>
                 <span class="tecla">(F4) </span><span class='bnt'>Novo Ítem</span><span class='bnt'>Excluir Ítem</span><span class='loja'></span>
             </div>
+            <!--<fieldset class="iVendas">
+                <legend>Abaixo a lista dos ítens desta venda</legend>-->
             <div class="divVendas dItem">
                 <table>
                     <tr>
@@ -918,9 +946,10 @@
                         <?php endif ?>
                     <?php endforeach; ?>
                     </tr>
-                    <tr id=item1><span class=novo><td class=lupa></td><td class=item>1</td><td><input type="text" name="codigo_produto1" autocomplete="off" linha=1 required/></td><td><input type="text" name="descricao1" autocomplete="off" required /></td><td><input type="text" name="quantidade1" autocomplete="off" linha=1 required /></td><td><input type="text" name="vUnitarioItem1" autocomplete="off" required /></td><td><input type="text" name="vTotalItem1" linha=1 disabled /></td><td><input type="text" name="pDescontoItem1" autocomplete="off" linha=1 /></td><td><textarea rows="1" cols="25" name="obs_item1" linha=1 /></textarea></td><td><input type="hidden" name="cfop1" linha=1 /></td><td><input type="hidden" name="ncm1" linha=1 /></td><td><input type="hidden" name="ean1" linha=1 /></td><td><input type="hidden" name="unidade1" linha=1 /></td><td><input type="hidden" name="vTotalItem1" linha=1 /></td><input type=hidden name=cOmie1 /></span></tr>
+                    <tr id=item1><span class=novo><td class=lupa></td><td class=item>1</td><td><input type="text" size=10px name="codigo_produto1" autocomplete="off" linha=1 required/></td><td><input type="text" name="descricao1" autocomplete="off" required /></td><td><input type="text" size=2px name="quantidade1" autocomplete="off" linha=1 required /></td><td><input type="text" size=8px name="vUnitarioItem1" autocomplete="off" required /></td><td><input type="text" size=8px name="vTotalItem1" linha=1 disabled /></td><td><input type="text" size=2px name="pDescontoItem1" autocomplete="off" linha=1 /></td><td><textarea rows="1" cols="25" name="obs_item1" linha=1 /></textarea></td><td><input type="hidden" name="cfop1" linha=1 /></td><td><input type="hidden" name="ncm1" linha=1 /></td><td><input type="hidden" name="ean1" linha=1 /></td><td><input type="hidden" name="unidade1" linha=1 /></td><td><input type="hidden" name="vTotalItem1" linha=1 /></td><input type=hidden name=cOmie1 /></span></tr>
                 </table>
             </div>
+            <!--</fieldset>-->
         </div>
         <div id='pnl2'>
             <div class="divVendas dItem">
@@ -1047,6 +1076,7 @@
         <input type="hidden" name="dadosProduto" />
         <!--<input type="reset" value="Limpa"/>-->
         <input type="submit" value="Confirma"/>
+        <a id="novoPedido" href="../web/index.php?pagina=pedido&act=cad"><div class="novoPedido">Novo Pedido</div></a>
     </span>
 <div id="painel"></div>
 </form>

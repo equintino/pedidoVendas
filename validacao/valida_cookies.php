@@ -27,7 +27,7 @@
 class valida_cookies{
     public $login;
     public $senha;
-    public $setor;
+    public $funcao;
     public $index;
     private $OMIE_APP_KEY;
     private $OMIE_APP_SECRET;
@@ -46,11 +46,11 @@ class valida_cookies{
     public function getSenha(){
         return $this->senha;
     }
-    public function setSetor($setor){
-        $this->setor = $setor;
+    public function setSetor($funcao){
+        $this->funcao = $funcao;
     }
     public function getSetor(){
-        return $this->setor;
+        return $this->funcao;
     }
     public function setIndex($index){
         $this->index = $index;
@@ -108,8 +108,9 @@ class valida_cookies{
             $escreve = fwrite($file, '<?php define("OMIE_APP_KEY","'.OMIE_APP_KEY.'"); define("OMIE_APP_SECRET","'.OMIE_APP_SECRET.'");');
             fclose($file);
             if($senhaDb== $senha){
+                $funcao=$item->getfuncao();
+                echo '<script> document.cookie="funcao='.$funcao.';path:/";</script>';
                 $this->popup("Bem-Vindo ".$this->getlogin().".",'sim');
-                //exit;
             }else{
                 $this->popup('A senha não confere.',null);
                 exit;

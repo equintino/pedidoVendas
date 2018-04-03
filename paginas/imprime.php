@@ -69,9 +69,9 @@
             h3{
                 text-align: center;
             }
-            .endereco{
+            .endereco, .web{
                 text-align: center;
-                font-size: 10px;
+                //font-size: 10px;
             }
             .cnpj{
                 margin-top: 10px;
@@ -232,7 +232,8 @@
     <body>
         <div class="conteudo">
             <h3><?= $razao_social ?></h3>
-            <div class="endereco">Tel. (<?= $telefone1_ddd ?>) <?= $telefone1_numero ?> / <?= $website ?></div>
+            <div class="web"><?= $website ?></div>
+            <div class="endereco">Tel. (<?= $telefone1_ddd ?>) <?= $telefone1_numero ?> </div><br>
             <div class="cnpj">CNPJ: <?= $cnpj ?><br></div>
             <div class="ie">IE: <?= $inscricao_estadual ?><br></div>
             <!--<div class="IM">IM:0.000.000-0</div>-->
