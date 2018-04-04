@@ -1,8 +1,9 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <head>
 <meta charset="utf-8" >
 </head>
-<body>
+<body>-->
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <?php
     @$excl=$_GET['excl'];
     @$pagAtual=$_GET['pagAtual'];
@@ -174,5 +175,5 @@
         echo '<script>window.location.assign(\'../web/index.php?pagina=cliente&act=list&seleciona=1\')</script>';
     }
 ?>
-</body>
-</html>
+<!--</body>
+</html>-->

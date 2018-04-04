@@ -59,7 +59,7 @@
         $dao = new CRUD();
         $search=new ModelSearchCriteria();
         $search->settabela('tb_cliente');
-        $search->setrazao_social($_GET['razao']);
+        $search->setrazao_social($_GET['cnpj_cpf']);
         $dadosLocal=$dao->encontre($search);
         
         $codigo=null;

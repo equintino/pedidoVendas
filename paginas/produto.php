@@ -3,6 +3,11 @@
     @$excl=$_GET['excl'];
     @$tipoBusca=$_GET['tipoBusca'];
     @$buscaPor=$_GET['buscaPor'];
+    @$funcao=$_COOKIE['funcao'];
+    
+    if(@$funcao){
+        echo '<script>var funcao="'.$funcao.'"</script>';
+    }
     
     if($excl==1){
         print_r($_GET);die;
@@ -22,7 +27,9 @@
     }
     
 ////////// Produtos ////////////
-    if($act=='excl'){
+    if($funcao=='administrador'){
+        //echo '<pre>';print_r([$_GET,$_POST,$funcao]);die;
+    }elseif($act=='excl'){
         $produto_servico_cadastro_chave = array("codigo_produto" => $_GET['codigo'], "codigo_cliente_integracao" => "", "codigo" => "");
         $produtos->ExcluirProduto($produto_servico_cadastro_chave);
         header('Location:index.php?pagina=produto&act=list');

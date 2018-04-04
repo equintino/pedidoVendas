@@ -135,7 +135,8 @@
         }
         $config = Config::getConfig("db");
         try {
-            $this->db = new PDO($config['dsn'], $config['username'], $config['password']);
+            $this->db = new PDO($config['dsn'], $config['username'], $config['password'],
+            array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));  
         } catch (Exception $ex) {
             throw new Exception('DB connection error: ' . $ex->getMessage());
         }

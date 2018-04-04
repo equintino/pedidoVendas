@@ -651,7 +651,10 @@
     }
     #pnl1 .divVendas{
         margin-left: -7px;
-        //border: solid red;        
+        height: 210px;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        margin-bottom: 10px;     
     }
     .divVendas{
         width: 870px;
@@ -660,7 +663,6 @@
     }
     #pnl2 .divVendas, #pnl3 .divVendas, #pnl4 .divVendas, #pnl5 .divVendas{
         margin: 19px 43px;
-        //border: solid red;
     }
     .divVendas table{
         white-space: nowrap;
@@ -696,21 +698,36 @@
         text-shadow: 2px 2px 2px black;
     }
     .botao{
-        float: left;
+        float: right;
         margin-top: -4px;
-        margin-left: 745px;
     }
-    .botao input{
+    .botao input, .botao .novoPedido{
         border-radius: 0 0 5px 5px;
         font-weight: 600;
         color: #111f46;
-        padding: 1px 4px;
+        padding: 2px 6px;
+        float: right;
+        cursor: pointer;
+    }
+    .botao .novoPedido{
+        padding: 2px 20px;
+        color: white;
+        background: orange;
+        margin: 1px 4px;
+        text-shadow: 1px 1px 1px gray;
+        box-shadow: 2px 2px 2px gray;
+    }
+    .botao .novoPedido:active{
+        box-shadow: none;
+        border-top: 2px solid gray;
+        border-left: 2px solid gray;
+        padding-top: 0px;
+        padding-left: 17px;
     }
     #botoes{
         margin: 10px 20px;
-        //border: solid red;
     }
-    #botoes .bnt, .novoPedido{
+    #botoes .bnt{
         margin: -2px 4px;
         background: orange;
         color: white;
@@ -718,12 +735,11 @@
         text-shadow: 1px 1px 1px gray;
         font-weight: 700;
         box-shadow: 2px 2px 2px gray;
-        //border: solid red;
     }
-    #botoes .bnt:hover, .novoPedido:hover{
+    #botoes .bnt:hover{
         background: #c97a08;
     }
-    #botoes .bnt:active, .novoPedido:active{
+    #botoes .bnt:active{
         position: relative;
         top: 3px;
     }
@@ -752,11 +768,9 @@
     }
     .conteudo form, .conteudo h1{
         margin-left: 40px;
-        //border: solid green;
     }
     .conteudo{
         height: 580px;
-        //border: solid green;
     }
     .conteudo h1{
         font-size: 38px;
@@ -771,10 +785,8 @@
         width: 100px;
     }
     #pnl1 fieldset{
-        //padding: 10px 20px;
         width: 920px;
         height: 220px;
-        //padding: 10px 20px;
         margin: 15px 5px;
         overflow-x: hidden;
         overflow-y: scroll;
@@ -803,7 +815,6 @@
         position: absolute;
         right: 150px;
         top: 200px;
-        //display: none;
     }
     #transf{
         margin: 15px;
@@ -813,14 +824,9 @@
         color: white;
         box-shadow: 2px 2px 2px gray;
         font-weight: 700;
-        //text-shadow: 2px 2px 2px red;
     }
     #transf:hover{
         cursor: pointer;
-    }
-    .novoPedido{
-        cursor: pointer;
-        float: right;
     }
     
     .blink_me {
@@ -1075,8 +1081,8 @@
     <span class="botao">
         <input type="hidden" name="dadosProduto" />
         <!--<input type="reset" value="Limpa"/>-->
-        <input type="submit" value="Confirma"/>
-        <a id="novoPedido" href="../web/index.php?pagina=pedido&act=cad"><div class="novoPedido">Novo Pedido</div></a>
+        <input type="submit" value="Enviar Pedido"/>
+        <a id="novoPedido" href="../web/index.php?pagina=pedido&act=cad"><span type="reset" class="novoPedido">Novo Pedido</span></a>
     </span>
 <div id="painel"></div>
 </form>

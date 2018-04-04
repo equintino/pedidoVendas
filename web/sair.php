@@ -1,21 +1,34 @@
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script>
-    $(document).ready(function(){
-        $('button').click(function(){
-            alert('Obrigado por ter usado o sistema.');
-            window.close('#');
-        });
-    })
-    function close_window() {
-        alert('vai fechar.');
-        close();
+<!DOCTYPE html>
+<head>
+<style>
+    body{
+        margin: 0;
+        padding: 0;
+        font-size: 30px;
+        text-shadow: 2px 2px 2px white;
     }
-</script>
-<body onload = "setTimeout('window.close()',50000)">
+    div.msg{
+        width: 400px;
+        height: 400px;
+        margin: 100px auto;
+        text-align: center;
+    }
+    .contato{
+        font-size: 20px;        
+    }
+</style>
+</head>
+<body>
 <?php
-   include '../validacao/valida_cookies.php';
+    include '../validacao/valida_cookies.php';
     $cookies=new valida_cookies();
     $cookies->limpaCookies();
-    //header("Location:../index.html");
 ?>
-<button onclick="close_window()">Fecha</button>
+    <div class="msg"><img src="../web/img/logo.png" />
+        <h2>EMQDesenv</h2>
+        <h4>Desenvolvimento de Sistemas</h4>
+    <p>Obrigado  por ter usado nosso Sistema de Pedido de Vendas.</p>
+    <p class="contato">edmquintino@gmail.com</p>
+    </div>
+</body>
+</html>

@@ -70,6 +70,25 @@
         })
         var pagina=null;
         $('.pagina').text(pag)
+        if(funcao=='administrador'){
+            $('.mGeral').text('ATUALIZAR TABELA').css({
+                cursor:'pointer'
+            }).bind('mouseover',function(){
+                $(this).css({
+                    background: '#4e9bae',
+                    color: 'white',
+                    height: '18px'
+                }).mouseleave(function(){
+                    $(this).css({
+                       background:'none',
+                       color: 'black'
+                   })
+                })
+            })
+            $('.mGeral').click(function(){
+                //$(location).attr('href','../web/index.php?pagina=cliente&act=atualiza&seleciona=0')
+            })
+        }
         /*if(act=='excl'){
             $(location).attr('href','index.php?pagina=produto&act=list');
         }*/
@@ -131,14 +150,21 @@
     .procura img{
         margin-top: 2px;
     }
+    .conteudo{
+        height: 610px;
+        width: 1050px;
+        background: none;
+        box-shadow: none;
+        //border: solid red;
+    }
 </style>
 <div id="menu">
-    <ul>
+    <!--<ul>
         <li><a href=<?= Utils::createLink('produto',array('act'=>'cad')); ?>>Incluir</a></li>
         <li><a href=<?= Utils::createLink('produto',array('act'=>'list')); ?>>Listar</a></li>
-    </ul>
+    </ul>-->
     <?php if($act!='cad'){?>
-    <div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por produtos" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por produtos" /></div>
+    <!--<div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por produtos" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por produtos" /></div>-->
     <?php } ?>
     <script>var pag="<?= strtoupper($_GET['pagina']); ?>";</script>
 </div>
