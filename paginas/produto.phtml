@@ -69,6 +69,10 @@
             })
         })
         var pagina=null;
+        $('.vaivem').append($('<img title="Alternar para Cliente" src="../web/img/vaivem.png" height=20px />'))
+        $('.vaivem img').click(function(){
+            $(location).attr('href','index.php?pagina=cliente&act=adm&seleciona=1&tags=undefined')
+        })
         $('.pagina').text(pag)
         if(funcao=='administrador'){
             $('.mGeral').text('ATUALIZAR TABELA').css({
@@ -117,12 +121,13 @@
     }
     table{
         width: 700px;
+        margin: auto;
     }
     table td{
         padding: 3px 10px;
     }
     table tr{
-        background: rgba(216, 0, 0,0.1);
+        //background: rgba(216, 0, 0,0.1);
     }
     .rs{
         width: 70%;
@@ -131,10 +136,10 @@
         align-content: center;
     }
     table th{
-        background: black;
-        color: white;
+        //background: black;
+        //color: white;
         font-size: 20px;
-        padding: 2px;
+        //padding: 2px;
     }
     .edicao{
         background-color: white;
@@ -169,7 +174,11 @@
     <script>var pag="<?= strtoupper($_GET['pagina']); ?>";</script>
 </div>
 <div class="conteudo">
-<?php if($act=='cad'): ?>
+<?php if($act=='adm'): ?>
+    <table class="atualizacao">
+        <tr><th>LOCAL</th><th><th>SERVIDOR</th></tr>
+    </table>    
+<?php elseif($act=='cad'): ?>
 <h1>Cadastro de Produtos</h1>
 <form method="post" action="../paginas/add.php?act=cad&pagina=produto" />
 <?php

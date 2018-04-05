@@ -99,17 +99,17 @@ class valida_cookies{
         $search->setLogin($this->login);
         $user = $dao->find($search);
         $senha = self::criptografia($_COOKIE['senha']);
-        foreach($user as $key => $item){
-            define('OMIE_APP_KEY',$item->getOMIE_APP_KEY());
-            define('OMIE_APP_SECRET',$item->getOMIE_APP_SECRET());
-            
+        foreach($user as $key => $item){            
             $senhaDb = @$item->getSenha();
-            $file = fopen('config/OmieAppAuth.php','w+');
+            /*$file = fopen('config/OmieAppAuth.php','w+');
             $escreve = fwrite($file, '<?php define("OMIE_APP_KEY","'.OMIE_APP_KEY.'"); define("OMIE_APP_SECRET","'.OMIE_APP_SECRET.'");');
-            fclose($file);
+            fclose($file);*/
             if($senhaDb== $senha){
+                define('OMIE_APP_KEY',$item->getOMIE_APP_KEY());
+                define('OMIE_APP_SECRET',$item->getOMIE_APP_SECRET());
                 $funcao=$item->getfuncao();
-                echo '<script> document.cookie="funcao='.$funcao.';path:/";</script>';
+                $nomeEmpresa=$item->getempresa();
+                echo '<script> document.cookie="funcao='.$funcao.';path:/";document.cookie="nomeEmpresa='.$nomeEmpresa.';path:/";</script>';
                 $this->popup("Bem-Vindo ".$this->getlogin().".",'sim');
             }else{
                 $this->popup('A senha não confere.',null);

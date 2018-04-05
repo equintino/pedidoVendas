@@ -13,6 +13,7 @@ final class User {
     private $funcao;
     private $OMIE_APP_KEY;
     private $OMIE_APP_SECRET;
+    private $empresa;
 
     public function __construct() {
         $this->setDeleted(false);
@@ -73,6 +74,12 @@ final class User {
     }
     public function getOMIE_APP_SECRET(){
         return $this->OMIE_APP_SECRET;
+    }
+    public function setempresa($empresa){
+        $this->empresa = $empresa;
+    }
+    public function getempresa(){
+        return $this->empresa;
     }
     public function getDeleted() {
         return $this->deleted;

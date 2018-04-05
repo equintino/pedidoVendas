@@ -5,11 +5,16 @@
 <body>-->
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <?php
+
     @$excl=$_GET['excl'];
     @$pagAtual=$_GET['pagAtual'];
     @$tipoBusca=$_GET['tipoBusca'];
     @$buscaPor=$_GET['buscaPor'];
+    @$funcao=$_COOKIE['funcao'];
     
+    if(@$funcao){
+        echo '<script>var funcao="'.$funcao.'"</script>';
+    }
     if($excl==1){
         print_r($_GET);die;
     }
@@ -57,7 +62,9 @@
     }
     
 ////////// Clientes ////////////
-    if($act=='list'){
+    if($funcao=='administrador' && $act=='adm'){
+        //echo '<pre>';print_r([$_GET,$_POST,$funcao]);die;
+    }elseif($act=='list'){
         //// Listar Clientes ////
         if($tipoBusca=='servidor' || !$tipoBusca){
             if(!$pagAtual){

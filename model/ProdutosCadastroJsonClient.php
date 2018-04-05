@@ -1,5 +1,17 @@
 <?php
-include '../config/OmieAppAuth.php';
+//include '../config/OmieAppAuth.php';
+include '../dao/UserDao.php';
+include '../dao/UserSearchCriteria.php';
+include '../model/User.php';
+include '../mapping/UserMapper.php';
+
+$user = new UserDao();
+$search = new UserSearchCriteria();
+$search->setLogin($_COOKIE['login']);
+foreach($user->find($search) as $usuario){
+    define('OMIE_APP_KEY',$usuario->getOMIE_APP_KEY());
+    define('OMIE_APP_SECRET',$usuario->getOMIE_APP_SECRET());
+}
 /**
  * @service ProdutosCadastroJsonClient
  * @author omie

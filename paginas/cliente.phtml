@@ -101,7 +101,35 @@
             $(':input').each(function(){
                 arr.push($(this).attr('name'));          
             })
-        }) 
+        })
+        if(act=='adm'){
+            $('.vaivem').append($('<img title="Alternar para Cliente" src="../web/img/vaivem.png" height=20px />'))
+            $('.vaivem img').click(function(){
+                $(location).attr('href','index.php?pagina=produto&act=adm')
+            })
+            if(funcao=='administrador'){
+                $('.mGeral').text('ATUALIZAR TABELA').css({
+                    cursor:'pointer'
+                }).bind('mouseover',function(){
+                    $(this).css({
+                        background: '#4e9bae',
+                        color: 'white',
+                        height: '18px'
+                    }).mouseleave(function(){
+                        $(this).css({
+                           background:'none',
+                           color: 'black'
+                       })
+                    })
+                })
+            }
+            $('.conteudo').css({
+                height: '610px',
+                width: '1050px',
+                background: 'none',
+                boxShadow: 'none'
+            })
+        }
         $('.pagina').text('CLIENTE')
         /*$('.mGeral').text('ATUALIZAR TABELA').css({
             cursor:'pointer'
@@ -397,10 +425,10 @@
     }
 </style>
 <div id="menu">
-    <?php if($act!='cad' && $seleciona!=1 && $act != 'atualiza'):?>
+    <?php if($act!='cad' && $seleciona!=1 && $act != 'atualiza' && $act!='adm'):?>
         <div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por clientes" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por clientes" /></div>
 </div>
-    <?php else:
+    <?php elseif($act != 'adm'):
         switch($tipoBusca){
             case 'servidor':
                 $servidor='checked';

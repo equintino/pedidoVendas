@@ -17,17 +17,8 @@
     
     <script>
         $(document).ready(function(){
-            $('#ico img').css({
-                position: 'absolute',
-                left: '10px',
-                height: '40px',
-                background: 'none'
-            })
-            $('<img src="../web/img/sair.png" title="Sair" height="28px" />').appendTo($('#sair'));
-            $('#sair img')
-                .css({
-                    float:'right'
-                });
+            //$('<img src="../web/img/sair.png" title="Sair" height="28px" />').appendTo($('#sair'));
+            
             $('#sair img').mouseover(function(){
                 $(this).css({
                     cursor:'pointer'
@@ -42,9 +33,26 @@
         })
     </script>
     <style>
+        #ico img{
+            position: absolute;
+            left: 10px;
+            height: 40px;
+            background: none;
+        }
+        #sair img{
+            float: right;
+        }
         .pagina{
             float: right;
-            margin-right: 30px;          
+            margin-right: 10px;          
+        }
+        .vaivem{
+            float: right;
+            margin-top: 5px;
+            margin-right: 20px;
+        }
+        .vaivem:hover{
+            cursor: pointer;
         }
         .pagina, .mGeral{
             margin-top: 5px;
@@ -65,6 +73,19 @@
             cursor: pointer;
             background: #ccc;
         }
+        .empresa{
+            //margin-top: 5px;
+            font-size: 15px;
+            //position: absolute;
+            margin-right: 50px;
+            float: right;
+            text-transform: uppercase;
+            background: #4e9bae;
+            color: white;
+            text-shadow: 2px 2px 2px black;
+            padding: 5px 13px;
+            //width: 200px;        
+        }
     </style>
 </head>
 <body id="page">
@@ -73,9 +94,11 @@
         <div id="header">
             <div id="ico"><img src='../web/img/logo.png' title='EMQDesenv' /></div>
             <div class="mGeral"></div>
+            <div class="vaivem"></div>
             <div class="pagina"><?= $pagina ?></div>
+            <div class="empresa"><?= $_COOKIE['nomeEmpresa'] ?></div>
         </div>
-        <span id="sair"></span>
+        <span id="sair"><img src="../web/img/sair.png" title="Sair" height="28px" /></span>
         <!-- content -->
         <div id="content">
             <div class="wrapper">

@@ -134,16 +134,17 @@
         $codigo_pedido_integracao=file_get_contents('numeroPedido.txt');
         
         //include '../config/OmieAppAuth.php';
+        include '../config/Config.php';
         include '../model/ProdutosCadastroJsonClient.php';
         include '../model/PedidoVendaProdutoJsonClient.php';
         include '../model/modelProduto.php';
         include '../dao/dao.php';
         include '../dao/CRUDProduto.php';
         include '../dao/ProdutoSearchCriteria.php';
-        include '../config/Config.php';
         include '../mapping/ProdutoMapper.php';
         include '../dao/ModelSearchCriteria.php';
         include '../model/ProdutosCaracteristicasJsonClient.php';
+        //include '../dao/UserDao.php';
         
         $pedido=new PedidoVendaProdutoJsonClient();
         $parCod=explode(',', $_POST['parcela']);

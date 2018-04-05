@@ -69,8 +69,8 @@ final class UserDao {
         $this->criaTabela($user);
         $this->execute('ALTER TABLE `tb_usuario` ADD UNIQUE(`login`)', $user);
         $sql = '
-            INSERT INTO tb_usuario (id, nome, login, senha, email, loja, funcao, OMIE_APP_KEY, OMIE_APP_SECRET)
-            VALUES (:id, :nome, :login, :senha, :email, :loja, :funcao, :OMIE_APP_KEY, :OMIE_APP_SECRET)';
+            INSERT INTO tb_usuario (id, nome, login, senha, email, loja, funcao, OMIE_APP_KEY, OMIE_APP_SECRET, empresa)
+            VALUES (:id, :nome, :login, :senha, :email, :loja, :funcao, :OMIE_APP_KEY, :OMIE_APP_SECRET, :empresa)';
         return $this->execute($sql, $user);
     }
     private function update(User $user) {
@@ -102,7 +102,8 @@ final class UserDao {
             ':loja' => $user->getLoja(),
             ':funcao' => $user->getFuncao(),
             ':OMIE_APP_KEY' => $user->getOMIE_APP_KEY(),
-            ':OMIE_APP_SECRET' => $user->getOMIE_APP_SECRET()
+            ':OMIE_APP_SECRET' => $user->getOMIE_APP_SECRET(),
+            ':empresa' => $user->getempresa()
         );
         if ($user->getId()) {
             // unset created date, this one is never updated
@@ -119,7 +120,7 @@ final class UserDao {
         $statement = $this->getDb()->query($sql, PDO::FETCH_ASSOC);
         //print_r($statement);die;
         if ($statement === false) {
-            $sql = "CREATE TABLE IF NOT EXISTS `tb_usuario` (`id` int(5) NOT NULL AUTO_INCREMENT,`nome` varchar(100) DEFAULT NULL,`login` varchar(50) DEFAULT NULL, `senha` varchar(100) DEFAULT NULL, `email` varchar(100) DEFAULT NULL, `deleted` enum('0','1') DEFAULT '0', `loja` varchar(100) DEFAULT NULL, `funcao` varchar(100) DEFAULT NULL, `OMIE_APP_KEY` varchar(100) DEFAULT NULL, `OMIE_APP_SECRET` varchar(100) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1";
+            $sql = "CREATE TABLE IF NOT EXISTS `tb_usuario` (`id` int(5) NOT NULL AUTO_INCREMENT,`nome` varchar(100) DEFAULT NULL,`login` varchar(50) DEFAULT NULL, `senha` varchar(100) DEFAULT NULL, `email` varchar(100) DEFAULT NULL, `deleted` enum('0','1') DEFAULT '0', `loja` varchar(100) DEFAULT NULL, `funcao` varchar(100) DEFAULT NULL, `OMIE_APP_KEY` varchar(100) DEFAULT NULL, `OMIE_APP_SECRET` varchar(100) DEFAULT NULL, `empresa` varchar(100) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1";
             $statement = $this->getDb()->query($sql, PDO::FETCH_ASSOC);
             //self::throwDbError($this->getDb()->errorInfo());
         }
@@ -130,7 +131,7 @@ final class UserDao {
         throw new Exception('Erro na conexão com o Banco [' . $errorInfo[0] . ', ' . $errorInfo[1] . ']: ' . $errorInfo[2]);
     }
     private function criaTabela(User $user){
-        $sql = "CREATE TABLE IF NOT EXISTS `tb_usuario` (`id` int(5) NOT NULL AUTO_INCREMENT,`nome` varchar(100) DEFAULT NULL,`login` varchar(50) DEFAULT NULL, `senha` varchar(100) DEFAULT NULL, `email` varchar(100) DEFAULT NULL, `deleted` enum('0','1') DEFAULT '0', `loja` varchar(100) DEFAULT NULL, `funcao` varchar(100) DEFAULT NULL, `OMIE_APP_KEY` varchar(100) DEFAULT NULL, `OMIE_APP_SECRET` varchar(100) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1";
+        $sql = "CREATE TABLE IF NOT EXISTS `tb_usuario` (`id` int(5) NOT NULL AUTO_INCREMENT,`nome` varchar(100) DEFAULT NULL,`login` varchar(50) DEFAULT NULL, `senha` varchar(100) DEFAULT NULL, `email` varchar(100) DEFAULT NULL, `deleted` enum('0','1') DEFAULT '0', `loja` varchar(100) DEFAULT NULL, `funcao` varchar(100) DEFAULT NULL, `OMIE_APP_KEY` varchar(100) DEFAULT NULL, `OMIE_APP_SECRET` varchar(100) DEFAULT NULL, `empresa` varchar(100) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1";
         return $this->execute($sql, $user);
     }
 }

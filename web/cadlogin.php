@@ -12,10 +12,17 @@
             $classe='set'.$key;
             $user->$classe($criptografia->criptografia($item));            
         }
-    }    
+    }
+    include '../model/EmpresasCadastroJsonClient.php';
+    $empresa=new EmpresasCadastroJsonClient();
+    $empresas_list_request=array("pagina"=>1,"registros_por_pagina"=>100,"apenas_importado_api"=>"N");
+    define('OMIE_APP_KEY',$_POST['OMIE_APP_KEY']);
+    define('OMIE_APP_SECRET',$_POST['OMIE_APP_SECRET']);
+    $emp=$empresa->ListarEmpresas($empresas_list_request);
+    if(is_object($emp)){
+        $nomeEmpresa=$emp->empresas_cadastro[0]->razao_social;
+    }
+    $user->setempresa($nomeEmpresa);
     $dao->save($user);
-    
-    //$string="Location: ../index.html";
-    //header($string);
 ?>
 <script>window.location.assign("../index.html")</script>

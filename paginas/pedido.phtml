@@ -196,6 +196,50 @@
                     }
                 }
             }else{
+                var selecao=$(this).val().substr(0,2);
+                if(selecao=='A '){
+                    $('.tabela select[name=parcela] option').each(function(){
+                            $(this).removeAttr('selected');
+                            if($(this).val()=='1 Parcela,001,1'){
+                                $(this).attr('selected','selected')
+                            }
+                        })
+                        $('#pnl4 .novo4').each(function(){
+                            if($(this).attr('linha')>1){
+                                $(this).remove()
+                            }
+                        })
+                        $('#pnl4 .novo4 input[name=numero_parcela1]').val(1)
+                        $('#pnl4 .novo4 input[name=data_vencimento1]').val(data(1))
+                        $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
+                        $('#pnl4 .novo4 input[name=percentual1]').val(100)
+                }else if(selecao=='1 '){
+                    $('#pnl4 .novo4').each(function(){
+                        if($(this).attr('linha')>1){
+                            $(this).remove()
+                        }
+                    })
+                    $('#pnl4 .novo4 input[name=numero_parcela1]').val(1)
+                    $('#pnl4 .novo4 input[name=data_vencimento1]').val(data(1))
+                    $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
+                    $('#pnl4 .novo4 input[name=percentual1]').val(100)
+                }else{
+                    $('#pnl4 .novo4').each(function(){
+                        if($(this).attr('linha')>1){
+                            $(this).remove()
+                        }
+                    })
+                    var percent=100/selecao;
+                    for(var x=1;x<parseInt(selecao)+1;x++){
+                        if(x!=1){
+                            $('#pnl4 table').append($('<tr linha='+x+' class=novo4><td><input size=1px type=text name=numero_parcela'+x+' /></td><td><input size=10px type=text name=data_vencimento'+x+' /></td><td><input size=10px type=text name=valor'+x+' /></td><td><input size=10px type=text name=percentual'+x+' /></td>'))
+                        }
+                        $('#pnl4 .novo4 input[name=numero_parcela'+x+']').val(x)
+                        $('#pnl4 .novo4 input[name=data_vencimento'+x+']').val(data(x))
+                        $('#pnl4 .novo4 input[name=valor'+x+']').val(calcula('/',$('.autoQuadro td[nome=vPedido]').text(),selecao))
+                        $('#pnl4 .novo4 input[name=percentual'+x+']').val(percent)
+                    }
+                }
                 alert('Defina a forma de pagamento.');
                 $('.tabela td select[name=fPagamento]').css('background','rgba(216, 0, 0,0.1)').focus()
             }
@@ -243,6 +287,12 @@
                 if(formPag=='dinheiro' || formPag=='debito'){
                     if(numParc != 'A Vista,000,1'){
                         alert('A forma de pagamento não condiz com parcelas.');
+                        $('.outrosItens span').each(function(){
+                            if($(this).text()=='Parcelas'){
+                                $(this).trigger('click')
+                            }
+                        })
+                        $(this).focus()
                         return false;
                     }
                 }else if(formPag=='credito'){
@@ -482,7 +532,11 @@
         function preencheTotais(){///// preencher quadro com valores Totais ////
                 mercadoriaTotal=0;
                 vDescontoTotal=0;
-                $('#pnl2 .novo2 input[name=qvolume]').val(item)
+                var qVol=0;
+                for(var h=1;h<parseInt(item)+1;h++){
+                    qVol +=parseInt($('#pnl1 input[name=quantidade'+h+']').val());
+                }
+                $('#pnl2 .novo2 input[name=qvolume]').val(qVol)
                 $('.autoQuadro input[name=tItem]').val(item)
                 $('.autoQuadro td[nome=tItem]').text(item)/// Rotal de Ítens ////
                 for(var i=1;i<item+1;i++){
@@ -909,7 +963,9 @@
                 <option value="<?= $item->codigo ?>" <?= $selected ?> ><?= $item->nome ?></option>
                 <?php endforeach; ?>
             </select>
-            <img height=15px src="../web/img/atualiza.png" title="Atualiza lista de vendedores"/>
+            <?php if($funcao=='administrador'): ?>
+                <img height=15px src="../web/img/atualiza.png" title="Atualiza lista de vendedores"/>
+            <?php endif; ?>
         </td><td>
             <select name="parcela" tabindex="4" disabled required>
                 <option value=""></option>

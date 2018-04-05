@@ -133,7 +133,11 @@
         if ($this->db !== null) {
             return $this->db;
         }
-        $config = Config::getConfig("db");
+        if(OMIE_APP_KEY=='2769656370'){
+            $config = Config::getConfig("db");
+        }else{
+           $config = Config::getConfig("db2"); 
+        }
         try {
             $this->db = new PDO($config['dsn'], $config['username'], $config['password'],
             array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));  

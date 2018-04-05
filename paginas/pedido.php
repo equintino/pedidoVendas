@@ -12,6 +12,7 @@
     @$etapaAtualiza=$_GET['$etapaAtualiza'];
     @$tabelaPrecoAtualiza=$_GET['$tabelaPrecoAtualiza'];
     @$origem=$_GET['origem'];
+    @$funcao=$_COOKIE['funcao'];
     
     if(array_key_exists('razao', $_GET)){
         $razao=$_GET['razao'];
@@ -157,18 +158,14 @@
             $vendedores=new vendedores();
             $vendedores->codigo=$item->getcodigo();
             $vendedores->nome=$item->getnome();
-            array_push($vend, $vendedores);
+            if(@$funcao == 'administrador'){
+                array_push($vend, $vendedores);
+            }else{
+                if(strtoupper($login) == strtoupper($item->getnome())){
+                    array_push($vend, $vendedores);
+                }
+            }
         }
-        
-        //$vendedorLista=array('740394323'=>'Jadeylson','740395328'=>'Angela','740395810'=>'Moises','742241153'=>'Sergio','756282022'=>'Adriano');
-        /*$vend=array();*/
-        /*foreach($vendedorLista as $key => $item){
-            $vendedores=new vendedores();
-            $vendedores->codigo=$key;
-            $vendedores->nome=$item;
-            array_push($vend, $vendedores);
-        }*/
-        //echo '<pre>';print_r($vend);die;
    }
    
     $dadosParcelas=array(array('cCodigo'=>'000','cDescricao'=>'A Vista','nQtdeParc'=>'1'),array('cCodigo'=>'001','cDescricao'=>'1 Parcela','nQtdeParc'=>'1'),array('cCodigo'=>'002','cDescricao'=>'2 Parcelas','nQtdeParc'=>'2'),array('cCodigo'=>'003','cDescricao'=>'3 Parcelas','nQtdeParc'=>'3'),array('cCodigo'=>'004','cDescricao'=>'4 Parcelas','nQtdeParc'=>'4'),array('cCodigo'=>'005','cDescricao'=>'5 Parcelas','nQtdeParc'=>'5'),array('cCodigo'=>'006','cDescricao'=>'6 Parcelas','nQtdeParc'=>'6'),array('cCodigo'=>'007','cDescricao'=>'7 Parcelas','nQtdeParc'=>'7'),array('cCodigo'=>'008','cDescricao'=>'8 Parcelas','nQtdeParc'=>'8'),array('cCodigo'=>'009','cDescricao'=>'9 Parcelas','nQtdeParc'=>'9'),array('cCodigo'=>'010','cDescricao'=>'10 Parcelas','nQtdeParc'=>'10'));

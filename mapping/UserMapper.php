@@ -53,6 +53,9 @@ final class UserMapper {
         if (array_key_exists('OMIE_APP_SECRET', $properties)){
             $user->setOMIE_APP_SECRET($properties['OMIE_APP_SECRET']);
         }
+        if (array_key_exists('empresa', $properties)){
+            $user->setempresa($properties['empresa']);
+        }
     }
 }
 ?>
