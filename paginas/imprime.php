@@ -166,7 +166,7 @@
     @$vendedor=$_POST['vendedor'];
     @$empresaAtualiza=$_GET['empresaAtualiza'];
     
-    //$empresaAtualiza=1;
+    $empresaAtualiza=1;
     if($empresaAtualiza==1){
         $emp=new EmpresasCadastroJsonClient();
         $empresas_list_request=array("pagina"=>1,"registros_por_pagina"=>100,"apenas_importado_api"=>"N");

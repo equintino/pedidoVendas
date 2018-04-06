@@ -1,5 +1,12 @@
 <meta charset="utf-8" >
-<?php
+<style>
+    .percentual{
+        position: absolute;
+        top: 50%;
+        laft: 50%;
+    }
+</style>
+<?php 
     @$excl=$_GET['excl'];
     @$tipoBusca=$_GET['tipoBusca'];
     @$buscaPor=$_GET['buscaPor'];
@@ -28,6 +35,17 @@
     
 ////////// Produtos ////////////
     if($funcao=='administrador'){
+        $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>100,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
+        $prod=$produtos->ListarProdutos($produto_servico_list_request);
+        $paginaTotal=$prod->total_de_paginas;
+        $registroTotal=$prod->total_de_registros;
+        
+        $dao=new Dao();
+        $search=new ProdutoSearchCriteria();
+        $search->settabela('tb_produto');
+        $prodLocal=$dao->encontre2($search);
+        
+        //echo '<pre>';print_r($prodLocal);die;
         //echo '<pre>';print_r([$_GET,$_POST,$funcao]);die;
     }elseif($act=='excl'){
         $produto_servico_cadastro_chave = array("codigo_produto" => $_GET['codigo'], "codigo_cliente_integracao" => "", "codigo" => "");
@@ -77,7 +95,7 @@
         $paginas=$dados->total_de_paginas;
         $registroa=$dados->total_de_registros;
         $y=1;
-        for($x=1;$x<$paginas;$x++){
+        for($x=1;$x<=$paginas;$x++){
             $produto_servico_list_request=array("pagina"=>$x,"registros_por_pagina"=>1,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
             $dados=$produtos->ListarProdutos($produto_servico_list_request)->produto_servico_cadastro;
             $campos=array();
@@ -144,16 +162,18 @@
             $prcListarCaractRequest=array("nPagina"=>1,"nRegPorPagina"=>50,"nCodProd"=>$modelProduto->getcodigo_produto());
             $conteudo=$caracteristica->ListarCaractProduto($prcListarCaractRequest);
             
-            echo ($y*100/$registroa).'%';
-            
-            foreach($conteudo->listaCaracteristicas as $item3){
-                if(strtoupper($item3->cNomeCaract)==strtoupper('loja')){
-                    $modelProduto->setloja($item3->cConteudo);
+            echo '<script>var contador="'.($y*100/$registroa).'%"</script>';
+            if(is_object($conteudo)){
+                foreach($conteudo->listaCaracteristicas as $item3){
+                    if(strtoupper($item3->cNomeCaract)==strtoupper('loja')){
+                        $modelProduto->setloja($item3->cConteudo);
+                    }
                 }
             }
-            echo ($y*100/$registroa).'%';
+            echo '<div id=contador></div>';
             //echo 'Atualização de número '.$y;
             $gravado=$dao2->grava2($modelProduto);
+            echo '<script> document.getElementById("contador").innerHTML=contador;</script>';
             $y++;
         }
         if($gravado){

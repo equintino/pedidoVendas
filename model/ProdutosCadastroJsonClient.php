@@ -1,9 +1,11 @@
 <?php
 //include '../config/OmieAppAuth.php';
-include '../dao/UserDao.php';
-include '../dao/UserSearchCriteria.php';
-include '../model/User.php';
-include '../mapping/UserMapper.php';
+if(@$_GET['act']!='atualiza' && @$_GET['act']!='adm' && @$_GET['act']!='atualiza2'){
+    include '../dao/UserDao.php';
+    include '../dao/UserSearchCriteria.php';
+    include '../model/User.php';
+    include '../mapping/UserMapper.php';
+}
 
 $user = new UserDao();
 $search = new UserSearchCriteria();

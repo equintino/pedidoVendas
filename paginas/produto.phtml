@@ -136,8 +136,8 @@
         align-content: center;
     }
     table th{
-        //background: black;
-        //color: white;
+        background: green;
+        color: white;
         font-size: 20px;
         //padding: 2px;
     }
@@ -156,11 +156,32 @@
         margin-top: 2px;
     }
     .conteudo{
-        height: 610px;
-        width: 1050px;
+        height: 690px;
+        width: 1090px;
         background: none;
         box-shadow: none;
         //border: solid red;
+        overflow: scroll;
+        margin-left: 0px;
+    }
+    .tabela1{
+        float: left;
+    }
+    .tabela2{
+        float: right;
+    }
+    .atualizacao caption{
+        font-size: 25px;
+        font-weight: 900;
+    }
+    .tabelas{
+        width: 1450px;
+        height: 690px;
+        overflow: auto;
+    }
+    .local, .servidor{
+        font-weight: 900;
+        font-size: 23px;
     }
 </style>
 <div id="menu">
@@ -174,10 +195,72 @@
     <script>var pag="<?= strtoupper($_GET['pagina']); ?>";</script>
 </div>
 <div class="conteudo">
-<?php if($act=='adm'): ?>
-    <table class="atualizacao">
-        <tr><th>LOCAL</th><th><th>SERVIDOR</th></tr>
-    </table>    
+    <div class="tabelas">
+<?php 
+    if($act=='adm'): 
+    $num=1; 
+?>
+    <table class="tabela1" border="1" cellspacing="0" cellpadding="2">
+        <caption class="local">LOCAL</caption>
+        <tr><th>N°</th><th>CÓDIGO</th><th>DESCRIÇÃO</th><th>PREÇO</th></tr>
+        <?php foreach($prodLocal as $item): ?>
+            <tr>
+            <?php    
+                echo '<td align=center>'.$num.'</td>';
+                echo '<td align=center>'.$item->getcodigo().'</td>';
+                echo '<td align=center>'.$item->getdescricao().'</td>';
+                echo '<td align=right>'.number_format($item->getvalor_unitario(),'2',',','.').'</td>';
+                $num++;
+            ?>
+            </tr>
+        <?php endforeach; $num=1;?>
+    </table>
+    <table class="tabela2" border="1" cellspacing="0" cellpadding="2">
+        <caption class="servidor">SERVIDOR</caption>
+        <tr><th>N°</th><th>CÓDIGO</th><th>DESCRIÇÃO</th><th>PREÇO</th></tr>
+        <?php foreach($prod->produto_servico_cadastro as $item): ?>
+            <tr>
+            <?php    
+                foreach($item as $key => $item_){
+                    if($key=='codigo'){
+                        echo '<td align=center>'.$num.'</td>';                    
+                    }
+                    if($key=='codigo' || $key=='descricao'){
+                        echo '<td align=center>'.$item_.'</td>';
+                    }elseif($key=='valor_unitario'){
+                        echo '<td align=right>'.number_format($item_,'2',',','.').'</td>';
+                        $num++;
+                    }
+                }
+            ?>
+            </tr>
+        <?php endforeach; ?>
+        <?php
+            for($x=2;$x<=$paginaTotal;$x++):
+                $produto_servico_list_request=array("pagina"=>$x,"registros_por_pagina"=>100,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
+                $prod=$produtos->ListarProdutos($produto_servico_list_request);
+        ?>
+                <?php foreach($prod->produto_servico_cadastro as $item): ?>
+                <tr>
+                <?php    
+                    foreach($item as $key => $item_){
+                        if($key=='codigo'){
+                            echo '<td align=center>'.$num.'</td>';                    
+                        }
+                        if($key=='codigo' || $key=='descricao'){
+                            echo '<td align=center>'.$item_.'</td>';
+                        }elseif($key=='valor_unitario'){
+                            echo '<td align=right>'.number_format($item_,'2',',','.').'</td>';
+                            $num++;
+                        }
+                    }
+                ?>
+                </tr>
+                <?php endforeach; 
+            endfor;?>
+        </tr>
+    </table>
+    </div>
 <?php elseif($act=='cad'): ?>
 <h1>Cadastro de Produtos</h1>
 <form method="post" action="../paginas/add.php?act=cad&pagina=produto" />
