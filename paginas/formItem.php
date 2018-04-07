@@ -397,10 +397,19 @@
             $dados=$produto->ListarProdutos($produto_servico_list_request);
             
             $tabelaPreco=new TabelaPrecosJsonClient();
-            $tprItensListarRequest=array("nPagina"=>1,"nRegPorPagina"=>100,"nCodTabPreco"=>742240473,"cCodIntTabPreco"=>"");
-
+            $tprItensListarRequest=array("nPagina"=>1,"nRegPorPagina"=>50,"nCodTabPreco"=>742240473,"cCodIntTabPreco"=>"");
             $tabPreco=$tabelaPreco->ListarTabelaItens($tprItensListarRequest);
-            echo '<pre>';print_r($tabPreco);die;
+            $nTotPaginas=$tabPreco->nTotPaginas;
+            $nTotRegistros=$tabPreco->nTotRegistros;
+            
+            echo '<br>Tabela de Preço ('.$tabPreco->listaTabelaPreco->cNome.')<br>';
+            
+            foreach($tabPreco->listaTabelaPreco->itensTabela as $item){
+                echo 'Alteração '.$item->itemInfo->dAltItem.' '.$item->itemInfo->hAltItem.'<br>';
+                echo 'Código '.$item->cCodigoProduto.'<br>';
+                echo 'Preços: Original (R$ '.number_format($item->nValorOriginal,'2',',','.').') / Tabela (R$ '.number_format($item->nValorTabela,'2',',','.').')<br><hr>';
+            }
+            
             if(!$dados){
                 echo 'Não foi encontrado nenhum produto cadastrado.';
                 //echo '<button onclick=history.go(-1)>Voltar</button>';
