@@ -108,6 +108,7 @@
                 cProduto=$(this).attr('codigo');
                 cOmie=$(this).attr('codigo_produto');
                 vUnitario=$(this).attr('valor_unitario');
+                pTabela=$(this).attr('pTabela');
                 qEstoque=$(this).attr('quantidade_estoque');
                 cfop=$(this).attr('cfop');
                 ncm=$(this).attr('ncm');
@@ -123,6 +124,10 @@
                     }
                 })
                 linha=linha.substring(4,5);
+                alert(vUnitario);
+                alert(pTabela);
+                alert(qEstoque);
+                return false;
                 $('#pnl1 table #item'+linha+' input').each(function(){
                     var z=$(this).attr('name');
                     switch(z.substr(0,z.length-1)){
@@ -134,6 +139,9 @@
                            break;
                         case 'vUnitarioItem':
                            $(this).val(numeroParaMoeda(vUnitario));
+                           break;
+                        case 'pTabela':
+                           $(this).val(pTabela);
                            break;
                         case 'quantidade':
                            $(this).val(null);
@@ -396,19 +404,22 @@
             $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>40,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
             $dados=$produto->ListarProdutos($produto_servico_list_request);
             
-            $tabelaPreco=new TabelaPrecosJsonClient();
-            $tprItensListarRequest=array("nPagina"=>1,"nRegPorPagina"=>50,"nCodTabPreco"=>742240473,"cCodIntTabPreco"=>"");
+            ///// Tabela de Preço //////
+            /*$tabelaPreco=new TabelaPrecosJsonClient();
+            $tprItensListarRequest=array("nPagina"=>8,"nRegPorPagina"=>50,"nCodTabPreco"=>742240473,"cCodIntTabPreco"=>"");
             $tabPreco=$tabelaPreco->ListarTabelaItens($tprItensListarRequest);
             $nTotPaginas=$tabPreco->nTotPaginas;
             $nTotRegistros=$tabPreco->nTotRegistros;
-            
+            echo 'Total de Páginas '.$nTotPaginas.' / Total de Registros '.$nTotRegistros;
             echo '<br>Tabela de Preço ('.$tabPreco->listaTabelaPreco->cNome.')<br>';
             
             foreach($tabPreco->listaTabelaPreco->itensTabela as $item){
                 echo 'Alteração '.$item->itemInfo->dAltItem.' '.$item->itemInfo->hAltItem.'<br>';
                 echo 'Código '.$item->cCodigoProduto.'<br>';
                 echo 'Preços: Original (R$ '.number_format($item->nValorOriginal,'2',',','.').') / Tabela (R$ '.number_format($item->nValorTabela,'2',',','.').')<br><hr>';
-            }
+            }*/
+            /// fim tabela de preço ///
+            
             
             if(!$dados){
                 echo 'Não foi encontrado nenhum produto cadastrado.';
@@ -430,7 +441,9 @@
         $search->settabela('tb_produto');
         $search->setcodigo($buscaProduto);
         $detalhes=$dao->encontre2($search);
-        //echo '<pre>';print_r($detalhes);die;
+        
+        
+        
         $totalRegistros=$dao->totalLinhas2($search);
         $registros=null;
     }elseif($loja){
@@ -490,17 +503,34 @@
                     if($tipoBusca=='local'){
                         echo '<th  width="10%" class="col1">CÓDIGO</th>';
                         echo '<th class="descricao col2">DESCRIÇÃO DO PRODUTO</th>';
-                        echo '<th class="col3">VL.UNITÁRIO</th></tr></thead>';
+                        echo '<th class="col3">VALOR UNITÁRIO</th>';
+                        echo '<th class="col4">PREÇO BOADICA</th></tr></thead>';
                         if($act != 'atualiza'){
-                            foreach($detalhes as  $item){
-                                echo '<tr class=listaProduto row="'.$row.'" descricao="'.$item->getdescricao().'" codigo="'.$item->getcodigo().'" codigo_produto="'.$item->getcodigo_produto().'" valor_unitario="'.$item->getvalor_unitario().'" quantidade_estoque="'.$item->getquantidade_estoque().'" cfop="'.$item->getcfop().'" ncm="'.$item->getncm().'" ean="'.$item->getean().'" unidade="'.$item->getunidade().'" ><td class="col1" align=center><div width=10px>'.$item->getcodigo().'</td>';
+                            foreach($detalhes as $item){
+                                $search->settabela('tb_preco');
+                                $search->setcodigo($item->getcodigo());
+                                $boadica=$dao->encontre2($search);
+                                if($boadica){
+                                    foreach($boadica as $preco){
+                                        $pTabela=number_format($preco->getpTabela(),'2',',','.');
+                                        $item->setpTabela($pTabela);
+                                    }
+                                }else{
+                                    $pTabela='Não Definido';
+                                    $item->setpTabela($pTabela);
+                                }
+                                
+                                echo '<tr class=listaProduto row="'.$row.'" descricao="'.$item->getdescricao().'" codigo="'.$item->getcodigo().'" codigo_produto="'.$item->getcodigo_produto().'" valor_unitario="'.$item->getvalor_unitario().'" pTabela="'.$item->getpTabela().'" quantidade_estoque="'.$item->getquantidade_estoque().'" cfop="'.$item->getcfop().'" ncm="'.$item->getncm().'" ean="'.$item->getean().'" unidade="'.$item->getunidade().'" ><td class="col1" align=center><div width=10px>'.$item->getcodigo().'</td>';
                                 echo '<td class="col2" align=center>'.$item->getdescricao().'</td>';
-                                echo '<td class="col3" align=right>'.number_format($item->getvalor_unitario(),'2',',','.').'</td></tr>';
+                                echo '<td class="col3" align=right>'.number_format($item->getvalor_unitario(),'2',',','.').'</td>';
+                                echo '<td class="col4" align=right>'.$pTabela.'</td></tr>';
                                 $cont++;
                             }
                             echo '<script>var cont='.$cont.'</script>';
                         }
                     }elseif($tipoBusca=='servidor'){
+                        $dao = new Dao();
+                        $search = new ProdutoSearchCriteria();
                         foreach($detalhes as $prod){
                             if($w==0){
                                 foreach($prod as $key => $item){
@@ -508,15 +538,16 @@
                                         if($key=='descricao'){
                                             echo '<th class="descricao col'.$col.'">DESCRIÇÃO DO PRODUTO</th>';
                                         }elseif($key=='valor_unitario'){
-                                            echo '<th class="col'.$col.'">VL.UNITÁRIO</th>';
+                                            echo '<th class="col'.$col.'">VALOR UNITÁRIO</th>';
                                         }elseif($key=='codigo'){
                                             echo '<th  width="10%" class="col'.$col.'">CÓDIGO</th>';
-                                        }else{
-                                            echo '<th class="col'.$col.'">'.mb_strtoupper(str_replace('_',' ',$key),'utf-8').'</th>';
-                                        }
+                                        }/*else{
+                                            //echo '<th class="col'.$col.'">'.mb_strtoupper(str_replace('_',' ',$key),'utf-8').'</th>';
+                                        }*/
                                         $col++;
                                     }
                                 }
+                                echo '<th class="col4">PREÇO BOADICA</th>';
                                 $w=1;
                                 goto s;
                             }
@@ -534,17 +565,30 @@
                     }
                 }
                 echo '>';
-                foreach($prod as $key => $item){
+                foreach($prod as $key => $item){                    
                     if(!strstr($key,'aliquo') && !strstr($key,'altura') && !strstr($key,'bloqueado') && !strstr($key,'cest') && !strstr($key,'familia') && !strstr($key,'cst') && !strstr($key,'dias') && !stristr($key,'dadosib') && !stristr($key,'csosn') && !stristr($key,'importado') && !stristr($key,'inativo') && !stristr($key,'largura') && !stristr($key,'peso') && !stristr($key,'profundidade') && !stristr($key,'red') && !stristr($key,'recomendacoes') && !stristr($key,'imagens') && !stristr($key,'integracao') && !stristr($key,'marca') && !stristr($key,'cfop') && !stristr($key,'produto') && !stristr($key,'minimo') && !stristr($key,'internas') && !stristr($key,'tipo') && !stristr($key,'quantidade_estoque') && !stristr($key,'ean') && !stristr($key,'ncm') && !stristr($key,'unidade') && !stristr($key,'detalhada')){
                         if(stristr($key,'obs_interna')){
                             echo '<td class="col'.$col.'" align=center>'.$item.'</td>';
                         }elseif(stristr($key,'valor')){
                             echo '<td class="col'.$col.'" align=right>'.number_format($item,'2',',','.').'</td>';
                         }elseif(stristr($key,'codigo')){
+                            $search->settabela('tb_preco');
+                            $search->setcodigo($item);
+                            $boadica=$dao->encontre2($search);
+                            if($boadica){
+                                foreach($boadica as $preco){
+                                    $pTabela=number_format($preco->getpTabela(),'2',',','.');
+                                }
+                            }else{
+                                $pTabela='Não Definido';
+                            }
                             echo '<td class="col'.$col.'" loja="'.$loja.'" align=center><div width=10px>'.$item;
                             if($loja){ echo '('.$loja.')';}else{echo '</div></td>';}
-                        }else{
+                        }elseif(stristr($key,'descricao')){
                             echo '<td class="col'.$col.'" align=center>'.mb_strtoupper(str_replace('_',' ',$item),'utf-8').'</td>';
+                        }
+                        if($col==3){
+                            echo '<td class="col'.$col.'" align=right>'.$pTabela.'</td>';
                         }
                     $col++;
                     $z=1;

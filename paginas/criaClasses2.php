@@ -2,13 +2,14 @@
     class criaClsses2 {
         public $POST;
         public $tabela;
+        public $tabela2='tb_preco';
         private $filename1='../model/modelProduto.php';        
         private $filename2='../mapping/ProdutoMapper.php';
         private $filename3='../dao/ProdutoSearchCriteria.php';
         private $filename4='../dao/CRUDProduto.php';
         public function novoArquivo($campos){
             $mode='w+';
-            $variaveis=array('loja','videos','modificado');
+            $variaveis=array('loja','videos','modificado','pOriginal','pTabela','nTabela');
             foreach($campos as $item){
                 $variaveis[] = $item;
             }
@@ -99,6 +100,8 @@
             return $texto;
         }
         private function texto4($variaveis){
+            $variaveis=array_diff($variaveis,['pOriginal','pTabela','nTabela']);
+            $variaveis2=array('modificado','codigo','pOriginal','pTabela','nTabela');
             $texto="<?php \r\n class CRUDProduto extends Dao{\r\n";
             $texto .= '   public function insert(modelProduto $modelProduto){
                 date_default_timezone_set("Brazil/East");
@@ -179,6 +182,83 @@
                         $texto .=' `excluido` ENUM(\'0\',\'1\') NOT NULL DEFAULT \'0\', PRIMARY KEY (`id`)) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci";
                 return $sql;
                 }'."\r\n";
+                        
+                $texto .= '   public function insert4(modelProduto $modelProduto){
+                date_default_timezone_set("Brazil/East");
+                $now = mktime (date(\'H\'), date(\'i\'), date(\'s\'), date("m")  , date("d"), date("Y"));
+                $modelProduto->setid(null);
+                $modelProduto->setexcluido(0);
+                $modelProduto->setcriado($now);  
+                $sql=$this->criaTabela4(\''.$this->tabela2.'\');
+                $this->execute4($sql, $modelProduto);
+                $sql = \'INSERT INTO '.$this->tabela2.' (';
+                  foreach($variaveis2 as $item){
+                    $texto .= '`'.$item.'`,';
+                  }
+            $padrao=$this->padrao();
+            $x='1';
+            foreach($padrao as $pad){
+                if($pad!='tabela'){
+                    $texto .= '`'.$pad.'`';
+                    if(count($padrao)>$x){
+                        $texto .= ',';
+                    }
+                }
+                $x++;
+            }
+                $texto .= ') VALUES (';
+                  foreach($variaveis2 as $item){
+                    $texto .= ':'.$item.',';
+                  }
+            $padrao=$this->padrao();
+            $x='1';
+            foreach($padrao as $pad){
+                if($pad!='tabela'){
+                    $texto .= ':'.$pad;
+                    if(count($padrao)>$x){
+                        $texto .= ',';
+                    }
+                }
+                $x++;
+            }
+            $texto .=  ')\';'."\r\n";
+            $texto .= "\t".'$search = new ProdutoSearchCriteria();
+                $search->settabela($modelProduto->gettabela());
+                return $this->execute4($sql, $modelProduto);
+                }'."\r\n";
+            $texto .= '   public function update4(modelProduto $modelProduto){
+                date_default_timezone_set("Brazil/East");
+                $now = mktime (date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
+                //$modelProduto->setmodificado($now);
+                $sql = \'UPDATE '.$this->tabela2.' SET id=:id,criado=:criado,modificado=:modificado,';
+                   $x=1;
+                    foreach($variaveis2 as $item){
+                        if($item != 'criado'){
+                            $texto .= " $item = :$item";
+                            if(count($variaveis)>$x){
+                                $texto .= ',';
+                            }
+                        }
+                        $x++;
+                    }
+                $texto .= ' WHERE id = :id \';
+                    return $this->execute4($sql, $modelProduto);
+           }'."\r\n";
+                        
+                $texto .= '    public function criaTabela4($tabela){
+                        $sql="CREATE TABLE IF NOT EXISTS '.$this->tabela2.' ( `id` INT(5) NOT NULL AUTO_INCREMENT , `criado` INT(100) NULL,';
+                        foreach($variaveis2 as $item){
+                            $texto .= '`'.$item.'`';
+                            if($item=='cod_API'){
+                                $texto .=' INT (5) NULL,';
+                            }else{
+                                $texto .=' varchar(100) NULL,';
+                            }
+                        }
+                        $texto .=' `excluido` ENUM(\'0\',\'1\') NOT NULL DEFAULT \'0\', PRIMARY KEY (`id`)) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci";
+                return $sql;
+                }'."\r\n";        
+                        
             $texto .='  public function getParams(modelProduto $modelProduto){
         $params = array(';
             $padrao=$this->padrao();
@@ -188,6 +268,22 @@
                 }
             }
                 foreach($variaveis as $key => $item){
+                    $classe='get'.$item;
+                    $texto .='\':'.$item.'\'=>$modelProduto->'.$classe.'(),';
+                }    
+                $texto .=' );
+	 return $params;
+   }'."\r\n";
+                
+            $texto .='  public function getParams4(modelProduto $modelProduto){
+        $params = array(';
+            $padrao=$this->padrao();
+            foreach($padrao as $pad){
+                if($pad!='tabela'){
+                    $texto .= '\':'.$pad.'\'=>$modelProduto->get'.$pad.'(),';
+                }
+            }
+                foreach($variaveis2 as $key => $item){
                     $classe='get'.$item;
                     $texto .='\':'.$item.'\'=>$modelProduto->'.$classe.'(),';
                 }    

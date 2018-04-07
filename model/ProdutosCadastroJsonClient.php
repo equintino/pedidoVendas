@@ -1,6 +1,10 @@
 <?php
+@$act=$_GET['act'];
+if(@!$act){
+    $act=null;
+}
 //include '../config/OmieAppAuth.php';
-if(@$_GET['act']!='atualiza' && @$_GET['act']!='adm' && @$_GET['act']!='atualiza2'){
+if($act!='atualiza' && $act!='adm' && $act!='atualiza2' && $act!='atualizaTabela'){
     include '../dao/UserDao.php';
     include '../dao/UserSearchCriteria.php';
     include '../model/User.php';

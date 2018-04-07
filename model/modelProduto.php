@@ -49,6 +49,27 @@
  public function setmodificado($modificado ){
 	$this->modificado=$modificado;
  }
+ private $pOriginal;
+ public function getpOriginal(){
+	return $this->pOriginal;
+ }
+ public function setpOriginal($pOriginal ){
+	$this->pOriginal=$pOriginal;
+ }
+ private $pTabela;
+ public function getpTabela(){
+	return $this->pTabela;
+ }
+ public function setpTabela($pTabela ){
+	$this->pTabela=$pTabela;
+ }
+ private $nTabela;
+ public function getnTabela(){
+	return $this->nTabela;
+ }
+ public function setnTabela($nTabela ){
+	$this->nTabela=$nTabela;
+ }
  private $aliquota_cofins;
  public function getaliquota_cofins(){
 	return $this->aliquota_cofins;

@@ -34,7 +34,7 @@
                     die;
                 }
                 item++;
-                   $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" size=10px name="codigo_produto'+item+'" autocomplete="off" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" autocomplete="off" required /></td><td><input type="text" size=2px name="quantidade'+item+'" autocomplete="off" required linha='+item+' /></td><td><input type="text" size=8px name="vUnitarioItem'+item+'" autocomplete="off" required /></td><td><input type="text" size=8px name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" size=2px name="pDescontoItem'+item+'" autocomplete="off" linha='+item+' /></td><td><textarea cols=25 rows=1 name="obs_item'+item+'" linha='+item+' /></textares></td><td><input type="hidden" name="cfop'+item+'" linha='+item+' /></td><td><input type="hidden" name="ncm'+item+'" linha='+item+' /></td><td><input type="hidden" name="ean'+item+'" linha='+item+' /></td><td><input type="hidden" name="unidade'+item+'" linha='+item+' /></td><td><input type="hidden" name="vTotalItem'+item+'" linha='+item+' /></td><input type=hidden name="cOmie'+item+'" /></span></tr>');
+                   $('#pnl1 table').append('<tr id=item'+item+'><span class=novo><td class="lupa" ></td><td class=item>'+item+'</td><td><input type="text" size=10px name="codigo_produto'+item+'" autocomplete="off" linha='+item+' required/></td><td><input type="text" name="descricao'+item+'" autocomplete="off" required /></td><td><input type="text" size=2px name="quantidade'+item+'" autocomplete="off" required linha='+item+' /></td><td><input type="text" size=8px name="vUnitarioItem'+item+'" autocomplete="off" required /></td><td><input type="text" size=8px name="vTotalItem'+item+'" linha='+item+' disabled /></td><td><input type="text" size=2px name="pDescontoItem'+item+'" autocomplete="off" linha='+item+' /></td><td><textarea cols=25 rows=1 name="obs_item'+item+'" linha='+item+' /></textares></td><td><input type="hidden" name="cfop'+item+'" linha='+item+' /></td><td><input type="hidden" name="ncm'+item+'" linha='+item+' /></td><td><input type="hidden" name="ean'+item+'" linha='+item+' /></td><td><input type="hidden" name="unidade'+item+'" linha='+item+' /></td><td><input type="hidden" name="vTotalItem'+item+'" linha='+item+' /></td><td><input type="hidden" name="pTabela'+item+'" linha=1 /></td><input type=hidden name="cOmie'+item+'" /></span></tr>');
                     itemExclusao();
                     busca();
                     $('#pnl1 table input[name=codigo_produto'+item+']').trigger('focus');
@@ -506,6 +506,15 @@
                     $(this).bind('keyup click', function(){
                         var vlItem=$(this).attr('name');
                         var nBusca=vlItem.substr(vlItem.length-1);
+                        alert(nBusca);
+                        //alert($(this).val());
+                        //alert($('#pnl1 td input[name=quantidade'+nBusca+']').val());
+                        $('#pnl1 td input').each(function(){
+                            if($(this).attr('name')=='pTabela1'){
+                                alert($(this).val());
+                            }
+                        })
+                        //alert($('#pnl1 tr input[name=pTabela1]').val());
                         $('#pnl1 td input[name=quantidade'+nBusca+']').trigger('click');
                     })
                 }
@@ -1008,7 +1017,7 @@
                         <?php endif ?>
                     <?php endforeach; ?>
                     </tr>
-                    <tr id=item1><span class=novo><td class=lupa></td><td class=item>1</td><td><input type="text" size=10px name="codigo_produto1" autocomplete="off" linha=1 required/></td><td><input type="text" name="descricao1" autocomplete="off" required /></td><td><input type="text" size=2px name="quantidade1" autocomplete="off" linha=1 required /></td><td><input type="text" size=8px name="vUnitarioItem1" autocomplete="off" required /></td><td><input type="text" size=8px name="vTotalItem1" linha=1 disabled /></td><td><input type="text" size=2px name="pDescontoItem1" autocomplete="off" linha=1 /></td><td><textarea rows="1" cols="25" name="obs_item1" linha=1 /></textarea></td><td><input type="hidden" name="cfop1" linha=1 /></td><td><input type="hidden" name="ncm1" linha=1 /></td><td><input type="hidden" name="ean1" linha=1 /></td><td><input type="hidden" name="unidade1" linha=1 /></td><td><input type="hidden" name="vTotalItem1" linha=1 /></td><input type=hidden name=cOmie1 /></span></tr>
+                    <tr id=item1><span class=novo><td class=lupa></td><td class=item>1</td><td><input type="text" size=10px name="codigo_produto1" autocomplete="off" linha=1 required/></td><td><input type="text" name="descricao1" autocomplete="off" required /></td><td><input type="text" size=2px name="quantidade1" autocomplete="off" linha=1 required /></td><td><input type="text" size=8px name="vUnitarioItem1" autocomplete="off" required /></td><td><input type="text" size=8px name="vTotalItem1" linha=1 disabled /></td><td><input type="text" size=2px name="pDescontoItem1" autocomplete="off" linha=1 /></td><td><textarea rows="1" cols="25" name="obs_item1" linha=1 /></textarea></td><td><input type="hidden" name="cfop1" linha=1 /></td><td><input type="hidden" name="ncm1" linha=1 /></td><td><input type="hidden" name="ean1" linha=1 /></td><td><input type="hidden" name="unidade1" linha=1 /></td><td><input type="hidden" name="vTotalItem1" linha=1 /></td><td><input type="hidden" name="pTabela1" linha=1 /></td><input type=hidden name=cOmie1 /></span></tr>
                 </table>
             </div>
             <!--</fieldset>-->

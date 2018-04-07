@@ -22,6 +22,15 @@
 	if (array_key_exists('modificado', $properties)){
 	  $modelProduto->setmodificado($properties['modificado']);
 	}
+	if (array_key_exists('pOriginal', $properties)){
+	  $modelProduto->setpOriginal($properties['pOriginal']);
+	}
+	if (array_key_exists('pTabela', $properties)){
+	  $modelProduto->setpTabela($properties['pTabela']);
+	}
+	if (array_key_exists('nTabela', $properties)){
+	  $modelProduto->setnTabela($properties['nTabela']);
+	}
 	if (array_key_exists('aliquota_cofins', $properties)){
 	  $modelProduto->setaliquota_cofins($properties['aliquota_cofins']);
 	}

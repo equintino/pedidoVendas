@@ -6,11 +6,13 @@
         laft: 50%;
     }
 </style>
+<div id=contador></div>
 <?php 
     @$excl=$_GET['excl'];
     @$tipoBusca=$_GET['tipoBusca'];
     @$buscaPor=$_GET['buscaPor'];
     @$funcao=$_COOKIE['funcao'];
+    @$administrador=$_GET['administrador'];
     
     if(@$funcao){
         echo '<script>var funcao="'.$funcao.'"</script>';
@@ -34,7 +36,7 @@
     }
     
 ////////// Produtos ////////////
-    if($funcao=='administrador'){
+    if($funcao=='administrador' && $administrador != 0){
         $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>100,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
         $prod=$produtos->ListarProdutos($produto_servico_list_request);
         $paginaTotal=$prod->total_de_paginas;
@@ -167,7 +169,7 @@
             $prcListarCaractRequest=array("nPagina"=>1,"nRegPorPagina"=>50,"nCodProd"=>$modelProduto->getcodigo_produto());
             $conteudo=$caracteristica->ListarCaractProduto($prcListarCaractRequest);
             
-            echo '<script>var contador="'.($y*100/$registroa).'%"</script>';
+            //echo '<script>var contador="'.($y*100/$registroa).'%"</script>';
             if(is_object($conteudo)){
                 foreach($conteudo->listaCaracteristicas as $item3){
                     if(strtoupper($item3->cNomeCaract)==strtoupper('loja')){
@@ -175,10 +177,9 @@
                     }
                 }
             }
-            echo '<div id=contador></div>';
             //echo 'Atualização de número '.$y;
             $gravado=$dao2->grava2($modelProduto);
-            echo '<script> document.getElementById("contador").innerHTML=contador;</script>';
+            echo '<script> document.getElementById("contador").innerHTML="Percentual concluido '.number_format($y*100/$registroa,'0','.','').'%";</script>';
             $y++;
         }
         if($gravado){
@@ -200,6 +201,57 @@
             }
         
         }die;
+    }elseif($act=='atualizaTabela'){
+        include '../dao/CRUDProduto.php';
+        ///// Tabela de Preço //////
+        $tabelaPreco=new TabelaPrecosJsonClient();
+        $tprItensListarRequest=array("nPagina"=>1,"nRegPorPagina"=>50,"nCodTabPreco"=>742240473,"cCodIntTabPreco"=>"");
+        $tabPreco=$tabelaPreco->ListarTabelaItens($tprItensListarRequest);
+        //echo '<pre>';print_r($tabPreco);die;
+        $nTotPaginas=$tabPreco->nTotPaginas;
+        $nTotRegistros=$tabPreco->nTotRegistros;
+        $nomeTabela=$tabPreco->listaTabelaPreco->cNome;
+        echo '<br>Tabela de Preço ('.$tabPreco->listaTabelaPreco->cNome.')<br>';
+        //echo 'Total de Páginas '.$nTotPaginas.'<br>';
+        echo '<span id=totalLido></span> / '.$nTotRegistros.'<br><br>';
+        
+        $contProd=1;
+        $CRUDProduto=new CRUDProduto();
+        
+        $CRUDProduto->drop('tb_preco');
+        foreach($tabPreco->listaTabelaPreco->itensTabela as $item){
+            if(@$item->cCodigoProduto){
+                $modelProduto=new modelProduto();
+                $modelProduto->setnTabela($nomeTabela);
+                $modelProduto->setmodificado($item->itemInfo->dAltItem.' '.$item->itemInfo->hAltItem);
+                //echo $item->cCodigoProduto;die;
+                $modelProduto->setcodigo($item->cCodigoProduto);
+                $modelProduto->setpOriginal($item->nValorOriginal);
+                $modelProduto->setpTabela($item->nValorTabela);
+                
+                echo '<script>document.getElementById("totalLido").innerHTML="Registros '.$contProd.'"</script>';
+                $CRUDProduto->grava4($modelProduto);
+                $contProd++;
+            }
+        }
+        
+        for($x=2;$x<=$nTotPaginas;$x++){
+            $tprItensListarRequest=array("nPagina"=>$x,"nRegPorPagina"=>50,"nCodTabPreco"=>742240473,"cCodIntTabPreco"=>"");
+            $tabPreco=$tabelaPreco->ListarTabelaItens($tprItensListarRequest);
+            foreach($tabPreco->listaTabelaPreco->itensTabela as $item){
+                if(@$item->cCodigoProduto){
+                    echo '<script>document.getElementById("totalLido").innerHTML="Registros '.$contProd.'"</script>';
+                    $gravado=$CRUDProduto->grava4($modelProduto);
+                    $contProd++;
+                }
+            }
+        }
+        if($gravado){
+            echo 'Atualização de Produtos realizada com sucesso.';
+            //echo '<script>window.location.assign(\'index.php?pagina=produto&act=list&seleciona=1\')</script>';
+        }
+        die;
+            /// fim tabela de preço ///
     }
     function buscaTagLoja($codigo){
         $cod_prod=($dados->produto_servico_cadastro);

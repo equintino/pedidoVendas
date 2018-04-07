@@ -19,6 +19,7 @@
             set_time_limit(3600);
             ini_set('memory_limit', '-1');
         $result = array();
+        //echo '<pre>';print_r($this->getEncontreSql2($search));
         foreach ($this->query($this->getEncontreSql2($search)) as $row){
             $modelProduto = new modelProduto();
             ProdutoMapper::map($modelProduto, $row);
@@ -108,6 +109,13 @@
         }
         return $this->update3($model);
    }
+   public function grava4(modelProduto $modelProduto){
+        set_time_limit(3600);
+        if ($modelProduto->getid() === null) {
+            return $this->insert4($modelProduto);
+        }
+        return $this->update4($modelProduto);
+   }
    public function exclui($id) {
         $sql = 'delete from `'.$model->gettabela().'` WHERE id = :id';
         $statement = $this->getDb()->prepare($sql);
@@ -183,6 +191,16 @@
         }
         return $model;
    }
+   public function execute4($sql,modelProduto $modelProduto){
+        $statement = $this->getDb()->prepare($sql);
+        $this->executeStatement($statement, $this->getParams4($modelProduto));
+        $search=new ModelSearchCriteria();        
+        $search->settabela($modelProduto->gettabela());
+        if (!$modelProduto->getid()) {
+            //return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));
+        }
+        return $modelProduto;
+   }
    private function executeStatement(PDOStatement $statement, array $params){
         if (!$statement->execute($params)){
             self::throwDbError($this->getDb()->errorInfo());
@@ -217,21 +235,23 @@
    }
    private function getEncontreSql(ModelSearchCriteria $search = null) {        
        if(preg_match('/[0-9]/',$search->getrazao_social())){
-           //echo 'contem número';
            $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND cnpj_cpf like "%'.$search->getrazao_social().'%"';
        }elseif(!preg_match('/[0-9]/',$search->getrazao_social())){
            $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND razao_social like "%'.$search->getrazao_social().'%"';
-           //echo 'não contém número';
        }else{
             $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" ';
        }
         return $sql;
   }
     private function getEncontreSql2(ProdutoSearchCriteria $search = null){
-        //echo '<pre>';print_r($search);die;
+        if($search->gettabela()=='tb_preco'){
+            $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo = "'.$search->getcodigo().'"';
+            //echo $sql;
+            return $sql;
+        }
         $codigo=str_replace(' ','%',$search->getcodigo());
         if($search->getcodigo_produto()){
-            $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo_produto = "'.$search->getcodigo_produto().'"';
+            $sql = 'SELECT `id`,`descricao`,`codigo`,`codigo_produto`,`valor_unitario`,`quantidade_estoque`,`cfop`,`ncm`,`ean`,`unidade` FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo_produto = "'.$search->getcodigo_produto().'"';
         }elseif(preg_match('/[0-9]/',$codigo) && !$search->getcodigo_produto()){
             $sql = 'SELECT `id`,`descricao`,`codigo`,`codigo_produto`,`valor_unitario`,`quantidade_estoque`,`cfop`,`ncm`,`ean`,`unidade` FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo like "%'.$codigo.'%"';
         }elseif(!preg_match('/[0-9]/',$codigo)){
@@ -239,7 +259,6 @@
         }else{
             $sql = 'SELECT `id`,`descricao`,`codigo`,`codigo_produto`,`valor_unitario`,`quantidade_estoque`,`cfop`,`ncm`,`ean`,`unidade` FROM `'.$search->gettabela().'` WHERE excluido = "0" ';
         }
-        //echo $sql;die;
         return $sql;
     }
 }
