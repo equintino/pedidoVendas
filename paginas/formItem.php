@@ -348,9 +348,11 @@
     include '../model/ProdutosCadastroJsonClient.php';
     include '../model/modelProduto.php';
     include '../mapping/ProdutoMapper.php';
+    include '../model/TabelaPrecosJsonClient.php';
+    
     $loja=null;
     $produto=new ProdutosCadastroJsonClient();
-    
+        
     if(key_exists('act', $_GET)){
         $act=$_GET['act'];
     }else{
@@ -393,6 +395,17 @@
         if(@$pagAtual=='undefined' || @!$pagAtual){
             $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>40,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
             $dados=$produto->ListarProdutos($produto_servico_list_request);
+            
+            $tabelaPreco=new TabelaPrecosJsonClient();
+            $tprItensListarRequest=array("nPagina"=>1,"nRegPorPagina"=>100,"nCodTabPreco"=>742240473,"cCodIntTabPreco"=>"");
+
+            $tabPreco=$tabelaPreco->ListarTabelaItens($tprItensListarRequest);
+            echo '<pre>';print_r($tabPreco);die;
+            if(!$dados){
+                echo 'Não foi encontrado nenhum produto cadastrado.';
+                //echo '<button onclick=history.go(-1)>Voltar</button>';
+                exit;
+            }
             $pagAtual=$dados->total_de_paginas;
             echo '<script>pagAtual='.$pagAtual.'</script>';
         }

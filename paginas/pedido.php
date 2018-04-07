@@ -151,7 +151,17 @@
         $dao2=new CRUD();
         $search=new ModelSearchCriteria();
         $search->settabela('tb_vendedor');
+        //echo OMIE_APP_KEY;
+        if(OMIE_APP_KEY=='2769656370'){
+            $db='db';
+        }elseif(OMIE_APP_KEY=='461893204773'){
+            $db='db2';
+        }
+        if(!$dao2->showTabela('tb_vendedor',$db)){
+           echo '<script>window.location.assign("index.php?index=sim&pagina=pedido&act=cad&vendedorAtualiza=1")</script>'; 
+        }
         $vendedores=$dao2->encontrePorVendedor($search);
+        //echo '<pre>';print_r($vendedores);die;
         $vend=array();
         foreach($vendedores as $item){
             //$vend[]=array('codigo'=>$item->getcodigo(),'nome'=>$item->getnome());

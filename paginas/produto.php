@@ -92,6 +92,11 @@
         $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>1,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
         $dados=$produtos->ListarProdutos($produto_servico_list_request);
         
+        if(!$dados){
+            echo 'Não foi encontrado nenhum produto cadastrado.';
+            echo '<button onclick=history.go(-1)>Voltar</button>';
+            exit;
+        }
         $paginas=$dados->total_de_paginas;
         $registroa=$dados->total_de_registros;
         $y=1;

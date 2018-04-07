@@ -21,8 +21,10 @@
     $emp=$empresa->ListarEmpresas($empresas_list_request);
     if(is_object($emp)){
         $nomeEmpresa=$emp->empresas_cadastro[0]->razao_social;
+        $cnpj=$emp->empresas_cadastro[0]->cnpj;
     }
     $user->setempresa($nomeEmpresa);
+    $user->setcnpj($cnpj);
     $dao->save($user);
 ?>
 <script>window.location.assign("../index.html")</script>

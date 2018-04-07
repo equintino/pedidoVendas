@@ -56,6 +56,9 @@ final class UserMapper {
         if (array_key_exists('empresa', $properties)){
             $user->setempresa($properties['empresa']);
         }
+        if (array_key_exists('cnpj', $properties)){
+            $user->setcnpj($properties['cnpj']);
+        }
     }
 }
 ?>

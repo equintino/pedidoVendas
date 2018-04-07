@@ -14,6 +14,7 @@ final class User {
     private $OMIE_APP_KEY;
     private $OMIE_APP_SECRET;
     private $empresa;
+    private $cnpj;
 
     public function __construct() {
         $this->setDeleted(false);
@@ -80,6 +81,12 @@ final class User {
     }
     public function getempresa(){
         return $this->empresa;
+    }
+    public function setcnpj($cnpj){
+        $this->cnpj = $cnpj;
+    }
+    public function getcnpj(){
+        return $this->cnpj;
     }
     public function getDeleted() {
         return $this->deleted;

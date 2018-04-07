@@ -119,12 +119,19 @@
         $sql = 'DROP TABLE `'.$tabela.'`';
         $statement = $this->getDb()->prepare($sql)->execute(); 
    }
-   public function showTabela($tabela){
+   public function showTabela($tabela,$db=null){
         $sql = 'SHOW TABLES';
         $statement = $this->getDb()->query($sql, PDO::FETCH_ASSOC)->fetchAll();
+        if(!$db){
+            $db='db';
+        }
+        $config = Config::getConfig($db);
+        $banco=strstr(substr(strstr($config['dsn'],'dbname=',false),'7'),';',true);
         foreach($statement as $key => $item){
-            if($item['Tables_in_pedidovendas']==$tabela){
-                return 1;
+            if(array_key_exists('Tables_in_'.$banco.'',$item)){
+                if($item['Tables_in_'.$banco.'']==$tabela){
+                    return 1;
+                }
             }
         }
         return null;
@@ -184,6 +191,21 @@
    public function query($sql){
         set_time_limit(3600);
         $statement = $this->getDb()->query($sql, PDO::FETCH_ASSOC);
+        /*$tab=explode('`',strstr($sql,'`'));
+        if($tab[1]=='tb_vendedor' && !$statement){
+            //echo '<pre>';print_r($this->criaTabela3('tb_vendedor'));//die;
+            /*date_default_timezone_set("Brazil/East");
+            $now = mktime (date('H'), date('i'), date('s'), date("m")  , date("d"), date("Y"));
+            $model=new Model();
+            $model->setid(null);
+            $model->setexcluido(0);
+            $model->setcriado($now);
+            $model->settabela('tb_vendedor');
+            $sql=$this->insert3($model);
+            $this->execute3($sql, $model);
+            //$statement = $this->getDb()->query($sql, PDO::FETCH_ASSOC);
+            return $tabelaVendedor='inexistente';
+        }*/
         if ($statement === false) {
             self::throwDbError($this->getDb()->errorInfo());
         }
