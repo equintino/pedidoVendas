@@ -124,10 +124,11 @@
                     }
                 })
                 linha=linha.substring(4,5);
-                alert(vUnitario);
-                alert(pTabela);
-                alert(qEstoque);
-                return false;
+                //alert($(this).text());
+                //alert(vUnitario);
+                //alert(pTabela);
+                //alert(qEstoque);
+                //return false;
                 $('#pnl1 table #item'+linha+' input').each(function(){
                     var z=$(this).attr('name');
                     switch(z.substr(0,z.length-1)){
@@ -558,13 +559,26 @@
                     </tr>
                 </thead>
             <?php
-                echo '<tr class="listaProduto" row="'.$row.'" ';
                 foreach($prod as $key => $item){
+                    echo '<tr class="listaProduto" row="'.$row.'" ';
                     if($key!='dadosIbpt' && $key!='imagens' && $key!='recomendacoes_fiscais'){
+                        if(stristr($key,'codigo')){
+                            $search->settabela('tb_preco');
+                            $search->setcodigo($item);
+                            $boadica=$dao->encontre2($search);
+                            if($boadica){
+                                foreach($boadica as $preco){
+                                    $pTabela=number_format($preco->getpTabela(),'2',',','.');
+                                }
+                            }else{
+                                $pTabela='Não Definido';
+                            }
+                            echo 'pTabela="'.$pTabela.'"';
+                        }
                         echo $key.'="'.$item.'"';
                     }
                 }
-                echo '>';
+                echo ' pTabela="'.$pTabela.'">';
                 foreach($prod as $key => $item){                    
                     if(!strstr($key,'aliquo') && !strstr($key,'altura') && !strstr($key,'bloqueado') && !strstr($key,'cest') && !strstr($key,'familia') && !strstr($key,'cst') && !strstr($key,'dias') && !stristr($key,'dadosib') && !stristr($key,'csosn') && !stristr($key,'importado') && !stristr($key,'inativo') && !stristr($key,'largura') && !stristr($key,'peso') && !stristr($key,'profundidade') && !stristr($key,'red') && !stristr($key,'recomendacoes') && !stristr($key,'imagens') && !stristr($key,'integracao') && !stristr($key,'marca') && !stristr($key,'cfop') && !stristr($key,'produto') && !stristr($key,'minimo') && !stristr($key,'internas') && !stristr($key,'tipo') && !stristr($key,'quantidade_estoque') && !stristr($key,'ean') && !stristr($key,'ncm') && !stristr($key,'unidade') && !stristr($key,'detalhada')){
                         if(stristr($key,'obs_interna')){

@@ -249,6 +249,34 @@
             $('.vendedor input[name=vendedor]').val(vendedor);
             var numParc=$('.tabela select[name=parcela] :selected').val();
             var formPag=$('.tabela td select[name=fPagamento] :selected').val();
+            
+            //var vlItem=$(this).attr('name');
+            //var nBusca=vlItem.substr(vlItem.length-1);
+            $('#pnl1 td input').each(function(){
+                alert($(this).attr('name'));
+                if($(this).attr('name')=='vUnitarioItem1'){
+                    alert($(this).val());
+                }
+                if($(this).attr('name')=='pTabela1'){
+                    alert($(this).val());
+                }
+            })
+            //var pTabela=$('#pnl1 td input[name=pTabela'+nBusca+']').val();
+            //var pMinimo=$('#pnl1 td input[name=vUnitarioItem'+nBusca+']').val();
+            //alert([pTabela,pMinimo]);
+            /*var pInserido=$(this).val();
+            var pTabela=pTabela.replace(',','.');
+            var pMinimo=pMinimo.replace(',','.');
+            //alert([vInserido,vMinimo]);
+            if(pTabela != 'Não Definido' && pInserido < pMinimo){
+                //alert('Valor mínimo permitodo '+pMinimo+'');
+                $(this).val(pMinimo)
+            }else if(pInserido < pTabela){
+                //alert('Valor mínimo permitodo '+pTabela+'');
+                $(this).val(pTabela);
+            }*/
+            
+            
             if(formPag=='credito' || formPag == 'debito'){
                 if($('#pnl3 tr.dados_adcionais_nf td textarea').val()==''){
                     var dados=confirm('Não foi inserido o número do documento referente ao cartão. Deseja continuar assim mesmo?');
@@ -506,14 +534,13 @@
                     $(this).bind('keyup click', function(){
                         var vlItem=$(this).attr('name');
                         var nBusca=vlItem.substr(vlItem.length-1);
-                        alert(nBusca);
-                        //alert($(this).val());
-                        //alert($('#pnl1 td input[name=quantidade'+nBusca+']').val());
-                        $('#pnl1 td input').each(function(){
-                            if($(this).attr('name')=='pTabela1'){
+                        //alert(nBusca);
+                        
+                        /*$('#pnl1 td input').each(function(){
+                            if($(this).attr('name')=='pTabela'+nBusca+''){
                                 alert($(this).val());
                             }
-                        })
+                        })*/
                         //alert($('#pnl1 tr input[name=pTabela1]').val());
                         $('#pnl1 td input[name=quantidade'+nBusca+']').trigger('click');
                     })
