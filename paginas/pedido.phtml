@@ -504,23 +504,42 @@
                     })
                 }else if(str.substr(0,str.length-1)=='vUnitarioItem'){
                     $(this).mask('#.###.###,##', {reverse: true})
-                    $(this).click(function(){
+                    $(this).focus(function(){
                         var vlItem=$(this).attr('name');
                         var nBusca=vlItem.substr(vlItem.length-1);
                         var pTabela=$('#pnl1 td input[name=pTabela'+nBusca+']').val();
                         var pMinimo=$('#pnl1 td input[name=vUnitarioItem'+nBusca+']').val();
+                        $(document).keydown(function(e){
+                            if(e.keyCode==13){
+                                /*var pInserido=$(this).val();
+                                var vInserido=pInserido.replace(',','.');
+                                var vTabela=pTabela.replace(',','.');
+                                var vMinimo=pMinimo.replace(',','.');
+                                if(pTabela == 'Não Definido' && vInserido < vMinimo){
+                                    alert('Valor mínimo permitido '+pMinimo+'');
+                                    $(this).val(pMinimo)
+                                    $('#pnl1 td input[name=quantidade'+nBusca+']').trigger('click');
+                                }else if(vInserido < vTabela && pTabela != 'Não Definido'){
+                                    alert('Valor mínimo permitido '+pTabela+'');
+                                    $(this).val(pTabela);
+                                    $('#pnl1 td input[name=quantidade'+nBusca+']').trigger('click');
+                                }*/
+                                return false;
+                            }
+                        })
                         $(this).blur(function(){
                             var pInserido=$(this).val();
-
                             var vInserido=pInserido.replace(',','.');
                             var vTabela=pTabela.replace(',','.');
                             var vMinimo=pMinimo.replace(',','.');
                             if(pTabela == 'Não Definido' && vInserido < vMinimo){
                                 alert('Valor mínimo permitido '+pMinimo+'');
                                 $(this).val(pMinimo)
+                                $('#pnl1 td input[name=quantidade'+nBusca+']').trigger('click');
                             }else if(vInserido < vTabela && pTabela != 'Não Definido'){
                                 alert('Valor mínimo permitido '+pTabela+'');
                                 $(this).val(pTabela);
+                                $('#pnl1 td input[name=quantidade'+nBusca+']').trigger('click');
                             }
                         })
                     })
@@ -624,6 +643,7 @@
                 var vPedido=calcula('-',$('.autoQuadro td[nome=mercadorias]').text(),$('.autoQuadro td[nome=vDesconto]').text());
                 $('.autoQuadro input[name=vPedido]').val(numeroParaMoeda(vPedido))
                 $('.autoQuadro td[nome=vPedido]').text(numeroParaMoeda(vPedido)) /// Valor do Pedido ///
+                $('.valorPedido').text("VALOR DO PEDIDO R$ "+numeroParaMoeda(vPedido)).show()
         }
     })
     function numeroParaMoeda(n, c, d, t){
@@ -925,6 +945,16 @@
     #transf:hover{
         cursor: pointer;
     }
+    .valorPedido{
+        width: 100px;
+        display: none;
+        float: right;
+        font-size: 20px;
+        font-weight: 900;
+        color: red;
+        animation: blinker 1s linear infinite;
+        text-align: center;
+    }
     
     .blink_me {
     }
@@ -950,6 +980,7 @@
 </div>
 <div class="conteudo">
 <?php if($act=='cad'): ?>
+    <div class="valorPedido"></div>
 <h1>Inclusão de Pedido de Venda</h1>
 <span id=confirmado></span>
 <form id="dados" class="fPedido" method="post" action='../paginas/add.php?act=cad&pagina=pedido' target="_blank" >
