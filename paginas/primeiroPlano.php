@@ -5,7 +5,7 @@
     })
 </script>
 <?php
-    echo '<script>
+    /*echo '<script>
         var codigo_cliente="'.$_GET['codigo_cliente'].'";
         var razao="'.$_GET['razao'].'";
         var cnpj_cpf="'.$_GET['cnpj_cpf'].'";
@@ -16,7 +16,7 @@
         var bairro="'.$_GET['bairro'].'";
         var cep="'.$_GET['cep'].'";
         var cidade="'.$_GET['cidade'].'";
-    </script>';
+    </script>';*/
     
     function execInBackground($cmd){
         if (substr(php_uname(), 0, 7) == "Windows"){

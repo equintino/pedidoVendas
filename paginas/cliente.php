@@ -149,7 +149,9 @@
                             // apaga e cria nova tabela //
                         include '../dao/CRUD.php';
                         $dao = new CRUD();
-                        $dao->drop('tb_cliente');
+                        //if(isset($excluiTabela)){
+                            $dao->drop('tb_cliente');
+                        //}
                     }
                     $model = new Model();
                     foreach($row as $key => $item){
