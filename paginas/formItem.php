@@ -501,6 +501,8 @@
                     $w=$row=0;
                     $col=1;
                     $cont=0;
+                    $dao = new Dao();
+                    $search = new ProdutoSearchCriteria();
                     if($tipoBusca=='local'){
                         echo '<th  width="10%" class="col1">CÓDIGO</th>';
                         echo '<th class="descricao col2">DESCRIÇÃO DO PRODUTO</th>';
@@ -510,17 +512,43 @@
                             foreach($detalhes as $item){
                                 $search->settabela('tb_preco');
                                 $search->setcodigo($item->getcodigo());
-                                $boadica=$dao->encontre2($search);
-                                if($boadica){
-                                    foreach($boadica as $preco){
-                                        $pTabela=number_format($preco->getpTabela(),'2',',','.');
-                                        $item->setpTabela($pTabela);
+                                if($cont==0){
+                                    if(OMIE_APP_KEY=='2769656370'){
+                                        $db='db';
+                                    }elseif(OMIE_APP_KEY=='461893204773'){
+                                        $db='db2';
+                                    }
+                                    $tabelaExiste=$dao->showTabela($search->gettabela(),$db);
+                                    if(!$tabelaExiste){
+                                        include '../dao/CRUDProduto.php';
+                                        include '../dao/ModelSearchCriteria.php';
+                                        $dao2=new CRUDProduto();
+                                        $modelProduto=new modelProduto();
+                                        $modelProduto->settabela('tb_preco');
+                                        $dao2->grava4($modelProduto);
+                                    }
+                                    if($tabelaExiste){
+                                        $boadica=$dao->encontre2($search);
+                                        if($boadica){
+                                            foreach($boadica as $preco){
+                                                $pTabela=number_format($preco->getpTabela(),'2',',','.');
+                                            }
+                                        }else{
+                                            $pTabela='Não Definido';
+                                        }
                                     }
                                 }else{
-                                    $pTabela='Não Definido';
-                                    $item->setpTabela($pTabela);
+                                    $boadica=$dao->encontre2($search);
+                                    if($boadica){
+                                        foreach($boadica as $preco){
+                                            $pTabela=number_format($preco->getpTabela(),'2',',','.');
+                                        }
+                                    }else{
+                                        $pTabela='Não Definido';
+                                    }
                                 }
-                                
+                                if(!$pTabela)$pTabela='Não Definido';
+                                $item->setpTabela($pTabela);
                                 echo '<tr class=listaProduto row="'.$row.'" descricao="'.$item->getdescricao().'" codigo="'.$item->getcodigo().'" codigo_produto="'.$item->getcodigo_produto().'" valor_unitario="'.$item->getvalor_unitario().'" pTabela="'.$item->getpTabela().'" quantidade_estoque="'.$item->getquantidade_estoque().'" cfop="'.$item->getcfop().'" ncm="'.$item->getncm().'" ean="'.$item->getean().'" unidade="'.$item->getunidade().'" ><td class="col1" align=center><div width=10px>'.$item->getcodigo().'</td>';
                                 echo '<td class="col2" align=center>'.$item->getdescricao().'</td>';
                                 echo '<td class="col3" align=right>'.number_format($item->getvalor_unitario(),'2',',','.').'</td>';
@@ -530,8 +558,6 @@
                             echo '<script>var cont='.$cont.'</script>';
                         }
                     }elseif($tipoBusca=='servidor'){
-                        $dao = new Dao();
-                        $search = new ProdutoSearchCriteria();
                         foreach($detalhes as $prod){
                             if($w==0){
                                 foreach($prod as $key => $item){
@@ -559,19 +585,40 @@
                     </tr>
                 </thead>
             <?php
+                $serv=0;
                 foreach($prod as $key => $item){
                     echo '<tr class="listaProduto" row="'.$row.'" ';
                     if($key!='dadosIbpt' && $key!='imagens' && $key!='recomendacoes_fiscais'){
                         if(stristr($key,'codigo')){
-                            $search->settabela('tb_preco');
-                            $search->setcodigo($item);
-                            $boadica=$dao->encontre2($search);
-                            if($boadica){
-                                foreach($boadica as $preco){
-                                    $pTabela=number_format($preco->getpTabela(),'2',',','.');
+                            if($serv==0){
+                                $search->settabela('tb_preco');
+                                $search->setcodigo($item);
+                                if(OMIE_APP_KEY=='2769656370'){
+                                    $db='db';
+                                }elseif(OMIE_APP_KEY=='461893204773'){
+                                    $db='db2';
                                 }
-                            }else{
-                                $pTabela='Não Definido';
+                                $tabelaExiste=$dao->showTabela($search->gettabela(),$db);
+                                if($tabelaExiste){
+                                    $boadica=$dao->encontre2($search);
+                                    if($boadica){
+                                        foreach($boadica as $preco){
+                                            $pTabela=number_format($preco->getpTabela(),'2',',','.');
+                                        }
+                                    }else{
+                                        $pTabela='Não Definido';
+                                    }
+                                }else{
+                                    $pTabela=null;
+                                }
+                                if(!$pTabela){
+                                    include '../dao/CRUDProduto.php';
+                                    include '../dao/ModelSearchCriteria.php';
+                                    $dao2=new CRUDProduto();
+                                    $modelProduto=new modelProduto();
+                                    $modelProduto->settabela('tb_preco');
+                                    $dao2->grava4($modelProduto);
+                                }
                             }
                             echo 'pTabela="'.$pTabela.'"';
                         }

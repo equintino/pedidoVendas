@@ -251,6 +251,8 @@
                             $texto .= '`'.$item.'`';
                             if($item=='cod_API'){
                                 $texto .=' INT (5) NULL,';
+                            }elseif($item=='codigo'){
+                                $texto .=' varchar(100) NOT NULL,';
                             }else{
                                 $texto .=' varchar(100) NULL,';
                             }

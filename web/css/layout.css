@@ -6,9 +6,10 @@
 }
 
 #header {
-    height: 130px;
-    background: url(../img/fundo_menu.png) repeat right top;
+    //height: 130px;
+    //background: url(../img/fundo_menu.png) repeat right top;
     height: 30px;
+    //border: solid green;
 }
 #header, #content, #footer {
     font-size: 0.85em;
@@ -27,7 +28,11 @@
     min-height: 500px;
 }
 #page{
-    background: white;
+    background: url(../img/fundo_menu.png) repeat-x right top;
+    background-size: 4px;
+    //height: 40px;
+    //background: white;
+    //border: solid yellow;
 }
 #header_cadastro{
     padding: 2px;
@@ -52,7 +57,7 @@
     left: 10px;
 }
 .conteudo{
-    width: 1000px;
+    width: 1050px;
     margin-left: 30px;
     background: rgba(100, 100, 100, 0.1);
     border-radius: 5px;

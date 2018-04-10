@@ -24,7 +24,7 @@
     $cookies=new valida_cookies();
     $cookies->limpaCookies();
 ?>
-    <div class="msg"><img src="../web/img/logo.png" />
+    <div class="msg"><img src="img/logo.png" />
         <h2>EMQDesenv</h2>
         <h4>Desenvolvimento de Sistemas</h4>
     <p>Obrigado  por ter usado nosso Sistema de Pedido de Vendas.</p>

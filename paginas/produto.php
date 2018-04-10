@@ -206,49 +206,54 @@
         ///// Tabela de Preço //////
         $tabelaPreco=new TabelaPrecosJsonClient();
         $tprItensListarRequest=array("nPagina"=>1,"nRegPorPagina"=>50,"nCodTabPreco"=>742240473,"cCodIntTabPreco"=>"");
-        $tabPreco=$tabelaPreco->ListarTabelaItens($tprItensListarRequest);
-        //echo '<pre>';print_r($tabPreco);die;
-        $nTotPaginas=$tabPreco->nTotPaginas;
-        $nTotRegistros=$tabPreco->nTotRegistros;
-        $nomeTabela=$tabPreco->listaTabelaPreco->cNome;
-        echo '<br>Tabela de Preço ('.$tabPreco->listaTabelaPreco->cNome.')<br>';
-        //echo 'Total de Páginas '.$nTotPaginas.'<br>';
-        echo '<span id=totalLido></span> / '.$nTotRegistros.'<br><br>';
-        
+        @$tabPreco=$tabelaPreco->ListarTabelaItens($tprItensListarRequest);
+        is_object($tabPreco)? $obj='sim': $obj=null;
+        if($obj){
+            $nTotPaginas=$tabPreco->nTotPaginas;
+            $nTotRegistros=$tabPreco->nTotRegistros;
+            $nomeTabela=$tabPreco->listaTabelaPreco->cNome;
+            echo '<br>Tabela de Preço ('.$tabPreco->listaTabelaPreco->cNome.')<br>';
+            //echo 'Total de Páginas '.$nTotPaginas.'<br>';
+            echo '<span id=totalLido></span> / '.$nTotRegistros.'<br><br>';
+        }
         $contProd=1;
         $CRUDProduto=new CRUDProduto();
         
         $CRUDProduto->drop('tb_preco');
-        foreach($tabPreco->listaTabelaPreco->itensTabela as $item){
-            if(@$item->cCodigoProduto){
-                $modelProduto=new modelProduto();
-                $modelProduto->setnTabela($nomeTabela);
-                $modelProduto->setmodificado($item->itemInfo->dAltItem.' '.$item->itemInfo->hAltItem);
-                //echo $item->cCodigoProduto;die;
-                $modelProduto->setcodigo($item->cCodigoProduto);
-                $modelProduto->setpOriginal($item->nValorOriginal);
-                $modelProduto->setpTabela($item->nValorTabela);
-                
-                echo '<script>document.getElementById("totalLido").innerHTML="Registros '.$contProd.'"</script>';
-                $CRUDProduto->grava4($modelProduto);
-                $contProd++;
-            }
-        }
-        
-        for($x=2;$x<=$nTotPaginas;$x++){
-            $tprItensListarRequest=array("nPagina"=>$x,"nRegPorPagina"=>50,"nCodTabPreco"=>742240473,"cCodIntTabPreco"=>"");
-            $tabPreco=$tabelaPreco->ListarTabelaItens($tprItensListarRequest);
+        if($obj){
             foreach($tabPreco->listaTabelaPreco->itensTabela as $item){
                 if(@$item->cCodigoProduto){
+                    $modelProduto=new modelProduto();
+                    $modelProduto->setnTabela($nomeTabela);
+                    $modelProduto->setmodificado($item->itemInfo->dAltItem.' '.$item->itemInfo->hAltItem);
+                    //echo $item->cCodigoProduto;die;
+                    $modelProduto->setcodigo($item->cCodigoProduto);
+                    $modelProduto->setpOriginal($item->nValorOriginal);
+                    $modelProduto->setpTabela($item->nValorTabela);
+
                     echo '<script>document.getElementById("totalLido").innerHTML="Registros '.$contProd.'"</script>';
-                    $gravado=$CRUDProduto->grava4($modelProduto);
+                    $CRUDProduto->grava4($modelProduto);
                     $contProd++;
                 }
             }
-        }
-        if($gravado){
-            echo 'Atualização de Produtos realizada com sucesso.';
-            //echo '<script>window.location.assign(\'index.php?pagina=produto&act=list&seleciona=1\')</script>';
+        
+            for($x=2;$x<=$nTotPaginas;$x++){
+                $tprItensListarRequest=array("nPagina"=>$x,"nRegPorPagina"=>50,"nCodTabPreco"=>742240473,"cCodIntTabPreco"=>"");
+                $tabPreco=$tabelaPreco->ListarTabelaItens($tprItensListarRequest);
+                foreach($tabPreco->listaTabelaPreco->itensTabela as $item){
+                    if(@$item->cCodigoProduto){
+                        echo '<script>document.getElementById("totalLido").innerHTML="Registros '.$contProd.'"</script>';
+                        $gravado=$CRUDProduto->grava4($modelProduto);
+                        $contProd++;
+                    }
+                }
+            }
+            if($gravado){
+                echo 'Atualização de Produtos realizada com sucesso.';
+                //echo '<script>window.location.assign(\'index.php?pagina=produto&act=list&seleciona=1\')</script>';
+            }
+        }else{
+            echo '<h2>Tabela BoaDica não configurada</h2>';
         }
         die;
             /// fim tabela de preço ///

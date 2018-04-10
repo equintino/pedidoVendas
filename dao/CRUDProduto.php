@@ -46,7 +46,7 @@
                     return $this->execute4($sql, $modelProduto);
            }
     public function criaTabela4($tabela){
-                        $sql="CREATE TABLE IF NOT EXISTS tb_preco ( `id` INT(5) NOT NULL AUTO_INCREMENT , `criado` INT(100) NULL,`modificado` varchar(100) NULL,`codigo` varchar(100) NULL,`pOriginal` varchar(100) NULL,`pTabela` varchar(100) NULL,`nTabela` varchar(100) NULL, `excluido` ENUM('0','1') NOT NULL DEFAULT '0', PRIMARY KEY (`id`)) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci";
+                        $sql="CREATE TABLE IF NOT EXISTS tb_preco ( `id` INT(5) NOT NULL AUTO_INCREMENT , `criado` INT(100) NULL,`modificado` varchar(100) NULL,`codigo` varchar(100) NOT NULL,`pOriginal` varchar(100) NULL,`pTabela` varchar(100) NULL,`nTabela` varchar(100) NULL, `excluido` ENUM('0','1') NOT NULL DEFAULT '0', PRIMARY KEY (`id`)) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci";
                 return $sql;
                 }
   public function getParams(modelProduto $modelProduto){
