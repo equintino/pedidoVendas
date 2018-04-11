@@ -428,7 +428,7 @@
     <?php if($act!='cad' && $seleciona!=1 && $act != 'atualiza' && $act!='adm'):?>
         <div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por clientes" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por clientes" /></div>
 </div>
-    <?php elseif($act != 'adm'):
+    <?php elseif($act != 'adm' && $act != 'atualiza'):
         switch($tipoBusca){
             case 'servidor':
                 $servidor='checked';
@@ -606,6 +606,6 @@
 
 
 <?php elseif($act=='atualiza'): ?>
-             
+      
 <?php endif; ?>
 </div>

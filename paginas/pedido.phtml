@@ -369,6 +369,39 @@
                 return false;
             }
         })
+        if(funcao=='administrador'){
+            $('.mGeral').append($('<ul><li class=tabela>ATUALIZA TABELA CLIENTE</li></ul>'))
+            $('.mGeral ul li.tabela').click(function(){
+                var tab=$('.mGeral ul li.tabela').text().split(' ').slice('2');
+                if(tab=='CLIENTE'){
+                    window.location.assign('index.php?pagina=cliente&act=atualiza&seleciona=0');
+                }else if(tab=='PRODUTO'){
+                    window.location.assign('index.php?pagina=produto&act=atualiza&seleciona=0');
+                }else if(tab=='PREÇO'){
+                    window.location.assign('index.php?pagina=produto&act=atualizaTabela&seleciona=0');
+                }
+            })
+            $('.vaivem').append($('<img title="Trocar tabela" src="../web/img/vaivem.png" height=20px/>'))
+            var s=0;
+            $('.vaivem img').click(function(){
+                if(s==2){
+                    s=0; 
+                }else{
+                    s++;
+                }
+                switch(s){
+                    case 0:
+                        $('.mGeral ul li.tabela').text('ATUALIZA TABELA CLIENTE');
+                        break;
+                    case 1:
+                        $('.mGeral ul li.tabela').text('ATUALIZA TABELA PRODUTO');
+                        break;
+                    case 2:
+                        $('.mGeral ul li.tabela').text('ATUALIZA TABELA PREÇO');
+                        break;
+                }
+            })
+        }
         ///// funcoes ////
         function itemExclusao(){
             var corItem='rgba(255,0,0,0.7)';

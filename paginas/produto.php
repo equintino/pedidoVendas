@@ -13,6 +13,7 @@
     @$buscaPor=$_GET['buscaPor'];
     @$funcao=$_COOKIE['funcao'];
     @$administrador=$_GET['administrador'];
+    @$seleciona=$_GET['seleciona'];
     
     if(@$funcao){
         echo '<script>var funcao="'.$funcao.'"</script>';
@@ -91,6 +92,15 @@
             }*/
         }
     }elseif($act=='atualiza'){
+        $tabelaAtualizando='Produto';
+        if($seleciona==0){
+            echo '<script>pagina="produto";act="atualiza";</script>';
+            include '../paginas/atualizando.php';
+            die;
+        }elseif($seleciona==2){
+            echo '<script>var seleciona=2</script>';
+            include '../paginas/atualizando.php';
+        }
         $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>1,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
         $dados=$produtos->ListarProdutos($produto_servico_list_request);
         
@@ -104,7 +114,7 @@
         $y=1;
         for($x=1;$x<=$paginas;$x++){
             $produto_servico_list_request=array("pagina"=>$x,"registros_por_pagina"=>1,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
-            $dados=$produtos->ListarProdutos($produto_servico_list_request)->produto_servico_cadastro;
+            @$dados=$produtos->ListarProdutos($produto_servico_list_request)->produto_servico_cadastro;
             $campos=array();
             if($y==1){
                 foreach($dados as $item){
@@ -142,34 +152,39 @@
             
             }
             $modelProduto = new modelProduto();
-            foreach($dados as $item){
-                foreach($item as $key => $item_){
-                    if($key == 'dadosIbpt'){
-                        foreach($item_ as $key2 => $item2){
-                            $classe='set'.$key2;
-                            $modelProduto->$classe($item2);
-                        } 
-                    }elseif($key == 'recomendacoes_fiscais'){
-                        foreach($item_ as $key2 => $item2){
-                            $classe='set'.$key2;
-                            $modelProduto->$classe($item2);
+            if(is_object($dados)){
+                foreach($dados as $item){
+                    foreach($item as $key => $item_){
+                        if($key == 'dadosIbpt'){
+                            foreach($item_ as $key2 => $item2){
+                                $classe='set'.$key2;
+                                $modelProduto->$classe($item2);
+                            } 
+                        }elseif($key == 'recomendacoes_fiscais'){
+                            foreach($item_ as $key2 => $item2){
+                                $classe='set'.$key2;
+                                $modelProduto->$classe($item2);
+                            }
+                        }elseif($key == 'imagens'){
+                            if(@$item_[0]->url_imagem){
+                                @$modelProduto->seturl_imagem($item_[0]->url_imagem);
+                            }
+                        }else{
+                            $classe='set'.$key;
+                            $modelProduto->$classe($item_);
                         }
-                    }elseif($key == 'imagens'){
-                        if(@$item_[0]->url_imagem){
-                            @$modelProduto->seturl_imagem($item_[0]->url_imagem);
-                        }
-                    }else{
-                        $classe='set'.$key;
-                        $modelProduto->$classe($item_);
                     }
                 }
             }
+                
+                    
             
             $caracteristica= new ProdutosCaracteristicasJsonClient();
             $prcListarCaractRequest=array("nPagina"=>1,"nRegPorPagina"=>50,"nCodProd"=>$modelProduto->getcodigo_produto());
             $conteudo=$caracteristica->ListarCaractProduto($prcListarCaractRequest);
             
-            //echo '<script>var contador="'.($y*100/$registroa).'%"</script>';
+            
+            echo '<script> document.getElementById("cont").innerHTML="Percentual concluido '.number_format($y*100/$registroa,'0','.','').'%";</script>';
             if(is_object($conteudo)){
                 foreach($conteudo->listaCaracteristicas as $item3){
                     if(strtoupper($item3->cNomeCaract)==strtoupper('loja')){
@@ -177,15 +192,11 @@
                     }
                 }
             }
-            //echo 'Atualização de número '.$y;
             $gravado=$dao2->grava2($modelProduto);
-            echo '<script> document.getElementById("contador").innerHTML="Percentual concluido '.number_format($y*100/$registroa,'0','.','').'%";</script>';
             $y++;
         }
-        if($gravado){
-            echo 'Atualização de Produtos realizada com sucesso.';
-            //echo '<script>window.location.assign(\'index.php?pagina=produto&act=list&seleciona=1\')</script>';
-        }die;
+        echo '<script>window.location.assign(\'index.php?pagina=pedido&act=cad\')</script>';
+        die;
     }elseif($act=='atualiza2'){
         //caract:
         $caracteristica= new ProdutosCaracteristicasJsonClient();
@@ -202,6 +213,14 @@
         
         }die;
     }elseif($act=='atualizaTabela'){
+        $tabelaAtualizando='Preço';
+        if($seleciona==0){
+            echo '<script>pagina="produto";act="atualizaTabela";</script>';
+            include '../paginas/atualizando.php';die;
+        }elseif($seleciona==2){
+            echo '<script>var seleciona=2</script>';
+            include '../paginas/atualizando.php';
+        }
         include '../dao/CRUDProduto.php';
         ///// Tabela de Preço //////
         $tabelaPreco=new TabelaPrecosJsonClient();
@@ -212,9 +231,9 @@
             $nTotPaginas=$tabPreco->nTotPaginas;
             $nTotRegistros=$tabPreco->nTotRegistros;
             $nomeTabela=$tabPreco->listaTabelaPreco->cNome;
-            echo '<br>Tabela de Preço ('.$tabPreco->listaTabelaPreco->cNome.')<br>';
+            //echo '<br>Tabela de Preço ('.$tabPreco->listaTabelaPreco->cNome.')<br>';
             //echo 'Total de Páginas '.$nTotPaginas.'<br>';
-            echo '<span id=totalLido></span> / '.$nTotRegistros.'<br><br>';
+            //echo '<span id=totalLido></span> / '.$nTotRegistros.'<br><br>';
         }
         $contProd=1;
         $CRUDProduto=new CRUDProduto();
@@ -226,12 +245,13 @@
                     $modelProduto=new modelProduto();
                     $modelProduto->setnTabela($nomeTabela);
                     $modelProduto->setmodificado($item->itemInfo->dAltItem.' '.$item->itemInfo->hAltItem);
-                    //echo $item->cCodigoProduto;die;
                     $modelProduto->setcodigo($item->cCodigoProduto);
                     $modelProduto->setpOriginal($item->nValorOriginal);
                     $modelProduto->setpTabela($item->nValorTabela);
-
-                    echo '<script>document.getElementById("totalLido").innerHTML="Registros '.$contProd.'"</script>';
+                    
+                    echo '<script> document.getElementById("cont").innerHTML="Percentual concluido '.number_format($contProd*100/$nTotRegistros,'0','.','').'%";</script>';
+                    
+                                        
                     $CRUDProduto->grava4($modelProduto);
                     $contProd++;
                 }
@@ -242,18 +262,25 @@
                 $tabPreco=$tabelaPreco->ListarTabelaItens($tprItensListarRequest);
                 foreach($tabPreco->listaTabelaPreco->itensTabela as $item){
                     if(@$item->cCodigoProduto){
-                        echo '<script>document.getElementById("totalLido").innerHTML="Registros '.$contProd.'"</script>';
+                        $modelProduto=new modelProduto();
+                        $modelProduto->setnTabela($nomeTabela);
+                        $modelProduto->setmodificado($item->itemInfo->dAltItem.' '.$item->itemInfo->hAltItem);
+                        $modelProduto->setcodigo($item->cCodigoProduto);
+                        $modelProduto->setpOriginal($item->nValorOriginal);
+                        $modelProduto->setpTabela($item->nValorTabela);
+                        echo '<script> document.getElementById("cont").innerHTML="Percentual concluido '.number_format($contProd*100/$nTotRegistros,'0','.','').'%";</script>';
+                       
                         $gravado=$CRUDProduto->grava4($modelProduto);
                         $contProd++;
                     }
                 }
             }
-            if($gravado){
-                echo 'Atualização de Produtos realizada com sucesso.';
-                //echo '<script>window.location.assign(\'index.php?pagina=produto&act=list&seleciona=1\')</script>';
-            }
+                //echo 'Atualização de Produtos realizada com sucesso.';
+                echo '<script>window.location.assign(\'index.php?pagina=pedido&act=cad&seleciona=1\')</script>';
+                die;
         }else{
             echo '<h2>Tabela BoaDica não configurada</h2>';
+            echo '<script>window.location.assign(\'index.php?pagina=pedido&act=cad\')</script>';
         }
         die;
             /// fim tabela de preço ///

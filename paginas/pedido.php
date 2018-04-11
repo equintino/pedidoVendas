@@ -13,6 +13,9 @@
     @$tabelaPrecoAtualiza=$_GET['$tabelaPrecoAtualiza'];
     @$origem=$_GET['origem'];
     @$funcao=$_COOKIE['funcao'];
+    if(@$funcao){
+        echo '<script>var funcao="'.$funcao.'"</script>';
+    }
     
     if(array_key_exists('razao', $_GET)){
         $razao=$_GET['razao'];

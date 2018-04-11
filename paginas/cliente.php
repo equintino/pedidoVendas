@@ -1,9 +1,10 @@
-<!--<!DOCTYPE html>
-<head>
-<meta charset="utf-8" >
-</head>
-<body>-->
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<script>
+    /*function contador(cont){
+        //document.getElemntById('cont').innerHTML='Percentual concluido '+cont+'%';
+        //document.getElementById("cont").innerHTML="Percentual concluido "+cont+"%";
+    }*/
+</script>
 <?php
 
     @$excl=$_GET['excl'];
@@ -103,10 +104,9 @@
         $cliente->ExcluirCliente($clientes_cadastro_chave);
         header('Location:index.php?pagina=cliente&act=list');
     }elseif($act=='atualiza'){
-        //include '../paginas/primeiroPlano.php';
-        //execInBackground('php -f ../paginas/segundoPlanoClienteTotal.php >> ../paginas/segundoPlanoIndex.txt &');
-        
+        $tabelaAtualizando='Cliente';
         if($seleciona==0){
+            echo '<script>pagina="cliente";act="atualiza";</script>';
             include '../paginas/atualizando.php';
             die;
         }elseif($seleciona==2){
@@ -116,6 +116,7 @@
         $clientes_list_request=array('pagina'=>'1','registros_por_pagina'=>'1','apenas_importado_api'=>'N');
         $dados=$cliente->ListarClientes($clientes_list_request);
         $paginas=$dados->total_de_paginas;
+        $registroa=$dados->total_de_registros;
         if(@!$y){
             $y=1;
         }
@@ -127,6 +128,7 @@
             $dados=$cliente->ListarClientes($clientes_list_request);
             $result = array();
             $campos = array();
+            //echo '<pre>';print_r($dados);
             if(is_object($dados)){
                 foreach($dados->clientes_cadastro as $row){
                     if($y==1){
@@ -149,9 +151,7 @@
                             // apaga e cria nova tabela //
                         include '../dao/CRUD.php';
                         $dao = new CRUD();
-                        //if(isset($excluiTabela)){
-                            $dao->drop('tb_cliente');
-                        //}
+                        $dao->drop('tb_cliente');
                     }
                     $model = new Model();
                     foreach($row as $key => $item){
@@ -171,18 +171,12 @@
                     }
                     $gravado=$dao->grava($model);
                     $y++;
+                    echo '<script> document.getElementById("cont").innerHTML="Percentual concluido '.number_format($y*100/$registroa,'0','.','').'%";</script>';
+                    if(number_format($y*100/$registroa,'0','.','')=='100'){
+                        echo '<script>window.location.assign(\'index.php?pagina=pedido&act=cad\')</script>';
+                    }
                 }
             }
         }
-        echo '<div id=cont></div><br>';
-        
-        if($gravado){
-            echo 'Atualização de Cleintes realizada com sucesso.';
-            echo '<script>window.location.assign(\'index.php?pagina=cliente&act=list&seleciona=1\')</script>';
-        }
-         
-        echo '<script>window.location.assign(\'../web/index.php?pagina=cliente&act=list&seleciona=1\')</script>';
     }
 ?>
-<!--</body>
-</html>-->
