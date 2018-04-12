@@ -119,16 +119,21 @@
    }
    
    ////// Classes //////
-   $contaAtualiza=1;
+   //$contaAtualiza=1;
    if($contaAtualiza==1){
         $contas=new ContaCorrenteCadastroJsonClient();
         $contaListarRequest=array('pagina'=>'1','registros_por_pagina'=>'50');
         $conta=$contas->PesquisarContaCorrente($contaListarRequest)->conta_corrente_lista;
         $nCodCC=$conta[0]->nCodCC;
         $descricao=$conta[0]->descricao;
+        
+        /*$handle=fopen('../config/conta.ini','a+');
+        fwrite($handle,"\n[".OMIE_APP_KEY."]\n nCodCC=".$nCodCC." \n descricao=".$descricao."");*/
+
    }else{
-       $nCodCC='740899824';
-       $descricao='Santander';
+        $conta=Config::getConfig2(OMIE_APP_KEY);
+        $nCodCC=$conta['nCodCC'];
+        $descricao=$conta['descricao'];
    }
    if($vendedorAtualiza==1){
         $vendedor=new VendedoresCadastroJsonClient();
@@ -187,29 +192,29 @@
         $detalheParc->nQtdeParc=$item['nQtdeParc'];
         array_push($parcela, $detalheParc);
     }
-    $correiosAtualiza=1;
-    if($correiosAtualiza==1){
-        $dao = new Dao();
-        $search = new ModelSearchCriteria();
-        $search->settabela('tb_cliente');
-        $search->setrazao_social('correios');
-        $cliente=$dao->encontre($search);
+    //$correiosAtualiza=1;
+    //if($correiosAtualiza==1){
+    $dao = new Dao();
+    $search = new ModelSearchCriteria();
+    $search->settabela('tb_cliente');
+    $search->setrazao_social('correios');
+    $cliente=$dao->encontre($search);
         /*$clientes_list_request=array("pagina"=>1,"registros_por_pagina"=>100);
         $clientes=new ClientesCadastroJsonClient();
         $cliente=$clientes->ListarClientes($clientes_list_request)->clientes_cadastro;*/
-        foreach($cliente as $item){
-            if(stristr($item->getnome_fantasia(),'correios')){
-                $correios=$item;
-                break;
-            }
+    foreach($cliente as $item){
+        if(stristr($item->getnome_fantasia(),'correios')){
+            $correios=$item;
+            break;
         }
-    }else{
+    }
+    /*}else{
         $transportadora_=array('bairro'=>'CIDADE NOVA','cep'=>'20210900','cidade'=>'RIO DE JANEIRO (RJ)','cidade_ibge'=>'3304557','cnae'=>'5310501','cnpj_cpf'=>'34.028.316/0002-94','codigo_cliente_integracao'=>'','codigo_cliente_omie'=>'743699622','codigo_pais'=>'1058','complemento'=>'','endereco'=>'AV PRESIDENTE VARGAS','endereco_numero'=>'3077','estado'=>'RJ','exterior'=>'N','info'=>array('cImpAPI'=>'N','dAlt'=>'18/01/2018','dInc'=>'18/01/2018','hAlt'=>'16:57:03','hInc'=>'16:42:18','uAlt'=>'P000065360'),'uInc'=>'P000065360','inscricao_estadual'=>'','inscricao_municipal'=>'','nome_fantasia'=>'Correios','pessoa_fisica'=>'N','razao_social'=>'EMPRESA BRASILEIRA DE CORREIOS E TELEGRAFOS','tags'=>array('Transportadora',array('tag'=>'Transportadora')),'telefone1_ddd'=>'21','telefone1_numero'=>'2503-8152');
         $correios=new cliente();
         foreach($transportadora_ as $key => $item){
             $correios->$key=$item;
         }
-    }
+    }*/
     
     //$etapaAtualiza=1;
     if($etapaAtualiza==1){
