@@ -306,7 +306,7 @@
             }
         }
         //echo '<pre>';print_r($pedido_venda_produto);die;
-        //$resultado=$pedido->IncluirPedido($pedido_venda_produto);
+        $resultado=$pedido->IncluirPedido($pedido_venda_produto);
         
         @$numero_pedido=$resultado->numero_pedido;
         include 'imprime.php';

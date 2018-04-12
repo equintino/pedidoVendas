@@ -1131,7 +1131,7 @@
                     <tr class='novo2'>
                     <?php foreach($variaveis2['Frete e Outras Despesas'] as $key => $item): ?>
                         <?php if($item == 'Transportadora'){
-                            echo '<td width=20px><input size=10px type="text" name="'.$key.'" value="'.$correios->nome_fantasia.'" /></td><input type=hidden name=codigo_transportadora value="'.$correios->codigo_cliente_omie.'" />';
+                            echo '<td width=20px><input size=10px type="text" name="'.$key.'" value="'.$correios->getnome_fantasia().'" /></td><input type=hidden name=codigo_transportadora value="'.$correios->getcodigo_cliente_omie().'" />';
                         }elseif($item == 'Tipo do Frete'){
                             echo '<td width=40px><input size=40px type="text" name="'.$key.'" value="1-Frete por Conta do Destinatário" /></td>';  
                         }elseif($item=='Quantidade de Volumes'){

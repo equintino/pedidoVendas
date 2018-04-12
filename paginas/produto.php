@@ -180,7 +180,7 @@
                     }
                 }
                 
-                $prcListarCaractRequest=array("nPagina"=>1,"nRegPorPagina"=>1,"nCodProd"=>$modelProduto->getcodigo_produto());
+                $prcListarCaractRequest=array("nPagina"=>1,"nRegPorPagina"=>50,"nCodProd"=>$modelProduto->getcodigo_produto());
                 $conteudo=$caracteristica->ListarCaractProduto($prcListarCaractRequest);
                 if(is_object($conteudo)){
                     foreach($conteudo->listaCaracteristicas as $item3){
@@ -267,7 +267,15 @@
         include '../dao/CRUDProduto.php';
         ///// Tabela de Preço //////
         $tabelaPreco=new TabelaPrecosJsonClient();
-        $tprItensListarRequest=array("nPagina"=>1,"nRegPorPagina"=>50,"nCodTabPreco"=>742240473,"cCodIntTabPreco"=>"");
+        $tprListarRequest=array("nPagina"=>1,"nRegPorPagina"=>20);
+        @$codTabela=$tabelaPreco->ListarTabelasPreco($tprListarRequest);
+        foreach($codTabela->listaTabelasPreco as $item){
+            if(strtoupper($item->cNome)=='BOADICA'){
+                $codTabela=$item->nCodTabPreco;
+            }
+        }
+        
+        $tprItensListarRequest=array("nPagina"=>1,"nRegPorPagina"=>50,"nCodTabPreco"=>$codTabela,"cCodIntTabPreco"=>"");//956527761 //742240473
         @$tabPreco=$tabelaPreco->ListarTabelaItens($tprItensListarRequest);
         is_object($tabPreco)? $obj='sim': $obj=null;
         if($obj){
@@ -301,7 +309,7 @@
             }
         
             for($x=2;$x<=$nTotPaginas;$x++){
-                $tprItensListarRequest=array("nPagina"=>$x,"nRegPorPagina"=>50,"nCodTabPreco"=>742240473,"cCodIntTabPreco"=>"");
+                $tprItensListarRequest=array("nPagina"=>$x,"nRegPorPagina"=>50,"nCodTabPreco"=>$codTabela,"cCodIntTabPreco"=>"");
                 $tabPreco=$tabelaPreco->ListarTabelaItens($tprItensListarRequest);
                 foreach($tabPreco->listaTabelaPreco->itensTabela as $item){
                     if(@$item->cCodigoProduto){
