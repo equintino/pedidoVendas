@@ -92,6 +92,8 @@
             }*/
         }
     }elseif($act=='atualiza'){
+        $caracteristica= new ProdutosCaracteristicasJsonClient();
+        
         $tabelaAtualizando='Produto';
         if($seleciona==0){
             echo '<script>pagina="produto";act="atualiza";</script>';
@@ -101,7 +103,7 @@
             echo '<script>var seleciona=2</script>';
             include '../paginas/atualizando.php';
         }
-        $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>1,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
+        $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>100,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
         $dados=$produtos->ListarProdutos($produto_servico_list_request);
         
         if(!$dados){
@@ -111,49 +113,95 @@
         }
         $paginas=$dados->total_de_paginas;
         $registroa=$dados->total_de_registros;
+        
         $y=1;
-        for($x=1;$x<=$paginas;$x++){
-            $produto_servico_list_request=array("pagina"=>$x,"registros_por_pagina"=>1,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
-            @$dados=$produtos->ListarProdutos($produto_servico_list_request)->produto_servico_cadastro;
-            $campos=array();
-            if($y==1){
-                foreach($dados as $item){
-                    foreach($item as $key => $item_){
-                        if($key=='dadosIbpt'){
-                            $campos[]='dadosIbpt';
-                            foreach($item_ as $key2 => $item2){
-                                $campos[]=$key2;
-                            }
-                        }elseif($key=='imagens'){
-                            $campos[]='imagens';
-                            foreach($item_ as $item2){
-                                $campos[]='url_imagem';
-                            }
-                        }elseif($key=='recomendacoes_fiscais'){
-                            $campos[]='recomendacoes_fiscais';
-                            foreach($item_ as $key2 => $item2){
-                                $campos[]=$key2;
-                            }
-                        }else{
-                            $campos[]=$key;
+        //echo '<pre>';print_r($dados->produto_servico_cadastro[0]);die;
+        $campos=array();
+        if($y==1){
+            foreach($dados->produto_servico_cadastro[0] as $key => $item){
+                //echo '<pre>';print_r($key);die;
+                //foreach($item as $key => $item_){
+                    if($key=='dadosIbpt'){
+                        $campos[]='dadosIbpt';
+                        foreach($item as $key2 => $item2){
+                            $campos[]=$key2;
+                        }
+                    }elseif($key=='imagens'){
+                        $campos[]='imagens';
+                        foreach($item as $item2){
+                            $campos[]='url_imagem';
+                        }
+                    }elseif($key=='recomendacoes_fiscais'){
+                        $campos[]='recomendacoes_fiscais';
+                        foreach($item as $key2 => $item2){
+                            $campos[]=$key2;
+                        }
+                    }else{
+                        $campos[]=$key;
+                    }
+                //}
+            }
+            //echo '<pre>';print_r($campos);die;
+            if(!file_exists('../model/modelProduto.php') || !file_exists('../dao/ProdutoSearchCriteria.php') || !file_exists('../dao/CRUDProduto.php') || !file_exists('../mapping/ProdutoMapper.php')){
+                include 'criaClasses2.php';
+                $arquivo = new criaClsses2();
+                $arquivo->tabela='tb_produto';
+                $variaveis=$arquivo->novoArquivo($campos);
+            }   
+                // apaga e cria nova tabela //
+            include '../dao/CRUDProduto.php';
+            $dao2=new CRUDProduto();
+            $dao2->drop('tb_produto');
+
+        }
+        $modelProduto = new modelProduto();
+        if(is_object($dados)){
+            foreach($dados->produto_servico_cadastro as $item){
+                //echo '<pre>';print_r($item);die;
+            //foreach($dados as $item){
+                foreach($item as $key => $item_){
+                    if($key == 'dadosIbpt'){
+                        foreach($item_ as $key2 => $item2){
+                            $classe='set'.$key2;
+                            $modelProduto->$classe($item2);
+                        } 
+                    }elseif($key == 'recomendacoes_fiscais'){
+                        foreach($item_ as $key2 => $item2){
+                            $classe='set'.$key2;
+                            $modelProduto->$classe($item2);
+                        }
+                    }elseif($key == 'imagens'){
+                        if(@$item_[0]->url_imagem){
+                            @$modelProduto->seturl_imagem($item_[0]->url_imagem);
+                        }
+                    }else{
+                        $classe='set'.$key;
+                        $modelProduto->$classe($item_);
+                    }
+                }
+                
+                $prcListarCaractRequest=array("nPagina"=>1,"nRegPorPagina"=>1,"nCodProd"=>$modelProduto->getcodigo_produto());
+                $conteudo=$caracteristica->ListarCaractProduto($prcListarCaractRequest);
+                if(is_object($conteudo)){
+                    foreach($conteudo->listaCaracteristicas as $item3){
+                        if(strtoupper($item3->cNomeCaract)==strtoupper('loja')){
+                            $modelProduto->setloja($item3->cConteudo);
                         }
                     }
                 }
-                if(!file_exists('../model/modelProduto.php') || !file_exists('../dao/ProdutoSearchCriteria.php') || !file_exists('../dao/CRUDProduto.php') || !file_exists('../mapping/ProdutoMapper.php')){
-                    include 'criaClasses2.php';
-                    $arquivo = new criaClsses2();
-                    $arquivo->tabela='tb_produto';
-                    $variaveis=$arquivo->novoArquivo($campos);
-                }   
-                    // apaga e cria nova tabela //
-                include '../dao/CRUDProduto.php';
-                $dao2=new CRUDProduto();
-                $dao2->drop('tb_produto');
-            
+                
+                $gravado=$dao2->grava2($modelProduto);
+                echo '<script> document.getElementById("cont").innerHTML="Percentual concluido '.number_format($y*100/$registroa,'0','.','').'%";</script>';
+                $y++;
             }
+        }   
+        for($x=2;$x<=$paginas;$x++){
+            $produto_servico_list_request=array("pagina"=>$x,"registros_por_pagina"=>100,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
+            @$dados=$produtos->ListarProdutos($produto_servico_list_request)->produto_servico_cadastro;
             $modelProduto = new modelProduto();
-            if(is_object($dados)){
+            //if(is_object($dados)){
                 foreach($dados as $item){
+                //foreach($dados as $item){
                     foreach($item as $key => $item_){
                         if($key == 'dadosIbpt'){
                             foreach($item_ as $key2 => $item2){
@@ -174,26 +222,21 @@
                             $modelProduto->$classe($item_);
                         }
                     }
-                }
-            }
-                
-                    
-            
-            $caracteristica= new ProdutosCaracteristicasJsonClient();
-            $prcListarCaractRequest=array("nPagina"=>1,"nRegPorPagina"=>50,"nCodProd"=>$modelProduto->getcodigo_produto());
-            $conteudo=$caracteristica->ListarCaractProduto($prcListarCaractRequest);
-            
-            
-            echo '<script> document.getElementById("cont").innerHTML="Percentual concluido '.number_format($y*100/$registroa,'0','.','').'%";</script>';
-            if(is_object($conteudo)){
-                foreach($conteudo->listaCaracteristicas as $item3){
-                    if(strtoupper($item3->cNomeCaract)==strtoupper('loja')){
-                        $modelProduto->setloja($item3->cConteudo);
+
+                    $prcListarCaractRequest=array("nPagina"=>1,"nRegPorPagina"=>50,"nCodProd"=>$modelProduto->getcodigo_produto());
+                    $conteudo=$caracteristica->ListarCaractProduto($prcListarCaractRequest);
+                    if(is_object($conteudo)){
+                        foreach($conteudo->listaCaracteristicas as $item3){
+                            if(strtoupper($item3->cNomeCaract)==strtoupper('loja')){
+                                $modelProduto->setloja($item3->cConteudo);
+                            }
+                        }
                     }
+                    $gravado=$dao2->grava2($modelProduto);
+                    echo '<script> document.getElementById("cont").innerHTML="Percentual concluido '.number_format($y*100/$registroa,'0','.','').'%";</script>';
+                    $y++;
                 }
-            }
-            $gravado=$dao2->grava2($modelProduto);
-            $y++;
+            //}
         }
         echo '<script>window.location.assign(\'index.php?pagina=pedido&act=cad\')</script>';
         die;
