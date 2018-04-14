@@ -34,6 +34,7 @@
     }
     
     $cliente=new ClientesCadastroJsonClient();
+    $dao = new Dao();
     
     if(!isset($quant))
         $quant=0;
@@ -82,13 +83,21 @@
             
             $dados_=$dados->clientes_cadastro;
         }else{
-            $dao = new Dao();
             $search = new ModelSearchCriteria();
             $search->settabela('tb_cliente');
             $search->setrazao_social($buscaPor);
-            if(@$buscaPor){
-                $dados_=$dao->encontre($search);
-            }else{
+            if(array_key_exists('buscaPor',$_GET)){
+                if($buscaPor==null){
+                    if(@!$tagsArray[1]){
+                        $search->settags($tagLista);
+                    }else{
+                        $search->settags($tagsArray);
+                    }
+                    $dados_=$dao->encontrePorTag($search);
+                }else{
+                    $dados_=$dao->encontre($search);
+                }
+            }elseif(@$tagsArray){
                 $dados=null;
                 if(@!$tagsArray[1]){
                     $search->settags($tagLista);
@@ -96,8 +105,13 @@
                     $search->settags($tagsArray);
                 }
                 $dados_=$dao->encontrePorTag($search);
+                //$dados_=null;
+            }else{
+                $dados_=null;
             }
         }
+        //echo '<pre>';
+        //print_r($dados_);//die;
     }elseif($act=='excl'){
         //// Excluir Cliente ////
         $clientes_cadastro_chave=array("codigo_cliente_omie"=>$_GET['codigo'],"codigo_cliente_integracao"=>"");
@@ -150,8 +164,8 @@
                         }
                             // apaga e cria nova tabela //
                         include '../dao/CRUD.php';
-                        $dao = new CRUD();
-                        $dao->drop('tb_cliente');
+                        $dao2 = new CRUD();
+                        $dao2->drop('tb_cliente');
                     }
                     $model = new Model();
                     foreach($row as $key => $item){
@@ -169,7 +183,7 @@
                             }
                         }
                     }
-                    $gravado=$dao->grava($model);
+                    $gravado=$dao2->grava($model);
                     $y++;
                     echo '<script> document.getElementById("cont").innerHTML="Percentual concluido '.number_format($y*100/$registroa,'0','.','').'%";</script>';
                     if(number_format($y*100/$registroa,'0','.','')=='100'){

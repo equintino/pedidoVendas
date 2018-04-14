@@ -149,9 +149,11 @@
         })*/
         $(".procura2 input").on("keyup", function(){
             var value = $(this).val().toLowerCase();
-            $(".listaCliente .tudo").filter(function(){
-              $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
+            if($('.tipoBusca :checked').val() != 'local'){
+                $(".listaCliente .tudo").filter(function(){
+                  $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            }
         });
         $('button').each(function(){
             $(this).css('cursor','pointer')
@@ -322,10 +324,15 @@
                 }
                 tipoBusca=$(':checked[name=tipoBusca]').val();
             })
-            link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'&tipoBusca='+tipoBusca+'';
+            /*link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'&tipoBusca='+tipoBusca+'';
             $('.tudo').hide()
             $('.tituloProd').text('Aguarde...')
-            $(location).attr('href',link) 
+            $(location).attr('href',link)*/
+            if(tipoBusca=='local'){
+                $('.tudo, .paginacao').hide()                
+            }else if(tipoBusca=='servidor'){
+                $('.tudo, .paginacao').show()
+            }
         })
     })
 </script>
