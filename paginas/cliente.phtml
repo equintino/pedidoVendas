@@ -324,14 +324,15 @@
                 }
                 tipoBusca=$(':checked[name=tipoBusca]').val();
             })
-            /*link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'&tipoBusca='+tipoBusca+'';
-            $('.tudo').hide()
-            $('.tituloProd').text('Aguarde...')
-            $(location).attr('href',link)*/
+            
             if(tipoBusca=='local'){
                 $('.tudo, .paginacao').hide()                
             }else if(tipoBusca=='servidor'){
-                $('.tudo, .paginacao').show()
+                pagAtual='';
+                link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'&tipoBusca='+tipoBusca+'';
+                $('.tudo').hide()
+                $('.tituloProd').text('Aguarde...')
+                $(location).attr('href',link)
             }
         })
     })

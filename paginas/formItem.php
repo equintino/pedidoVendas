@@ -9,22 +9,29 @@
         }else if(tipoBusca=='local'){
             $('.loja').show()
         }
+        
         $('.procura input[name=tipoBusca]:radio').click(function(){
             if($(this).val()=='local'){
-                $('.paginacao, .listaProduto').hide()
+                $('.listaProduto').hide()
                 $('.loja').show()
                 tipoBusca='local';
-                $('.recarrega').trigger('click')
+                //$('.recarrega').trigger('click')
             }else if($(this).val()=='servidor'){
-                $('.paginacao, .listaProduto').show()
+                $('.listaProduto, .paginacao').show()
                 $('.loja').hide()
                 tipoBusca='servidor';
-                $('.recarrega').trigger('click')
+                //$('.recarrega').trigger('click')
             }
-            $('.procura input[name=procura]').focus()
             tipoBusca=$(this).val();
-            if(tipoBusca=='local'){
-
+            if(tipoBusca=='servidor'){
+                pagAtual=1;
+                link='../paginas/formItem.php?tipoBusca='+tipoBusca+'&pagAtual='+pagAtual+'';
+                $('.listaProduto').hide()
+                $('.tituloProd').text('Aguarde...');
+                $('a[rel=modal]').attr('href',link);
+                $("a[rel=modal]").trigger("click")
+            }else{
+                $('.paginacao').hide();
             }
         })
         $('.procura img').mouseover(function(){
@@ -181,12 +188,17 @@
         })
         $(".procura input").on("keyup", function(){
             var value = $(this).val().toLowerCase();
-            $(".listaProduto").filter(function(){
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
+            if(tipoBusca != 'local'){
+                $(".listaProduto").filter(function(){
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            }
         }).focus()
         $('.recarrega').css('cursor','pointer')
         $('.recarrega').click(function(){
+            if (typeof pagAtual == "undefined"){
+                pagAtual=1;
+            }
             link='../paginas/formItem.php?codigo_produto='+codigo_produto+'&pagAtual='+pagAtual+'&tipoBusca='+tipoBusca+'';
             $('a[rel=modal]').attr('href',link);
             
@@ -336,17 +348,6 @@
         position: absolute;
         margin-top: 10px;
     }
-    .atualizaProduto{
-        /*margin-left: 150px;
-        color: red;
-        text-align: center;
-        font-style: italic;*/
-    }
-    .atualizaProduto span:hover{
-        /*cursor: pointer;
-        background: #8de572;
-        text-shadow: 2px -2px 2px white;*/
-    }
 </style>
 <div id="dadosItem"></div>
 <?php
@@ -382,7 +383,7 @@
     if(key_exists('tipoBusca', $_GET)){
         $tipoBusca=$_GET['tipoBusca'];
     }else{
-        $tipoBusca='servidor';
+        $tipoBusca='local';
     }
     
     switch(@$tipoBusca){
@@ -395,12 +396,13 @@
             $servidor=null;
             break;
         default :
-            $servidor='checked';
-            $local=null;
+            $local='checked';
+            $servidor=null;
             break;
     }
     echo '<div class=recarrega><img src="../web/img/atualiza.png" height="18px" title="Recarregar esta página."/></div>';
     if($tipoBusca=='servidor' && $act != 'atualiza'){
+        //print_r([$tipoBusca,$pagAtual]);
         if(@$pagAtual=='undefined' || @!$pagAtual){
             $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>40,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
             $dados=$produto->ListarProdutos($produto_servico_list_request);
@@ -424,15 +426,14 @@
             
             if(!$dados){
                 echo 'Não foi encontrado nenhum produto cadastrado.';
-                //echo '<button onclick=history.go(-1)>Voltar</button>';
                 exit;
             }
             $pagAtual=$dados->total_de_paginas;
             echo '<script>pagAtual='.$pagAtual.'</script>';
+        }else{        
+            $produto_servico_list_request=array("pagina"=>$pagAtual,"registros_por_pagina"=>40,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
+            $dados=$produto->ListarProdutos($produto_servico_list_request);
         }
-        
-        $produto_servico_list_request=array("pagina"=>$pagAtual,"registros_por_pagina"=>40,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
-        $dados=$produto->ListarProdutos($produto_servico_list_request);
         $registros=$dados->registros;
         $totalRegistros=$dados->total_de_registros;
         $detalhes=$dados->produto_servico_cadastro;
@@ -440,11 +441,13 @@
         $dao = new Dao();
         $search = new ProdutoSearchCriteria();
         $search->settabela('tb_produto');
-        $search->setcodigo($buscaProduto);
-        $detalhes=$dao->encontre2($search);
-        
-        
-        
+        //echo '<pre>';print_r($_GET);
+        if($buscaProduto || @$pagAtual != 'undefined'){
+            $search->setcodigo($buscaProduto);
+            $detalhes=$dao->encontre2($search);
+        }else{
+            $detalhes=null;
+        }
         $totalRegistros=$dao->totalLinhas2($search);
         $registros=null;
     }elseif($loja){
@@ -508,7 +511,7 @@
                         echo '<th class="descricao col2">DESCRIÇÃO DO PRODUTO</th>';
                         echo '<th class="col3">VALOR UNITÁRIO</th>';
                         echo '<th class="col4">PREÇO BOADICA</th></tr></thead>';
-                        if($act != 'atualiza'){
+                        if($act != 'atualiza' && $detalhes){
                             foreach($detalhes as $item){
                                 $search->settabela('tb_preco');
                                 $search->setcodigo($item->getcodigo());
