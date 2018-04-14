@@ -173,6 +173,8 @@
             $vendedores=new vendedores();
             $vendedores->codigo=$item->getcodigo();
             $vendedores->nome=$item->getnome();
+            $vendedores->comissao=$item->getcomissao();
+
             if(@$funcao == 'administrador'){
                 array_push($vend, $vendedores);
             }else{

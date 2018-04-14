@@ -676,8 +676,15 @@
                 var vPedido=calcula('-',$('.autoQuadro td[nome=mercadorias]').text(),$('.autoQuadro td[nome=vDesconto]').text());
                 $('.autoQuadro input[name=vPedido]').val(numeroParaMoeda(vPedido))
                 $('.autoQuadro td[nome=vPedido]').text(numeroParaMoeda(vPedido)) /// Valor do Pedido ///
-                $('.valorPedido').text("VALOR DO PEDIDO R$ "+numeroParaMoeda(vPedido)).show()
+                var comissao=$('.vendedor :selected').attr('comissao')*vPedido/100;
+                $('.valorPedido').text("Valor do Pedido R$"+numeroParaMoeda(vPedido)).show()
+                $('.valorPedido').append('<div><font color="blue">Comissão R$ '+numeroParaMoeda(comissao)+'</font></div>');
         }
+        $('.vendedor select').change(function(){
+            var vPedido=calcula('-',$('.autoQuadro td[nome=mercadorias]').text(),$('.autoQuadro td[nome=vDesconto]').text());
+            var comissao=$('.vendedor :selected').attr('comissao')*vPedido/100;
+            $('.valorPedido div font').text('Comissão R$ '+numeroParaMoeda(comissao));
+        })
     })
     function numeroParaMoeda(n, c, d, t){
         c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
@@ -1067,7 +1074,7 @@
                         $selected='';
                     }
                 ?>
-                <option value="<?= $item->codigo ?>" <?= $selected ?> ><?= $item->nome ?></option>
+                <option value="<?= $item->codigo ?>" comissao="<?= $item->comissao ?>" <?= $selected ?> ><?= $item->nome ?></option>
                 <?php endforeach; ?>
             </select>
             <?php if($funcao=='administrador'): ?>
