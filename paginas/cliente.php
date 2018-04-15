@@ -85,7 +85,7 @@
         }else{
             $search = new ModelSearchCriteria();
             $search->settabela('tb_cliente');
-            $search->setrazao_social($buscaPor);
+            $search->setnome_fantasia($buscaPor);
             if(array_key_exists('buscaPor',$_GET)){
                 if($buscaPor==null){
                     if(@!$tagsArray[1]){
@@ -110,8 +110,6 @@
                 $dados_=null;
             }
         }
-        //echo '<pre>';
-        //print_r($dados_);//die;
     }elseif($act=='excl'){
         //// Excluir Cliente ////
         $clientes_cadastro_chave=array("codigo_cliente_omie"=>$_GET['codigo'],"codigo_cliente_integracao"=>"");

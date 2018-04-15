@@ -120,6 +120,12 @@
                 return false;
             }else if(e.which==114){
                 return false;
+            }else if(e.which==27){
+                $("#mascara").hide();
+                $(".window").hide();
+            }else if(e.which==123){
+                $('.procura img').trigger('click');
+                return false;
             }
         })
         $('.tabela td select[name=parcela]').change(function(){

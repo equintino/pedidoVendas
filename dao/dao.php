@@ -56,7 +56,11 @@
    }
    public function encontrePorLoja(ProdutoSearchCriteria $search=null){
         $result = array();
-        $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND `loja` like "%'.$search->getloja().'%"')->fetchAll();
+        if(!$search->getcodigo()){
+            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND `loja` like "%'.$search->getloja().'%"')->fetchAll();
+        }else{
+            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND `loja` like "%'.$search->getloja().'%" AND codigo like "%'.$search->getcodigo().'%"')->fetchAll();
+        }
         foreach($row as $item){
             $modelProduto = new modelProduto();
             ProdutoMapper::map($modelProduto, $item);
@@ -234,10 +238,10 @@
         throw new Excecao('DB error [' . $errorInfo[0] . ', ' . $errorInfo[1] . ']: ' . $errorInfo[2]);
    }
    private function getEncontreSql(ModelSearchCriteria $search = null) {        
-       if(preg_match('/[0-9]/',$search->getrazao_social())){
-           $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND cnpj_cpf like "%'.$search->getrazao_social().'%"';
-       }elseif(!preg_match('/[0-9]/',$search->getrazao_social())){
-           $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND razao_social like "%'.$search->getrazao_social().'%"';
+       if(preg_match('/[0-9]/',$search->getnome_fantasia())){
+           $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND cnpj_cpf like "%'.$search->getnome_fantasia().'%"';
+       }elseif(!preg_match('/[0-9]/',$search->getnome_fantasia())){
+           $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND nome_fantasia like "%'.$search->getnome_fantasia().'%"';
        }else{
             $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" ';
        }

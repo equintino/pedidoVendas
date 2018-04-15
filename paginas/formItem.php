@@ -374,6 +374,13 @@
     }else{
         $loja=null;
     }
+    $funcao=$_COOKIE['funcao'];
+    $dadosUser=$user->find($search);
+    foreach($dadosUser as $item){
+        $loja=$item->getloja();
+    }
+    //echo $login;
+    
     echo '<script>var loja="'.$loja.'"</script>';
     if(key_exists('pagAtual', $_GET)){
         $pagAtual=$_GET['pagAtual'];
@@ -401,29 +408,11 @@
             break;
     }
     echo '<div class=recarrega><img src="../web/img/atualiza.png" height="18px" title="Recarregar esta página."/></div>';
+    print_r([$tipoBusca,$act,$loja]);//die;
     if($tipoBusca=='servidor' && $act != 'atualiza'){
-        //print_r([$tipoBusca,$pagAtual]);
         if(@$pagAtual=='undefined' || @!$pagAtual){
             $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>40,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
             $dados=$produto->ListarProdutos($produto_servico_list_request);
-            
-            ///// Tabela de Preço //////
-            /*$tabelaPreco=new TabelaPrecosJsonClient();
-            $tprItensListarRequest=array("nPagina"=>8,"nRegPorPagina"=>50,"nCodTabPreco"=>742240473,"cCodIntTabPreco"=>"");
-            $tabPreco=$tabelaPreco->ListarTabelaItens($tprItensListarRequest);
-            $nTotPaginas=$tabPreco->nTotPaginas;
-            $nTotRegistros=$tabPreco->nTotRegistros;
-            echo 'Total de Páginas '.$nTotPaginas.' / Total de Registros '.$nTotRegistros;
-            echo '<br>Tabela de Preço ('.$tabPreco->listaTabelaPreco->cNome.')<br>';
-            
-            foreach($tabPreco->listaTabelaPreco->itensTabela as $item){
-                echo 'Alteração '.$item->itemInfo->dAltItem.' '.$item->itemInfo->hAltItem.'<br>';
-                echo 'Código '.$item->cCodigoProduto.'<br>';
-                echo 'Preços: Original (R$ '.number_format($item->nValorOriginal,'2',',','.').') / Tabela (R$ '.number_format($item->nValorTabela,'2',',','.').')<br><hr>';
-            }*/
-            /// fim tabela de preço ///
-            
-            
             if(!$dados){
                 echo 'Não foi encontrado nenhum produto cadastrado.';
                 exit;
@@ -437,7 +426,7 @@
         $registros=$dados->registros;
         $totalRegistros=$dados->total_de_registros;
         $detalhes=$dados->produto_servico_cadastro;
-    }elseif($act != 'atualiza' && !$loja){
+    }elseif($tipoBusca=='local' && $act != 'atualiza'){echo 'estou aqui';
         $dao = new Dao();
         $search = new ProdutoSearchCriteria();
         $search->settabela('tb_produto');
@@ -450,7 +439,7 @@
         }
         $totalRegistros=$dao->totalLinhas2($search);
         $registros=null;
-    }elseif($loja){
+    }elseif($loja && $funcao='administrador'){
         $dao = new Dao();
         $search = new ProdutoSearchCriteria();
         $search->settabela('tb_produto');
@@ -467,6 +456,14 @@
                 //$cachambi='';
                 break;
         }*/
+    }elseif($loja && $funcao=='vendedor'){
+        $dao = new Dao();
+        $search = new ProdutoSearchCriteria();
+        $search->settabela('tb_produto');
+        $search->setloja(strtoupper($loja));
+        $search->setcodigo($buscaProduto);
+        @$detalhes=$dao->encontrePorLoja($search);
+        $totalRegistros=$dao->totalLinhas2($search);
     }
     echo '<span class=tituloProd>Páginas </span>';
     if($tipoBusca=='servidor'){
@@ -480,12 +477,16 @@
         <span class="loja">
             <label><b>LOJA:</b> </label>
             <select name="loja">
+                <?php if($funcao == 'administrador'): ?>
                 <option value="" ></option>
                 <option value="cachambi" >Cachambi</option>
                 <option value="bonsucesso" >Bonsucesso</option>
+                <?php else: ?>
+                <option value="<?= $loja ?>"><?= $loja ?></option>
+                <?php endif; ?>
             </select>
         </span>
-        <input autofocus type="text" name="procura" title="Pesquisar por produtos" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por produtos" /><br>
+        <input autofocus type="text" name="procura" title="Pesquisar por produtos" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por produtos" /> (F12)<br>
         <div class="tipoBusca"><input title="Tipo de busca" type="radio" name="tipoBusca" value="local" <?= $local ?>/><b> Local</b> &nbsp&nbsp&nbsp<input title="Tipo de busca" type="radio" name="tipoBusca" value="servidor" <?= $servidor ?>/> <b>Servidor</b></div>
     </div>
     <?php if($act != 'atualiza'): ?>
