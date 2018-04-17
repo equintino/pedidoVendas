@@ -133,6 +133,13 @@
  public function setnumero_conta_corrente($numero_conta_corrente ){
 	$this->numero_conta_corrente=$numero_conta_corrente;
  }
+ private $pdv_categoria;
+ public function getpdv_categoria(){
+	return $this->pdv_categoria;
+ }
+ public function setpdv_categoria($pdv_categoria ){
+	$this->pdv_categoria=$pdv_categoria;
+ }
  private $pdv_cod_adm;
  public function getpdv_cod_adm(){
 	return $this->pdv_cod_adm;

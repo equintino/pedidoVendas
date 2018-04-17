@@ -148,6 +148,7 @@
         
         $pedido=new PedidoVendaProdutoJsonClient();
         $parCod=explode(',', $_POST['parcela']);
+        //print_r($parCod);
         $parcela=$parCod[2];
         $parc=null;
         $cParcela=$parCod[1];
@@ -167,14 +168,20 @@
         
         
         $parcelas=array();
-        for($x=0;$x<$parcela;$x++){
-            $y=$x+1;
-            if(!$parc){
-                $parc=$y*30;
-            }
+        if($parcela==0){
             $lista_parcelas=new lista_parcelas();
-            array_push($parcelas,array('data_vencimento'=>$_POST['data_vencimento'.$y.''],'numero_parcela'=>$y,'percentual'=>$_POST['percentual'.$y.''],'quantidade_dias'=>$parc,'valor'=>str_replace(',','.',$_POST['valor'.$y.''])));
+            array_push($parcelas,array('data_vencimento'=>$_POST['data_vencimento1'],'numero_parcela'=>0,'percentual'=>$_POST['percentual1'],'quantidade_dias'=>0,'valor'=>str_replace(',','.',$_POST['valor1'])));
             $parc=null;
+        }else{
+            for($x=0;$x<$parcela;$x++){
+                $y=$x+1;
+                if(!$parc){
+                    $parc=$y*30;
+                }
+                $lista_parcelas=new lista_parcelas();
+                array_push($parcelas,array('data_vencimento'=>$_POST['data_vencimento'.$y.''],'numero_parcela'=>$y,'percentual'=>$_POST['percentual'.$y.''],'quantidade_dias'=>$parc,'valor'=>str_replace(',','.',$_POST['valor'.$y.''])));
+                $parc=null;
+            }
         }
         $lista_parcelas->parcela=$parcelas;
                 

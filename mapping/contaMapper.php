@@ -58,6 +58,9 @@
 	if (array_key_exists('numero_conta_corrente', $properties)){
 	  $conta->setnumero_conta_corrente($properties['numero_conta_corrente']);
 	}
+	if (array_key_exists('pdv_categoria', $properties)){
+	  $conta->setpdv_categoria($properties['pdv_categoria']);
+	}
 	if (array_key_exists('pdv_cod_adm', $properties)){
 	  $conta->setpdv_cod_adm($properties['pdv_cod_adm']);
 	}

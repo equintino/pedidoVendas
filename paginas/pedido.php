@@ -129,7 +129,7 @@
         
         //echo '<pre>';print_r($conta);die;
         //$handle=fopen('../config/conta.ini','a+');
-        $variavelConta=array('bol_instr1','bol_sn','cobr_sn','codigo_agencia','codigo_banco','data_alt','data_inc','descricao','dias_rcomp','hora_alt','hora_inc','nCodCC','nao_fluxo','nao_resumo','numero_conta_corrente','pdv_cod_adm','pdv_dias_venc','pdv_enviar','pdv_limite_pacelas','pdv_num_parcelas','pdv_sincr_analitica','pdv_taxa_adm','pdv_taxa_loja','pdv_tipo_tef','per_juros','per_multa','saldo_inicial','tipo','tipo_conta_corrente','user_alt','user_inc','valor_limite');
+        $variavelConta=array('bol_instr1','bol_sn','cobr_sn','codigo_agencia','codigo_banco','data_alt','data_inc','descricao','dias_rcomp','hora_alt','hora_inc','nCodCC','nao_fluxo','nao_resumo','numero_conta_corrente','pdv_categoria','pdv_cod_adm','pdv_dias_venc','pdv_enviar','pdv_limite_pacelas','pdv_num_parcelas','pdv_sincr_analitica','pdv_taxa_adm','pdv_taxa_loja','pdv_tipo_tef','per_juros','per_multa','saldo_inicial','tipo','tipo_conta_corrente','user_alt','user_inc','valor_limite');
         if(file_exists('../dao/CRUDConta.php')){
             include '../dao/CRUDConta.php';
             $dao3=new CRUDConta();
@@ -166,13 +166,24 @@
         $search=new ContaSearchCriteria();
         $search->settabela('tb_conta');
         $search->setOMIE_APP_KEY(OMIE_APP_KEY);
-        //echo '<pre>';print_r($search);die;
+        if(OMIE_APP_KEY=='2769656370'){
+            $db='db';
+        }elseif(OMIE_APP_KEY=='461893204773'){
+            $db='db2';
+        }
+        if(!$daoConta->showTabela($search->gettabela(),$db)){
+            echo '<script>window.location.assign("index.php?pagina=pedido&act=cad&contaAtualiza=1")</script>';
+        }
         $conta=$daoConta->encontrePorConta($search);
-        //echo '<pre>';print_r($conta);die;
+        $contaTipo=array();
+        foreach($conta as $item){
+            $contaTipo[$item->getdescricao()]=array($item->getnCodCC(),$item->getpdv_categoria());
+        }
+        //echo '<pre>';print_r($contaTipo);die;
         
-        $conta=Config::getConfig2(OMIE_APP_KEY);
+        /*$conta=Config::getConfig2(OMIE_APP_KEY);
         $nCodCC=$conta['nCodCC'];
-        $descricao=$conta['descricao'];
+        $descricao=$conta['descricao'];*/
    }
    if($vendedorAtualiza==1){
         $vendedor=new VendedoresCadastroJsonClient();
@@ -224,7 +235,7 @@
         }
    }
    
-    $dadosParcelas=array(array('cCodigo'=>'000','cDescricao'=>'A Vista','nQtdeParc'=>'1'),array('cCodigo'=>'001','cDescricao'=>'1 Parcela','nQtdeParc'=>'1'),array('cCodigo'=>'002','cDescricao'=>'2 Parcelas','nQtdeParc'=>'2'),array('cCodigo'=>'003','cDescricao'=>'3 Parcelas','nQtdeParc'=>'3'),array('cCodigo'=>'004','cDescricao'=>'4 Parcelas','nQtdeParc'=>'4'),array('cCodigo'=>'005','cDescricao'=>'5 Parcelas','nQtdeParc'=>'5'),array('cCodigo'=>'006','cDescricao'=>'6 Parcelas','nQtdeParc'=>'6'),array('cCodigo'=>'007','cDescricao'=>'7 Parcelas','nQtdeParc'=>'7'),array('cCodigo'=>'008','cDescricao'=>'8 Parcelas','nQtdeParc'=>'8'),array('cCodigo'=>'009','cDescricao'=>'9 Parcelas','nQtdeParc'=>'9'),array('cCodigo'=>'010','cDescricao'=>'10 Parcelas','nQtdeParc'=>'10'));
+    $dadosParcelas=array(array('cCodigo'=>'000','cDescricao'=>'A Vista','nQtdeParc'=>'0'),array('cCodigo'=>'001','cDescricao'=>'1 Parcela','nQtdeParc'=>'1'),array('cCodigo'=>'002','cDescricao'=>'2 Parcelas','nQtdeParc'=>'2'),array('cCodigo'=>'003','cDescricao'=>'3 Parcelas','nQtdeParc'=>'3'),array('cCodigo'=>'004','cDescricao'=>'4 Parcelas','nQtdeParc'=>'4'),array('cCodigo'=>'005','cDescricao'=>'5 Parcelas','nQtdeParc'=>'5'),array('cCodigo'=>'006','cDescricao'=>'6 Parcelas','nQtdeParc'=>'6'),array('cCodigo'=>'007','cDescricao'=>'7 Parcelas','nQtdeParc'=>'7'),array('cCodigo'=>'008','cDescricao'=>'8 Parcelas','nQtdeParc'=>'8'),array('cCodigo'=>'009','cDescricao'=>'9 Parcelas','nQtdeParc'=>'9'),array('cCodigo'=>'010','cDescricao'=>'10 Parcelas','nQtdeParc'=>'10'));
     $parcela=array();
     foreach($dadosParcelas as $item){
         $detalheParc=new parcela();
@@ -239,16 +250,28 @@
     $search = new ModelSearchCriteria();
     $search->settabela('tb_cliente');
     $search->setrazao_social('correios');
-    $cliente=$dao->encontre($search);
+    
+    if(OMIE_APP_KEY=='2769656370'){
+        $db='db';
+    }elseif(OMIE_APP_KEY=='461893204773'){
+        $db='db2';
+    }
+    if($dao2->showTabela('tb_cliente',$db)){
+       //echo '<script>window.location.assign("index.php?index=sim&pagina=pedido&act=cad&vendedorAtualiza=1")</script>'; 
+        $cliente=$dao->encontre($search);
+        foreach($cliente as $item){
+            if(stristr($item->getnome_fantasia(),'correios')){
+                $correios=$item;
+                break;
+            }
+        }
+    }else{
+        Flash::addFlash('É necessário atualizar a tabela de Cliente.');
+    }
+    
         /*$clientes_list_request=array("pagina"=>1,"registros_por_pagina"=>100);
         $clientes=new ClientesCadastroJsonClient();
         $cliente=$clientes->ListarClientes($clientes_list_request)->clientes_cadastro;*/
-    foreach($cliente as $item){
-        if(stristr($item->getnome_fantasia(),'correios')){
-            $correios=$item;
-            break;
-        }
-    }
     /*}else{
         $transportadora_=array('bairro'=>'CIDADE NOVA','cep'=>'20210900','cidade'=>'RIO DE JANEIRO (RJ)','cidade_ibge'=>'3304557','cnae'=>'5310501','cnpj_cpf'=>'34.028.316/0002-94','codigo_cliente_integracao'=>'','codigo_cliente_omie'=>'743699622','codigo_pais'=>'1058','complemento'=>'','endereco'=>'AV PRESIDENTE VARGAS','endereco_numero'=>'3077','estado'=>'RJ','exterior'=>'N','info'=>array('cImpAPI'=>'N','dAlt'=>'18/01/2018','dInc'=>'18/01/2018','hAlt'=>'16:57:03','hInc'=>'16:42:18','uAlt'=>'P000065360'),'uInc'=>'P000065360','inscricao_estadual'=>'','inscricao_municipal'=>'','nome_fantasia'=>'Correios','pessoa_fisica'=>'N','razao_social'=>'EMPRESA BRASILEIRA DE CORREIOS E TELEGRAFOS','tags'=>array('Transportadora',array('tag'=>'Transportadora')),'telefone1_ddd'=>'21','telefone1_numero'=>'2503-8152');
         $correios=new cliente();
@@ -293,7 +316,7 @@
                             'transportadora'=>'Transportadora','tfrete'=>'Tipo do Frete',/*'Placa do Veícula','UF','RNTRC (ANTT)',*/'qvolume'=>'Quantidade de Volumes'/*,'evolume'=>'Espécie dos Volumes','mvolume'=>'Marca dos Volumes','nvolume'=>'Numeração dos Volumes','pliquido'=>'Peso Líquido (Kg)','pbruto'=>'Peso Bruto (Kg)','vfrete'=>'Valor do Frete','vseguro'=>'Valor do Seguro','nlacre'=>'Número do Lacre','odespesas'=>'Outras Despesas Acessórias','O transporte será realizado com veículo próprio'*/
                         ),
                         'Informações Adcionais'=>array(
-                            'codigo_categoria'=>'Categoria','codigo_conta_corrente'=>'Banco','etapa'=>'Etapa'/*,'Nº do Pedido do Cliente','Nº do Contrato de Venda','Contato','Projeto'*/,'dados_adcionais_nf'=>'Dados Adicionais para a Nota Fiscal'/*,'Nota Fiscal para Consumo Final'*/
+                            'codigo_categoria'=>'Categoria','codigo_conta_corrente'=>'Conta','etapa'=>'Etapa'/*,'Nº do Pedido do Cliente','Nº do Contrato de Venda','Contato','Projeto'*/,'dados_adcionais_nf'=>'Dados Adicionais para a Nota Fiscal'/*,'Nota Fiscal para Consumo Final'*/
                         ),
                         'Parcelas'=>array(
                             /*'Valor Total a Receber'*/'numero_parcela'=>'Parcela','data_vencimento'=>'Vencimento','valor'=>'Valor da Parcela','percentual'=>'Percentual da Parcela','quantidade_dias'=>'Quantidade dias'/*,'Não gerar boleto desta parcela'*/
