@@ -1,7 +1,9 @@
 <meta charset="utf-8" >
 <?php
     include '../paginas/janela.php';
-    include '../dao/CRUD.php';
+    if(file_exists('../dao/CRUD.php')){
+        include '../dao/CRUD.php';
+    }
     
     @$login=$_COOKIE['login'];
     @$excl=$_GET['excl'];
@@ -59,11 +61,11 @@
     $pedido=new PedidoVendaProdutoJsonClient();
     $cliente=new ClientesCadastroJsonClient();
     
-    if(@$origem=='cliente'){
+    /*if(@$origem=='cliente'){
         $dao = new CRUD();
         $search=new ModelSearchCriteria();
         $search->settabela('tb_cliente');
-        $search->setrazao_social($_GET['cnpj_cpf']);
+        $search->setnome_fantasia($_GET['cnpj_cpf']);
         $dadosLocal=$dao->encontre($search);
         
         $codigo=null;
@@ -100,7 +102,7 @@
         }else{
             $gravado=$dao->grava($model);
         }
-    }
+    }*/
         
     $pvpListarRequest=array('pagina'=>'1','registros_por_pagina'=>'50');
     if(!isset($quant)){
@@ -124,13 +126,50 @@
         $contas=new ContaCorrenteCadastroJsonClient();
         $contaListarRequest=array('pagina'=>'1','registros_por_pagina'=>'50');
         $conta=$contas->PesquisarContaCorrente($contaListarRequest)->conta_corrente_lista;
-        $nCodCC=$conta[0]->nCodCC;
-        $descricao=$conta[0]->descricao;
         
-        /*$handle=fopen('../config/conta.ini','a+');
-        fwrite($handle,"\n[".OMIE_APP_KEY."]\n nCodCC=".$nCodCC." \n descricao=".$descricao."");*/
+        //echo '<pre>';print_r($conta);die;
+        //$handle=fopen('../config/conta.ini','a+');
+        $variavelConta=array('bol_instr1','bol_sn','cobr_sn','codigo_agencia','codigo_banco','data_alt','data_inc','descricao','dias_rcomp','hora_alt','hora_inc','nCodCC','nao_fluxo','nao_resumo','numero_conta_corrente','pdv_cod_adm','pdv_dias_venc','pdv_enviar','pdv_limite_pacelas','pdv_num_parcelas','pdv_sincr_analitica','pdv_taxa_adm','pdv_taxa_loja','pdv_tipo_tef','per_juros','per_multa','saldo_inicial','tipo','tipo_conta_corrente','user_alt','user_inc','valor_limite');
+        if(file_exists('../dao/CRUDConta.php')){
+            include '../dao/CRUDConta.php';
+            $dao3=new CRUDConta();
+            $dao3->drop('tb_conta');
+        }
+        foreach($conta as $item){
+            $conta_=new conta();
+            //print_r(file_exists('../dao/CRUDConta.php'));die;
+            if(!file_exists('../dao/CRUDConta.php')){
+                include '../paginas/criaClasses3.php';
+                $arquivo=new criaClsses3();
+                $arquivo->novoArquivo();
+                echo '<script>window.location.assign("index.php?pagina=pedido&act=cad&contaAtualiza=1")</script>';
+            }
+            foreach($variavelConta as $item2){
+                $$item2=$item->$item2;
+                $classe='set'.$item2;
+                $conta_->$classe($$item2);
+            }
+            $conta_->setOMIE_APP_KEY(OMIE_APP_KEY);
+            $conta_->settabela('tb_conta');
+            $dao3->grava5($conta_);
+        
+            //fwrite($handle,"\n[".OMIE_APP_KEY."]\n nCodCC=".$nCodCC." \n descricao=".$descricao."");
+        }
+        //fclose($handle);
+        echo '<script>window.location.assign("index.php?pagina=pedido&act=cad")</script>';
 
    }else{
+        if(!file_exists('../dao/CRUDConta.php')){
+            echo '<script>window.location.assign("index.php?pagina=pedido&act=cad&contaAtualiza=1")</script>';
+        }
+        $daoConta=new dao();
+        $search=new ContaSearchCriteria();
+        $search->settabela('tb_conta');
+        $search->setOMIE_APP_KEY(OMIE_APP_KEY);
+        //echo '<pre>';print_r($search);die;
+        $conta=$daoConta->encontrePorConta($search);
+        //echo '<pre>';print_r($conta);die;
+        
         $conta=Config::getConfig2(OMIE_APP_KEY);
         $nCodCC=$conta['nCodCC'];
         $descricao=$conta['descricao'];

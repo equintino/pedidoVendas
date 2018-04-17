@@ -6,23 +6,22 @@
         var tipoBusca=$('.procura .tipoBusca input:checked').val();
         if(tipoBusca=='servidor'){
             $('.loja').hide()
-        }else if(tipoBusca=='local'){
+        }else{
             $('.loja').show()
         }
         
         $('.procura input[name=tipoBusca]:radio').click(function(){
             if($(this).val()=='local'){
-                $('.listaProduto').hide()
+                $('.listaProduto, .paginacao').hide()
                 $('.loja').show()
                 tipoBusca='local';
-                //$('.recarrega').trigger('click')
             }else if($(this).val()=='servidor'){
                 $('.listaProduto, .paginacao').show()
                 $('.loja').hide()
                 tipoBusca='servidor';
-                //$('.recarrega').trigger('click')
+                $('.recarrega').trigger('click')
             }
-            tipoBusca=$(this).val();
+            /*tipoBusca=$(this).val();
             if(tipoBusca=='servidor'){
                 pagAtual=1;
                 link='../paginas/formItem.php?tipoBusca='+tipoBusca+'&pagAtual='+pagAtual+'';
@@ -32,7 +31,7 @@
                 $("a[rel=modal]").trigger("click")
             }else{
                 $('.paginacao').hide();
-            }
+            }*/
         })
         $('.procura img').mouseover(function(){
             if(tipoBusca=='local'){
@@ -40,13 +39,16 @@
             }
         })
         $('.procura img').click(function(){
+            var loja=$('.loja :selected').val();
             if(tipoBusca=='local'){
                 buscaProduto=encodeURIComponent($('.procura input[name=procura]').val());
-                link='../paginas/formItem.php?tipoBusca='+tipoBusca+'&buscaProduto='+buscaProduto+'';
+                link='../paginas/formItem.php?tipoBusca='+tipoBusca+'&buscaProduto='+buscaProduto+'&loja='+loja+'';
                 $('.listaProduto').hide()
                 $('.tituloProd').text('Aguarde...');
                 $('a[rel=modal]').attr('href',link);
                 $("a[rel=modal]").trigger("click")
+            }else{
+                $('.recarrega').trigger('click')                
             }
         })
         /*$('.procura input[name=procura').focus(function(){
@@ -94,11 +96,11 @@
             $("a[rel=modal]").trigger("click")
         })
         $('.tituloProd').text('Páginas ');
-        $('.jTabela').scroll(function(){
+        /*$('.jTabela').scroll(function(){
             var pos=$('.jTabela').scrollLeft();
             $('.cima').scrollLeft(pos)
                        
-        })
+        })*/
         //$('.jTabela table').clone().appendTo('.cima')
         //$('.cima').scrollTop('3')
         
@@ -131,11 +133,6 @@
                     }
                 })
                 linha=linha.substring(4,5);
-                //alert($(this).text());
-                //alert(vUnitario);
-                //alert(pTabela);
-                //alert(qEstoque);
-                //return false;
                 $('#pnl1 table #item'+linha+' input').each(function(){
                     var z=$(this).attr('name');
                     switch(z.substr(0,z.length-1)){
@@ -183,28 +180,32 @@
                 $('#mascara').hide();
                 $('.listaProduto').hide();
                 $('.tituloProd').text('Aguarde...');
-                $('.botao :hidden').val(dadosProduto);
+                //$('.botao :hidden').val(dadosProduto);
             })
         })
         $(".procura input").on("keyup", function(){
             var value = $(this).val().toLowerCase();
-            if(tipoBusca != 'local'){
+            //if(tipoBusca != 'local'){
                 $(".listaProduto").filter(function(){
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
-            }
+            //}
         }).focus()
         $('.recarrega').css('cursor','pointer')
         $('.recarrega').click(function(){
-            if (typeof pagAtual == "undefined"){
-                pagAtual=1;
+            if(tipoBusca=='local'){
+                $('.procura img').trigger('click')
+            }else{
+                if (typeof pagAtual == "undefined"){
+                    pagAtual=1;
+                }
+                link='../paginas/formItem.php?codigo_produto='+codigo_produto+'&pagAtual='+pagAtual+'&tipoBusca='+tipoBusca+'';
+                $('a[rel=modal]').attr('href',link);
+
+                $('.listaProduto').hide();
+                $('.tituloProd').text('Aguarde...');
+                $("a[rel=modal]").trigger("click")
             }
-            link='../paginas/formItem.php?codigo_produto='+codigo_produto+'&pagAtual='+pagAtual+'&tipoBusca='+tipoBusca+'';
-            $('a[rel=modal]').attr('href',link);
-            
-            $('.listaProduto').hide();
-            $('.tituloProd').text('Aguarde...');
-            $("a[rel=modal]").trigger("click")
         })
         $('.procura input[name=procura]').focus()
         /*$('.atualizaProduto span').click(function(){
@@ -219,9 +220,9 @@
             }
             //alert('clicou');
         })*/
-        if(act=='atualiza'){
+        /*if(act=='atualiza'){
             $('#boxes .window2').css('display','block')
-        }
+        }*/
         if(tipoBusca=='local'){
             $('.cont').text(cont);
         }
@@ -377,9 +378,10 @@
     $funcao=$_COOKIE['funcao'];
     $dadosUser=$user->find($search);
     foreach($dadosUser as $item){
-        $loja=$item->getloja();
+        if($funcao != 'administrador'){
+            $loja=$item->getloja();
+        }
     }
-    //echo $login;
     
     echo '<script>var loja="'.$loja.'"</script>';
     if(key_exists('pagAtual', $_GET)){
@@ -408,7 +410,7 @@
             break;
     }
     echo '<div class=recarrega><img src="../web/img/atualiza.png" height="18px" title="Recarregar esta página."/></div>';
-    print_r([$tipoBusca,$act,$loja]);//die;
+    //print_r([$tipoBusca,$act,$loja]);//die;
     if($tipoBusca=='servidor' && $act != 'atualiza'){
         if(@$pagAtual=='undefined' || @!$pagAtual){
             $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>40,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
@@ -426,13 +428,14 @@
         $registros=$dados->registros;
         $totalRegistros=$dados->total_de_registros;
         $detalhes=$dados->produto_servico_cadastro;
-    }elseif($tipoBusca=='local' && $act != 'atualiza'){echo 'estou aqui';
+    }elseif($tipoBusca=='local' && $act != 'atualiza'){
         $dao = new Dao();
         $search = new ProdutoSearchCriteria();
         $search->settabela('tb_produto');
-        //echo '<pre>';print_r($_GET);
         if($buscaProduto || @$pagAtual != 'undefined'){
             $search->setcodigo($buscaProduto);
+            $search->setloja($loja);
+            //echo '<pre>';print_r($search);echo 'passei aqui';
             $detalhes=$dao->encontre2($search);
         }else{
             $detalhes=null;
@@ -668,14 +671,14 @@
         </div>
     </div>
 
-    <div id="boxes">
+    <!--<div id="boxes">
             <!-- Janela Modal2 -->
-	<div id="dialog2" class="window2">
+	<!--<div id="dialog2" class="window2">
             <div align="right">
                 <!--<input type="button" value="Fechar" class="close2"/>-->
-            </div>
+            <!--</div>
                 <!--<img src="mensagem.jpg" width="650" height="655" /><br />-->
                 <?php //include '../paginas/aguarde.php' ?>
-	</div>
+	<!--</div>
             <!-- Fim Janela Modal-->
-    </div>
+    <!--</div>-->

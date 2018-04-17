@@ -69,7 +69,10 @@ final class index{
         'empresa'=>'../model/empresa.php',
         'modelProduto'=>'../model/modelProduto.php',
         'ProdutoSearchCriteria'=>'../dao/ProdutoSearchCriteria.php',
-        'ProdutoMapper'=>'../mapping/ProdutoMapper.php'
+        'ProdutoMapper'=>'../mapping/ProdutoMapper.php',
+        'ContaSearchCriteria'=>'../dao/ContaSearchCriteria.php',
+        'conta'=>'../model/conta.php',
+        'contaMapper'=>'../mapping/contaMapper.php'
     );
     if (!array_key_exists($nome, $classes)){
        die("A classe $nome não existe");
