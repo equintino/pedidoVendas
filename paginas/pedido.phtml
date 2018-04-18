@@ -326,17 +326,13 @@
                 $('.doc input').val('');
                 $('#pnl3 tr.dados_adcionais_nf td textarea').val('')
             }
-            if(formPag == 'debito' || formPag == 'dinheiro'){// $(this).val()=='debito' || $(this).val() == 'dinheiro'){
-                //$('.tabela select[name=parcela] option[value="A Vista,000,0"]').attr('selected','selected');
-                //$('.tabela select[name=parcela]').removeAttr('selected');
+            if(formPag == 'debito' || formPag == 'dinheiro'){
                 if($('.tabela select[name=parcela] :selected').val() != 'A Vista,000,0'){
                     $('.tabela select[name=parcela] option').each(function(){
                         if($(this).val()=='A Vista,000,0'){
                             $(this).attr('selected','selected')
-                            //$('.tabela select[name=parcela]').attr('disabled','disabled')
                         }
                     })
-                            //alert($('.tabela select[name=parcela] :selected').val());
                     $('#pnl4 .novo4').each(function(){
                         if($(this).attr('linha')>1){
                             $(this).remove()
@@ -349,7 +345,6 @@
                 }
             }else if(formPag == 'credito'){
                 numParc=$('.tabela select[name=parcela] :selected').val();
-                //alert(numParc);
                 if(numParc == 'A Vista,000,0' || numParc == ''){
                     $('.tabela select[name=parcela] option').each(function(){
                         $(this).removeAttr('selected');
@@ -379,9 +374,7 @@
             var selecao=$(this).val();
             $('.novo3 select[name=codigo_conta_corrente] option').each(function(){
                 if($(this).val()==selecao){
-                    //alert($(this).val());
                     var codigo_categoria=$(this).attr('codigo_categoria');
-                    //alert(codigo_categoria);
                     $('.novo3 :hidden[name=codigo_categoria]').val(codigo_categoria)
                     $('.novo3 :disabled[name=codigo_categoria]').val(codigo_categoria)
                 }
@@ -418,6 +411,13 @@
                         $('.mGeral ul li.tabela').text('ATUALIZA TABELA PREÇO');
                         break;
                 }
+            })
+            $('.opcaoTransp button').click(function(){
+                var transpSelecionada=$('.opcaoTransp :selected').val();
+                window.location.assign('index.php?pagina=pedido&act=cad&transpSelecionada='+transpSelecionada+'');
+            })
+            $('.novo3 img').click(function(){
+                window.location.assign('index.php?pagina=pedido&act=cad&contaAtualiza=1');
             })
         }
         ///// funcoes ////
@@ -562,19 +562,6 @@
                         var pMinimo=$('#pnl1 td input[name=vUnitarioItem'+nBusca+']').val();
                         $(document).keydown(function(e){
                             if(e.keyCode==13){
-                                /*var pInserido=$(this).val();
-                                var vInserido=pInserido.replace(',','.');
-                                var vTabela=pTabela.replace(',','.');
-                                var vMinimo=pMinimo.replace(',','.');
-                                if(pTabela == 'Não Definido' && vInserido < vMinimo){
-                                    alert('Valor mínimo permitido '+pMinimo+'');
-                                    $(this).val(pMinimo)
-                                    $('#pnl1 td input[name=quantidade'+nBusca+']').trigger('click');
-                                }else if(vInserido < vTabela && pTabela != 'Não Definido'){
-                                    alert('Valor mínimo permitido '+pTabela+'');
-                                    $(this).val(pTabela);
-                                    $('#pnl1 td input[name=quantidade'+nBusca+']').trigger('click');
-                                }*/
                                 return false;
                             }
                         })
@@ -597,28 +584,6 @@
                     $(this).bind('keyup click', function(){
                         var vlItem=$(this).attr('name');
                         var nBusca=vlItem.substr(vlItem.length-1);
-                        
-                        
-                        /*$('#pnl1 td input').each(function(){
-                            alert($(this).attr('name'));
-                            if($(this).attr('name')=='vUnitarioItem1'){
-                                alert($(this).val());
-                            }
-                            if($(this).attr('name')=='pTabela1'){
-                                alert($(this).val());
-                            }
-                        })*/
-                        //alert([vInserido,vMinimo]);
-                        
-
-                        //alert(nBusca);
-                        
-                        /*$('#pnl1 td input').each(function(){
-                            if($(this).attr('name')=='pTabela'+nBusca+''){
-                                alert($(this).val());
-                            }
-                        })*/
-                        //alert($('#pnl1 tr input[name=pTabela1]').val());
                         $('#pnl1 td input[name=quantidade'+nBusca+']').trigger('click');
                     })
                 }
@@ -786,9 +751,6 @@
     .total{
         float: right;
     }
-    .fPedido{
-        //width: 980px;
-    }
     .tabela{
         padding: 5px;
         font-size: 15px;
@@ -944,9 +906,15 @@
     .conteudo form, .conteudo h1{
         margin-left: 40px;
     }
+    <?php if($funcao=='administrador'): ?>
     .conteudo{
-        height: 580px;
+        height: 605px;
     }
+    <?php else: ?>
+    .conteudo{
+        height: 583px;
+    }
+    <?php endif; ?>
     .conteudo h1{
         font-size: 38px;
     }
@@ -1013,6 +981,12 @@
         animation: blinker 1s linear infinite;
         text-align: center;
     }
+    .opcaoTransp{
+        margin-left: 43px;
+    }
+    .opcaoTransp span{
+        margin-right: 10px;
+    }
     
     .blink_me {
     }
@@ -1025,14 +999,10 @@
 </head>
 <body>
 <div id="menu">
-    <ul>
-        <!--<li><a href=<?php //Utils::createLink('pedido',array('act'=>'cad')); ?>>Incluir</a></li>-->
-        <!--<li><a href=<?php  //Utils::createLink('pedido',array('act'=>'list')); ?>>Listar</a></li>-->
-    </ul>
     <?php if($act != 'cad'):?>
     <div class="procura">
         <input autofocus type="text" name="procura" title="Pesquisar por produtos" />
-        <img height="18px" src="../web/img/lupa.png" title="Pesquisar por produtos">
+        <img height="18" src="../web/img/lupa.png" title="Pesquisar por produtos">
     </div>
     <?php endif; ?>
 </div>
@@ -1040,15 +1010,24 @@
 <?php if($act=='cad'): ?>
     <div class="valorPedido"></div>
 <h1>Inclusão de Pedido de Venda</h1>
+        <?php if($funcao=='administrador'): ?>
+        <span class="opcaoTransp">
+            <span>SELECIONE A TRANSPORTADORA</span>
+            <select name="transportadora" >
+                <?php foreach($transpSelecao as $key => $item): ?>
+                <option value="<?= $item[1] ?>"><?= $item[0].' - '.$key ?></option>
+                <?php endforeach; ?>
+            </select>
+            <button>Confirma</button>
+        </span>
+        <?php endif; ?>
 <span id=confirmado></span>
 <form id="dados" class="fPedido" method="post" action='../paginas/add.php?act=cad&pagina=pedido' target="_blank" >
 <table class="tabela">
     <tr><td colspan="4">Cliente</td><td align="center">Previsão Faturamento</td></tr>
-    <tr><td colspan="4" class="razao"><input type="hidden" name="cCliente" value="<?= $cCliente ?>" /><input tabindex="1" name="cliente" type="text" size=53 value="<?= $razao ?>" required /> <img src="../web/img/lupa.png" height="14px" title="Pesquisar cliente"/><span class="tecla"> (F2)</span></td><td class="previsao"><input disabled name="dPrevisao" type="text" value="<?= date('d/m/Y') ?>" /><input name="dPrevisao" type="hidden" value="<?= date('d/m/Y') ?>" /></td></tr>     <input type="hidden" name="endereco" value="<?= $_GET['endereco'] ?>" /><input type="hidden" name="endereco_numero" value="<?= $_GET['endereco_numero'] ?>" /><input type="hidden" name="endereco" value="<?= $_GET['endereco'] ?>" /><input type="hidden" name="bairro" value="<?= $_GET['bairro'] ?>" /><input type="hidden" name="cidade" value="<?= $_GET['cidade'] ?>" /><input type="hidden" name="cep" value="<?= $_GET['cep'] ?>" />
-    <tr><td><font size=2px>CNPJ/CPF</font></td><!--<td>Tabela de Preço</td>--><tr>
+    <tr><td colspan="4" class="razao"><input type="hidden" name="cCliente" value="<?= $cCliente ?>" /><input tabindex="1" name="cliente" type="text" size=53 value="<?= $razao ?>" required /> <img src="../web/img/lupa.png" height="14" title="Pesquisar cliente"/><span class="tecla"> (F2)</span></td><td class="previsao"><input disabled name="dPrevisao" type="text" value="<?= date('d/m/Y') ?>" /><input name="dPrevisao" type="hidden" value="<?= date('d/m/Y') ?>" /></td></tr>     <input type="hidden" name="endereco" value="<?= $_GET['endereco'] ?>" /><input type="hidden" name="endereco_numero" value="<?= $_GET['endereco_numero'] ?>" /><input type="hidden" name="endereco" value="<?= $_GET['endereco'] ?>" /><input type="hidden" name="bairro" value="<?= $_GET['bairro'] ?>" /><input type="hidden" name="cidade" value="<?= $_GET['cidade'] ?>" /><input type="hidden" name="cep" value="<?= $_GET['cep'] ?>" />
+    <tr><td><font size=2px>CNPJ/CPF</font></td><tr>
     <tr><td class="cnpj"><input tabindex="2" type="text" name="cnpj_cpf" required value="<?= $cnpj_cpf ?>"/></td>
-        <!--<td><select name='cCodIntTabPreco'>   
-        </select></td>-->
     </tr>
 </table>
 <fieldset class="fTotais">
@@ -1121,14 +1100,11 @@
         <span class="info">Informações Adcionais</span>
         <span class="parcela">Parcelas</span>        
         <span class="email">E-mail para Cliente</span>
-        <!--<span class="observacao">Observação</span>-->
     </div>
         <div id='pnl1'>
             <div id='botoes'>
                 <span class="tecla">(F4) </span><span class='bnt'>Novo Ítem</span><span class='bnt'>Excluir Ítem</span><span class='loja'></span>
             </div>
-            <!--<fieldset class="iVendas">
-                <legend>Abaixo a lista dos ítens desta venda</legend>-->
             <div class="divVendas dItem">
                 <table>
                     <tr>
@@ -1143,7 +1119,6 @@
                     <tr id=item1><span class=novo><td class=lupa></td><td class=item>1</td><td><input type="text" size=10px name="codigo_produto1" autocomplete="off" linha=1 required/></td><td><input type="text" name="descricao1" autocomplete="off" required /></td><td><input type="text" size=2px name="quantidade1" autocomplete="off" linha=1 required /></td><td><input type="text" size=8px name="vUnitarioItem1" autocomplete="off" required /></td><td><input type="text" size=8px name="vTotalItem1" linha=1 disabled /></td><td><input type="text" size=2px name="pDescontoItem1" autocomplete="off" linha=1 /></td><td><textarea rows="1" cols="25" name="obs_item1" linha=1 /></textarea></td><td><input type="hidden" name="cfop1" linha=1 /></td><td><input type="hidden" name="ncm1" linha=1 /></td><td><input type="hidden" name="ean1" linha=1 /></td><td><input type="hidden" name="unidade1" linha=1 /></td><td><input type="hidden" name="vTotalItem1" linha=1 /></td><td><input type="hidden" name="pTabela1" linha=1 /></td><input type=hidden name=cOmie1 /></span></tr>
                 </table>
             </div>
-            <!--</fieldset>-->
         </div>
         <div id='pnl2'>
             <div class="divVendas dItem">
@@ -1172,7 +1147,6 @@
         </div>
         <div id='pnl3'>
             <div class="divVendas dItem">
-        <!--<fieldset class="iVendas">-->
                 <table>
                     <tr>
                     <?php foreach($variaveis2['Informações Adcionais'] as $key => $item): ?>
@@ -1189,7 +1163,11 @@
                                     <?php foreach($contaTipo as $key => $item): ?>
                                     <option value='<?= $item[0] ?>' codigo_categoria="<?= $item[1] ?>" ><?= $key ?></option>
                                     <?php endforeach; ?>
-                            </td></select>
+                            </select>
+                            <?php if($funcao=='administrador'): ?>
+                                <img height=15px src="../web/img/atualiza.png" title="Atualiza Contas"/>
+                            <?php endif; ?>
+                            </td>
                         <?php elseif($item=='Etapa'): ?>
                             <td width='20px'><select name='etapa'>
                             <?php 
@@ -1200,10 +1178,9 @@
                             </td></select>
                         <?php elseif($key=='dados_adcionais_nf'): ?>                                <tr class="dados_adcionais_nf"><td colspan="3">Dados Adcionais para a Nota Fiscal<br><textarea cols=40 rows="3" name='dados_adcionais_nf'/></textarea></td></tr>
                         <?php endif; ?>
-                    <?php /*$ref++;*/ endforeach; ?>
+                    <?php endforeach; ?>
                     </tr>
                 </table>
-        <!--</fieldset>-->
             </div>
         </div>
         <div id='pnl4'>
@@ -1221,17 +1198,12 @@
                     <?php foreach($variaveis2['Parcelas'] as $key => $item): ?>
                         <?php if($key=='numero_parcela'): ?>
                             <td align='center' width='2px'><input size='1px' type='text' name='<?= $key ?>1' /></td>
-                            <!--<input type='hidden' name='<?= $key ?>1' />-->
                         <?php elseif($key=='data_vencimento'): ?>
                             <td align='center' width='7px'><input size='10px' type='text' name='<?= $key ?>1' /></td>
-                            <!--<input type='hidden' name='<?= $key ?>1' />-->
                         <?php elseif($key=='valor' || $key=='percentual'): ?>
                             <td align='center' width='7px'><input size='10px' type='text' name='<?= $key ?>1' /></td>
-                            <!--<input type='hidden' name='<?= $key ?>1' />-->
                         <?php elseif($key!='quantidade_dias'): ?>
                             <td align='center'><input type='text' name='<?= $key ?>1'  /></td>
-                            <!--<input type='hidden' name='<?= $key ?>1' />-->
-                        <!--<td><input type='text' name='<?= $key ?>' /></td>-->
                     <?php endif; endforeach; ?>
                     </tr>
                 </table>
@@ -1240,7 +1212,6 @@
         </div>
         <div id='pnl5'>
             <div class="divVendas dItem">
-        <!--<fieldset class="iVendas">-->
                 <table>
                     <tr>
                     <?php foreach($variaveis2['E-mail para o Cliente'] as $item): ?>
@@ -1251,26 +1222,10 @@
                         <td><textarea cols="80" name="e-mail"><?= $email ?></textarea></td>
                     </tr>
                 </table>
-        <!--</fieldset>-->
             </div>
         </div>
-        <!--<div id='pnl6'>
-            <div class="divVendas dItem">
-                <table>
-                    <tr>
-                    <?php //foreach($variaveis2['Observações'] as $key => $item): ?>
-                    <td><?php //echo $item ?></td>
-                    <?php //endforeach; ?>
-                    </tr>
-                    <tr>
-                        <td><textarea cols="80" name="observacao"></textarea></td>
-                    </tr>
-                </table>
-            </div>
-        </div>-->
     <span class="botao">
         <input type="hidden" name="dadosProduto" />
-        <!--<input type="reset" value="Limpa"/>-->
         <input type="submit" value="Enviar Pedido"/>
         <a id="novoPedido" href="../web/index.php?pagina=pedido&act=cad"><span type="reset" class="novoPedido">Novo Pedido</span></a>
     </span>
@@ -1360,7 +1315,6 @@
                     $prev=Utils::datafatura($triagem[$item]->data_previsao,$triagem[$item]->etapa);
                     $cor=substr(strstr($prev,','),1);
                     $fatura=strstr($prev,',',true);
-                    //print_r($);
                     echo '<li><font color='.$cor.'>'.$fatura.'</font></li>';
                 }
                 echo '</ul>';

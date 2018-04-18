@@ -21,17 +21,6 @@
                 tipoBusca='servidor';
                 $('.recarrega').trigger('click')
             }
-            /*tipoBusca=$(this).val();
-            if(tipoBusca=='servidor'){
-                pagAtual=1;
-                link='../paginas/formItem.php?tipoBusca='+tipoBusca+'&pagAtual='+pagAtual+'';
-                $('.listaProduto').hide()
-                $('.tituloProd').text('Aguarde...');
-                $('a[rel=modal]').attr('href',link);
-                $("a[rel=modal]").trigger("click")
-            }else{
-                $('.paginacao').hide();
-            }*/
         })
         $('.procura img').mouseover(function(){
             if(tipoBusca=='local'){
@@ -51,22 +40,6 @@
                 $('.recarrega').trigger('click')                
             }
         })
-        /*$('.procura input[name=procura').focus(function(){
-            $(document).keydown(function(e){
-                if($('.window').is(':visible')){
-                    if(e.keyCode=='13'){
-                        if(tipoBusca=='local'){
-                            buscaProduto=encodeURIComponent($('.procura input[name=procura]').val());
-                            link='../paginas/formItem.php?tipoBusca='+tipoBusca+'&buscaProduto='+buscaProduto+'';
-                            $('.listaProduto').hide()
-                            $('.tituloProd').text('Aguarde...');
-                            $('a[rel=modal]').attr('href',link);
-                            $("a[rel=modal]").trigger("click")
-                        }
-                    }
-                }
-            })
-        })*/
         $('button').each(function(){
             if($(this).text()==pagAtual){
                 $(this).css({
@@ -96,14 +69,6 @@
             $("a[rel=modal]").trigger("click")
         })
         $('.tituloProd').text('Páginas ');
-        /*$('.jTabela').scroll(function(){
-            var pos=$('.jTabela').scrollLeft();
-            $('.cima').scrollLeft(pos)
-                       
-        })*/
-        //$('.jTabela table').clone().appendTo('.cima')
-        //$('.cima').scrollTop('3')
-        
         $('.listaProduto').mouseover(function(){
             $(this).css({
                 background:'#EDEDED',
@@ -180,16 +145,13 @@
                 $('#mascara').hide();
                 $('.listaProduto').hide();
                 $('.tituloProd').text('Aguarde...');
-                //$('.botao :hidden').val(dadosProduto);
             })
         })
         $(".procura input").on("keyup", function(){
             var value = $(this).val().toLowerCase();
-            //if(tipoBusca != 'local'){
-                $(".listaProduto").filter(function(){
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            //}
+            $(".listaProduto").filter(function(){
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
         }).focus()
         $('.recarrega').css('cursor','pointer')
         $('.recarrega').click(function(){
@@ -208,21 +170,6 @@
             }
         })
         $('.procura input[name=procura]').focus()
-        /*$('.atualizaProduto span').click(function(){
-            var pergAtualiza=confirm('O processo não poderá ser interrompido, pode demorar uns 5 minutos, Deseja continuar?');
-            if(pergAtualiza){
-                link='../paginas/formItem.php?act=atualiza&codigo_produto='+codigo_produto+'&pagAtual='+pagAtual+'&tipoBusca='+tipoBusca+'';
-                $('a[rel=modal]').attr('href',link);
-                $('.listaProduto').hide();
-                $("a[rel=modal]").trigger("click")
-
-                $('#boxes .window2').css('display','block')
-            }
-            //alert('clicou');
-        })*/
-        /*if(act=='atualiza'){
-            $('#boxes .window2').css('display','block')
-        }*/
         if(tipoBusca=='local'){
             $('.cont').text(cont);
         }
@@ -410,7 +357,6 @@
             break;
     }
     echo '<div class=recarrega><img src="../web/img/atualiza.png" height="18px" title="Recarregar esta página."/></div>';
-    //print_r([$tipoBusca,$act,$loja]);//die;
     if($tipoBusca=='servidor' && $act != 'atualiza'){
         if(@$pagAtual=='undefined' || @!$pagAtual){
             $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>40,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
@@ -449,16 +395,6 @@
         $search->setloja(strtoupper($loja));
         @$detalhes=$dao->encontrePorLoja($search);
         $totalRegistros=$dao->totalLinhas2($search);
-        /*switch($loja){
-            case 'cachambi':
-                $cachambi='selected';
-                //$bonsucesso='';
-                break;
-            case 'bonsucesso':
-                $bonsucesso='selected';
-                //$cachambi='';
-                break;
-        }*/
     }elseif($loja && $funcao=='vendedor'){
         $dao = new Dao();
         $search = new ProdutoSearchCriteria();
@@ -495,7 +431,6 @@
     <?php if($act != 'atualiza'): ?>
     <div class="paginas">Registros <span class="cont"><?= $registros ?></span> de <?= $totalRegistros ?>
         <?php if($tipoBusca=='local'): ?>
-            <!--<span class="atualizaProduto">para atualizar a tabela de produtos na busca LOCAL <span>clique aqui.</span></span>-->
         <?php endif; endif;?>
     </div>
 </form>
@@ -575,9 +510,7 @@
                                             echo '<th class="col'.$col.'">VALOR UNITÁRIO</th>';
                                         }elseif($key=='codigo'){
                                             echo '<th  width="10%" class="col'.$col.'">CÓDIGO</th>';
-                                        }/*else{
-                                            //echo '<th class="col'.$col.'">'.mb_strtoupper(str_replace('_',' ',$key),'utf-8').'</th>';
-                                        }*/
+                                        }
                                         $col++;
                                     }
                                 }
@@ -670,15 +603,3 @@
             </table>
         </div>
     </div>
-
-    <!--<div id="boxes">
-            <!-- Janela Modal2 -->
-	<!--<div id="dialog2" class="window2">
-            <div align="right">
-                <!--<input type="button" value="Fechar" class="close2"/>-->
-            <!--</div>
-                <!--<img src="mensagem.jpg" width="650" height="655" /><br />-->
-                <?php //include '../paginas/aguarde.php' ?>
-	<!--</div>
-            <!-- Fim Janela Modal-->
-    <!--</div>-->

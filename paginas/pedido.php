@@ -15,6 +15,11 @@
     @$tabelaPrecoAtualiza=$_GET['$tabelaPrecoAtualiza'];
     @$origem=$_GET['origem'];
     @$funcao=$_COOKIE['funcao'];
+    @$transpSelecionada=$_GET['transpSelecionada'];
+    if(!@$transpSelecionada){
+        $transpSelecionada=null;
+    }
+        
     if(@$funcao){
         echo '<script>var funcao="'.$funcao.'"</script>';
     }
@@ -60,49 +65,7 @@
     
     $pedido=new PedidoVendaProdutoJsonClient();
     $cliente=new ClientesCadastroJsonClient();
-    
-    /*if(@$origem=='cliente'){
-        $dao = new CRUD();
-        $search=new ModelSearchCriteria();
-        $search->settabela('tb_cliente');
-        $search->setnome_fantasia($_GET['cnpj_cpf']);
-        $dadosLocal=$dao->encontre($search);
-        
-        $codigo=null;
-        $clientes_cadastro_chave=array("codigo_cliente_omie"=>$cCliente,
-"codigo_cliente_integracao"=>$codigo);
-        $dados=$cliente->ConsultarCliente($clientes_cadastro_chave);
-
-        $model = new Model();
-        foreach($dados as $key => $item){
-            if($key != 'info' && $key != 'tags'){
-                $classe='set'.$key;
-                $model->$classe($item);
-                //$resultado[]=$model->$classe($item);
-            }elseif($key == 'info'){
-                foreach($item as $key2 => $item2){
-                    $classe='set'.$key2;
-                    $model->$classe($item2);
-                }
-            }elseif($key == 'tags'){
-                foreach($item as $item_){
-                    $model->settags($item_->tag.',');
-                }
-            }
-        }
-        $model->settabela('tb_cliente');
-        if($dadosLocal){
-            foreach($dadosLocal as $item){
-                $alteracao=$item->getdAlt();
-                $model->setid($item->getid());
-            }
-            if($model->getdAlt() > $alteracao){
-                $gravado=$dao->grava($model);
-            }
-        }else{
-            $gravado=$dao->grava($model);
-        }
-    }*/
+   
         
     $pvpListarRequest=array('pagina'=>'1','registros_por_pagina'=>'50');
     if(!isset($quant)){
@@ -127,7 +90,6 @@
         $contaListarRequest=array('pagina'=>'1','registros_por_pagina'=>'50');
         $conta=$contas->PesquisarContaCorrente($contaListarRequest)->conta_corrente_lista;
         
-        //echo '<pre>';print_r($conta);die;
         //$handle=fopen('../config/conta.ini','a+');
         $variavelConta=array('bol_instr1','bol_sn','cobr_sn','codigo_agencia','codigo_banco','data_alt','data_inc','descricao','dias_rcomp','hora_alt','hora_inc','nCodCC','nao_fluxo','nao_resumo','numero_conta_corrente','pdv_categoria','pdv_cod_adm','pdv_dias_venc','pdv_enviar','pdv_limite_pacelas','pdv_num_parcelas','pdv_sincr_analitica','pdv_taxa_adm','pdv_taxa_loja','pdv_tipo_tef','per_juros','per_multa','saldo_inicial','tipo','tipo_conta_corrente','user_alt','user_inc','valor_limite');
         if(file_exists('../dao/CRUDConta.php')){
@@ -137,7 +99,6 @@
         }
         foreach($conta as $item){
             $conta_=new conta();
-            //print_r(file_exists('../dao/CRUDConta.php'));die;
             if(!file_exists('../dao/CRUDConta.php')){
                 include '../paginas/criaClasses3.php';
                 $arquivo=new criaClsses3();
@@ -153,7 +114,6 @@
             $conta_->settabela('tb_conta');
             $dao3->grava5($conta_);
         
-            //fwrite($handle,"\n[".OMIE_APP_KEY."]\n nCodCC=".$nCodCC." \n descricao=".$descricao."");
         }
         //fclose($handle);
         echo '<script>window.location.assign("index.php?pagina=pedido&act=cad")</script>';
@@ -179,11 +139,6 @@
         foreach($conta as $item){
             $contaTipo[$item->getdescricao()]=array($item->getnCodCC(),$item->getpdv_categoria());
         }
-        //echo '<pre>';print_r($contaTipo);die;
-        
-        /*$conta=Config::getConfig2(OMIE_APP_KEY);
-        $nCodCC=$conta['nCodCC'];
-        $descricao=$conta['descricao'];*/
    }
    if($vendedorAtualiza==1){
         $vendedor=new VendedoresCadastroJsonClient();
@@ -243,13 +198,26 @@
         $detalheParc->cDescricao=$item['cDescricao'];
         $detalheParc->nQtdeParc=$item['nQtdeParc'];
         array_push($parcela, $detalheParc);
+    }    
+    
+    $file='../paginas/transp'.OMIE_APP_KEY.'.txt';
+    if(file_exists($file)){
+        $transpSelecionada=file($file)[0];
     }
-    //$correiosAtualiza=1;
-    //if($correiosAtualiza==1){
+    if(@!$transpSelecionada){
+        $transpSelecionada=null;
+    }elseif($funcao=='administrador' && array_key_exists('transpSelecionada',$_GET)){
+        @$transpSelecionada=$_GET['transpSelecionada']; 
+        $handle=fopen($file,'w+');
+        fwrite($handle, $transpSelecionada);
+        fclose($handle);
+    }
+    
     $dao = new Dao();
     $search = new ModelSearchCriteria();
     $search->settabela('tb_cliente');
-    $search->setrazao_social('correios');
+    $tags=array('Transportadora');
+    $search->settags($tags);
     
     if(OMIE_APP_KEY=='2769656370'){
         $db='db';
@@ -257,28 +225,27 @@
         $db='db2';
     }
     if($dao2->showTabela('tb_cliente',$db)){
-       //echo '<script>window.location.assign("index.php?index=sim&pagina=pedido&act=cad&vendedorAtualiza=1")</script>'; 
-        $cliente=$dao->encontre($search);
+        $cliente=$dao->encontrePorTag($search);
+        $transpSelecao=array();
+        $listaCliente=array();
         foreach($cliente as $item){
+            $transpSelecao[$item->getcidade()]=array($item->getnome_fantasia(),$item->getcodigo_cliente_omie());
             if(stristr($item->getnome_fantasia(),'correios')){
-                $correios=$item;
-                break;
+                $correios_=$item;
             }
+            if($transpSelecionada==$item->getcodigo_cliente_omie()){
+                $correios=$item;
+                if($funcao!='administrador'){
+                    break;
+                }
+            }
+        }
+        if(@!$correios){
+            $correios=$correios_;
         }
     }else{
         Flash::addFlash('É necessário atualizar a tabela de Cliente.');
     }
-    
-        /*$clientes_list_request=array("pagina"=>1,"registros_por_pagina"=>100);
-        $clientes=new ClientesCadastroJsonClient();
-        $cliente=$clientes->ListarClientes($clientes_list_request)->clientes_cadastro;*/
-    /*}else{
-        $transportadora_=array('bairro'=>'CIDADE NOVA','cep'=>'20210900','cidade'=>'RIO DE JANEIRO (RJ)','cidade_ibge'=>'3304557','cnae'=>'5310501','cnpj_cpf'=>'34.028.316/0002-94','codigo_cliente_integracao'=>'','codigo_cliente_omie'=>'743699622','codigo_pais'=>'1058','complemento'=>'','endereco'=>'AV PRESIDENTE VARGAS','endereco_numero'=>'3077','estado'=>'RJ','exterior'=>'N','info'=>array('cImpAPI'=>'N','dAlt'=>'18/01/2018','dInc'=>'18/01/2018','hAlt'=>'16:57:03','hInc'=>'16:42:18','uAlt'=>'P000065360'),'uInc'=>'P000065360','inscricao_estadual'=>'','inscricao_municipal'=>'','nome_fantasia'=>'Correios','pessoa_fisica'=>'N','razao_social'=>'EMPRESA BRASILEIRA DE CORREIOS E TELEGRAFOS','tags'=>array('Transportadora',array('tag'=>'Transportadora')),'telefone1_ddd'=>'21','telefone1_numero'=>'2503-8152');
-        $correios=new cliente();
-        foreach($transportadora_ as $key => $item){
-            $correios->$key=$item;
-        }
-    }*/
     
     //$etapaAtualiza=1;
     if($etapaAtualiza==1){
