@@ -23,7 +23,7 @@
         $('table tr:odd').css({
             background: '#ccc'
         })
-        $('td img').click(function(){
+        /*$('td img').click(function(){
             if($(this).attr('title')=='Exclui'){
                 var razao=$(this).attr('razao');
                 var confirma=confirm('Confirma Exclusão de "'+razao+'"');
@@ -35,13 +35,13 @@
                 var codigo=$(this).attr('codigo');
                 $(location).attr('href','index.php?pagina=cliente&act=alt&omie='+codigo+'')
             }
-        })
-        $('.procura img').mouseover(function(){
+        })*/
+        /*$('.procura img').mouseover(function(){
             $(this).css('cursor','pointer')
-        })
+        })*/
         
         /// conferir este campo ///
-        $('.procura').keyup(function(e){
+        /*$('.procura').keyup(function(e){
               var code = e.which;
               if(code==13)e.preventDefault();
               if(code==13||e.keyCode==13){
@@ -50,13 +50,13 @@
                     $(location).attr('href','index.php?pagina=cliente&act=cons&codigo='+codigo+'')
                   }
               } 
-        })
-        $('.procura img').click(function(){
+        })*/
+        /*$('.procura img').click(function(){
             var codigo=$('.procura :input').val();
-              if(codigo){
-                $(location).attr('href','index.php?pagina=cliente&act=cons&codigo='+codigo+'')
-              }
-        })
+            if(codigo){
+              $(location).attr('href','index.php?pagina=cliente&act=cons&codigo='+codigo+'')
+            }
+        })*/
         //// conferir este campo acima ////
         
         if(seleciona!=1){
@@ -96,13 +96,13 @@
                 })
             })
         }      
-        $(':submit').click(function(){
+        /*$(':submit').click(function(){
             var arr=new Array();
             $(':input').each(function(){
                 arr.push($(this).attr('name'));          
             })
-        })
-        if(act=='adm'){
+        })*/
+        /*if(act=='adm'){
             $('.vaivem').append($('<img title="Alternar para Cliente" src="../web/img/vaivem.png" height=20px />'))
             $('.vaivem img').click(function(){
                 $(location).attr('href','index.php?pagina=produto&act=adm')
@@ -129,7 +129,7 @@
                 background: 'none',
                 boxShadow: 'none'
             })
-        }
+        }*/
         $('.pagina').text('CLIENTE')
         $(".procura2 input").on("keyup", function(){
             var value = $(this).val().toLowerCase();

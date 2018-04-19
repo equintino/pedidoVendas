@@ -80,29 +80,24 @@
             $search = new ModelSearchCriteria();
             $search->settabela('tb_cliente');
             $search->setnome_fantasia($buscaPor);
-            if(array_key_exists('buscaPor',$_GET)){
+            if(@!$tagsArray[1]){
+                $search->settags($tagLista);
+            }else{
+                $search->settags($tagsArray);
+            }
+            $dados_=$dao->encontrePorTag($search);
+            /*if(array_key_exists('buscaPor',$_GET)){
                 if($buscaPor==null){
-                    if(@!$tagsArray[1]){
-                        $search->settags($tagLista);
-                    }else{
-                        $search->settags($tagsArray);
-                    }
                     $dados_=$dao->encontrePorTag($search);
                 }else{
                     $dados_=$dao->encontre($search);
                 }
             }elseif(@$tagsArray){
                 $dados=null;
-                if(@!$tagsArray[1]){
-                    $search->settags($tagLista);
-                }else{
-                    $search->settags($tagsArray);
-                }
                 $dados_=$dao->encontrePorTag($search);
-                //$dados_=null;
             }else{
                 $dados_=null;
-            }
+            }*/
         }
     }elseif($act=='excl'){
         //// Excluir Cliente ////
