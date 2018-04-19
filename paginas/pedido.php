@@ -84,7 +84,6 @@
    }
    
    ////// Classes //////
-   //$contaAtualiza=1;
    if($contaAtualiza==1){
         $contas=new ContaCorrenteCadastroJsonClient();
         $contaListarRequest=array('pagina'=>'1','registros_por_pagina'=>'50');
@@ -247,7 +246,6 @@
         Flash::addFlash('É necessário atualizar a tabela de Cliente.');
     }
     
-    //$etapaAtualiza=1;
     if($etapaAtualiza==1){
         $etapas=new EtapasFaturamentoJsonClient();
         $etaproListarRequest=array("pagina"=>1,"registros_por_pagina"=>100);
@@ -264,7 +262,6 @@
             array_push($selEtapa, $selEtapa2);
         }
     }
-    //$tabelaPrecoAtualiza=1;
     if($tabelaPrecoAtualiza==1){
         $tabPreco=new TabelaPrecosJsonClient();
         $tprListarRequest=array("nPagina"=>1,"nRegPorPagina"=>20);
@@ -277,19 +274,19 @@
     $variaveis1=array('tItem'=>'Total de Ítens','mercadorias'=>'Mercadorias','vDesconto'=>'Desconto',/*'ipi'=>'IPI','icmsSt'=>'ICMS ST',*/'vPedido'=>'Valor do Pedido');//valores preenchidos automaticamente
     $variaveis2=array(
                         'Ítens de Venda'=>array(
-                            'busca'=>'','nItem'=>'Nº','cProduto'=>'Código','descricao'=>'Descrição do Produto','quantidade'=>'Quantidade','vUnitario'=>'Preço Unitário de Venda','vTotal'=>'Valor Total do Ítem','pDesconto'=>'Desconto',/*'tabelaPreco'=>'Tabela de Preço',*/'obs_item'=>'Observação do Ítem','cfop'=>'CFOP','ncm'=>'NCM','ean'=>'EAN','unidade'=>'Unidade'/*,'loja'=>'Loja de Origem','icms'=>'ICMS','icmsSt'=>'ICMS ST','ipi'=>'IPI','pis'=>'PIS','cofins'=>'COFINS','frete'=>'Frete','seguro'=>'Seguros','oDespesa'=>'Outras Despesas','icmsDesonerado'=>'ICMS Desonerado','gCReceber'=>'Gera Conta a Receber','pLiquido'=>'Peso Líquido(Kg)','pBruto'=>'Peso Bruto(Kg)'*/
+                            'busca'=>'','nItem'=>'Nº','cProduto'=>'Código','descricao'=>'Descrição do Produto','quantidade'=>'Quantidade','vUnitario'=>'Preço Unitário de Venda','vTotal'=>'Valor Total do Ítem','pDesconto'=>'Desconto','obs_item'=>'Observação do Ítem','cfop'=>'CFOP','ncm'=>'NCM','ean'=>'EAN','unidade'=>'Unidade'
                         ),
                         'Frete e Outras Despesas'=>array(
-                            'transportadora'=>'Transportadora','tfrete'=>'Tipo do Frete',/*'Placa do Veícula','UF','RNTRC (ANTT)',*/'qvolume'=>'Quantidade de Volumes'/*,'evolume'=>'Espécie dos Volumes','mvolume'=>'Marca dos Volumes','nvolume'=>'Numeração dos Volumes','pliquido'=>'Peso Líquido (Kg)','pbruto'=>'Peso Bruto (Kg)','vfrete'=>'Valor do Frete','vseguro'=>'Valor do Seguro','nlacre'=>'Número do Lacre','odespesas'=>'Outras Despesas Acessórias','O transporte será realizado com veículo próprio'*/
+                            'transportadora'=>'Transportadora','tfrete'=>'Tipo do Frete','qvolume'=>'Quantidade de Volumes'
                         ),
                         'Informações Adcionais'=>array(
-                            'codigo_categoria'=>'Categoria','codigo_conta_corrente'=>'Conta','etapa'=>'Etapa'/*,'Nº do Pedido do Cliente','Nº do Contrato de Venda','Contato','Projeto'*/,'dados_adcionais_nf'=>'Dados Adicionais para a Nota Fiscal'/*,'Nota Fiscal para Consumo Final'*/
+                            'codigo_categoria'=>'Categoria','codigo_conta_corrente'=>'Conta','etapa'=>'Etapa','dados_adcionais_nf'=>'Dados Adicionais para a Nota Fiscal'
                         ),
                         'Parcelas'=>array(
-                            /*'Valor Total a Receber'*/'numero_parcela'=>'Parcela','data_vencimento'=>'Vencimento','valor'=>'Valor da Parcela','percentual'=>'Percentual da Parcela','quantidade_dias'=>'Quantidade dias'/*,'Não gerar boleto desta parcela'*/
+                            'numero_parcela'=>'Parcela','data_vencimento'=>'Vencimento','valor'=>'Valor da Parcela','percentual'=>'Percentual da Parcela','quantidade_dias'=>'Quantidade dias'
                         ),
                         'E-mail para o Cliente'=>array(
-                            'Utilizar os seguintes endereço de e-mail'/*,'Enviar o e-mail com o boleto de cobrança gerado pelo faturamento (juntamente com o DANFE e o XML da NFe)'*/
+                            'Utilizar os seguintes endereço de e-mail'
                         ),
                         'Observações'=>array(
                           /*'Preencha aqui as observações desta venda (elas não serão exibidas na Nota Fiscal)'*/  

@@ -131,22 +131,6 @@
             })
         }
         $('.pagina').text('CLIENTE')
-        /*$('.mGeral').text('ATUALIZAR TABELA').css({
-            cursor:'pointer'
-        }).bind('mouseover',function(){
-            $(this).css({
-                background: '#4e9bae',
-                color: 'white'
-            }).mouseleave(function(){
-                $(this).css({
-                   background:'none',
-                   color: 'black'
-               })
-            })
-        })
-        $('.mGeral').click(function(){
-            $(location).attr('href','../web/index.php?pagina=cliente&act=atualiza&seleciona=0')
-        })*/
         $(".procura2 input").on("keyup", function(){
             var value = $(this).val().toLowerCase();
             if($('.tipoBusca :checked').val() != 'local'){
@@ -373,9 +357,6 @@
     table tr{
         background: rgba(216, 0, 0,0.1);
     }
-    .rs{
-        //width: 600px;
-    }
     .ct{
         align-content: center;
     }
@@ -434,7 +415,7 @@
 </style>
 <div id="menu">
     <?php if($act!='cad' && $seleciona!=1 && $act != 'atualiza' && $act!='adm'):?>
-        <div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por clientes" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por clientes" /></div>
+        <div class="procura"><input autofocus type="text" name="procura" title="Pesquisar por clientes" /> <img height="18" src="../web/img/lupa.png" title="Pesquisar por clientes" /></div>
 </div>
     <?php elseif($act != 'adm' && $act != 'atualiza'):
         switch($tipoBusca){
@@ -452,7 +433,7 @@
                 break;
         }
     ?>
-<div class="procura2"><input autofocus type="text" name="procura" title="Pesquisar por clientes" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por clientes" /><br>
+<div class="procura2"><input autofocus type="text" name="procura" title="Pesquisar por clientes" /> <img height="18" src="../web/img/lupa.png" title="Pesquisar por clientes" /><br>
     <div class="tipoBusca"><input title="Tipo de busca" type="radio" name="tipoBusca" value="local" <?= $local ?>/>Local &nbsp&nbsp&nbsp<input title="Tipo de busca" type="radio" name="tipoBusca" value="servidor" <?= $servidor ?>/>Servidor</div>
         </div>
     <?php endif; ?>
@@ -548,7 +529,7 @@
 <input type="submit" value="Salvar" /> 
 </form>
 <?php elseif($act=='list'): ?>
-<div class=recarrega><img src="../web/img/atualiza.png" height="18px" title="Recarregar esta página."/></div>
+<div class=recarrega><img src="../web/img/atualiza.png" height="18" title="Recarregar esta página."/></div>
 <span class=tituloProd>Páginas </span>
 <?php
     if($tipoBusca=='servidor' || !$tipoBusca){
@@ -597,7 +578,7 @@
         foreach($dados_ as $cliente): 
             foreach($cliente->tags as $tipo):
                     if(in_array($tipo->tag, $tagsArray)): $contador++;?>
-                        <tr class="razaosocial tudo" linha="<?= $cliente->codigo_cliente_omie ?>" razao="<?= $cliente->nome_fantasia ?>" cnpj_cpf="<?= $cliente->cnpj_cpf ?>" email="<?= $cliente->email ?>" endereco="<?= $cliente->endereco ?>" numero="<?= $cliente->endereco_numero ?>" bairro="<?= $cliente->bairro ?>" cep="<?= $cliente->cep ?>" cidade="<?= $cliente->cidade ?>"><td class="rs"><?= mb_strtoupper($cliente->razao_social,'utf-8') ?></td><td class="nf"><?= mb_strtoupper($cliente->nome_fantasia,'utf-8') ?></td><td align=center ><?= $cliente->cnpj_cpf ?></td><!--<td align=center ><div><?php echo @$cliente->email ?></div></td>--><?php if(@$seleciona!=1):?><td class="edicao"><img title="Altera" height="12px" src="../web/img/editar.png" codigo="<?= $cliente->codigo_cliente_omie ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $cliente->codigo_cliente_omie ?>" razao="<?= mb_strtoupper($cliente->nome_fantasia,'utf-8') ?>" /></td><?php endif ?></tr>
+                        <tr class="razaosocial tudo" linha="<?= $cliente->codigo_cliente_omie ?>" razao="<?= $cliente->nome_fantasia ?>" cnpj_cpf="<?= $cliente->cnpj_cpf ?>" email="<?= $cliente->email ?>" endereco="<?= $cliente->endereco ?>" numero="<?= $cliente->endereco_numero ?>" bairro="<?= $cliente->bairro ?>" cep="<?= $cliente->cep ?>" cidade="<?= $cliente->cidade ?>"><td class="rs"><?= mb_strtoupper($cliente->razao_social,'utf-8') ?></td><td class="nf"><?= mb_strtoupper($cliente->nome_fantasia,'utf-8') ?></td><td align=center ><?= $cliente->cnpj_cpf ?></td><!--<td align=center ><div><?php echo @$cliente->email ?></div></td>--><?php if(@$seleciona!=1):?><td class="edicao"><img title="Altera" height="12" src="../web/img/editar.png" codigo="<?= $cliente->codigo_cliente_omie ?>" />-<img title="Exclui" height="12px" src="../web/img/excluir.png" codigo="<?= $cliente->codigo_cliente_omie ?>" razao="<?= mb_strtoupper($cliente->nome_fantasia,'utf-8') ?>" /></td><?php endif ?></tr>
         <?php endif; 
             endforeach; 
         endforeach;

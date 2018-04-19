@@ -1,6 +1,6 @@
+<!DOCTYPE html>
 <head>
 <meta charset="utf-8" />
-</head>
 <script>
     $(document).ready(function(){        
         var tipoBusca=$('.procura .tipoBusca input:checked').val();
@@ -297,6 +297,8 @@
         margin-top: 10px;
     }
 </style>
+</head>
+<body>
 <div id="dadosItem"></div>
 <?php
     include '../excecao/Excecao.php';
@@ -603,3 +605,5 @@
             </table>
         </div>
     </div>
+</body>
+</html>

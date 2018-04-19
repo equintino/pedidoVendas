@@ -1,10 +1,4 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<script>
-    /*function contador(cont){
-        //document.getElemntById('cont').innerHTML='Percentual concluido '+cont+'%';
-        //document.getElementById("cont").innerHTML="Percentual concluido "+cont+"%";
-    }*/
-</script>
 <?php
 
     @$excl=$_GET['excl'];
@@ -140,7 +134,6 @@
             $dados=$cliente->ListarClientes($clientes_list_request);
             $result = array();
             $campos = array();
-            //echo '<pre>';print_r($dados);
             if(is_object($dados)){
                 foreach($dados->clientes_cadastro as $row){
                     if($y==1){
