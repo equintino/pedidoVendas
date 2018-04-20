@@ -59,7 +59,7 @@
         })*/
         //// conferir este campo acima ////
         
-        if(seleciona!=1){
+        /*if(seleciona!=1){
             $('.razaosocial').mouseover(function(){
                 $(this).css('cursor','pointer')
                 $(this).attr('title','dê um duplo clique para ver detalhes.')
@@ -68,34 +68,34 @@
                 var codigo=$(this).attr('linha');
                 $(location).attr('href','index.php?pagina=cliente&act=cons&omie='+codigo+'')
             })
-        }else{
-            $('.razaosocial').css({
-               background: 'white'
+        }else{*/
+        $('.razaosocial').css({
+           background: 'white'
+        })
+        $('.razaosocial td').css({
+            borderBottom: '1px solid #ccc'
+        })
+        $('.razaosocial').mouseover(function(){
+            $(this).css('cursor','pointer')
+            $(this).css('background','silver')
+            $(this).mouseleave(function(){
+                $('.razaosocial').css('background','white')
             })
-            $('.razaosocial td').css({
-                borderBottom: '1px solid #ccc'
+            $(this).click(function(){
+                var codigo_cliente=$(this).attr('linha');
+                var razao=$(this).attr('razao');
+                var cnpj_cpf=$(this).attr('cnpj_cpf');
+                var contato=$(this).attr('contato');
+                var email=$(this).attr('email');
+                var endereco=$(this).attr('endereco');
+                var numero=$(this).attr('numero');
+                var bairro=$(this).attr('bairro');
+                var cep=$(this).attr('cep');
+                var cidade=$(this).attr('cidade');
+                $(location).attr('href','../web/index.php?pagina=pedido&act=cad&codigo_cliente='+codigo_cliente+'&razao='+razao+'&cnpj_cpf='+cnpj_cpf+'&contato='+contato+'&email='+email+'&endereco='+endereco+'&endereco_numero='+numero+'&bairro='+bairro+'&cep='+cep+'&cidade='+cidade+'&origem=cliente')
             })
-            $('.razaosocial').mouseover(function(){
-                $(this).css('cursor','pointer')
-                $(this).css('background','silver')
-                $(this).mouseleave(function(){
-                    $('.razaosocial').css('background','white')
-                })
-                $(this).click(function(){
-                    var codigo_cliente=$(this).attr('linha');
-                    var razao=$(this).attr('razao');
-                    var cnpj_cpf=$(this).attr('cnpj_cpf');
-                    var contato=$(this).attr('contato');
-                    var email=$(this).attr('email');
-                    var endereco=$(this).attr('endereco');
-                    var numero=$(this).attr('numero');
-                    var bairro=$(this).attr('bairro');
-                    var cep=$(this).attr('cep');
-                    var cidade=$(this).attr('cidade');
-                    $(location).attr('href','../web/index.php?pagina=pedido&act=cad&codigo_cliente='+codigo_cliente+'&razao='+razao+'&cnpj_cpf='+cnpj_cpf+'&contato='+contato+'&email='+email+'&endereco='+endereco+'&endereco_numero='+numero+'&bairro='+bairro+'&cep='+cep+'&cidade='+cidade+'&origem=cliente')
-                })
-            })
-        }      
+        })
+        //}      
         /*$(':submit').click(function(){
             var arr=new Array();
             $(':input').each(function(){
@@ -139,7 +139,7 @@
                 });
             }
         });
-        $('button').each(function(){
+        $('button.paginacao').each(function(){
             $(this).css('cursor','pointer')
             $(this).css({
                 border: 'none'
@@ -260,7 +260,8 @@
         })
         $(document).keydown(function(e){
             if(e.keyCode==13){
-                if($(':checked[name=tipoBusca]').val()=='local'){
+                $('.procura2 img').trigger('click')
+                /*if($(':checked[name=tipoBusca]').val()=='local'){
                     if($('.procura2 input').val()){
                         var tipoBusca;
                         var buscaPor=$('.procura2 input').val();
@@ -315,7 +316,7 @@
                     link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'&tipoBusca='+tipoBusca+'&buscaPor='+buscaPor+'';
                     $('.tituloProd').text('Aguarde...')
                     $(location).attr('href',link)
-                }
+                }*/
             }
         })
         $('.tipoBusca input').click(function(){
