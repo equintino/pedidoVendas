@@ -28,7 +28,7 @@
             //inserido 
             href = $(this).attr("href");
             $('.window').load(href);
-            $(id).show();	
+            $(id).show()
         });              
         $('#pnl1 table').on('click',function(){
             $('#pnl1 table tr').click('each',function(){

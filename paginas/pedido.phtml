@@ -108,7 +108,7 @@
                 }else{
                     $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&tags=undefined')
                 }
-            }else if(e.which==112){
+            }else if(e.which==112 || e.which==114 || e.which==116 || e.which==123){
                 return false;
             }else if(e.which==115){
                 $('.bnt').each(function(){
@@ -116,15 +116,11 @@
                         $(this).trigger('click')
                     }
                 })
-            }else if(e.which==116){
-                return false;
-            }else if(e.which==114){
-                return false;
             }else if(e.which==27){
                 $("#mascara").hide();
                 $(".window").hide();
-            }else if(e.which==123){
-                $('.procura img').trigger('click');
+            }else if(e.which==119){
+                $('.procura img').trigger('click')
                 return false;
             }
         })

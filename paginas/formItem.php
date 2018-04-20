@@ -334,9 +334,12 @@
     echo '<script>var loja="'.$loja.'"</script>';
     if(key_exists('pagAtual', $_GET)){
         $pagAtual=$_GET['pagAtual'];
+        if($pagAtual=='undefined'){
+           echo '<script>pagAtual=1;</script>'; 
+        }
     }else{
-        $pagAtual=null;
-        echo '<script>var pagAtual=1;</script>';
+        $pagAtual=1;
+        echo '<script>pagAtual=1;</script>';
     }
     @$buscaProduto=$_GET['buscaProduto'];
     
@@ -429,7 +432,7 @@
                 <?php endif; ?>
             </select>
         </span>
-        <input autofocus type="text" name="procura" title="Pesquisar por produtos" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por produtos" /> (F12)<br>
+        <input autofocus type="text" name="procura" title="Pesquisar por produtos" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por produtos" /> (F8)<br>
         <div class="tipoBusca"><input title="Tipo de busca" type="radio" name="tipoBusca" value="local" <?= $local ?>/><b> Local</b> &nbsp&nbsp&nbsp<input title="Tipo de busca" type="radio" name="tipoBusca" value="servidor" <?= $servidor ?>/> <b>Servidor</b></div>
     </div>
     <?php if($act != 'atualiza'): ?>
