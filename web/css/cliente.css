@@ -1,0 +1,121 @@
+body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.head{
+    text-align: center;
+    font-size: 30px;
+    padding-top: 10px;
+    margin-left: 160px;
+}
+.pag{
+    font-size: 15px;
+}
+.total{
+    float: right;
+    margin-right: 30px;
+}
+table{
+    width: 100%;
+    border: 1px solid #ccc;
+}
+table td{
+    padding: 3px 10px;
+}
+table td div{
+    width: 250px;
+    word-wrap:  break-word;
+}
+table tr{
+    background: rgba(216, 0, 0,0.1);
+}
+.ct{
+    align-content: center;
+}
+table th{
+    background: green;
+    color: white;
+    font-size: 20px;
+    padding: 2px;
+}
+.edicao{
+    background-color: white;
+    padding: 0;
+}
+td img:hover{
+    cursor: pointer;
+}
+.procura{
+    float: right;
+    margin: 10px;
+}
+.procura img{
+    margin-top: 2px;
+}
+.procura2 img:hover{
+    cursor: pointer;
+}
+.procura2{
+    float: right;
+    margin: 10px;
+}
+.procura2 .tipoBusca{
+    margin-top: 5px;
+    padding: 0 20px;
+}
+#menu{
+    width: 1030px;
+}
+.tituloProd{
+    font-size: 20px;
+}
+button{
+    box-shadow: 2px 2px 2px gray;
+    background-color: #cbcbcb;
+    padding: 1px 3px;
+    border-radius: 5px;
+    text-shadow: 2px 2px 2px white;
+    font-weight: bolder;
+}
+.filtroTag{
+    padding: 20px;
+}
+.filtroTag span{
+    margin-top: 30px;
+}
+.recarrega{
+    float:left;
+    padding: 5px;
+}
+#saldo{
+    float: right;
+    position: relative;
+    top: -50px;
+}
+.botao{
+    float: right;
+    marginRight: 20px;
+}
+.botao input{
+    borderRadius: 0 0 5px 5px;
+    fontWeight: 600;
+    backgroundColor: #63a9c1;
+    color: #111f46;
+    padding: 1px 4px;
+}
+form{
+    width: 710px;
+}
+table tr:odd{
+    background: #ccc;
+}
+.razaosocial{
+    background: white;
+}
+.razaosocial td{
+    borderBottom: 1px solid #ccc;
+}

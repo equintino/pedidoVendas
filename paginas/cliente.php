@@ -59,7 +59,7 @@
     
 ////////// Clientes ////////////
     if($funcao=='administrador' && $act=='adm'){
-        //echo '<pre>';print_r([$_GET,$_POST,$funcao]);die;
+        
     }elseif($act=='list'){
         //// Listar Clientes ////
         if($tipoBusca=='servidor' || !$tipoBusca){
