@@ -4,7 +4,6 @@
 </head>
 <body>
 <?php 
-//include_once 'web/backup.php';
 include 'validacao/valida_cookies.php';
 $acesso = new valida_cookies();
         

@@ -4,51 +4,7 @@
         <title>Cadastro</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!--<link rel="stylesheet" href="css/login-style.css" />-->
-        <style>           
-            .cadlogin{
-                background: #46BEF0 url('../imagens/excalibur.jpeg') 100% fixed no-repeat;
-                background-position: center;
-            }
-            h1{
-                font-size: 28px;
-                text-shadow: 4px 4px 4px gray;
-                color: black;
-                font-weight: bolder;
-            }
-            .quadro{
-                border-radius: 10px;
-                box-shadow: 4px 4px 4px gray;
-                text-shadow: 2px 2px 2px white;
-                font-size: 22px;
-                background: #9fcef7;
-                width: 900px;
-                height: 480px;
-                margin: 100px auto;
-            }
-            fieldset{
-                width: 800px;
-                margin: auto;
-            }
-            fieldset table{
-                margin: auto;
-            }
-            .quadro div{
-                width: 200px;
-                margin-right: 20px;
-                float: right;
-            }
-            .quadro div input{
-                margin-top: 5px;
-                border: none;
-                background-color: green;
-                color: white;
-                font-size: 20px;
-                font-weight: 800;
-                font-family: sans-serif;
-                border-radius: 5px;
-            }
-        </style>
+        <link rel="stylesheet" href="css/cadlogin.css" />
     </head>
     <body class="cadlogin">
         <form action="cadlogin.php" method="POST" autocomplete="off">
@@ -65,13 +21,14 @@
                 <fieldset><legend>Função e Localização</legend>
                     <table>
                         <tr>
-                            <td align="right"><label>Função: </label></td><td><!--<input name="funcao" type="text" size="30" />-->
+                            <td align="right"><label>Função: </label></td>
+                            <td>
                                 <select name="funcao"  required>
                                     <option value="vendedor">Vendedor</option>
                                     <option value="administrador">Administrador</option>
                                 </select>
                             </td>
-                            <td align="right"><label>&nbsp&nbsp Loja: </label></td><td><!--<input name="setor" type="text" size="30" />-->
+                            <td align="right"><label>&nbsp&nbsp Loja: </label></td><td>
                                 <select name="loja" >
                                     <option value=""></option>
                                     <option value="cachambi">Cachambi</option>
