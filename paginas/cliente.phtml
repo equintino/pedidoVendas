@@ -133,7 +133,7 @@
         $('.pagina').text('CLIENTE')
         $(".procura2 input").on("keyup", function(){
             var value = $(this).val().toLowerCase();
-            if($('.tipoBusca :checked').val() != 'local'){
+            if($('.tipoBusca :checked').val()){
                 $(".listaCliente .tudo").filter(function(){
                   $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
@@ -184,15 +184,18 @@
         $('.recarrega').css('cursor','pointer')
         $('.recarrega').click(function(){
             var tags;
-            $('input:checked').each(function(){
-                if(!tags){
-                    tags = $(this).attr('name');
-                }else{
-                    tags += ','+$(this).attr('name');
-                }
-                tipoBusca=$(':checked[name=tipoBusca]').val();
-            })
-            link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'&tipoBusca='+tipoBusca+'';
+            var buscaPor=$('.procura2 input').val();
+            if(!buscaPor){
+                $('input:checked').each(function(){
+                    if(!tags){
+                        tags = $(this).attr('name');
+                    }else{
+                        tags += ','+$(this).attr('name');
+                    }
+                    tipoBusca=$(':checked[name=tipoBusca]').val();
+                })
+            }
+            link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'&tipoBusca='+tipoBusca+'&buscaPor='+buscaPor+'';
             $('.tudo').hide()
             $('.tituloProd').text('Aguarde...')
             $(location).attr('href',link)     
@@ -201,11 +204,20 @@
             if($(':checked[name=tipoBusca]').val()=='local'){
                 if($('.procura2 input').val()){
                     var tipoBusca;
-                    var tags=null;
+                    var buscaPor=$('.procura2 input').val();
+                    var tags;
+                    if(!buscaPor){
+                        $('.filtroTag input:checked').each(function(){
+                            if(!tags){
+                                tags = $(this).attr('name');
+                            }else{
+                                tags += ','+$(this).attr('name');
+                            }                            
+                        })
+                    }
                     $('input:checked').each(function(){
                         tipoBusca=$(':checked[name=tipoBusca]').val();
                     })
-                    var buscaPor=$('.procura2 input').val();
                     link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'&tipoBusca='+tipoBusca+'&buscaPor='+buscaPor+'';
                     $('.tituloProd').text('Aguarde...')
                     $(location).attr('href',link)                        
@@ -251,11 +263,20 @@
                 if($(':checked[name=tipoBusca]').val()=='local'){
                     if($('.procura2 input').val()){
                         var tipoBusca;
-                        var tags=null;
+                        var buscaPor=$('.procura2 input').val();
+                        var tags;
+                        if(!buscaPor){
+                            $('.filtroTag input:checked').each(function(){
+                                if(!tags){
+                                    tags = $(this).attr('name');
+                                }else{
+                                    tags += ','+$(this).attr('name');
+                                }                            
+                            })
+                        }
                         $('input:checked').each(function(){
                             tipoBusca=$(':checked[name=tipoBusca]').val();
                         })
-                        var buscaPor=$('.procura2 input').val();
                         link='../web/index.php?pagina=cliente&act=list&seleciona=1&pagAtual='+pagAtual+'&tags='+tags+'&tipoBusca='+tipoBusca+'&buscaPor='+buscaPor+'';
                         $('.tituloProd').text('Aguarde...')
                         $(location).attr('href',link)                        
@@ -402,10 +423,10 @@
         text-shadow: 2px 2px 2px white;
         font-weight: bolder;
     }
-    .filtroRag{
+    .filtroTag{
         padding: 20px;
     }
-    .filtroRag span{
+    .filtroTag span{
         margin-top: 30px;
     }
     .recarrega{
@@ -547,7 +568,7 @@
         }else{
             $checked=null;
         }
-        echo '<span class=filtroRag><input type=checkbox name="'.$item.'" '.$checked.' />'.$item.'</span>';
+        echo '<span class=filtroTag><input type=checkbox name="'.$item.'" '.$checked.' />'.$item.'</span>';
     }
     if(!@$tagsArray[1]){
         $tagsArray=$tagLista;

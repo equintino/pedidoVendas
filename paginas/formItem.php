@@ -2,14 +2,13 @@
 <head>
 <meta charset="utf-8" />
 <script>
-    $(document).ready(function(){        
+    $(document).ready(function(){
         var tipoBusca=$('.procura .tipoBusca input:checked').val();
         if(tipoBusca=='servidor'){
             $('.loja').hide()
         }else{
             $('.loja').show()
         }
-        
         $('.procura input[name=tipoBusca]:radio').click(function(){
             if($(this).val()=='local'){
                 $('.listaProduto, .paginacao').hide()
@@ -335,6 +334,9 @@
     echo '<script>var loja="'.$loja.'"</script>';
     if(key_exists('pagAtual', $_GET)){
         $pagAtual=$_GET['pagAtual'];
+    }else{
+        $pagAtual=null;
+        echo '<script>var pagAtual=1;</script>';
     }
     @$buscaProduto=$_GET['buscaProduto'];
     

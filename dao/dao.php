@@ -41,12 +41,11 @@
    }
    public function encontrePorTag(ModelSearchCriteria $search=null){
         $result = array();
-        //echo '<pre>';print_r($search->gettags());die;
         foreach($search->gettags() as $item){
             if($item != 'tipoBusca' && !$search->getnome_fantasia()){
                 $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND tags like "%'.$item.'%"')->fetchAll();
             }elseif($search->getnome_fantasia()){
-                $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND tags like "%'.$item.'%" AND nome_fantasia like "%'.$search->getnome_fantasia().'%" OR razao_social like "%'.$search->getnome_fantasia().'%"')->fetchAll();
+                $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND tags like "%'.$item.'%" AND nome_fantasia like "%'.$search->getnome_fantasia().'%" OR razao_social like "%'.$search->getnome_fantasia().'%" OR cnpj_cpf like "%'.$search->getnome_fantasia().'%"')->fetchAll();
             }
             if(@$row){
                 foreach($row as $item){

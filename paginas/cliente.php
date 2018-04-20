@@ -86,18 +86,6 @@
                 $search->settags($tagsArray);
             }
             $dados_=$dao->encontrePorTag($search);
-            /*if(array_key_exists('buscaPor',$_GET)){
-                if($buscaPor==null){
-                    $dados_=$dao->encontrePorTag($search);
-                }else{
-                    $dados_=$dao->encontre($search);
-                }
-            }elseif(@$tagsArray){
-                $dados=null;
-                $dados_=$dao->encontrePorTag($search);
-            }else{
-                $dados_=null;
-            }*/
         }
     }elseif($act=='excl'){
         //// Excluir Cliente ////
