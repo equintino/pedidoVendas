@@ -1,9 +1,7 @@
 <?php
 final class UserDao {
-    /** @var PDO */
     private $db = null;
     public function __destruct() {
-        // close db connection
         $this->db = null;
     }
     public function find(UserSearchCriteria $search = null) {
@@ -128,7 +126,6 @@ final class UserDao {
         return $statement;
     }
     private static function throwDbError(array $errorInfo) {
-        // TODO log error, send email, etc.
         throw new Exception('Erro na conexão com o Banco [' . $errorInfo[0] . ', ' . $errorInfo[1] . ']: ' . $errorInfo[2]);
     }
     private function criaTabela(User $user){
