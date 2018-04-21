@@ -29,7 +29,6 @@
             $texto=$this->texto4($variaveis);
             fwrite($handle, $texto); 
             fclose($handle);
-            
             return $variaveis;
         }
         private function padrao(){
@@ -170,10 +169,6 @@
                             $texto .= '`'.$item.'`';
                             if($item=='cod_API'){
                                 $texto .=' INT (5) NULL,';
-                            /*}elseif($item=='entrada'||$item=='saida'){
-                                $texto .=' DATETIME DEFAULT NULL,';
-                            }elseif($item=='descricao'){
-                                $texto .=' TEXT NULL,';*/
                             }else{
                                 $texto .=' varchar(100) NULL,';
                             }
