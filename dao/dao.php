@@ -174,8 +174,10 @@
         }
         if(OMIE_APP_KEY=='2769656370'){
             $config = Config::getConfig("db");
-        }else{
+        }elseif(OMIE_APP_KEY=='461893204773'){
            $config = Config::getConfig("db2");
+        }else{
+           $config = Config::getConfig("db3");            
         }
         try {
             $this->db = new PDO($config['dsn'], $config['username'], $config['password'],

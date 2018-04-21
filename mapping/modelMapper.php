@@ -67,9 +67,6 @@
 	if (array_key_exists('cidade_ibge', $properties)){
 	  $model->setcidade_ibge($properties['cidade_ibge']);
 	}
-	if (array_key_exists('cnae', $properties)){
-	  $model->setcnae($properties['cnae']);
-	}
 	if (array_key_exists('cnpj_cpf', $properties)){
 	  $model->setcnpj_cpf($properties['cnpj_cpf']);
 	}
@@ -85,8 +82,8 @@
 	if (array_key_exists('complemento', $properties)){
 	  $model->setcomplemento($properties['complemento']);
 	}
-	if (array_key_exists('email', $properties)){
-	  $model->setemail($properties['email']);
+	if (array_key_exists('contribuinte', $properties)){
+	  $model->setcontribuinte($properties['contribuinte']);
 	}
 	if (array_key_exists('endereco', $properties)){
 	  $model->setendereco($properties['endereco']);
@@ -133,6 +130,9 @@
 	if (array_key_exists('nome_fantasia', $properties)){
 	  $model->setnome_fantasia($properties['nome_fantasia']);
 	}
+	if (array_key_exists('observacao', $properties)){
+	  $model->setobservacao($properties['observacao']);
+	}
 	if (array_key_exists('pessoa_fisica', $properties)){
 	  $model->setpessoa_fisica($properties['pessoa_fisica']);
 	}
@@ -142,15 +142,6 @@
 	if (array_key_exists('tags', $properties)){
 	  $model->settags($properties['tags']);
 	}
-	if (array_key_exists('telefone1_ddd', $properties)){
-	  $model->settelefone1_ddd($properties['telefone1_ddd']);
-	}
-	if (array_key_exists('telefone1_numero', $properties)){
-	  $model->settelefone1_numero($properties['telefone1_numero']);
-	}
-	if (array_key_exists('tipo_atividade', $properties)){
-	  $model->settipo_atividade($properties['tipo_atividade']);
-	}
 	if (array_key_exists('cod_API', $properties)){
 	  $model->setcod_API($properties['cod_API']);
 	}
@@ -159,6 +150,12 @@
 	}
 	if (array_key_exists('optante_simples_nacional', $properties)){
 	  $model->setoptante_simples_nacional($properties['optante_simples_nacional']);
+	}
+	if (array_key_exists('telefone1_ddd', $properties)){
+	  $model->settelefone1_ddd($properties['telefone1_ddd']);
+	}
+	if (array_key_exists('telefone1_numero', $properties)){
+	  $model->settelefone1_numero($properties['telefone1_numero']);
 	}
 	if (array_key_exists('telefone2_ddd', $properties)){
 	  $model->settelefone2_ddd($properties['telefone2_ddd']);
@@ -175,11 +172,14 @@
 	if (array_key_exists('homepage', $properties)){
 	  $model->sethomepage($properties['homepage']);
 	}
-	if (array_key_exists('observacao', $properties)){
-	  $model->setobservacao($properties['observacao']);
+	if (array_key_exists('tipo_atividade', $properties)){
+	  $model->settipo_atividade($properties['tipo_atividade']);
 	}
-	if (array_key_exists('contribuinte', $properties)){
-	  $model->setcontribuinte($properties['contribuinte']);
+	if (array_key_exists('email', $properties)){
+	  $model->setemail($properties['email']);
+	}
+	if (array_key_exists('cnae', $properties)){
+	  $model->setcnae($properties['cnae']);
 	}
   } 
  }
