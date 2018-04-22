@@ -1,0 +1,21 @@
+﻿30/03/2018 19:03 - Atualização de Cleintes Total realizada com sucesso.
+Fatal error: Call to undefined method Model::getprodutor_rural() in C:\Arquivos de programas\EasyPHP-DevServer-14.1VC9\data\localweb\projects\pedidoVendas\dao\CRUD.php on line 29
+
+Fatal error: Call to undefined method Model::getrecomendacao_atraso() in C:\Arquivos de programas\EasyPHP-DevServer-14.1VC9\data\localweb\projects\pedidoVendas\dao\CRUD.php on line 29
+
+Fatal error: Call to undefined method Model::getlogradouro() in C:\Arquivos de programas\EasyPHP-DevServer-14.1VC9\data\localweb\projects\pedidoVendas\dao\CRUD.php on line 29
+
+Fatal error: Call to undefined method Model::getimportado_api() in C:\Arquivos de programas\EasyPHP-DevServer-14.1VC9\data\localweb\projects\pedidoVendas\dao\CRUD.php on line 29
+
+Fatal error: Call to undefined method Model::getbloqueado() in C:\Arquivos de programas\EasyPHP-DevServer-14.1VC9\data\localweb\projects\pedidoVendas\dao\CRUD.php on line 29
+
+30/03/2018 19:03 - Atualização de Cleintes Total realizada com sucesso.
+Fatal error: Call to undefined method Model::getmodificado() in C:\Arquivos de programas\EasyPHP-DevServer-14.1VC9\data\localweb\projects\pedidoVendas\dao\CRUD.php on line 29
+
+30/03/2018 20:03 - Atualização de Cleintes Total realizada com sucesso.
+30/03/2018 20:03 - Atualização de Cleintes Total realizada com sucesso.
+30/03/2018 20:03 - Atualização de Cleintes Total realizada com sucesso.
+30/03/2018 21:03 - Atualização de Cleintes Total realizada com sucesso.
+Fatal error: Class 'UserDao' not found in C:\Arquivos de programas\EasyPHP-DevServer-14.1VC9\data\localweb\projects\pedidoVendas\model\ClientesCadastroJsonClient.php on line 3
+
+Fatal error: Class 'UserDao' not found in C:\Arquivos de programas\EasyPHP-DevServer-14.1VC9\data\localweb\projects\pedidoVendas\model\ClientesCadastroJsonClient.php on line 3

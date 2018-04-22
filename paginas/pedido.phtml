@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<head>
+  <script src="../web/js/jquery.mask.min.js"></script>
+  <script src="../web/js/jqueryPedido.js"></script>
+  <link rel="stylesheet" href="../web/css/pedido.css" />
+<style>
+<?php if($funcao=='administrador'): ?>
+.conteudo{
+    height: 605px;
+}
+<?php else: ?>
+.conteudo{
+    height: 583px;
+}
+<?php endif; ?>
+.conteudo h1{
+    font-size: 38px;
+}
+</style>
+</head>
+<body>
+<div id="menu">
+    <?php if($act != 'cad'):?>
+    <div class="procura">
+        <input autofocus type="text" name="procura" title="Pesquisar por produtos" />
+        <img height="18" src="../web/img/lupa.png" title="Pesquisar por produtos">
+    </div>
+    <?php endif; ?>
+</div>
+<div class="conteudo">
+<?php if($act=='cad'): ?>
+    <div class="valorPedido"></div>
+<h1>Inclusão de Pedido de Venda</h1>
+        <?php if($funcao=='administrador'): ?>
+        <span class="opcaoTransp">
+            <span>SELECIONE A TRANSPORTADORA</span>
+            <select name="transportadora" >
+                <?php foreach($transpSelecao as $key => $item): ?>
+                <option value="<?= $key ?>"><?= $item[0].' - '.$item[1] ?></option>
+                <?php endforeach; ?>
+            </select>
+            <button>Confirma</button>
+        </span>
+        <?php endif; ?>
+<span id=confirmado></span>
+<form id="dados" class="fPedido" method="post" action='../paginas/add.php?act=cad&pagina=pedido' target="_blank" >
+<table class="tabela">
+    <tr><td colspan="4">Cliente</td><td align="center">Previsão Faturamento</td></tr>
+    <tr><td colspan="4" class="razao"><input type="hidden" name="cCliente" value="<?= $cCliente ?>" /><input tabindex="1" name="cliente" type="text" size=53 value="<?= $razao ?>" required /> <img src="../web/img/lupa.png" height="14" title="Pesquisar cliente"/><span class="tecla"> (F2)</span></td><td class="previsao"><input disabled name="dPrevisao" type="text" value="<?= date('d/m/Y') ?>" /><input name="dPrevisao" type="hidden" value="<?= date('d/m/Y') ?>" /></td></tr>     <input type="hidden" name="endereco" value="<?= $_GET['endereco'] ?>" /><input type="hidden" name="endereco_numero" value="<?= $_GET['endereco_numero'] ?>" /><input type="hidden" name="endereco" value="<?= $_GET['endereco'] ?>" /><input type="hidden" name="bairro" value="<?= $_GET['bairro'] ?>" /><input type="hidden" name="cidade" value="<?= $_GET['cidade'] ?>" /><input type="hidden" name="cep" value="<?= $_GET['cep'] ?>" />
+    <tr><td><font size=2px>CNPJ/CPF</font></td><tr>
+    <tr><td class="cnpj"><input tabindex="2" type="text" name="cnpj_cpf" required value="<?= $cnpj_cpf ?>"/></td>
+    </tr>
+</table>
+<fieldset class="fTotais">
+    <legend> Totais </legend>
+    <!-- Quadro Preenchido Automaticamente -->
+<table>
+    <tr>
+        <?php foreach($variaveis1 as $key => $item): ?>
+            <?php if($item=='IPI'||$item=='ICMS ST'||$item=='Desconto'): ?>
+                <td width="20%" align="right"><?= $item ?> </td>
+            <?php elseif($item=='Valor do Pedido'): ?>
+                <td align="center" ><?= $item ?> </td>
+            <?php else: ?>
+                <td><?= $item ?></td>
+            <?php endif ?>
+        <?php endforeach; ?>
+    </tr>
+    <tr class="autoQuadro">       
+        <?php foreach($variaveis1 as $key => $item): ?>
+        <?php if($key=='tItem'): ?>
+        <td class="valores" nome="<?= $key ?>" align="center">0 </td>
+        <input type='hidden' name='<?= $key ?>' value=''/>
+        <?php else: ?>
+        <td class="valores" nome="<?= $key ?>" vlr="" align="right">0,00 </td>
+        <input type='hidden' name='<?= $key ?>' value=''/>
+        <?php endif; endforeach; ?>
+    </tr>
+</table></fieldset>
+    <!-- Fim do Quadro -->
+    <div id="serial"><textarea rows=5 placeholder="Insira aqui o serial:"></textarea><br><span id="transf">Transferir para o campo</span></div>
+<table class="tabela">
+    <tr><td>Vendedor</td><td>Número de Parcelas</td><td>Forma de Pagamento</td></tr>
+    <tr><td class='vendedor'><input type="hidden" name="vendedor" />
+            <select name="cod_vend" required>
+                <option value=""></option>
+                <?php foreach($vend as $key => $item): ?>
+                <?php 
+                    if(mb_strtoupper(trim($item->nome),'utf-8') == mb_strtoupper(trim($login,'utf-8'))){
+                        $selected='selected=\'selected\'';
+                    }else{
+                        $selected='';
+                    }
+                ?>
+                <option value="<?= $item->codigo ?>" comissao="<?= $item->comissao ?>" <?= $selected ?> ><?= $item->nome ?></option>
+                <?php endforeach; ?>
+            </select>
+            <?php if($funcao=='administrador'): ?>
+                <img height=15px src="../web/img/atualiza.png" title="Atualiza lista de vendedores"/>
+            <?php endif; ?>
+        </td><td>
+            <select name="parcela" tabindex="4" disabled required>
+                <option value=""></option>
+                <?php foreach($parcela as $key => $item): ?>
+                <option value="<?= $item->cDescricao.','.$item->cCodigo.','.$item->nQtdeParc ?>"><?= $item->cDescricao ?></option>
+                <?php endforeach; ?>
+            </select>
+        </td><td>
+            <select class='fPag' tabindex="3" name="fPagamento" required>
+                <option value=""></option>
+                <?php foreach($form_pag as $key => $item): ?>
+                <option value="<?= $key ?>"><?= $item ?></option>
+                <?php endforeach; ?>
+            </select>
+        </td>
+        <td class='doc'><input type='text' name='doc' placeholder="Isira aqui o documento"/></td></tr>
+</table>
+    <div class="outrosItens">
+        <span class="item">Itens de Venda</span>
+        <span class="frete">Frete/Despesas</span>
+        <span class="info">Informações Adcionais</span>
+        <span class="parcela">Parcelas</span>        
+        <span class="email">E-mail para Cliente</span>
+    </div>
+        <div id='pnl1'>
+            <div id='botoes'>
+                <span class="tecla">(F4) </span><span class='bnt'>Novo Ítem</span><span class='bnt'>Excluir Ítem</span><span class='loja'></span>
+            </div>
+            <div class="divVendas dItem">
+                <table>
+                    <tr>
+                    <?php foreach($variaveis2['Ítens de Venda'] as $key => $item): ?>
+                        <?php if($item=='Desconto'): ?>
+                            <td><?= $item ?>(%)</td>
+                        <?php elseif($item != 'CFOP' && $item != 'NCM' && $item != 'EAN' && $item != 'Unidade'): ?>
+                            <td><?= $item ?></td>
+                        <?php endif ?>
+                    <?php endforeach; ?>
+                    </tr>
+                    <tr id=item1><span class=novo><td class=lupa></td><td class=item>1</td><td><input type="text" size=10px name="codigo_produto1" autocomplete="off" linha=1 required/></td><td><input type="text" name="descricao1" autocomplete="off" required /></td><td><input type="text" size=2px name="quantidade1" autocomplete="off" linha=1 required /></td><td><input type="text" size=8px name="vUnitarioItem1" autocomplete="off" required /></td><td><input type="text" size=8px name="vTotalItem1" linha=1 disabled /></td><td><input type="text" size=2px name="pDescontoItem1" autocomplete="off" linha=1 /></td><td><textarea rows="1" cols="25" name="obs_item1" linha=1 /></textarea></td><td><input type="hidden" name="cfop1" linha=1 /></td><td><input type="hidden" name="ncm1" linha=1 /></td><td><input type="hidden" name="ean1" linha=1 /></td><td><input type="hidden" name="unidade1" linha=1 /></td><td><input type="hidden" name="vTotalItem1" linha=1 /></td><td><input type="hidden" name="pTabela1" linha=1 /></td><input type=hidden name=cOmie1 /></span></tr>
+                </table>
+            </div>
+        </div>
+        <div id='pnl2'>
+            <div class="divVendas dItem">
+                <table>
+                    <tr>
+                    <?php foreach($variaveis2['Frete e Outras Despesas'] as $key => $item): ?>
+                    <td><?= $item ?></td>
+                    <?php endforeach; ?>
+                    </tr>
+                    <tr class='novo2'>
+                    <?php foreach($variaveis2['Frete e Outras Despesas'] as $key => $item): ?>
+                        <?php if($item == 'Transportadora'){
+                            echo '<td width=20px><input size=10px type="text" name="'.$key.'" value="'.$correios->getnome_fantasia().'" /></td><input type=hidden name=codigo_transportadora value="'.$correios->getcodigo_cliente_omie().'" />';
+                        }elseif($item == 'Tipo do Frete'){
+                            echo '<td width=40px><input size=40px type="text" name="'.$key.'" value="1-Frete por Conta do Destinatário" /></td>';  
+                        }elseif($item=='Quantidade de Volumes'){
+                            echo "<td><input size=10px type='text' name=$key value='' /></td>";
+                        }else{
+                            echo '<td><input type="text" name="'.$key.'" /></td>';
+                        }
+                        endforeach; 
+                    ?>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div id='pnl3'>
+            <div class="divVendas dItem">
+                <table>
+                    <tr>
+                    <?php foreach($variaveis2['Informações Adcionais'] as $key => $item): ?>
+                    <td><?php if($key != 'dados_adcionais_nf') echo $item ?></td>
+                    <?php endforeach; ?>
+                    </tr>
+                    <tr class='novo3'>
+                    <?php foreach($variaveis2['Informações Adcionais'] as $key => $item): ?>
+                        <?php if($item=='Categoria'): ?>
+                        <td width='8px'><input disabled size=8px type='text' name='<?= $key ?>' value="<?= '1.01.03' ?>"/></td>
+                        <input type='hidden' name='codigo_categoria' />
+                        <?php elseif($item=='Conta'): ?>
+                            <td width=20px><select name='codigo_conta_corrente'>
+                                    <?php foreach($contaTipo as $key => $item): ?>
+                                    <option value='<?= $item[0] ?>' codigo_categoria="<?= $item[1] ?>" ><?= $key ?></option>
+                                    <?php endforeach; ?>
+                            </select>
+                            <?php if($funcao=='administrador'): ?>
+                                <img height=15px src="../web/img/atualiza.png" title="Atualiza Contas"/>
+                            <?php endif; ?>
+                            </td>
+                        <?php elseif($item=='Etapa'): ?>
+                            <td width='20px'><select name='etapa'>
+                            <?php 
+                                foreach($selEtapa as $key => $item): ?>
+                                    <?php if($item->cCodigo!='00'): ?>
+                                        <option value='<?= $item->cCodigo ?>'><?= $item->cDescricao ?></option>
+                                <?php endif; endforeach; ?>
+                            </td></select>
+                        <?php elseif($key=='dados_adcionais_nf'): ?>                                <tr class="dados_adcionais_nf"><td colspan="3">Dados Adcionais para a Nota Fiscal<br><textarea cols=40 rows="3" name='dados_adcionais_nf'/></textarea></td></tr>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div id='pnl4'>
+            <div class="divVendas dItem">
+        <fieldset class="iVendas">
+            <legend>Abaixo as parcelas e vencimentos desta venda</legend>
+                <table>
+                    <tr>
+                    <?php foreach($variaveis2['Parcelas'] as $key => $item): ?>
+                    <?php if($key!='quantidade_dias'): ?>
+                        <td><?= $item ?></td>
+                    <?php endif; endforeach; ?>
+                    </tr>
+                    <tr linha=1 class='novo4'>
+                    <?php foreach($variaveis2['Parcelas'] as $key => $item): ?>
+                        <?php if($key=='numero_parcela'): ?>
+                            <td align='center' width='2px'><input size='1px' type='text' name='<?= $key ?>1' /></td>
+                        <?php elseif($key=='data_vencimento'): ?>
+                            <td align='center' width='7px'><input size='10px' type='text' name='<?= $key ?>1' /></td>
+                        <?php elseif($key=='valor' || $key=='percentual'): ?>
+                            <td align='center' width='7px'><input size='10px' type='text' name='<?= $key ?>1' /></td>
+                        <?php elseif($key!='quantidade_dias'): ?>
+                            <td align='center'><input type='text' name='<?= $key ?>1'  /></td>
+                    <?php endif; endforeach; ?>
+                    </tr>
+                </table>
+        </fieldset>
+            </div>
+        </div>
+        <div id='pnl5'>
+            <div class="divVendas dItem">
+                <table>
+                    <tr>
+                    <?php foreach($variaveis2['E-mail para o Cliente'] as $item): ?>
+                    <td><?= $item ?></td>
+                    <?php endforeach; ?>
+                    </tr>
+                    <tr>
+                        <td><textarea cols="80" name="e-mail"><?= $email ?></textarea></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    <span class="botao">
+        <input type="hidden" name="dadosProduto" />
+        <input type="submit" value="Enviar Pedido"/>
+        <a id="novoPedido" href="../web/index.php?pagina=pedido&act=cad"><span type="reset" class="novoPedido">Novo Pedido</span></a>
+    </span>
+<div id="painel"></div>
+</form>
+<?php elseif($act=='cons'):?>
+
+<?php elseif($act=='alt'): ?>
+
+<?php elseif($act=='list'): ?>
+
+
+<?php else: 
+    $pvpListarRequest=array("pagina"=>2,"registros_por_pagina"=>100,"apenas_importado_api"=>"N");
+    $dados=$pedido->ListarPedidos($pvpListarRequest);
+    
+    echo '<pre>';print_r($dados);die;
+    
+    $posicao=array('Pedido de Venda','Separar Estoque','Faturar','Faturado','Entrega');
+    foreach($dados->pedido_venda_produto as $key => $item){
+            if($item->cabecalho->etapa=='10'){
+                $triagem['Pedido de Venda']=$item->cabecalho;
+            }elseif($item->cabecalho->etapa=='20'){
+                $triagem['Separar Estoque']=$item->cabecalho;
+            }elseif($item->cabecalho->etapa=='50'){
+                $triagem['Faturar']=$item->cabecalho;
+            }elseif($item->cabecalho->etapa=='60'){
+                $triagem['Faturado']=$item->cabecalho;
+            }elseif($item->cabecalho->etapa=='70'){
+                $triagem['Entrega']=$item->cabecalho;
+            }
+    }
+     $clientes_cadastro_chave=array("codigo_cliente_omie"=>0,"codigo_cliente_integracao"=>"");    
+    echo '<ul>';
+    $y=1;
+    foreach($posicao as $item){
+        echo '<ul><li>';
+            echo $item;
+                echo '<ul>';
+                if(@$triagem[$item]->numero_pedido){
+                    echo '<li>Pedido Nº'.number_format($triagem[$item]->numero_pedido);
+                    switch($y){
+                        case 1:
+                            echo ' <select name=etapa>';
+                                echo '<option value=1></option>';
+                                echo '<option value=1>2</option>';
+                                echo '<option value=1>3</option>';
+                                echo '<option value=1>4</option>';
+                                echo '<option value=1>5</option>';
+                            echo '</select>';
+                            break;
+                        case 2:
+                            echo ' <select name=etapa>';
+                                echo '<option value=2></option>';
+                                echo '<option value=2>1</option>';
+                                echo '<option value=2>3</option>';
+                                echo '<option value=2>4</option>';
+                                echo '<option value=2>5</option>';
+                            echo '</select>';
+                            break;
+                        case 3:
+                            echo ' <select name=etapa>';
+                                echo '<option value=3></option>';
+                                echo '<option value=3>1</option>';
+                                echo '<option value=3>2</option>';
+                                echo '<option value=3>4</option>';
+                                echo '<option value=3>5</option>';
+                            echo '</select>';
+                            break;
+                        case 4:
+                            echo ' <select name=etapa>';
+                                echo '<option value=4></option>';
+                                echo '<option value=4>5</option>';
+                            echo '</select>';
+                            break;
+                        case 5:
+                            echo ' <select name=etapa>';
+                                echo '<option value=5></option>';
+                                echo '<option value=5>4</option>';
+                            echo '</select>';
+                            break;
+                    }
+                    echo ' Alterar Etapa</li>';
+                    $clientes_cadastro_chave=array('codigo_cliente_omie'=>$triagem[$item]->codigo_cliente);
+                    $dados_cliente=$cliente->ConsultarCliente($clientes_cadastro_chave);
+                    echo '<li><b>'.$dados_cliente->nome_fantasia.'</b></li>';
+                    $prev=Utils::datafatura($triagem[$item]->data_previsao,$triagem[$item]->etapa);
+                    $cor=substr(strstr($prev,','),1);
+                    $fatura=strstr($prev,',',true);
+                    echo '<li><font color='.$cor.'>'.$fatura.'</font></li>';
+                }
+                echo '</ul>';
+        echo '</li></ul>';
+        $y++;
+    }
+    echo '</ul>';
+?>
+<?php endif; ?>
+</div>
+</body>
+</html>
