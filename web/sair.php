@@ -20,10 +20,7 @@
 </head>
 <body>
 <?php
-    include '../validacao/valida_cookies.php';
-    $cookies=new valida_cookies();
-    $cookies->limpaCookies();
-?>
+ include '../validacao/valida_cookies.php';$cookies=new valida_cookies();$cookies->limpaCookies();?>
     <div class="msg"><img src="img/logo.png" />
         <h2>EMQDesenv</h2>
         <h4>Desenvolvimento de Sistemas</h4>

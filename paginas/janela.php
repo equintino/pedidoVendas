@@ -42,6 +42,11 @@
             })
             $('#pnl1 table tr .lupa img').click(function(){
                 var pagAtual;
+                //$('.tudo').hide();
+                //$('.tituloProd').text('Aguarde...');
+                /*if(!pagAtual){
+                    var pagAtual=1;
+                }*/
                 link='../paginas/formItem.php?codigo_produto='+codigo_produto+'&pagAtual='+pagAtual+'';
                 $('a[rel=modal]').attr('href',link);
                 $("a[rel=modal]").trigger("click")
@@ -89,6 +94,11 @@
 		$(this).hide();
 		$('.window2').hide();
 	});
+        
+        
+                
+                
+                
             });
 	</script>
         <style type="text/css">
@@ -98,6 +108,9 @@
 		height:620px;
 		position:absolute;
 		left:0;
+                //overflow: scroll;
+		//top:0;
+                //margin: auto;
 		background:#FFF;
 		z-index:9900;
 		padding:10px;
@@ -110,10 +123,14 @@
   		z-index:9000;
   		background-color:#000;
   		display:none;
+                //border: solid yellow;
             }
             .fechar{
                 display:block; 
                 text-align:right;
+            }
+            a{
+                /*display: none;*/
             }
             
     #mask2 {
@@ -136,6 +153,9 @@
     }
     #boxes #dialog2 {
         background: transparent; 
+        //width:650px;
+        //margin:0 auto;
+        //margin-top:-160px;
     }
     .close{
         display:block; 
