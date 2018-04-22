@@ -74,15 +74,7 @@
     if(@$_GET['gravado']){
         Flash::addFlash('Registro salvo com sucesso.');
     }
-    
-////////// Produtos ////////////
-   if($act=='excl'){
-    /*$produto_servico_cadastro_chave = array("codigo_produto" => $_GET['codigo'], "codigo_cliente_integracao" => "", "codigo" => "");
-    $produtos->ExcluirProduto($produto_servico_cadastro_chave);
-    header('Location:index.php?pagina=produto&act=list');*/
-       die;
-   }
-   
+       
    ////// Classes //////
    if($contaAtualiza==1){
         $contas=new ContaCorrenteCadastroJsonClient();
@@ -121,22 +113,26 @@
         if(!file_exists('../dao/CRUDConta.php')){
             echo '<script>window.location.assign("index.php?pagina=pedido&act=cad&contaAtualiza=1")</script>';
         }
-        $daoConta=new dao();
-        $search=new ContaSearchCriteria();
-        $search->settabela('tb_conta');
-        $search->setOMIE_APP_KEY(OMIE_APP_KEY);
-        if(OMIE_APP_KEY=='2769656370'){
-            $db='db';
-        }elseif(OMIE_APP_KEY=='461893204773'){
-            $db='db2';
-        }
-        if(!$daoConta->showTabela($search->gettabela(),$db)){
-            echo '<script>window.location.assign("index.php?pagina=pedido&act=cad&contaAtualiza=1")</script>';
-        }
-        $conta=$daoConta->encontrePorConta($search);
-        $contaTipo=array();
-        foreach($conta as $item){
-            $contaTipo[$item->getdescricao()]=array($item->getnCodCC(),$item->getpdv_categoria());
+        if(file_exists('../dao/CRUD.php')){
+            $daoConta=new dao();
+            $search=new ContaSearchCriteria();
+            $search->settabela('tb_conta');
+            $search->setOMIE_APP_KEY(OMIE_APP_KEY);
+            if(OMIE_APP_KEY=='2769656370'){
+                $db='db';
+            }elseif(OMIE_APP_KEY=='461893204773'){
+                $db='db2';
+            }else{
+                $db='db3';
+            }
+            if(!$daoConta->showTabela($search->gettabela(),$db)){
+                echo '<script>window.location.assign("index.php?pagina=pedido&act=cad&contaAtualiza=1")</script>';
+            }
+            $conta=$daoConta->encontrePorConta($search);
+            $contaTipo=array();
+            foreach($conta as $item){
+                $contaTipo[$item->getdescricao()]=array($item->getnCodCC(),$item->getpdv_categoria());
+            }
         }
    }
    if($vendedorAtualiza==1){
@@ -160,30 +156,32 @@
             $dao2->grava3($model);
         }
    }else{
-        $dao2=new CRUD();
-        $search=new ModelSearchCriteria();
-        $search->settabela('tb_vendedor');
-        if(OMIE_APP_KEY=='2769656370'){
-            $db='db';
-        }elseif(OMIE_APP_KEY=='461893204773'){
-            $db='db2';
-        }
-        if(!$dao2->showTabela('tb_vendedor',$db)){
-           echo '<script>window.location.assign("index.php?index=sim&pagina=pedido&act=cad&vendedorAtualiza=1")</script>'; 
-        }
-        $vendedores=$dao2->encontrePorVendedor($search);
-        $vend=array();
-        foreach($vendedores as $item){
-            $vendedores=new vendedores();
-            $vendedores->codigo=$item->getcodigo();
-            $vendedores->nome=$item->getnome();
-            $vendedores->comissao=$item->getcomissao();
+        if(file_exists('../dao/CRUD.php')){
+            $dao2=new CRUD();
+            $search=new ModelSearchCriteria();
+            $search->settabela('tb_vendedor');
+            if(OMIE_APP_KEY=='2769656370'){
+                $db='db';
+            }elseif(OMIE_APP_KEY=='461893204773'){
+                $db='db2';
+            }
+            if(!$dao2->showTabela('tb_vendedor',$db)){
+               echo '<script>window.location.assign("index.php?index=sim&pagina=pedido&act=cad&vendedorAtualiza=1")</script>'; 
+            }
+            $vendedores=$dao2->encontrePorVendedor($search);
+            $vend=array();
+            foreach($vendedores as $item){
+                $vendedores=new vendedores();
+                $vendedores->codigo=$item->getcodigo();
+                $vendedores->nome=$item->getnome();
+                $vendedores->comissao=$item->getcomissao();
 
-            if(@$funcao == 'administrador'){
-                array_push($vend, $vendedores);
-            }else{
-                if(strtoupper($login) == strtoupper($item->getnome())){
+                if(@$funcao == 'administrador'){
                     array_push($vend, $vendedores);
+                }else{
+                    if(strtoupper($login) == strtoupper($item->getnome())){
+                        array_push($vend, $vendedores);
+                    }
                 }
             }
         }
@@ -228,7 +226,7 @@
         $transpSelecao=array();
         $listaCliente=array();
         foreach($cliente as $item){
-            $transpSelecao[$item->getcidade()]=array($item->getnome_fantasia(),$item->getcodigo_cliente_omie());
+            $transpSelecao[$item->getcodigo_cliente_omie()]=array($item->getnome_fantasia(),$item->getcidade());
             if(stristr($item->getnome_fantasia(),'correios')){
                 $correios_=$item;
             }
