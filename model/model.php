@@ -154,6 +154,13 @@
  public function setcidade_ibge($cidade_ibge ){
 	$this->cidade_ibge=$cidade_ibge;
  }
+ private $cnae;
+ public function getcnae(){
+	return $this->cnae;
+ }
+ public function setcnae($cnae ){
+	$this->cnae=$cnae;
+ }
  private $cnpj_cpf;
  public function getcnpj_cpf(){
 	return $this->cnpj_cpf;
@@ -189,12 +196,12 @@
  public function setcomplemento($complemento ){
 	$this->complemento=$complemento;
  }
- private $contribuinte;
- public function getcontribuinte(){
-	return $this->contribuinte;
+ private $email;
+ public function getemail(){
+	return $this->email;
  }
- public function setcontribuinte($contribuinte ){
-	$this->contribuinte=$contribuinte;
+ public function setemail($email ){
+	$this->email=$email;
  }
  private $endereco;
  public function getendereco(){
@@ -301,13 +308,6 @@
  public function setnome_fantasia($nome_fantasia ){
 	$this->nome_fantasia=$nome_fantasia;
  }
- private $observacao;
- public function getobservacao(){
-	return $this->observacao;
- }
- public function setobservacao($observacao ){
-	$this->observacao=$observacao;
- }
  private $pessoa_fisica;
  public function getpessoa_fisica(){
 	return $this->pessoa_fisica;
@@ -329,6 +329,27 @@
  public function settags($tags ){
 	$this->tags=$tags;
  }
+ private $telefone1_ddd;
+ public function gettelefone1_ddd(){
+	return $this->telefone1_ddd;
+ }
+ public function settelefone1_ddd($telefone1_ddd ){
+	$this->telefone1_ddd=$telefone1_ddd;
+ }
+ private $telefone1_numero;
+ public function gettelefone1_numero(){
+	return $this->telefone1_numero;
+ }
+ public function settelefone1_numero($telefone1_numero ){
+	$this->telefone1_numero=$telefone1_numero;
+ }
+ private $tipo_atividade;
+ public function gettipo_atividade(){
+	return $this->tipo_atividade;
+ }
+ public function settipo_atividade($tipo_atividade ){
+	$this->tipo_atividade=$tipo_atividade;
+ }
  private $cod_API;
  public function getcod_API(){
 	return $this->cod_API;
@@ -349,20 +370,6 @@
  }
  public function setoptante_simples_nacional($optante_simples_nacional ){
 	$this->optante_simples_nacional=$optante_simples_nacional;
- }
- private $telefone1_ddd;
- public function gettelefone1_ddd(){
-	return $this->telefone1_ddd;
- }
- public function settelefone1_ddd($telefone1_ddd ){
-	$this->telefone1_ddd=$telefone1_ddd;
- }
- private $telefone1_numero;
- public function gettelefone1_numero(){
-	return $this->telefone1_numero;
- }
- public function settelefone1_numero($telefone1_numero ){
-	$this->telefone1_numero=$telefone1_numero;
  }
  private $telefone2_ddd;
  public function gettelefone2_ddd(){
@@ -399,25 +406,18 @@
  public function sethomepage($homepage ){
 	$this->homepage=$homepage;
  }
- private $tipo_atividade;
- public function gettipo_atividade(){
-	return $this->tipo_atividade;
+ private $observacao;
+ public function getobservacao(){
+	return $this->observacao;
  }
- public function settipo_atividade($tipo_atividade ){
-	$this->tipo_atividade=$tipo_atividade;
+ public function setobservacao($observacao ){
+	$this->observacao=$observacao;
  }
- private $email;
- public function getemail(){
-	return $this->email;
+ private $contribuinte;
+ public function getcontribuinte(){
+	return $this->contribuinte;
  }
- public function setemail($email ){
-	$this->email=$email;
- }
- private $cnae;
- public function getcnae(){
-	return $this->cnae;
- }
- public function setcnae($cnae ){
-	$this->cnae=$cnae;
+ public function setcontribuinte($contribuinte ){
+	$this->contribuinte=$contribuinte;
  }
  }
