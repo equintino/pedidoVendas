@@ -1,1 +1,67 @@
-<!DOCTYPE html><html> <head> <title>Cadastro</title> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <link rel="stylesheet" href="css/cadlogin.css"/> </head> <body class="cadlogin"> <form action="cadlogin.php" method="POST" autocomplete="off"> <div class="quadro"> <h1>CADASTRO DE LOGIN</h1> <fieldset><legend>Dados do Funcionário</legend> <table> <tr> <td align="right"><label>Nome Completo: </label></td><td><input name="nome" type="text" size="40" required/></td><td align="right"><label>&nbsp&nbsp E-mail: </label></td><td><input name="email" type="email" size="40"/></td></tr></table> </fieldset> <fieldset><legend>Função e Localização</legend> <table> <tr> <td align="right"><label>Função: </label></td><td> <select name="funcao" required> <option value="vendedor">Vendedor</option> <option value="administrador">Administrador</option> </select> </td><td align="right"><label>&nbsp&nbsp Loja: </label></td><td> <select name="loja" > <option value=""></option> <option value="cachambi">Cachambi</option> <option value="bonsucesso">Bonsucesso</option> </select> </td></tr></table> </fieldset> <fieldset><legend>Autenticação</legend> <table> <tr> <td align="right"><label>Login: </label></td><td><input name="login" type="text" size="30" required/></td><td align="right"><label>Senha: </label></td><td><input name="senha" type="password" size="30" required/></td></tr><td></td><td></td><td align="right"><label>Confirma: </label></td><td><input name="senha2" type="password" size="30" required/></td></tr></table> </fieldset> <fieldset><legend>Autenticação Omie</legend> <table> <tr> <td align="right"><label>OMIE_APP_KEY: </label></td><td><input name="OMIE_APP_KEY" type="text" size="30" required/></td><td align="right"><label>OMIE_APP_SECRET: </label></td><td><input name="OMIE_APP_SECRET" type="password" size="30" required/></td></tr></table> </fieldset> <div> <input type="button" onclick="history.go(-1)" value="Voltar"/> <input type="submit" value="Confirmar"/> </div></div></form> </body></html>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Cadastro</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/cadlogin.css" />
+    </head>
+    <body class="cadlogin">
+        <form action="cadlogin.php" method="POST" autocomplete="off">
+            <div class="quadro">
+                    <h1>CADASTRO DE LOGIN</h1>
+                <fieldset><legend>Dados do Funcionário</legend>
+                    <table>
+                            <tr>
+                                <td align="right"><label>Nome Completo: </label></td><td><input name="nome" type="text" size="40" required/></td>
+                                <td align="right"><label>&nbsp&nbsp E-mail: </label></td><td><input name="email" type="email" size="40" /></td>
+                            </tr>
+                    </table>
+                </fieldset>
+                <fieldset><legend>Função e Localização</legend>
+                    <table>
+                        <tr>
+                            <td align="right"><label>Função: </label></td>
+                            <td>
+                                <select name="funcao"  required>
+                                    <option value="vendedor">Vendedor</option>
+                                    <option value="administrador">Administrador</option>
+                                </select>
+                            </td>
+                            <td align="right"><label>&nbsp&nbsp Loja: </label></td><td>
+                                <select name="loja" >
+                                    <option value=""></option>
+                                    <option value="cachambi">Cachambi</option>
+                                    <option value="bonsucesso">Bonsucesso</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <fieldset><legend>Autenticação</legend>
+                    <table>
+                            <tr>
+                                <td align="right"><label>Login: </label></td><td><input name="login" type="text" size="30"  required/></td>
+                                <td align="right"><label>Senha: </label></td><td><input name="senha" type="password" size="30"  required/></td>
+                            </tr>
+                                <td></td><td></td>
+                                <td align="right"><label>Confirma: </label></td><td><input name="senha2" type="password" size="30"  required/></td>
+                            </tr>
+                    </table>
+                </fieldset>
+                <fieldset><legend>Autenticação Omie</legend>
+                    <table>
+                        <tr>
+                            <td align="right"><label>OMIE_APP_KEY: </label></td><td><input name="OMIE_APP_KEY" type="text" size="30"  required/></td>
+                            <td align="right"><label>OMIE_APP_SECRET: </label></td><td><input name="OMIE_APP_SECRET" type="password" size="30"  required/></td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <div>
+                    <input type="button" onclick="history.go(-1)" value="Voltar" />
+                    <input type="submit" value="Confirmar" />
+                </div>
+            </div>
+        </form>
+    </body>
+</html>
