@@ -119,7 +119,7 @@
 <div class=recarrega><img src="../web/img/atualiza.png" height="18" title="Recarregar esta página."/></div>
 <span class=tituloProd>Páginas </span>
 <?php
-    if($tipoBusca=='servidor' || !$tipoBusca){
+    if(($tipoBusca=='servidor' || !$tipoBusca) && is_object($dados)){
         for($g=1;$g <= $dados->total_de_paginas;$g++){
                 echo '<button class=paginacao>'.$g.'</button>&nbsp&nbsp';
         }
@@ -153,15 +153,15 @@
         $totalRegistro=$dao->totalLinhas($search);
     }
 ?> 
-    <span class="pag">(pág.<?= $paginaAtual ?>/<?= $totalPagina ?>)</span>
-    <script>var pagAtual='<?= $paginaAtual ?>'</script>
+    <span class="pag">(pág.<?= @$paginaAtual ?>/<?= @$totalPagina ?>)</span>
+    <script>var pagAtual='<?= @$paginaAtual ?>'</script>
 </div>
 <div class="total"><script> var total='<?= $totalRegistro; ?>'</script></div>
 <table class="listaCliente">
     <tr><th>Razao Social/Nome</th><th>Nome Fantasia/Apelido</th><th>CNPJ/CPF</th></tr>
 <?php 
     $contador=0;
-    if($tipoBusca=='servidor' || !$tipoBusca):
+    if(($tipoBusca=='servidor' || !$tipoBusca) && $dados):
         foreach($dados_ as $cliente): 
             foreach($cliente->tags as $tipo):
                     if(in_array($tipo->tag, $tagsArray)): $contador++; ?>
