@@ -1,1 +1,0 @@
-<?php define("OMIE_APP_KEY","2769656370"); define("OMIE_APP_SECRET","56c8e6d86d2209ec5a066bc26f271891");
