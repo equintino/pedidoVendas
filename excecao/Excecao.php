@@ -1,5 +1,1 @@
-<?php
-  final class Excecao extends Exception{
- }
-?>
-
+<?php final class Excecao extends Exception{}?>
