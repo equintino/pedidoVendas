@@ -30,66 +30,6 @@
             })
         })
     </script>
-    <style>
-        #ico img{
-            position: absolute;
-            left: 10px;
-            height: 40px;
-            background: none;
-        }
-        #sair img{
-            float: right;
-        }
-        .pagina{
-            float: right;
-            margin-right: 10px;
-            text-transform: uppercase;
-        }
-        .vaivem{
-            float: left;
-            margin-top: 5px;
-            margin-left: -140px;
-            //border: solid red;
-        }
-        .vaivem:hover{
-            cursor: pointer;
-        }
-        .pagina, .mGeral{
-            margin-top: 5px;
-            font-size: 15px;
-            text-shadow: 4px 4px 4px white;
-        }
-        .mGeral{
-            float: left;
-            margin: 0px 100px;
-            padding: 6px 20px;
-            height: 20px;
-            //border: solid green;
-        }
-        .mGeral ul li{
-            display: inline;
-            padding: 7px 10px;
-        }
-        .mGeral li:hover{
-            cursor: pointer;
-            background: #4e9bae;
-            color: white;
-        }
-        .empresa{
-            font-size: 15px;
-            margin-right: 50px;
-            float: right;
-            text-transform: uppercase;
-            background: #4e9bae;
-            color: white;
-            text-shadow: 2px 2px 2px black;
-            padding: 5px 13px;
-        }
-        #flashes{
-            font-size: 30px;
-            text-align: center;
-        }
-    </style>
 </head>
 <body id="page">
     <div id="main">
@@ -105,18 +45,6 @@
         <!-- content -->
         <div id="content">
             <div class="wrapper">
-                <!--<div class="col-1">
-                    <div class="box">
-                        <div class="inner">
-                            <img src='emqdesenv.ico' />
-                            <ul class="list">
-                                <li><span><a href="<?php //echo Utils::createLink('cliente'); ?>" ><img src="img/clientes.png" alt="" title="Cadastro de Clientes" class="icon" />Clientes</a></span></li>
-                                <li><span><a href="<?php //echo Utils::createLink('produto'); ?>" ><img src="img/produtos.png" alt="" title="Cadastro de Produtos" class="icon" />Produtos</a></span></li>
-                                <li><span><a href="<?php //echo Utils::createLink('pedido'); ?>" ><img src="img/pedidos.png" alt="" title="Pré-Venda" class="icon" />Pré-Venda</a></span></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>-->
                 <div class="col-2">
                     <div class="indent">
                         <?php if ($flashes): ?>
