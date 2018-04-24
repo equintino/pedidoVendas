@@ -1,9 +1,7 @@
 <?php
 final class UserDao {
-    /** @var PDO */
     private $db = null;
     public function __destruct() {
-        // close db connection
         $this->db = null;
     }
     public function find(UserSearchCriteria $search = null) {
@@ -32,10 +30,7 @@ final class UserDao {
         }
     }
     public function delete($id) {
-        $sql = '
-            DELETE FROM tb_usuario 
-            WHERE
-                id = :id';
+        $sql = 'DELETE FROM tb_usuario WHERE id = :id';
         $statement = $this->getDb()->prepare($sql);
         $this->executeStatement($statement, array(
             ':id' => $id,
@@ -68,17 +63,11 @@ final class UserDao {
     private function insert(User $user){
         $this->criaTabela($user);
         $this->execute('ALTER TABLE `tb_usuario` ADD UNIQUE(`login`)', $user);
-        $sql = '
-            INSERT INTO tb_usuario (id, nome, login, senha, email, loja, funcao, OMIE_APP_KEY, OMIE_APP_SECRET, empresa, cnpj)
-            VALUES (:id, :nome, :login, :senha, :email, :loja, :funcao, :OMIE_APP_KEY, :OMIE_APP_SECRET, :empresa, :cnpj)';
+        $sql = 'INSERT INTO tb_usuario (id, nome, login, senha, email, loja, funcao, OMIE_APP_KEY, OMIE_APP_SECRET, empresa, cnpj) VALUES (:id, :nome, :login, :senha, :email, :loja, :funcao, :OMIE_APP_KEY, :OMIE_APP_SECRET, :empresa, :cnpj)';
         return $this->execute($sql, $user);
     }
     private function update(User $user) {
-        $sql = '
-            UPDATE tb_usuario SET
-		senha = :senha
-            WHERE
-                id = :id';
+        $sql = 'UPDATE tb_usuario SET senha = :senha WHERE id = :id';
         return $this->execute($sql, $user);
     }
     private function execute($sql, User $user) {
@@ -107,7 +96,6 @@ final class UserDao {
             ':cnpj' => $user->getcnpj()
         );
         if ($user->getId()) {
-            // unset created date, this one is never updated
             unset($params[':login']);
         }
         return $params;
@@ -119,16 +107,13 @@ final class UserDao {
     }
     private function query($sql) {
         $statement = $this->getDb()->query($sql, PDO::FETCH_ASSOC);
-        //print_r($statement);die;
         if ($statement === false) {
             $sql = "CREATE TABLE IF NOT EXISTS `tb_usuario` (`id` int(5) NOT NULL AUTO_INCREMENT,`nome` varchar(100) DEFAULT NULL,`login` varchar(50) DEFAULT NULL, `senha` varchar(100) DEFAULT NULL, `email` varchar(100) DEFAULT NULL, `deleted` enum('0','1') DEFAULT '0', `loja` varchar(100) DEFAULT NULL, `funcao` varchar(100) DEFAULT NULL, `OMIE_APP_KEY` varchar(100) DEFAULT NULL, `OMIE_APP_SECRET` varchar(100) DEFAULT NULL, `empresa` varchar(100) DEFAULT NULL, `cnpj` varchar(100) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1";
             $statement = $this->getDb()->query($sql, PDO::FETCH_ASSOC);
-            //self::throwDbError($this->getDb()->errorInfo());
         }
         return $statement;
     }
     private static function throwDbError(array $errorInfo) {
-        // TODO log error, send email, etc.
         throw new Exception('Erro na conexão com o Banco [' . $errorInfo[0] . ', ' . $errorInfo[1] . ']: ' . $errorInfo[2]);
     }
     private function criaTabela(User $user){
