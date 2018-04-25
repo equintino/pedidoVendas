@@ -126,14 +126,10 @@
         }
     }elseif($pagina=='pedido'){
         include '../validacao/ModelValidador.php';
-        // Obtêm o número do pedido Atual
         $numero_pedido_atual = file_get_contents('numeroPedido.txt');
-        // Atualiza número do Pedido e salva no arquivo
         file_put_contents('numeroPedido.txt', ++$numero_pedido_atual);
-        // Mostra o número de visitas
         $codigo_pedido_integracao=file_get_contents('numeroPedido.txt');
         
-        //include '../config/OmieAppAuth.php';
         include '../config/Config.php';
         include '../model/ProdutosCadastroJsonClient.php';
         include '../model/PedidoVendaProdutoJsonClient.php';
@@ -144,16 +140,14 @@
         include '../mapping/ProdutoMapper.php';
         include '../dao/ModelSearchCriteria.php';
         include '../model/ProdutosCaracteristicasJsonClient.php';
-        //include '../dao/UserDao.php';
         
         $pedido=new PedidoVendaProdutoJsonClient();
         $parCod=explode(',', $_POST['parcela']);
-        //print_r($parCod);
         $parcela=$parCod[2];
         $parc=null;
         $cParcela=$parCod[1];
         
-        ///// cabecalho /////
+        /* cabecalho */
         $cabecalho=new cabecalho();
         $cabecalho->bloqueado='N';
         $cabecalho->codigo_cliente=$_POST['cCliente'];
@@ -197,7 +191,7 @@
             $ide->codigo_item='';
             $ide->codigo_item_integracao=$_POST['codigo_produto'.$x.''];
 
-            ///// produto //////
+            /* produto */
             $produto->codigo_produto=$_POST['cOmie'.$x.''];
             $produto->descricao=$_POST['descricao'.$x.''];
             $produto->quantidade=$_POST['quantidade'.$x.''];
@@ -215,22 +209,21 @@
             $inf_adic->dados_adicionais_item=$_POST['obs_item'.$x.''];
             
                 
-            /// calculando ///
+            /* calculando */
             @$vDescontoItem=ModelValidador::removePonto($_POST['vTotalItem'.$x.''])*$_POST['pDescontoItem'.$x.'']/100;
             $vTotal=ModelValidador::removePonto($_POST['vTotalItem'.$x.''])-$vDescontoItem;
             $produto->valor_desconto=$vDescontoItem;
             $produto->valor_total=$vTotal;
-            //echo '<pre>';print_r($produto);die;
         }
         
-        //// Frete ////
+        /* Frete */
         $frete=new frete();
         $frete->codigo_transportadora=$_POST['codigo_transportadora'];
         $frete->codigo_transportadora_integracao;
         $frete->quantidade_volumes=$_POST['qvolume'];
         $frete->modalidade=substr($_POST['tfrete'],0,1);
         
-        //// Informacoes Adcionais //////
+        /* Informacoes Adcionais */
         $informacoes_adicionais=new informacoes_adicionais();
         $informacoes_adicionais->codigo_categoria=$_POST['codigo_categoria'];
         $informacoes_adicionais->codigo_conta_corrente=$_POST['codigo_conta_corrente'];
@@ -240,7 +233,7 @@
         $informacoes_adicionais->dados_adicionais_nf=$_POST['dados_adcionais_nf'];
         $informacoes_adicionais->utilizar_emails=$_POST['e-mail'];
         
-        //// Total Pedido ////
+        /* Total Pedido */
         $tPedido=new total_pedido();
         
         
@@ -312,284 +305,11 @@
                 $dao2->grava2($modelProduto);
             }
         }
-        //echo '<pre>';print_r($pedido_venda_produto);die;
+        echo '<pre>';print_r($pedido_venda_produto);die;
         $resultado=$pedido->IncluirPedido($pedido_venda_produto);
         
         @$numero_pedido=$resultado->numero_pedido;
         include 'imprime.php';
-        die;
-        /*
-    
-         * ***********************************
-         * Dados do Produto                  *
-         *                                   *
-         *************************************
-         
-         Array
-(
-    [aliquota_cofins] => 0
-    [aliquota_ibpt] => 0
-    [aliquota_icms] => 0
-    [aliquota_pis] => 0
-    [bloqueado] => N
-    [cest] => 
-    [cfop] => 
-    [codInt_familia] => 
-    [codigo] => 1000
-    [codigo_familia] => 0
-    [codigo_produto] => 1229930876
-    [codigo_produto_integracao] => 
-    [csosn_icms] => 
-    [cst_cofins] => 
-    [cst_icms] => 
-    [cst_pis] => 
-    [dadosIbpt] => stdClass Object
-        (
-            [aliqEstadual] => 0
-            [aliqFederal] => 0
-            [aliqMunicipal] => 0
-            [chave] => 
-            [fonte] => 
-            [valido_ate] => 
-            [valido_de] => 
-            [versao] => 
-        )
-
-    [descr_detalhada] => 
-    [descricao] => Mouse sem fio Microsoft
-    [descricao_familia] => 
-    [ean] => 
-    [estoque_minimo] => 10
-    [importado_api] => N
-    [inativo] => N
-    [ncm] => 9504.10.99
-    [obs_internas] => 
-    [peso_bruto] => 0
-    [peso_liq] => 0
-    [quantidade_estoque] => 10
-    [recomendacoes_fiscais] => stdClass Object
-        (
-            [cupom_fiscal] => N
-            [id_cest] => 
-            [id_preco_tabelado] => 0
-            [origem_mercadoria] => 
-        )
-
-    [red_base_icms] => 0
-    [tipoItem] => 00
-    [unidade] => UN
-    [valor_unitario] => 150
-)        
-   *****************************************************
-         stdClass Object
-(
-    [cabecalho] => stdClass Object
-        (
-            [bloqueado] => N
-            [codigo_cliente] => 3792227
-            [codigo_pedido_integracao] => 1519060633
-            [data_previsao] => 19/02/2018
-            [etapa] => 50
-            [numero_pedido] => 66628
-            [quantidade_itens] => 1
-        )
-
-    [det] => Array
-        (
-            [0] => stdClass Object
-                (
-                    [ide] => stdClass Object
-                        (
-                            [codigo_item_integracao] => 4422421
-                            [simples_nacional] => S
-                        )
-
-                    [imposto] => stdClass Object
-                        (
-                            [cofins_padrao] => stdClass Object
-                                (
-                                    [aliq_cofins] => 3
-                                    [base_cofins] => 400
-                                    [cod_sit_trib_cofins] => 01
-                                    [tipo_calculo_cofins] => B
-                                    [valor_cofins] => 12
-                                )
-
-                            [icms_sn] => stdClass Object
-                                (
-                                    [aliq_icms_sn] => 1.25
-                                    [cod_sit_trib_icms_sn] => 101
-                                    [origem_icms_sn] => 0
-                                    [valor_credito_icms_sn] => 5
-                                )
-
-                            [ipi] => stdClass Object
-                                (
-                                    [cod_sit_trib_ipi] => 51
-                                )
-
-                            [pis_padrao] => stdClass Object
-                                (
-                                    [aliq_pis] => 0.65
-                                    [base_pis] => 400
-                                    [cod_sit_trib_pis] => 01
-                                    [tipo_calculo_pis] => B
-                                    [valor_pis] => 2.6
-                                )
-
-                        )
-
-                    [inf_adic] => stdClass Object
-                        (
-                            [peso_bruto] => 150
-                            [peso_liquido] => 150
-                        )
-
-                    [produto] => stdClass Object
-                        (
-                            [cfop] => 5.102
-                            [codigo_produto] => 4422421
-                            [descricao] => Telefone Celular X
-                            [ncm] => 9403.30.00
-                            [quantidade] => 1
-                            [tipo_desconto] => V
-                            [unidade] => UN
-                            [valor_desconto] => 0
-                            [valor_mercadoria] => 200
-                            [valor_total] => 200
-                            [valor_unitario] => 200
-                        )
-
-                )
-
-        )
-
-    [frete] => stdClass Object
-        (
-            [codigo_transportadora] => 2239663
-            [modalidade] => 1
-            [placa] => ABC1234
-            [placa_estado] => SP
-            [valor_frete] => 30
-        )
-
-    [informacoes_adicionais] => stdClass Object
-        (
-            [codigo_categoria] => 1.01.03
-            [codigo_conta_corrente] => 11850365
-            [consumidor_final] => S
-            [enviar_email] => N
-        )
-
-    [lista_parcelas] => stdClass Object
-        (
-            [parcela] => Array
-                (
-                    [0] => stdClass Object
-                        (
-                            [data_vencimento] => 20/02/2018
-                            [numero_parcela] => 1
-                            [percentual] => 50
-                            [valor] => 100
-                        )
-
-                    [1] => stdClass Object
-                        (
-                            [data_vencimento] => 18/05/2018
-                            [numero_parcela] => 2
-                            [percentual] => 50
-                            [valor] => 100
-                        )
-
-                )
-
-        )
-
-    [total_pedido] => stdClass Object
-        (
-            [base_calculo_icms] => 200
-            [valor_mercadorias] => 200
-            [valor_total_pedido] => 200
-        )
-
-)
-         ********************************************       
-          
-         
-         * 
-         * 
-            $dados_pedido = array(
-                        'cabecalho'=>array(
-                            'bloqueado'=>'N',
-                            'codigo_cliente'=>$_POST['codigo_cliente'],
-                            'codigo_pedido_integracao'=>$_POST['codigo_pedido_integracao'],
-                            'data_previsao'=>$_POST['previsao'],
-                            'etapa'=>'10',
-                            'numero_pedido'=>$_POST['numero_pedido'],
-                            'quantidade_itens'=>$_POST['quantidade_itens']
-                        ),
-                        'det'=>array(
-                            'ide'=>array(
-                                'codigo_item_integracao'=>$_POST['codigo_item_integracao'],
-                                'simples_nacional'=>$_POST['simples_nacional']
-                            ),
-                            'produto'=>array(
-                                'cfop'=>'',
-                                'codigo_produto'=>$_POST['codigo_produto'],
-                                'descricao'=>$_POST['descricao'],
-                                'ncm'=>$_POST['ncm'],
-                                'quantidade'=>$_POST['quantidade'],
-                                'tipo_desconto'=>'P',
-                                'unidade'=>'UN',
-                                'valor_desconto'=>$_POST['valor_desconto'],
-                                'valor_mercadoria'=>$_POST['valor_mercadoria'],
-                                'valor_total'=>$_POST['valor_total'],
-                                'valor_unitario'=>$_POST['valor_unitario']
-                            )
-                        ),
-                        'frete'=>array(
-                            'codigo_transportadora'=>$_POST['codigo_transportadora'],
-                            'modalidade'=>$_POST['modalidade'],
-                            'placa'=>$_POST['placa'],
-                            'placa_estado'=>$_POAT['placa_estado'],
-                            'valor_frete'=>$_POST['valor_frete']
-                        ),
-                        'informacoes_adicionais'=>array(
-                            
-                        ),
-                        'lista_parcelas'=>array(
-                            'parcela'=>array(
-                                array(
-                                    'data_vencimento'=>$_POST['data_vencimento'],
-                                    'numero_parcela'=>$_POST['numero_parcela'],
-                                    'percentual'=>$_POST['percentual'],
-                                    'valor'=>$_POST['valor']
-                                ),
-                                array(
-                                    'data_vencimento'=>$_POST['data_vencimento'],
-                                    'numero_parcela'=>$_POST['numero_parcela'],
-                                    'percentual'=>$_POST['percentual'],
-                                    'valor'=>$_POST['valor']
-                                )
-                            )
-                        ),
-                        'total_pedido'=>array(
-                            'base_calculo_icms'=>$_POST['base_calculo_icms'],
-                            'valor_mercadorias'=>$_POST['valor_mercadorias'],
-                            'valor_total_pedido'=>$_POST['valor_total_pedido']
-                        )
-                    );
-         
-        echo '<pre>';
- print_r(json_decode('{"cabecalho": {"bloqueado": "N","codigo_cliente": 3792227,"codigo_pedido_integracao": "1519060633","data_previsao": "19/02/2018","etapa": "50","numero_pedido": "66628","quantidade_itens": 1},"det": [{"ide": {"codigo_item_integracao": "4422421","simples_nacional": "S"},"imposto": {"cofins_padrao": {"aliq_cofins": 3,"base_cofins": 400,"cod_sit_trib_cofins": "01","tipo_calculo_cofins": "B","valor_cofins": 12},"icms_sn": {"aliq_icms_sn": 1.25,"cod_sit_trib_icms_sn": 101,"origem_icms_sn": 0,"valor_credito_icms_sn": 5},"ipi": {"cod_sit_trib_ipi": 51},"pis_padrao": {"aliq_pis": 0.65,"base_pis": 400,"cod_sit_trib_pis": "01","tipo_calculo_pis": "B","valor_pis": 2.6}},"inf_adic": {"peso_bruto": 150,"peso_liquido": 150},"produto": {"cfop": "5.102","codigo_produto": "4422421","descricao": "Telefone Celular X","ncm": "9403.30.00","quantidade": 1,"tipo_desconto": "V","unidade": "UN","valor_desconto": 0,"valor_mercadoria": 200,"valor_total": 200,"valor_unitario": 200}}],"frete": {"codigo_transportadora": 2239663,"modalidade": "1","placa": "ABC1234","placa_estado": "SP","valor_frete": 30},"informacoes_adicionais": {"codigo_categoria": "1.01.03","codigo_conta_corrente": 11850365,"consumidor_final": "S","enviar_email": "N"},"lista_parcelas": {"parcela": [{"data_vencimento": "20/02/2018","numero_parcela": 1,"percentual": 50,"valor": 100},{"data_vencimento": "18/05/2018","numero_parcela": 2,"percentual": 50,"valor": 100}]},"total_pedido": {"base_calculo_icms": 200,"valor_mercadorias": 200,"valor_total_pedido": 200}}'));
- */
-         
-        /*    stdClass Object ( 
-        [cabecalho] => stdClass Object ( 
-            [bloqueado] => N [codigo_cliente] => 3792227 [codigo_pedido_integracao] => 1518658537 [data_previsao] => 14/02/2018 [etapa] => 50 [numero_pedido] => 68319 [quantidade_itens] => 1 
-                                        ) */
-        //echo '<pre>';
-        //print_r($_POST);
         die;
     }
     

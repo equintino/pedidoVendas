@@ -8,7 +8,7 @@
         private $filename3='../dao/ModelSearchCriteria.php';
         private $filename4='../dao/CRUD.php';
         public function novoArquivo($campos){
-            $variaveis=array('modificado','inscricao_suframa','produtor_rural','recomendacao_atraso','logradouro','importado_api','bloqueado','codInt','comissao','fatura_pedido','visualiza_pedido','nome','inativo','codigo');//email
+            $variaveis=array('modificado','inscricao_suframa','produtor_rural','recomendacao_atraso','logradouro','importado_api','bloqueado','codInt','comissao','fatura_pedido','visualiza_pedido','nome','inativo','codigo');
             $mode='w+';
             foreach($campos as $item){
                 $variaveis[] = $item;
@@ -35,82 +35,81 @@
             $padrao=array('id','tabela','excluido','criado');
             return $padrao;
         }
-        private function texto1($variaveis){          
-            $texto="<?php \r\n class Model{\r\n";
+        private function texto1($variaveis){
+            $texto="<?php class Model{ ";
             $padrao=$this->padrao();
             foreach($padrao as $pad){
-                $texto .="\t private $"."$pad; \r\n";
-                $texto .="\t public function get".$pad."(){\r\n".
-                        "\t\t ".'return $this->'."$pad; \r\n \t}\r\n".
-                        "\t public function set$pad(".'$'."$pad){\r\n".
-                        "\t\t".'$this->'.$pad.'=$'."$pad;\r\n \t}\r\n"; 
+                $texto .=" private $"."$pad; ";
+                $texto .=" public function get".$pad."(){".
+                        'return $this->'."$pad; }".
+                        " public function set$pad(".'$'."$pad){".
+                        '$this->'.$pad.'=$'."$pad;}"; 
             }
             foreach($variaveis as $item){
-              $texto .=' private $'.$item.';'."\r\n";
-              $texto .=  ' public function get'.$item."(){\r\n".
-                   "\t".'return $this->'.$item.";\r\n"." }\r\n".
-                   ' public function set'.$item.'($'.$item." ){\r\n".
-                   "\t".'$this->'.$item.'=$'.$item.";\r\n }\r\n";     
+              $texto .=' private $'.$item.';';
+              $texto .=  ' public function get'.$item."(){".
+                   'return $this->'.$item."; }".
+                   ' public function set'.$item.'($'.$item." ){".
+                   '$this->'.$item.'=$'.$item."; }";     
             }
             $texto .=' }'; 
             return $texto;
         }
         private function texto2($variaveis){
-            $texto="<?php \r\n class modelMapper{\r\n";
-            $texto .= '  public static function map(Model $model, array $properties){'."\r\n";
+            $texto="<?php class modelMapper{";
+            $texto .= '  public static function map(Model $model, array $properties){';
             $padrao=$this->padrao();
             foreach($padrao as $pad){
-            $texto .="\t".'if (array_key_exists(\''.$pad.'\', $properties)){'."\r\n".
-                        "\t".'  $model->set'.$pad.'($properties[\''.$pad.'\']);'."\r\n".
-                        "\t".'}'."\r\n";                
+            $texto .='if (array_key_exists(\''.$pad.'\', $properties)){'.
+                        '  $model->set'.$pad.'($properties[\''.$pad.'\']);'.
+                        '}';                
             }
             foreach($variaveis as $item){
-                $texto .="\t".'if (array_key_exists(\''.$item.'\', $properties)){'."\r\n".
-                        "\t".'  $model->set'.$item.'($properties[\''.$item.'\']);'."\r\n".
-                        "\t".'}'."\r\n";
+                $texto .='if (array_key_exists(\''.$item.'\', $properties)){'.
+                        '  $model->set'.$item.'($properties[\''.$item.'\']);'.
+                        '}';
             }
-            $texto .= '  }'." \r\n }"; 
+            $texto .= '  } }'; 
             return $texto;
         }
         private function texto3($variaveis){
-            $texto="<?php \r\n class ModelSearchCriteria{\r\n";
+            $texto="<?php class ModelSearchCriteria{";
             $padrao=$this->padrao();
             foreach($padrao as $pad){
-              $texto .= '   private $'.$pad.';
-               public function get'.$pad.'(){
-                return $this->'.$pad.';
-              }
-              public function set'.$pad.'($'.$pad.'){
-                  $this->'.$pad.'=$'.$pad.';
-                  return $this;
-              }'."\r\n";
+              $texto .= ' private $'.$pad.';'.
+               'public function get'.$pad.'(){'.
+                'return $this->'.$pad.';'.
+              '}'.
+              'public function set'.$pad.'($'.$pad.'){'.
+                  '$this->'.$pad.'=$'.$pad.';'.
+                  'return $this;'.
+              '}';
             }
             foreach($variaveis as $item){
-              $texto .= '   private $'.$item.';
-               public function get'.$item.'(){
-                return $this->'.$item.';
-              }
-              public function set'.$item.'($'.$item.'){
-                  $this->'.$item.' = $'.$item.';
-                  return $this;
-              }'."\r\n";
+              $texto .= ' private $'.$item.';'.
+               'public function get'.$item.'(){'.
+                'return $this->'.$item.';'.
+              '}'.
+              'public function set'.$item.'($'.$item.'){'.
+                  '$this->'.$item.' = $'.$item.';'.
+                  'return $this;'.
+              '}';
             }
             $texto .= '}';
             return $texto;
         }
         private function texto4($variaveis){
             $variaveis3=array('codigo','codInt','nome','inativo','comissao','email','fatura_pedido','visualiza_pedido');
-            $texto="<?php \r\n class CRUD extends Dao{\r\n";
-            $texto .= '   public function insert(Model $model){
-                date_default_timezone_set("Brazil/East");
-                $now = mktime (date(\'H\'), date(\'i\'), date(\'s\'), date("m")  , date("d"), date("Y"));
-                $model->setid(null);
-                $model->setexcluido(0);
-                $model->setcriado($now);  
-                $sql=$this->criaTabela(\''.$this->tabela.'\');
-                $this->execute($sql, $model);   
-                //$this->execute(\'ALTER TABLE `tb_cliente` ADD UNIQUE(`cnpj_cpf`)\', $model);
-                $sql = \'INSERT INTO '.$this->tabela.' (';
+            $texto="<?php class CRUD extends Dao{";
+            $texto .= ' public function insert(Model $model){'.
+                'date_default_timezone_set("Brazil/East");'.
+                '$now = mktime (date(\'H\'), date(\'i\'), date(\'s\'), date("m")  , date("d"), date("Y"));'.
+                '$model->setid(null);'.
+                '$model->setexcluido(0);'.
+                '$model->setcriado($now);'.
+                '$sql=$this->criaTabela(\''.$this->tabela.'\');'.
+                '$this->execute($sql, $model);'.
+                '$sql = \'INSERT INTO '.$this->tabela.' (';
                   foreach($variaveis as $item){
                     $texto .= '`'.$item.'`,';
                   }
@@ -140,16 +139,16 @@
                 }
                 $x++;
             }
-            $texto .=  ')\';'."\r\n";
-            $texto .= "\t".'$search = new ModelSearchCriteria();
-                $search->settabela($model->gettabela());
-                return $this->execute($sql, $model);
-                }'."\r\n";
-            $texto .= '   public function update(Model $model){
-                date_default_timezone_set("Brazil/East");
-                $now = mktime (date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
-                $model->setmodificado($now);
-                $sql = \'UPDATE '.$this->tabela.' SET id=:id,criado=:criado,modificado=:modificado,';
+            $texto .=  ')\';';
+            $texto .= '$search = new ModelSearchCriteria();'.
+                '$search->settabela($model->gettabela());'.
+                'return $this->execute($sql, $model);'.
+                '}';
+            $texto .= ' public function update(Model $model){'.
+                'date_default_timezone_set("Brazil/East");'.
+                '$now = mktime (date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));'.
+                '$model->setmodificado($now);'.
+                '$sql = \'UPDATE '.$this->tabela.' SET id=:id,criado=:criado,modificado=:modificado,';
                    $x=1;
                     foreach($variaveis as $item){
                         if($item != 'criado'){
@@ -160,11 +159,11 @@
                         }
                         $x++;
                     }
-                $texto .= ' WHERE id = :id \';
-                    return $this->execute($sql, $model);
-           }'."\r\n";
-                $texto .= '    public function criaTabela($tabela){
-                        $sql="CREATE TABLE IF NOT EXISTS '.$this->tabela.' ( `id` INT(5) NOT NULL AUTO_INCREMENT , `criado` INT(100) NULL,';
+                $texto .= ' WHERE id = :id \';'.
+                    'return $this->execute($sql, $model);'.
+           '}';
+                $texto .= ' public function criaTabela($tabela){'.
+                        '$sql="CREATE TABLE IF NOT EXISTS '.$this->tabela.' ( `id` INT(5) NOT NULL AUTO_INCREMENT , `criado` INT(100) NULL,';
                         foreach($variaveis as $item){
                             $texto .= '`'.$item.'`';
                             if($item=='cod_API'){
@@ -173,11 +172,11 @@
                                 $texto .=' varchar(100) NULL,';
                             }
                         }
-                        $texto .=' `excluido` ENUM(\'0\',\'1\') NOT NULL DEFAULT \'0\', PRIMARY KEY (`id`)) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci";
-                return $sql;
-                }'."\r\n";
-            $texto .='  public function getParams(Model $model){
-        $params = array(';
+                        $texto .=' `excluido` ENUM(\'0\',\'1\') NOT NULL DEFAULT \'0\', PRIMARY KEY (`id`)) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci";'.
+                'return $sql;'.
+                '}';
+            $texto .=' public function getParams(Model $model){'.
+        '$params = array(';
             $padrao=$this->padrao();
             foreach($padrao as $pad){
                 if($pad!='tabela'){
@@ -188,20 +187,18 @@
                     $classe='get'.$item;
                     $texto .='\':'.$item.'\'=>$model->'.$classe.'(),';
                 }    
-                $texto .=' );
-	 return $params;
-   }'."\r\n";
-                        
-                //$texto .= '}';
-            $texto .= '   public function insert3(Model $model){
-                date_default_timezone_set("Brazil/East");
-                $now = mktime (date(\'H\'), date(\'i\'), date(\'s\'), date("m")  , date("d"), date("Y"));
-                $model->setid(null);
-                $model->setexcluido(0);
-                $model->setcriado($now);  
-                $sql=$this->criaTabela3(\''.$this->tabela3.'\');
-                $this->execute3($sql, $model);
-                $sql = \'INSERT INTO '.$this->tabela3.' (';
+                $texto .=' );'.
+	 'return $params;'.
+   '}';
+            $texto .= ' public function insert3(Model $model){'.
+                'date_default_timezone_set("Brazil/East");'.
+                '$now = mktime (date(\'H\'), date(\'i\'), date(\'s\'), date("m")  , date("d"), date("Y"));'.
+                '$model->setid(null);'.
+                '$model->setexcluido(0);'.
+                '$model->setcriado($now);'.
+                '$sql=$this->criaTabela3(\''.$this->tabela3.'\');'.
+                '$this->execute3($sql, $model);'.
+                '$sql = \'INSERT INTO '.$this->tabela3.' (';
                   foreach($variaveis3 as $item){
                     $texto .= '`'.$item.'`,';
                   }
@@ -231,16 +228,16 @@
                 }
                 $x++;
             }
-            $texto .=  ')\';'."\r\n";
-            $texto .= "\t".'$search = new ModelSearchCriteria();
-                $search->settabela($model->gettabela());
-                return $this->execute3($sql, $model);
-                }'."\r\n";
-            $texto .= '   public function update3(Model $model){
-                date_default_timezone_set("Brazil/East");
-                $now = mktime (date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
-                $model->setmodificado($now);
-                $sql = \'UPDATE '.$this->tabela3.' SET id=:id,criado=:criado,modificado=:modificado,';
+            $texto .=  ')\';';
+            $texto .= '$search = new ModelSearchCriteria();'.
+                '$search->settabela($model->gettabela());'.
+                'return $this->execute3($sql, $model);'.
+                '}';
+            $texto .= ' public function update3(Model $model){'.
+                'date_default_timezone_set("Brazil/East");'.
+                '$now = mktime (date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));'.
+                '$model->setmodificado($now);'.
+                '$sql = \'UPDATE '.$this->tabela3.' SET id=:id,criado=:criado,modificado=:modificado,';
                    $x=1;
                     foreach($variaveis3 as $item){
                         if($item != 'criado'){
@@ -251,20 +248,20 @@
                         }
                         $x++;
                     }
-                $texto .= ' WHERE id = :id \';
-                    return $this->execute3($sql, $model);
-           }'."\r\n";
-                $texto .= '    public function criaTabela3($tabela){
-                        $sql="CREATE TABLE IF NOT EXISTS '.$this->tabela3.' ( `id` INT(5) NOT NULL AUTO_INCREMENT , `criado` INT(100) NULL,';
+                $texto .= ' WHERE id = :id \';'.
+                    'return $this->execute3($sql, $model);'.
+           '}';
+                $texto .= ' public function criaTabela3($tabela){'.
+                        '$sql="CREATE TABLE IF NOT EXISTS '.$this->tabela3.' ( `id` INT(5) NOT NULL AUTO_INCREMENT , `criado` INT(100) NULL,';
                         foreach($variaveis3 as $item){
                             $texto .= '`'.$item.'`';
                             $texto .=' varchar(100) NULL,';
                         }
-                        $texto .=' `excluido` ENUM(\'0\',\'1\') NOT NULL DEFAULT \'0\', PRIMARY KEY (`id`)) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci";
-                return $sql;
-                }'."\r\n";
-            $texto .='  public function getParams3(Model $model){
-        $params = array(';
+                        $texto .=' `excluido` ENUM(\'0\',\'1\') NOT NULL DEFAULT \'0\', PRIMARY KEY (`id`)) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci";'.
+                'return $sql;'.
+                '}'."\r\n";
+            $texto .=' public function getParams3(Model $model){'.
+        '$params = array(';
             $padrao=$this->padrao();
             foreach($padrao as $pad){
                 if($pad!='tabela'){
@@ -275,9 +272,9 @@
                     $classe='get'.$item;
                     $texto .='\':'.$item.'\'=>$model->'.$classe.'(),';
                 }    
-                $texto .=' );
-	 return $params;
-   }'."\r\n";      
+                $texto .=' );'.
+	 'return $params;'.
+   '}';      
                 $texto .= '}';    
                 
             return $texto;
