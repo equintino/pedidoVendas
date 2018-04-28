@@ -91,6 +91,22 @@
         }
         return $result;
    }
+   public function encontrePorPedido(PedidoSearchCriteria $search=null){
+        $result = array();
+        if($search->getpedido()){
+            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND pedido = "'.$search->getpedido().'"')->fetchAll();
+        }elseif($search->getcodigo_pedido_integracao()){
+            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo_pedido_integracao ='.$search->getcodigo_pedido_integracao().'')->fetchAll();
+        }else{
+            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND pedido IS NULL ORDER BY id DESC')->fetchAll();
+        }
+        foreach($row as $item){
+            $pedido = new pedido();
+            pedidoMapper::map($pedido, $item);
+            $result[$pedido->getid()] = $pedido;
+        }
+        return $result;
+   }
    public function totalLinhas(ModelSearchCriteria $search=null){
            $row = $this->query("SELECT id FROM `".$search->gettabela()."` WHERE `excluido` =  '0' ORDER BY id DESC ")->fetchAll();
         if (!$row) {
@@ -140,6 +156,17 @@
         }
         return $this->update5($conta);
    }
+   public function grava6(pedido $pedido){
+       if($pedido->getid() === null){
+           return $this->insert6($pedido);
+       }
+       return $this->update6($pedido);
+   }
+   public function gravaNumeroPedido($pedido){
+       $sql = 'UPDATE `tb_pedido` SET pedido = '.$pedido->getpedido().' WHERE codigo_pedido_integracao = '.$pedido->getcodigo_pedido_integracao().'';
+       $statement = $this->getDb()->prepare($sql)->execute();
+       return $statement;
+   }
    public function exclui($id) {
         $sql = 'delete from `'.$model->gettabela().'` WHERE id = :id';
         $statement = $this->getDb()->prepare($sql);
@@ -149,7 +176,7 @@
    }
    public function drop($tabela){
         $sql = 'DROP TABLE `'.$tabela.'`';
-        $statement = $this->getDb()->prepare($sql)->execute(); 
+        $statement = $this->getDb()->prepare($sql)->execute();
    }
    public function showTabela($tabela,$db=null){
         $sql = 'SHOW TABLES';
@@ -236,6 +263,16 @@
             //return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));
         }
         return $conta;
+   }
+   public function execute6($sql,pedido $pedido){
+        $statement = $this->getDb()->prepare($sql);
+        $this->executeStatement($statement, $this->getParams6($pedido));
+        $search=new PedidoSearchCriteria();        
+        $search->settabela($pedido->gettabela());
+        if (!$pedido->getid()) {
+            //return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));
+        }
+        return $pedido;
    }
    private function executeStatement(PDOStatement $statement, array $params){
         if (!$statement->execute($params)){

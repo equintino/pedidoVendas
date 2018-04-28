@@ -115,5 +115,10 @@ final class Utils {
         }
         return $msg.','.$cor;
     }
+    public static function removePonto($str){
+        $str=str_replace('.','',$str);
+        $str=str_replace(',','.',$str);
+        return $str;
+    }
 }
 ?>

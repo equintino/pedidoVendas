@@ -40,7 +40,7 @@ class PedidoVendaProdutoJsonClient {
 		);
                 //echo '<pre>';
                 //print_r(json_encode($call));die;           
-		return json_decode(file_get_contents(self::$_EndPoint."?JSON=".urlencode(json_encode($call))));
+		return @json_decode(file_get_contents(self::$_EndPoint."?JSON=".urlencode(json_encode($call))));
 	}
 
 	/**

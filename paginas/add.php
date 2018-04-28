@@ -1,5 +1,15 @@
 <meta charset='utf-8'>
+<script type="text/javascript" src="../web/js/jquery-3.2.1.min.js"></script>
 <script>
+    /*$(document).ready(function(){
+        if(flash){
+            $('body').text(flash);
+            $('body').append('<button>Reenviar</button>');
+            $('button').click(function(){
+                window.location.assign('../paginas/add.php?act=cad&pagina=pedido&reenvio=1');
+            })
+        }
+    })*/
     function removeVirgula(str){
         if(str.charAt(str.length-3)!='.'){
             str=str.replace('.','');
@@ -10,11 +20,21 @@
         return str.toFixed('2');
     }
 </script>
+<style>
+    /*body{
+        background: burlywood;
+        text-align: center;
+        margin-top: 50px;
+        font-size: 28;
+        font-weight: 700;
+        text-shadow: 2px 2px 2px white;
+    }*/
+</style>
 <?php
     $act=$_GET['act'];
     @$pagina=$_GET['pagina'];
     
-    if($act=='atualiza'){
+    /*if($act=='atualiza'){
         
             include '../config/Config.php';
             include '../excecao/Excecao.php';
@@ -55,13 +75,13 @@
             $model = new Model();
             modelMapper::map($model, $row);
             $result[$model->getid()] = $model;
-        }*/
-        print_r($model);
+        }
+        //print_r($model);
         //print_r(count($_POST));
         //$CRUD->criaTabela();
         
-        die;
-    }
+        //die;
+    }*/
     if($pagina=='cliente'){
         include '../model/ClientesCadastroJsonClient.php';
         $cliente=new ClientesCadastroJsonClient();
@@ -125,21 +145,216 @@
             }
         }
     }elseif($pagina=='pedido'){
+        /*if(array_key_exists('reenvio',$_GET)){
+            $reenvio=$_GET['reenvio'];
+        }else{
+            $reenvio=null;
+        }*/
+        
         include '../validacao/ModelValidador.php';
-        $numero_pedido_atual = file_get_contents('numeroPedido.txt');
-        file_put_contents('numeroPedido.txt', ++$numero_pedido_atual);
-        $codigo_pedido_integracao=file_get_contents('numeroPedido.txt');
+        include '../util/Utils.php';
         
         include '../config/Config.php';
         include '../model/ProdutosCadastroJsonClient.php';
+        if(OMIE_APP_KEY=='461893204773'){
+            $loja='1000';
+        }else{
+            $loja='2000';
+        }
+        if(!file_exists('../paginas/'.$loja.'numeroPedido.txt')){
+            fopen('../paginas/'.$loja.'numeroPedido.txt','a');
+        }
+        
+        
+        $numero_pedido_atual = file_get_contents('../paginas/'.$loja.'numeroPedido.txt');
+        //echo $numero_pedido_atual.' -> '.$_GET['numero_pedido_atual'];die;
+        if($numero_pedido_atual==$_GET['numero_pedido_atual']){
+            file_put_contents('../paginas/'.$loja.'numeroPedido.txt', ++$numero_pedido_atual);
+        }
+        $codigo_pedido_integracao=$loja.file_get_contents('../paginas/'.$loja.'numeroPedido.txt');
+        $campos=$campo1=$campo2=array();
+        $campoMultiplus=array('codigo_produto','descricao','quantidade','vUnitarioItem','pDescontoItem','obs_item','cfop','ncm','ean','unidade','vTotalItem','pTabela','cOmie');
+        $campoParcela=array('numero_parcela','data_vencimento','valor','percentual','numero_parcela1','data_vencimento1','valor1','percentual1');
+        $nParcelas=explode(',',$_POST['parcela'])[2];
+        $nItens=$_POST['tItem'];
+        foreach($_POST as $key => $item){
+            if($key=='e-mail'){
+               $key='email';
+            }
+            if(!in_array(substr($key,0,strlen($key)-1),$campoMultiplus) && !in_array(substr($key,0,strlen($key)-1),$campoParcela)){
+                $campos[$key]=$item;
+            }elseif(in_array(substr($key,0,strlen($key)-1),$campoParcela)){
+                if(is_numeric(substr($key,-2,1))){
+                    $campo2[substr($key,-2,2)][substr($key,0,strlen($key)-2)]=$item;
+                }else{
+                    $campo2[substr($key,-1,1)][substr($key,0,strlen($key)-1)]=$item;
+                }
+            }elseif(!is_numeric(substr($key,-2,1))){
+                $campo1[substr($key,0,strlen($key)-1)][substr($key,-1,1)]=$item;
+            }else{
+                print_r($key);die;
+            }
+        }
+        $variaveis=array_keys($campos);
+        $variaveis['item']=array_keys($campo1);
+        $variaveis['parcela']=array_keys($campo2[1]);
+        if(!file_exists('../dao/CRUDPedido.php')){
+            include '../paginas/criaClasses4.php';
+            $arqClasse=new criaClsses4();
+            $arqClasse->novoArquivo($variaveis);
+        }
+        include '../model/pedido.php';
+        include '../dao/dao.php';
+        include '../dao/CRUDPedido.php';
+        
+        $preVenda=new pedido();
+        $listCod=$listDesc=$listQuant=$listUnit=$listDesc=$listObs=$listCfop=$listNcm=$listEan=$listUnid=$listTot=$listTab=$listOmie=$listParc=$listVenc=$listValor=$listPerc=null;
+        foreach($_POST as $key => $item){
+            if(!in_array(substr($key,0,strlen($key)-1),$campoMultiplus) && !in_array(substr($key,0,strlen($key)-1),$campoParcela)){
+                if($key=='e-mail'){
+                    $key='email';
+                }
+                if($key=='mercadorias'||$key=='vDesconto'||$key=='vPedido'){
+                    $item=Utils::removePonto($item);
+                }
+                $classe='set'.$key;
+                $preVenda->$classe($item);
+            }elseif(in_array(substr($key,0,strlen($key)-1),$campoMultiplus)){
+                $elementoArray=substr($key,0,strlen($key)-1);
+                switch ($elementoArray){
+                    case 'codigo_produto':
+                        $listCod .=$item.'*/*';
+                        break;
+                    case 'descricao':
+                        $listDesc .=$item.'*/*';
+                        break;
+                    case 'quantidade':
+                        $listQuant .=$item.'*/*';
+                        break;
+                    case 'vUnitarioItem':
+                        $listUnit .=Utils::removePonto($item).'*/*';
+                        break;
+                    case 'pDescontoItem':
+                        $listDesc .=$item.'*/*';
+                        break;
+                    case 'obs_item':
+                        $listObs .=$item.'*/*';
+                        break;
+                    case 'cfop':
+                        $listCfop .=$item.'*/*';
+                        break;
+                    case 'ncm':
+                        $listNcm .=$item.'*/*';
+                        break;
+                    case 'ean':
+                        $listEan .=$item.'*/*';
+                        break;
+                    case 'unidade':
+                        $listUnid .=$item.'*/*';
+                        break;
+                    case 'vTotalItem':
+                        $listTot .=Utils::removePonto($item).'*/*';
+                        break;
+                    case 'pTabela':
+                        $listTab .=Utils::removePonto($item).'*/*';
+                        break;
+                    case 'cOmie':
+                        $listOmie .=$item.'*/*';
+                        break;
+                }
+            }elseif(in_array(substr($key,0,strlen($key)-1),$campoParcela)){
+                $elementoArray=substr($key,0,strlen($key)-1);
+                switch ($elementoArray){
+                    case 'numero_parcela':;case 'numero_parcela1':
+                        $listParc .=$item.'*/*';
+                        break;
+                    case 'data_vencimento':;case 'data_vencimento1':
+                        $listVenc .=$item.'*/*';
+                        break;
+                    case 'valor':;case 'valor1':
+                        $listValor .=Utils::removePonto($item).'*/*';
+                        break;
+                    case 'percentual':;case 'percentual1':
+                        $listPerc .=$item.'*/*';
+                        break;
+                }
+            }
+        }
+        for($x=0;$x<count($campoMultiplus);$x++){
+            $classe='set'.$campoMultiplus[$x];
+            switch($x){
+                case 0:
+                    $preVenda->$classe($listCod);
+                    break;
+                case 1:
+                    $preVenda->$classe($listDesc);
+                    break;
+                case 2:
+                    $preVenda->$classe($listQuant);
+                    break;
+                case 3:
+                    $preVenda->$classe($listUnit);
+                    break;
+                case 4:
+                    $preVenda->$classe($listDesc);
+                    break;
+                case 5:
+                    $preVenda->$classe($listObs);
+                    break;
+                case 6:
+                    $preVenda->$classe($listCfop);
+                    break;
+                case 7:
+                    $preVenda->$classe($listNcm);
+                    break;
+                case 8:
+                    $preVenda->$classe($listEan);
+                    break;
+                case 9:
+                    $preVenda->$classe($listUnid);
+                    break;
+                case 10:
+                    $preVenda->$classe($listTot);
+                    break;
+                case 11:
+                    $preVenda->$classe($listTab);
+                    break;
+                case 12:
+                    $preVenda->$classe($listOmie);
+                    break;
+            }
+        }
+        for($x=0;$x<4;$x++){
+            $classe='set'.$campoParcela[$x];
+            switch($x){
+                case 0:
+                    $preVenda->$classe($listParc);
+                    break;
+                case 1:
+                    $preVenda->$classe($listVenc);
+                    break;
+                case 2:
+                    $preVenda->$classe($listValor);
+                    break;
+                case 3:
+                    $preVenda->$classe($listPerc);
+                    break;
+            }
+        }
+        include '../dao/PedidoSearchCriteria.php';
+        include '../excecao/Excecao.php';
+        
+        $dao=new CRUDPedido();
+        $preVenda->settabela('tb_pedido');
+        
         include '../model/PedidoVendaProdutoJsonClient.php';
         include '../model/modelProduto.php';
-        include '../dao/dao.php';
         include '../dao/CRUDProduto.php';
         include '../dao/ProdutoSearchCriteria.php';
         include '../mapping/ProdutoMapper.php';
         include '../dao/ModelSearchCriteria.php';
         include '../model/ProdutosCaracteristicasJsonClient.php';
+        include '../flash/Flash.php';
         
         $pedido=new PedidoVendaProdutoJsonClient();
         $parCod=explode(',', $_POST['parcela']);
@@ -305,10 +520,50 @@
                 $dao2->grava2($modelProduto);
             }
         }
-        echo '<pre>';print_r([$_GET,$_POST,$pedido_venda_produto]);die;
-        $resultado=$pedido->IncluirPedido($pedido_venda_produto);
+        //echo '<pre>';print_r($pedido_venda_produto);die;
+        //@$resultado=$pedido->IncluirPedido($pedido_venda_produto);
         
-        @$numero_pedido=$resultado->numero_pedido;
+        $resultado='oi';
+        $numero_pedido=12345789;
+            //echo '<script>var numero_pedido='.$numero_pedido.'</script>';
+            
+        $preVenda->setcodigo_pedido_integracao($codigo_pedido_integracao);
+        //echo '<pre>';print_r($preVenda);die;
+        if(is_object($resultado)){
+            $numero_pedido=$resultado->numero_pedido;
+            $preVenda->setpedido($numero_pedido);
+        }else{
+            Flash::addFlash("O envio não retornou, número do pedido. ");
+            @$flash=Flash::getFlashes()[0];  
+            echo '<script>var flash="'.$flash.'"</script>';
+        }
+        include '../mapping/pedidoMapper.php';
+        $search=new PedidoSearchCriteria();
+        $search->settabela('tb_pedido');
+        $search->setcodigo_pedido_integracao($codigo_pedido_integracao);
+        if(OMIE_APP_KEY=='461893204773'){
+            $db='db2';
+        }else{
+            $db='db';
+        }
+        if($dao->showTabela('tb_pedido',$db)){
+            $busca=$dao->encontrePorPedido($search);
+        }
+        //echo '<pre>';print_r($busca);//die;
+        if(!isset($numero_pedido)){
+            echo '<script>var numero_pedido;</script>';
+        }else{
+            echo '<script>var numero_pedido='.$numero_pedido.'</script>';
+        }
+        
+        if(!$busca){
+            $dao->grava6($preVenda);
+        }else{
+            foreach($busca as $item){
+                $item->setpedido($numero_pedido);
+                $gravado=$dao->gravaNumeroPedido($item);
+            }
+        }
         include 'imprime.php';
         die;
     }

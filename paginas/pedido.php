@@ -267,9 +267,12 @@
     }
    
     $form_pag=array('dinheiro'=>'Dinheiro','debito'=>'Cartão de Débito','credito'=>'Cartão de Crédito');
+    
+    
+    $numero_pedido_atual = file_get_contents('../paginas/numeroPedido.txt');
       
-   //////// Variáveis ////////  
-    $variaveis1=array('tItem'=>'Total de Ítens','mercadorias'=>'Mercadorias','vDesconto'=>'Desconto',/*'ipi'=>'IPI','icmsSt'=>'ICMS ST',*/'vPedido'=>'Valor do Pedido');//valores preenchidos automaticamente
+   //////// Variáveis //////// 
+    $variaveis1=array('tItem'=>'Total de Ítens','mercadorias'=>'Mercadorias','vDesconto'=>'Desconto','vPedido'=>'Valor do Pedido');
     $variaveis2=array(
                         'Ítens de Venda'=>array(
                             'busca'=>'','nItem'=>'Nº','cProduto'=>'Código','descricao'=>'Descrição do Produto','quantidade'=>'Quantidade','vUnitario'=>'Preço Unitário de Venda','vTotal'=>'Valor Total do Ítem','pDesconto'=>'Desconto','obs_item'=>'Observação do Ítem','cfop'=>'CFOP','ncm'=>'NCM','ean'=>'EAN','unidade'=>'Unidade'

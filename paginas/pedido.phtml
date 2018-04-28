@@ -43,7 +43,7 @@
         </span>
         <?php endif; ?>
 <span id=confirmado></span>
-<form id="dados" class="fPedido" method="post" action='../paginas/add.php?act=cad&pagina=pedido' target="_blank" >
+<form id="dados" class="fPedido" method="post" action='../paginas/add.php?act=cad&pagina=pedido&numero_pedido_atual=<?= $numero_pedido_atual ?>' target="_blank" >
 <table class="tabela">
     <tr><td colspan="4">Cliente</td><td align="center">Previsão Faturamento</td></tr>
     <tr><td colspan="4" class="razao"><input type="hidden" name="cCliente" value="<?= $cCliente ?>" /><input tabindex="1" name="cliente" type="text" size=53 value="<?= $razao ?>" required /> <img src="../web/img/lupa.png" height="14" title="Pesquisar cliente"/><span class="tecla"> (F2)</span></td><td class="previsao"><input disabled name="dPrevisao" type="text" value="<?= date('d/m/Y') ?>" /><input name="dPrevisao" type="hidden" value="<?= date('d/m/Y') ?>" /></td></tr>     <input type="hidden" name="endereco" value="<?= $_GET['endereco'] ?>" /><input type="hidden" name="endereco_numero" value="<?= $_GET['endereco_numero'] ?>" /><input type="hidden" name="endereco" value="<?= $_GET['endereco'] ?>" /><input type="hidden" name="bairro" value="<?= $_GET['bairro'] ?>" /><input type="hidden" name="cidade" value="<?= $_GET['cidade'] ?>" /><input type="hidden" name="cep" value="<?= $_GET['cep'] ?>" />
@@ -246,7 +246,7 @@
             </div>
         </div>
     <span class="botao">
-        <input type="hidden" name="dadosProduto" />
+        <!--<input type="hidden" name="dadosProduto" />-->
         <input type="submit" value="Enviar Pedido"/>
         <a id="novoPedido" href="../web/index.php?pagina=pedido&act=cad"><span type="reset" class="novoPedido">Novo Pedido</span></a>
     </span>

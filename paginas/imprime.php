@@ -1,11 +1,19 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script type="text/javascript" src="../web/js/jquery-3.2.1.min.js"></script>
         
         <script>
             $(document).ready(function(){
-                window.print();
+                if(numero_pedido){
+                    alert(numero_pedido);
+                }else{
+                    alert('não existe');
+                }
+                if(!flash){
+                    $('.erro').hide();
+                    window.print();
+                }
                 //window.location='../web/index.php?pagina=pedido&act=cad';
             })
             
@@ -71,15 +79,9 @@
             }
             .endereco, .web{
                 text-align: center;
-                //font-size: 10px;
             }
             .cnpj{
                 margin-top: 10px;
-            }
-            .cnpj,.ie{
-                //font-weight: 900;
-                //color: black;
-                //font-size: 13px;
             }
             hr{
                 margin-top: 8px;
@@ -135,37 +137,82 @@
                 clear: both;
                 margin-top: 20px;
             }
-            .dCliente{
-                //font-style: italic;
-            }
-            .campos, .dCliente{
-                //font-size: 12px;
-            }
             .rodape{
-                //margin-top: 30px;
                 text-align: center;
+            }
+            .erro{
+                color: red;
             }
             
             @media print{
                 .conteudo {
-                    //-webkit-column-count: 1; /* Chrome, Safari, Opera */
-                    //-moz-column-count: 1; /* Firefox */
-                    //column-count: 1;
+                    /*-webkit-column-count: 1; /* Chrome, Safari, Opera */
+                    /*-moz-column-count: 1; /* Firefox */
+                    /*column-count: 1;*/
                 }
             }
             @page{
                 size: auto;
                 margin: 0mm;
             }
+            
+            .erro{
+                font-weight: 900;
+                color: red;
+                animation: blinker 1s linear infinite;
+                text-align: center;
+            }
+            
+            .blink_me {
+            }
+            @keyframes blinker {
+              50% {
+                opacity: 0.3;
+              }
+            }
         </style>
 <?php
     include '../model/EmpresasCadastroJsonClient.php';
     include '../model/empresa.php';
     
-    @$pedido=$_GET['pedido'];
+    array_key_exists('direto',$_GET)? $direto=$_GET['direto']: $direto=null;
+    
+    if($direto){
+        include '../dao/UserDao.php';
+        include '../dao/UserSearchCriteria.php';
+        include '../config/Config.php';
+        include '../model/User.php';
+        include '../mapping/UserMapper.php';
+        include '../dao/PedidoSearchCriteria.php';
+        include '../model/pedido.php';
+        include '../mapping/pedidoMapper.php';
+        include '../excecao/Excecao.php';
+        include '../dao/dao.php';
+        include '../dao/CRUDPedido.php';
+
+        $user = new UserDao();
+        $search = new UserSearchCriteria();
+        $search->setLogin($_COOKIE['login']);
+        foreach($user->find($search) as $usuario){
+            define('OMIE_APP_KEY',$usuario->getOMIE_APP_KEY());
+            define('OMIE_APP_SECRET',$usuario->getOMIE_APP_SECRET());
+        }
+        $search=new PedidoSearchCriteria();
+        $search->settabela('tb_pedido');
+        $dao=new CRUDPedido();
+        echo '<pre>';
+        print_r($dao->encontrePorPedido($search));
+    }
+    
+    //@$pedido=$_GET['pedido'];
     @$vendedor=$_POST['vendedor'];
     @$empresaAtualiza=$_GET['empresaAtualiza'];
-    
+    @$tItens=$pedido_venda_produto->cabecalho->quantidade_itens;
+    @$vPedido=$_POST['vPedido'];
+    @$vDesconto=$_POST['vDesconto'];
+
+
+        
     $empresaAtualiza=1;
     if($empresaAtualiza==1){
         $emp=new EmpresasCadastroJsonClient();
@@ -209,28 +256,20 @@
         $telefone1_numero=$empresa->telefone1_numero;
         $website=$empresa->website;
     }
-    //echo $website;
-    //die;
-    
-    //echo '<pre>';print_r($pedido_venda_produto);
-    @$tItens=$pedido_venda_produto->cabecalho->quantidade_itens;
-    
-    //echo '<pre>';print_r($pedido_venda_produto->det);
-    //print_r($_POST);die;
-    //@$item=$_POST['item'];
-    //@$codigo=$_POST['codigo'];
-    //@$descricao=$_POST['descricao'];
-    //@$quantidade=$_POST['quantidade'];
-    //@$vUnitario=$_POST['vUnitario'];
-    //@$vTotalItem=$_POST['vTotalItem'];
-    @$vPedido=$_POST['vPedido'];
-    @$vDesconto=$_POST['vDesconto'];
     
     date_default_timezone_set('America/Sao_Paulo');
 ?>
     </head>
     <body>
         <div class="conteudo">
+            <?php 
+                @$flash=Flash::getFlashes()[0];  
+                if($flash): ?>
+            <script>var flash="<?= $flash ?>";</script>
+            <div class="erro"><?= $flash ?></div>
+            <?php else: ?>
+            <script>var flash=null;</script>
+            <?php endif ?>
             <h3><?= $razao_social ?></h3>
             <div class="web"><?= $website ?></div>
             <div class="endereco">Tel. (<?= $telefone1_ddd ?>) <?= $telefone1_numero ?> </div><br>
@@ -239,9 +278,6 @@
             <!--<div class="IM">IM:0.000.000-0</div>-->
             <hr>
             <span class="data"><?= date('d/m/Y h:m:s') ?></span>
-            <!--O CCF significa Contador de Cupom Fiscal, que serve como um contador da impressora fiscal que conta os cupons fiscais emitidos pela impressora fiscal.
-
-            O COO, Contador de Ordem de Operação, é o número mais destacado em negrito. Este número é o número do Cupom Fiscal. Os números do CCO registram o primeiro e o último documento emitidos no dia-->
             <span class="pedido">Pedido: <?= preg_replace('/^0+/','',@$numero_pedido) ?></span><br>
             <span>Vendedor: <?= @$vendedor ?></span><br>
             <hr>
@@ -251,7 +287,6 @@
             <span class="campos">Cidade: </span><span class="dCliente"><?= $_POST['cidade'] ?></span><br>
             <span class="campos">CPF/CNPJ: </span><span class="dCliente"><?= $_POST['cnpj_cpf'] ?></span><br>
             <hr>
-            <!--<h2>CUPOM FISCAL</h2>-->
             <div class="titulo1">
                 <span>ÍTEM &nbsp&nbsp&nbspCODIGO</span><span class="descricao">DESCRIÇÃO<br></span>
                 <span class='qtd'>QTD.</span><span class=vlUnit>VL. UNIT(R$)</span><span class='vlItem'>VL. ÍTEM(R$)</span>
@@ -265,7 +300,6 @@
                 $dados_adcionais_item=$pedido_venda_produto->det[$i-1]['inf_adic']->dados_adicionais_item;
                 $vUnitario=number_format($pedido_venda_produto->det[$i-1]['produto']->valor_unitario,'2',',','.');
                 $vTotalItem=number_format($pedido_venda_produto->det[$i-1]['produto']->valor_mercadoria,'2',',','.');
-                //print_r($dados_adcionais_item));die;
             ?>
                 <span><?= '00'.$i.'</span><span class=cod>'.$codigo.'</span><span class=desc>'.$descricao ?><br></span>
                 <span class="quant">&nbsp&nbsp<?= $quantidade.'</span> &nbsp&nbsp&nbsp&nbsp&nbsp X <span class=vlUnit2>'.$vUnitario.'</span><span class=vTotalItem2>'.$vTotalItem ?></span><br>

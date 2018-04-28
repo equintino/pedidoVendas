@@ -91,7 +91,7 @@
                     var name=$(this).attr('name');
                     if(name.substr(0,name.length-1)=='codigo_produto'){
                         if($(this).val()==cProduto){
-                            alert('Este Produto já foi inserido');
+                            //alert('Este Produto já foi inserido');
                             die;
                         }
                     }

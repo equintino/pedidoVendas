@@ -1,5 +1,4 @@
 <?php
-//include '../config/OmieAppAuth.php';
 $user = new UserDao();
 $search = new UserSearchCriteria();
 $search->setLogin($_COOKIE['login']);
