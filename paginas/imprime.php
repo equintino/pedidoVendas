@@ -302,8 +302,8 @@
             <hr>
             <div class="titulo1">
                 <span>ÍTEM &nbsp&nbsp&nbspCODIGO</span><span class="descricao">DESCRIÇÃO<br></span>
+                <span class='seriais_'>SERIAL</span><br>
                 <span class='qtd'>QTD.</span><span class=vlUnit>VL. UNIT(R$)</span><span class='vlItem'>VL. ÍTEM(R$)</span>
-                <br><span class='seriais_'>SERIAL</span>
             </div>
             <hr>
             <div class="titulo2">
@@ -316,8 +316,8 @@
                 $vTotalItem=number_format($pedido_venda_produto->det[$i-1]['produto']->valor_mercadoria,'2',',','.');
             ?>
                 <span><?= '00'.$i.'</span><span class=cod>'.$codigo.'</span><span class=desc>'.$descricao ?><br></span>
-                <span class="quant">&nbsp&nbsp<?= $quantidade.'</span> &nbsp&nbsp&nbsp&nbsp&nbsp X <span class=vlUnit2>'.$vUnitario.'</span><span class=vTotalItem2>'.$vTotalItem ?></span><br>
                 <div class="seriais"><?= nl2br($dados_adcionais_item) ?></div>
+                <span class="quant">&nbsp&nbsp<?= $quantidade.'</span> &nbsp&nbsp&nbsp&nbsp&nbsp X <span class=vlUnit2>'.$vUnitario.'</span><span class=vTotalItem2>'.$vTotalItem ?></span><br>
             <?php endfor; ?>
             </div><br>
             <span class=desconto>(Desconto) -<?= $vDesconto ?></span><br>
