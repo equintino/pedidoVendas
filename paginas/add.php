@@ -20,73 +20,14 @@
         return str.toFixed('2');
     }
 </script>
-<style>
-    /*body{
-        background: burlywood;
-        text-align: center;
-        margin-top: 50px;
-        font-size: 28;
-        font-weight: 700;
-        text-shadow: 2px 2px 2px white;
-    }*/
-</style>
 <?php
     $act=$_GET['act'];
     @$pagina=$_GET['pagina'];
     
-    /*if($act=='atualiza'){
-        
-            include '../config/Config.php';
-            include '../excecao/Excecao.php';
-            include '../dao/ModelSearchCriteria.php';
-            include '../model/model.php';
-            include '../mapping/modelMapper.php';
-            include '../dao/dao.php';
-            include '../dao/CRUD.php';
-
-            $model = new Model();
-            $CRUD = new CRUD();
-
-            foreach($_POST as $key => $item){
-                $classe='set'.$key;
-                $model->$classe($item);
-            }
-
-
-            $model->settabela('tb_cliente');
-
-            echo '<pre>';print_r($model);die;
-
-            //$x=1;
-            //foreach($model as $item){
-                //echo $model;
-                //$x++;
-            //}
-                //echo $x;
-            //die;
-            $CRUD->grava($model);
-            //Utils::redirect('cadastro',array('act'=>'cad','gravado'=>'ok')); 
-        
-        echo '<pre>';
-        $model = new Model();
-
-        /*$result = array();
-        foreach ($_POST as $row){
-            $model = new Model();
-            modelMapper::map($model, $row);
-            $result[$model->getid()] = $model;
-        }
-        //print_r($model);
-        //print_r(count($_POST));
-        //$CRUD->criaTabela();
-        
-        //die;
-    }*/
     if($pagina=='cliente'){
         include '../model/ClientesCadastroJsonClient.php';
         $cliente=new ClientesCadastroJsonClient();
-        if($act=='alt'){         
-            //Array ( [codigo_pais][tipo_atividade] => [cnae] => [produtor_rural] => [contribuinte] => [exterior][recomendacao_atraso] => [tags]  [logradouro] => [importado_api] => [bloqueado] => [cidade_ibge] => )
+        if($act=='alt'){
             $clientes_cadastro=array("codigo_cliente_omie"=>$_POST['codigo_cliente_omie'],"codigo_cliente_integracao"=>$_POST['codigo_cliente_integracao'],"email"=>$_POST['email'],"razao_social"=>$_POST['razao_social'],"nome_fantasia"=>$_POST['nome_fantasia'],"cnpj_cpf"=>$_POST['cnpj_cpf'],"telefone1_ddd"=>$_POST['telefone1_ddd'],"telefone1_numero"=>$_POST['telefone1_numero'],"contato"=>$_POST['contato'],"endereco"=>$_POST['endereco'],"endereco_numero"=>$_POST['endereco_numero'],"bairro"=>$_POST['bairro'],"complemento"=>$_POST['complemento'],"estado"=>$_POST['estado'],"cidade"=>$_POST['cidade'],"cep"=>$_POST['cep'],"telefone2_ddd"=>$_POST['telefone2_ddd'],"telefone2_numero"=>$_POST['telefone2_numero'],"fax_ddd"=>$_POST['fax_ddd'],"fax_numero"=>$_POST['fax_numero'],"homepage"=>$_POST['homepage'],"inscricao_estadual"=>$_POST['inscricao_estadual'],"inscricao_municipal"=>$_POST['inscricao_municipal'],"inscricao_suframa"=>$_POST['inscricao_suframa'],"optante_simples_nacional"=>$_POST['optante_simples_nacional'],"observacao"=>$_POST['observacao'],"pessoa_fisica"=>$_POST['pessoa_fisica']);
 
             $status=@$cliente->AlterarCliente($clientes_cadastro);
@@ -144,22 +85,29 @@
                 die;
             }
         }
-    }elseif($pagina=='pedido'){
-        /*if(array_key_exists('reenvio',$_GET)){
-            $reenvio=$_GET['reenvio'];
-        }else{
-            $reenvio=null;
-        }*/
-        
+    }elseif($pagina=='pedido'){        
         include '../validacao/ModelValidador.php';
         include '../util/Utils.php';
-        
         include '../config/Config.php';
         include '../model/ProdutosCadastroJsonClient.php';
+        include '../model/pedido.php';
+        include '../dao/dao.php';
+        include '../excecao/Excecao.php';
+        include '../model/PedidoVendaProdutoJsonClient.php';
+        include '../model/modelProduto.php';
+        include '../dao/CRUDProduto.php';
+        include '../dao/ProdutoSearchCriteria.php';
+        include '../mapping/ProdutoMapper.php';
+        include '../dao/ModelSearchCriteria.php';
+        include '../model/ProdutosCaracteristicasJsonClient.php';
+        include '../flash/Flash.php';
+        
         if(OMIE_APP_KEY=='461893204773'){
-            $loja='1000';
+            $loja='10';/*CACHAMBI*/
+        }elseif(OMIE_APP_KEY=='2769656370'){
+            $loja='20';/*BONSUCESSO*/
         }else{
-            $loja='2000';
+            $loja='30';/*OUTRA*/ 
         }
         if(!file_exists('../paginas/'.$loja.'numeroPedido.txt')){
             fopen('../paginas/'.$loja.'numeroPedido.txt','a');
@@ -167,16 +115,17 @@
         
         
         $numero_pedido_atual = file_get_contents('../paginas/'.$loja.'numeroPedido.txt');
-        //echo $numero_pedido_atual.' -> '.$_GET['numero_pedido_atual'];die;
         if($numero_pedido_atual==$_GET['numero_pedido_atual']){
             file_put_contents('../paginas/'.$loja.'numeroPedido.txt', ++$numero_pedido_atual);
         }
         $codigo_pedido_integracao=$loja.file_get_contents('../paginas/'.$loja.'numeroPedido.txt');
+        
         $campos=$campo1=$campo2=array();
         $campoMultiplus=array('codigo_produto','descricao','quantidade','vUnitarioItem','pDescontoItem','obs_item','cfop','ncm','ean','unidade','vTotalItem','pTabela','cOmie');
         $campoParcela=array('numero_parcela','data_vencimento','valor','percentual','numero_parcela1','data_vencimento1','valor1','percentual1');
         $nParcelas=explode(',',$_POST['parcela'])[2];
         $nItens=$_POST['tItem'];
+        
         foreach($_POST as $key => $item){
             if($key=='e-mail'){
                $key='email';
@@ -198,14 +147,15 @@
         $variaveis=array_keys($campos);
         $variaveis['item']=array_keys($campo1);
         $variaveis['parcela']=array_keys($campo2[1]);
+        
         if(!file_exists('../dao/CRUDPedido.php')){
             include '../paginas/criaClasses4.php';
             $arqClasse=new criaClsses4();
             $arqClasse->novoArquivo($variaveis);
         }
-        include '../model/pedido.php';
-        include '../dao/dao.php';
         include '../dao/CRUDPedido.php';
+        include '../dao/PedidoSearchCriteria.php';
+        include '../mapping/pedidoMapper.php';
         
         $preVenda=new pedido();
         $listCod=$listDesc=$listQuant=$listUnit=$listDesc=$listObs=$listCfop=$listNcm=$listEan=$listUnid=$listTot=$listTab=$listOmie=$listParc=$listVenc=$listValor=$listPerc=null;
@@ -341,20 +291,10 @@
                     break;
             }
         }
-        include '../dao/PedidoSearchCriteria.php';
-        include '../excecao/Excecao.php';
         
         $dao=new CRUDPedido();
         $preVenda->settabela('tb_pedido');
         
-        include '../model/PedidoVendaProdutoJsonClient.php';
-        include '../model/modelProduto.php';
-        include '../dao/CRUDProduto.php';
-        include '../dao/ProdutoSearchCriteria.php';
-        include '../mapping/ProdutoMapper.php';
-        include '../dao/ModelSearchCriteria.php';
-        include '../model/ProdutosCaracteristicasJsonClient.php';
-        include '../flash/Flash.php';
         
         $pedido=new PedidoVendaProdutoJsonClient();
         $parCod=explode(',', $_POST['parcela']);
@@ -520,47 +460,47 @@
                 $dao2->grava2($modelProduto);
             }
         }
-        //echo '<pre>';print_r($pedido_venda_produto);die;
-        //@$resultado=$pedido->IncluirPedido($pedido_venda_produto);
+        /*echo '<pre>';print_r($pedido_venda_produto);die;*/
+        @$resultado=$pedido->IncluirPedido($pedido_venda_produto);
         
-        $resultado='oi';
-        $numero_pedido=12345789;
-            //echo '<script>var numero_pedido='.$numero_pedido.'</script>';
+        $resultado=$preVenda;
+        @is_object($resultado)? $obj=1: $obj=null;
             
         $preVenda->setcodigo_pedido_integracao($codigo_pedido_integracao);
-        //echo '<pre>';print_r($preVenda);die;
-        if(is_object($resultado)){
-            $numero_pedido=$resultado->numero_pedido;
+        if($obj){
+            @$numero_pedido=$resultado->numero_pedido;
+            $numero_pedido=123456789;
             $preVenda->setpedido($numero_pedido);
         }else{
-            Flash::addFlash("O envio não retornou, número do pedido. ");
-            @$flash=Flash::getFlashes()[0];  
+            Flash::addFlash("Não retornou, n° do pedido.");
+            @$flash=Flash::getFlashes()[0];
             echo '<script>var flash="'.$flash.'"</script>';
         }
-        include '../mapping/pedidoMapper.php';
         $search=new PedidoSearchCriteria();
         $search->settabela('tb_pedido');
         $search->setcodigo_pedido_integracao($codigo_pedido_integracao);
+        
         if(OMIE_APP_KEY=='461893204773'){
             $db='db2';
-        }else{
+        }elseif(OMIE_APP_KEY=='2769656370'){
             $db='db';
+        }else{
+            $db='db3';
         }
         if($dao->showTabela('tb_pedido',$db)){
             $busca=$dao->encontrePorPedido($search);
         }
-        //echo '<pre>';print_r($busca);//die;
         if(!isset($numero_pedido)){
             echo '<script>var numero_pedido;</script>';
         }else{
             echo '<script>var numero_pedido='.$numero_pedido.'</script>';
         }
         
-        if(!$busca){
+        if(!@$busca){
             $dao->grava6($preVenda);
         }else{
             foreach($busca as $item){
-                $item->setpedido($numero_pedido);
+                $item->setpedido(@$numero_pedido);
                 $gravado=$dao->gravaNumeroPedido($item);
             }
         }

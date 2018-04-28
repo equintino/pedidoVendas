@@ -5,16 +5,12 @@
         
         <script>
             $(document).ready(function(){
-                if(numero_pedido){
-                    alert(numero_pedido);
-                }else{
-                    alert('não existe');
-                }
-                if(!flash){
+                if(!flash && numero_pedido){
                     $('.erro').hide();
                     window.print();
+                    //window.close();
+                    //window.location='../web/index.php?pagina=pedido&act=cad';
                 }
-                //window.location='../web/index.php?pagina=pedido&act=cad';
             })
             
             /* estudar
@@ -177,6 +173,12 @@
     
     array_key_exists('direto',$_GET)? $direto=$_GET['direto']: $direto=null;
     
+    @$vendedor=$_POST['vendedor'];
+    @$empresaAtualiza=$_GET['empresaAtualiza'];
+    @$tItens=$pedido_venda_produto->cabecalho->quantidade_itens;
+    @$vPedido=$_POST['vPedido'];
+    @$vDesconto=$_POST['vDesconto'];
+    
     if($direto){
         include '../dao/UserDao.php';
         include '../dao/UserSearchCriteria.php';
@@ -204,14 +206,6 @@
         print_r($dao->encontrePorPedido($search));
     }
     
-    //@$pedido=$_GET['pedido'];
-    @$vendedor=$_POST['vendedor'];
-    @$empresaAtualiza=$_GET['empresaAtualiza'];
-    @$tItens=$pedido_venda_produto->cabecalho->quantidade_itens;
-    @$vPedido=$_POST['vPedido'];
-    @$vDesconto=$_POST['vDesconto'];
-
-
         
     $empresaAtualiza=1;
     if($empresaAtualiza==1){
@@ -263,8 +257,8 @@
     <body>
         <div class="conteudo">
             <?php 
-                @$flash=Flash::getFlashes()[0];  
-                if($flash): ?>
+                //@$flash=Flash::getFlashes()[0];  
+                if(@$flash): ?>
             <script>var flash="<?= $flash ?>";</script>
             <div class="erro"><?= $flash ?></div>
             <?php else: ?>

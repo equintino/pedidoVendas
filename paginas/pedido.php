@@ -268,8 +268,15 @@
    
     $form_pag=array('dinheiro'=>'Dinheiro','debito'=>'Cartão de Débito','credito'=>'Cartão de Crédito');
     
-    
-    $numero_pedido_atual = file_get_contents('../paginas/numeroPedido.txt');
+    if(OMIE_APP_KEY=='461893204773'){
+        $loja='1000';/*CACHAMBI*/
+    }elseif(OMIE_APP_KEY=='2769656370'){
+        $loja='2000';/*BONSUCESSO*/
+    }else{
+        $loja='3000';/*OUTRA*/ 
+    }
+        
+    $numero_pedido_atual = file_get_contents('../paginas/'.$loja.'numeroPedido.txt');
       
    //////// Variáveis //////// 
     $variaveis1=array('tItem'=>'Total de Ítens','mercadorias'=>'Mercadorias','vDesconto'=>'Desconto','vPedido'=>'Valor do Pedido');
