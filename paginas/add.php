@@ -23,6 +23,7 @@
 <?php
     $act=$_GET['act'];
     @$pagina=$_GET['pagina'];
+    @$fPagamento=$_POST['fPagamento'];
     
     if($pagina=='cliente'){
         include '../model/ClientesCadastroJsonClient.php';
@@ -460,8 +461,8 @@
                 $dao2->grava2($modelProduto);
             }
         }
-        /*echo '<pre>';print_r($pedido_venda_produto);die;*/
-        @$resultado=$pedido->IncluirPedido($pedido_venda_produto);
+        /*echo '<pre>';print_r([$_POST,$pedido_venda_produto]);die;*/
+        //@$resultado=$pedido->IncluirPedido($pedido_venda_produto);
         
         $resultado=$preVenda;
         @is_object($resultado)? $obj=1: $obj=null;
@@ -469,7 +470,6 @@
         $preVenda->setcodigo_pedido_integracao($codigo_pedido_integracao);
         if($obj){
             @$numero_pedido=$resultado->numero_pedido;
-            $numero_pedido=123456789;
             $preVenda->setpedido($numero_pedido);
         }else{
             Flash::addFlash("Não retornou, n° do pedido.");

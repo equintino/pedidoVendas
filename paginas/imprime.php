@@ -60,13 +60,14 @@
                 font-weight: 900;
                 width: 105mm;
                 text-transform: uppercase;
+                line-height: 1.4;
             }
             #texto{
                 width: 100%; 
                 margin: auto;
             }
             .conteudo{
-                width: 85mm;
+                width: 86mm;
                 background: white;
                 padding: 20px;
             }
@@ -96,28 +97,28 @@
                 margin-top: 5px;
             }
             .descricao{
-                margin-left: 50px;
+                margin-left: 25px;
             }
             .qtd, .quant{
                 margin-left: 20px;
             }
             .vlUnit{
-                margin-left: 60px;
+                margin-left: 30px;
             }
             .vlItem, .vTotalItem2{
                 float: right;
             }
             .cod{
-                margin-left: 35px;
+                margin-left: 30px;
             }
             .desc{
-                margin-left: 65px;
+                margin-left: 30px;
             }
             .quant{
                 margin-right: 20px;
             }
             .vlUnit2{
-                margin-left: 60px;
+                margin-left: 40px;
             }
             .vTotal{
                 float: right;
@@ -138,6 +139,11 @@
             }
             .erro{
                 color: red;
+            }
+            .fpagamento{
+                clear: right;
+                float: right;
+                margin-top: 15px;
             }
             
             @media print{
@@ -168,6 +174,13 @@
             }
         </style>
 <?php
+    function reduz($str,$num){
+        if(strlen($str)>$num){
+            $str=substr($str,0,$num).'...';
+        }
+        return $str;
+    }
+
     include '../model/EmpresasCadastroJsonClient.php';
     include '../model/empresa.php';
     
@@ -178,6 +191,12 @@
     @$tItens=$pedido_venda_produto->cabecalho->quantidade_itens;
     @$vPedido=$_POST['vPedido'];
     @$vDesconto=$_POST['vDesconto'];
+    $cliente=reduz($_POST['cliente'],23);
+    $enderecoCliente=reduz($_POST['endereco'],23);
+    $bairroCliente=reduz($_POST['bairro'],12);
+    $cepCliente=substr($_POST['cep'],0,4).'-'.substr($_POST['cep'],5,3);
+    $cidadeCliente=reduz($_POST['cidade'],25);
+    $cnpj_cpfCliente=$_POST['cnpj_cpf'];
     
     if($direto){
         include '../dao/UserDao.php';
@@ -257,7 +276,7 @@
     <body>
         <div class="conteudo">
             <?php 
-                //@$flash=Flash::getFlashes()[0];  
+                /*@$flash=Flash::getFlashes()[0];*/
                 if(@$flash): ?>
             <script>var flash="<?= $flash ?>";</script>
             <div class="erro"><?= $flash ?></div>
@@ -275,21 +294,22 @@
             <span class="pedido">Pedido: <?= preg_replace('/^0+/','',@$numero_pedido) ?></span><br>
             <span>Vendedor: <?= @$vendedor ?></span><br>
             <hr>
-            <span class="campos">Cliente: </span><span class="dCliente"><?= $_POST['cliente'] ?></span><br>
-            <span class="campos">Endereço: </span><span class="dCliente"><?= $_POST['endereco'] ?></span><br>
-            <span class="campos">Bairro: </span><span class="dCliente"><?= $_POST['bairro'] ?></span>&nbsp&nbsp&nbsp <span class="campos">Cep: </span><span class="dCliente"><?= substr($_POST['cep'],0,4).'-'.substr($_POST['cep'],5,3) ?></span><br>
-            <span class="campos">Cidade: </span><span class="dCliente"><?= $_POST['cidade'] ?></span><br>
-            <span class="campos">CPF/CNPJ: </span><span class="dCliente"><?= $_POST['cnpj_cpf'] ?></span><br>
+            <span class="campos">Cliente: </span><span class="dCliente"><?= $cliente ?></span><br>
+            <span class="campos">Endereço: </span><span class="dCliente"><?= $enderecoCliente ?></span><br>
+            <span class="campos">Bairro: </span><span class="dCliente"><?= $bairroCliente ?></span>&nbsp&nbsp&nbsp <span class="campos">Cep: </span><span class="dCliente"><?= $cepCliente ?></span><br>
+            <span class="campos">Cidade: </span><span class="dCliente"><?= $cidadeCliente ?></span><br>
+            <span class="campos">CPF/CNPJ: </span><span class="dCliente"><?= $cnpj_cpfCliente ?></span><br>
             <hr>
             <div class="titulo1">
                 <span>ÍTEM &nbsp&nbsp&nbspCODIGO</span><span class="descricao">DESCRIÇÃO<br></span>
                 <span class='qtd'>QTD.</span><span class=vlUnit>VL. UNIT(R$)</span><span class='vlItem'>VL. ÍTEM(R$)</span>
+                <br><span class='seriais_'>SERIAL</span>
             </div>
             <hr>
             <div class="titulo2">
             <?php for($i=1;$i<=$tItens;$i++): 
                 $codigo=$pedido_venda_produto->det[$i-1]['produto']->codigo_produto_integracao;
-                $descricao=$pedido_venda_produto->det[$i-1]['produto']->descricao;
+                $descricao=reduz($pedido_venda_produto->det[$i-1]['produto']->descricao,40);
                 $quantidade=$pedido_venda_produto->det[$i-1]['produto']->quantidade;
                 $dados_adcionais_item=$pedido_venda_produto->det[$i-1]['inf_adic']->dados_adicionais_item;
                 $vUnitario=number_format($pedido_venda_produto->det[$i-1]['produto']->valor_unitario,'2',',','.');
@@ -305,6 +325,7 @@
             <div class='final'>
                 <span class="total">TOTAL</span>
                 <span class="vTotal">R$ <?= $vPedido ?></span>
+                <span class='fpagamento'>(FORM. PAG.) &nbsp<?= $fPagamento ?></span>
             </div>
             <br><br>
             <hr>
