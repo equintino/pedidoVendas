@@ -269,11 +269,11 @@
     $form_pag=array('dinheiro'=>'Dinheiro','debito'=>'Cartão de Débito','credito'=>'Cartão de Crédito');
     
     if(OMIE_APP_KEY=='461893204773'){
-        $loja='1000';/*CACHAMBI*/
+        $loja='10';/*CACHAMBI*/
     }elseif(OMIE_APP_KEY=='2769656370'){
-        $loja='2000';/*BONSUCESSO*/
+        $loja='20';/*BONSUCESSO*/
     }else{
-        $loja='3000';/*OUTRA*/ 
+        $loja='30';/*OUTRA*/ 
     }
         
     $numero_pedido_atual = file_get_contents('../paginas/'.$loja.'numeroPedido.txt');

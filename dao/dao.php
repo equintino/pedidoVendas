@@ -163,7 +163,10 @@
        return $this->update6($pedido);
    }
    public function gravaNumeroPedido($pedido){
-       $sql = 'UPDATE `tb_pedido` SET pedido = '.$pedido->getpedido().' WHERE codigo_pedido_integracao = '.$pedido->getcodigo_pedido_integracao().'';
+       date_default_timezone_set("Brazil/East");
+       $now = mktime (date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
+       $pedido->setmodificado($now);
+       $sql = 'UPDATE `tb_pedido` SET pedido = '.$pedido->getpedido().', modificado = '.$pedido->getmodificado().' WHERE codigo_pedido_integracao = '.$pedido->getcodigo_pedido_integracao().'';
        $statement = $this->getDb()->prepare($sql)->execute();
        return $statement;
    }

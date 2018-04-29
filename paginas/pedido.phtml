@@ -178,7 +178,7 @@
                     <?php foreach($variaveis2['Informações Adcionais'] as $key => $item): ?>
                         <?php if($item=='Categoria'): ?>
                         <td width='8px'><input disabled size=8px type='text' name='<?= $key ?>' value="<?= '1.01.03' ?>"/></td>
-                        <input type='hidden' name='codigo_categoria' />
+                        <input type='hidden' name='codigo_categoria' value='1.01.03'/>
                         <?php elseif($item=='Conta'): ?>
                             <td width=20px><select name='codigo_conta_corrente'>
                                     <?php foreach($contaTipo as $key => $item): ?>

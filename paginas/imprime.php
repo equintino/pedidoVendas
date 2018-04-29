@@ -319,7 +319,7 @@
                 <div class="seriais"><?= nl2br($dados_adcionais_item) ?></div>
                 <span class="quant">&nbsp&nbsp<?= $quantidade.'</span> &nbsp&nbsp&nbsp&nbsp&nbsp X <span class=vlUnit2>'.$vUnitario.'</span><span class=vTotalItem2>'.$vTotalItem ?></span><br>
             <?php endfor; ?>
-            </div><br>
+            </div>
             <span class=desconto>(Desconto) -<?= $vDesconto ?></span><br>
             <hr class='hrTotal'>
             <div class='final'>

@@ -362,6 +362,9 @@ $(document).ready(function(){
             return false;
         }
     })
+    var codigo_categoria=$('.novo3 :selected').attr('codigo_categoria');
+    $('.novo3 :hidden[name=codigo_categoria]').val(codigo_categoria)
+    $('.novo3 :disabled[name=codigo_categoria]').val(codigo_categoria)
     $('.novo3 select[name=codigo_conta_corrente]').change(function(){
         var selecao=$(this).val();
         $('.novo3 select[name=codigo_conta_corrente] option').each(function(){

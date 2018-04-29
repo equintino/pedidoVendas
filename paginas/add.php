@@ -462,9 +462,8 @@
             }
         }
         /*echo '<pre>';print_r([$_POST,$pedido_venda_produto]);die;*/
-        //@$resultado=$pedido->IncluirPedido($pedido_venda_produto);
+        @$resultado=$pedido->IncluirPedido($pedido_venda_produto);
         
-        $resultado=$preVenda;
         @is_object($resultado)? $obj=1: $obj=null;
             
         $preVenda->setcodigo_pedido_integracao($codigo_pedido_integracao);
