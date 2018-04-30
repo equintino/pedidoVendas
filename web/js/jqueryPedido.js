@@ -415,7 +415,7 @@ $(document).ready(function(){
             window.location.assign('index.php?pagina=pedido&act=cad&contaAtualiza=1');
         });
     }
-    ///// funcoes ////
+    /* funcoes */
     function itemExclusao(){
         var corItem='rgba(255,0,0,0.7)';
         $('#pnl1 table .item').wrap('<span></span>');
