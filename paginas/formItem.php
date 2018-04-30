@@ -91,7 +91,7 @@
                     var name=$(this).attr('name');
                     if(name.substr(0,name.length-1)=='codigo_produto'){
                         if($(this).val()==cProduto){
-                            alert('Este Produto já foi inserido');
+                            //alert('Este Produto já foi inserido');
                             die;
                         }
                     }
@@ -162,7 +162,6 @@
                 }
                 link='../paginas/formItem.php?codigo_produto='+codigo_produto+'&pagAtual='+pagAtual+'&tipoBusca='+tipoBusca+'';
                 $('a[rel=modal]').attr('href',link);
-
                 $('.listaProduto').hide();
                 $('.tituloProd').text('Aguarde...');
                 $("a[rel=modal]").trigger("click")
