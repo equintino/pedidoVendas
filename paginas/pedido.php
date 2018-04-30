@@ -275,6 +275,20 @@
     }else{
         $loja='30';/*OUTRA*/ 
     }
+    
+    if(!file_exists('../paginas/'.$loja.'numeroPedido.txt')){
+        $pvpListarRequest=array("pagina"=>1,"registros_por_pagina"=>20,"apenas_importado_api"=>"S");
+        $listaPedido=$pedido->ListarPedidos($pvpListarRequest);
+        $tPaginaPedido=$listaPedido->total_de_paginas;
+        $pvpListarRequest=array("pagina"=>$tPaginaPedido,"registros_por_pagina"=>20,"apenas_importado_api"=>"S");
+        foreach($pedido->ListarPedidos($pvpListarRequest)->pedido_venda_produto as $item){
+            $ultimoNumeroPedIntegracao=$item->cabecalho->codigo_pedido_integracao;
+        }
+        $file='../paginas/'.$loja.'numeroPedido.txt';
+        $handle=fopen($file,'w');
+        fwrite($handle, $ultimoNumeroPedIntegracao);
+        fclose($handle);        
+    }
         
     $numero_pedido_atual = file_get_contents('../paginas/'.$loja.'numeroPedido.txt');
       
