@@ -1,15 +1,6 @@
 <meta charset='utf-8'>
 <script type="text/javascript" src="../web/js/jquery-3.2.1.min.js"></script>
 <script>
-    /*$(document).ready(function(){
-        if(flash){
-            $('body').text(flash);
-            $('body').append('<button>Reenviar</button>');
-            $('button').click(function(){
-                window.location.assign('../paginas/add.php?act=cad&pagina=pedido&reenvio=1');
-            })
-        }
-    })*/
     function removeVirgula(str){
         if(str.charAt(str.length-3)!='.'){
             str=str.replace('.','');
@@ -532,7 +523,7 @@
         $arquivo = new criaClsses();
         $arquivo->novoArquivo($_POST);
     }
-    //$flash=new Flash();
-        //Flash::addFlash('RNC salvo com sucesso.');
-    //print_r((Flash::addFlash("Estou aqui")));
+    /*$flash=new Flash();
+        Flash::addFlash('RNC salvo com sucesso.');
+    print_r((Flash::addFlash("Estou aqui")));*/
 ?>
