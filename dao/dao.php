@@ -223,7 +223,7 @@
         $search=new ModelSearchCriteria();        
         $search->settabela($model->gettabela());
         if (!$model->getid()) {
-            //return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));
+            /*return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));*/
         }
         return $model;
    }
@@ -233,7 +233,7 @@
         $search=new ModelSearchCriteria();        
         $search->settabela($modelProduto->gettabela());
         if (!$modelProduto->getid()) {
-            //return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));
+            /*return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));*/
         }
         return $modelProduto;
    }
@@ -243,7 +243,7 @@
         $search=new ModelSearchCriteria();        
         $search->settabela($model->gettabela());
         if (!$model->getid()) {
-            //return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));
+            /*return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));*/
         }
         return $model;
    }
@@ -253,7 +253,7 @@
         $search=new ModelSearchCriteria();        
         $search->settabela($modelProduto->gettabela());
         if (!$modelProduto->getid()) {
-            //return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));
+            /*return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));*/
         }
         return $modelProduto;
    }
@@ -263,7 +263,7 @@
         $search=new ContaSearchCriteria();        
         $search->settabela($conta->gettabela());
         if (!$conta->getid()) {
-            //return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));
+            /*return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));*/
         }
         return $conta;
    }
@@ -273,7 +273,7 @@
         $search=new PedidoSearchCriteria();        
         $search->settabela($pedido->gettabela());
         if (!$pedido->getid()) {
-            //return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));
+            /*return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));*/
         }
         return $pedido;
    }
@@ -292,7 +292,7 @@
         return $statement;
    }
    private static function throwDbError(array $errorInfo){
-        // TODO log error, send email, etc.);
+        /* TODO log error, send email, etc.);*/
         throw new Excecao('DB error [' . $errorInfo[0] . ', ' . $errorInfo[1] . ']: ' . $errorInfo[2]);
    }
    private function getEncontreSql(ModelSearchCriteria $search = null) {       
