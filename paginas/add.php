@@ -101,9 +101,6 @@
         }else{
             $loja='30';/*OUTRA*/ 
         }
-        if(!file_exists('../paginas/'.$loja.'numeroPedido.txt')){
-            fopen('../paginas/'.$loja.'numeroPedido.txt','a');
-        }
         
         
         $numero_pedido_atual = file_get_contents('../paginas/'.$loja.'numeroPedido.txt');
