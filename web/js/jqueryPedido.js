@@ -4,22 +4,22 @@ $(document).ready(function(){
     }
     $('.botao input').mouseover(function(){
         $(this).css('cursor','pointer');
-    })
+    });
 
     $('#botoes .bnt,.outrosItens span').mouseover(function(){
-        $(this).css('cursor','pointer')
-    }) 
+        $(this).css('cursor','pointer');
+    });
     var item=1;
     var conf=null;
     var conf2=null;
     $('#botoes .bnt').click(function(){
         if(!$('.razao input').val()){
             alert('Preenche campo "CLIENTE"');
-            $('.razao input').focus()
+            $('.razao input').focus();
             return false;
         }else if(!$('.cnpj input').val()){
             alert('Preenche campo "CNPJ/CPF"');
-            $('.cnpj input').focus()
+            $('.cnpj input').focus();
             return false;
         }            
         if($(this).text()=='Novo Ítem'){
@@ -79,12 +79,12 @@ $(document).ready(function(){
         }else if($(this).text() === 'E-mail para Cliente'){
             $('#pnl5').css('display','block');
         }
-    })
+    });
     $('table.tabela .razao img').click(function(){
         if($('div#pnl1 input').val()){
             var resp=confirm('Você já adcionou itens a este pedido, estes dados serão descartados. Deseja continuar?');
             if(resp){
-                $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&tags=undefined')
+                $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&tags=undefined');
             }else{
                 return false;
             }
@@ -97,35 +97,35 @@ $(document).ready(function(){
             if($('form').hasClass('#pnl1') || $('#pnl1 input').val()){
                 var resp=confirm('Você já adcionou itens a este pedido, estes dados serão descartados. Deseja continuar?');
                 if(resp){
-                    $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&tags=undefined')
+                    $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&tags=undefined');
                 }else{
                     return false;
                 }
             }else{
-                $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&tags=undefined')
+                $(location).attr('href','index.php?pagina=cliente&act=list&seleciona=1&tags=undefined');
             }
         }else if(e.which==112 || e.which==114 || e.which==116 || e.which==123){
             return false;
         }else if(e.which==115){
             $('.bnt').each(function(){
                 if($(this).text()=='Novo Ítem'){
-                    $(this).trigger('click')
+                    $(this).trigger('click');
                 }
             })
         }else if(e.which==27){
             $("#mascara").hide();
             $(".window").hide();
         }else if(e.which==119){
-            $('.procura img').trigger('click')
+            $('.procura img').trigger('click');
             return false;
         }
-    })
+    });
     $('.tabela td select[name=parcela]').change(function(){
         $('.outrosItens span').each(function(){
             if($(this).text()=='Parcelas'){
-                $(this).trigger('click')
+                $(this).trigger('click');
             }
-        })
+        });
         var numParc=$('.tabela select[name=parcela] :selected').val();
         var formPag=$('.tabela td select[name=fPagamento] :selected').val();
         if(formPag=='debito' || formPag=='dinheiro'){
@@ -133,63 +133,63 @@ $(document).ready(function(){
                 $('.tabela select[name=parcela] option').each(function(){
                     $(this).removeAttr('selected');
                     if($(this).val()=='A Vista,000,0'){
-                        $(this).attr('selected','selected')
+                        $(this).attr('selected','selected');
                     }
-                })                
+                });    
                 $('#pnl4 .novo4').each(function(){
                     if($(this).attr('linha')>1){
-                        $(this).remove()
+                        $(this).remove();
                     }
-                })
-                $('#pnl4 .novo4 input[name=numero_parcela1]').val(0)
-                $('#pnl4 .novo4 input[name=data_vencimento1]').val($('.previsao input[name=dPrevisao]:hidden').val())
-                $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
-                $('#pnl4 .novo4 input[name=percentual1]').val(100)
+                });
+                $('#pnl4 .novo4 input[name=numero_parcela1]').val(0);
+                $('#pnl4 .novo4 input[name=data_vencimento1]').val($('.previsao input[name=dPrevisao]:hidden').val());
+                $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text());
+                $('#pnl4 .novo4 input[name=percentual1]').val(100);
             }
         }else if(formPag=='credito'){
             if(numParc=='A Vista,000,0' || numParc==''){
                 $('.tabela select[name=parcela] option').each(function(){
                     $(this).removeAttr('selected');
                     if($(this).val()=='1 Parcela,001,1'){
-                        $(this).attr('selected','selected')
+                        $(this).attr('selected','selected');
                     }
-                })
+                });
                 $('#pnl4 .novo4').each(function(){
                     if($(this).attr('linha')>1){
-                        $(this).remove()
+                        $(this).remove();
                     }
-                })
-                $('#pnl4 .novo4 input[name=numero_parcela1]').val(1)
-                $('#pnl4 .novo4 input[name=data_vencimento1]').val(data(1))
-                $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
-                $('#pnl4 .novo4 input[name=percentual1]').val(100)
+                });
+                $('#pnl4 .novo4 input[name=numero_parcela1]').val(1);
+                $('#pnl4 .novo4 input[name=data_vencimento1]').val(data(1));
+                $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text());
+                $('#pnl4 .novo4 input[name=percentual1]').val(100);
             }else{
                 var selecao=$(this).val().substr(0,2);
                 if(selecao=='1 '){
                     $('#pnl4 .novo4').each(function(){
                         if($(this).attr('linha')>1){
-                            $(this).remove()
+                            $(this).remove();
                         }
-                    })
-                    $('#pnl4 .novo4 input[name=numero_parcela1]').val(1)
-                    $('#pnl4 .novo4 input[name=data_vencimento1]').val(data(1))
-                    $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
-                    $('#pnl4 .novo4 input[name=percentual1]').val(100)
+                    });
+                    $('#pnl4 .novo4 input[name=numero_parcela1]').val(1);
+                    $('#pnl4 .novo4 input[name=data_vencimento1]').val(data(1));
+                    $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text());
+                    $('#pnl4 .novo4 input[name=percentual1]').val(100);
                 }else{
                     $('#pnl4 .novo4').each(function(){
                         if($(this).attr('linha')>1){
-                            $(this).remove()
+                            $(this).remove();
                         }
-                    })
+                    });
                     var percent=100/selecao;
                     for(var x=1;x<parseInt(selecao)+1;x++){
                         if(x!=1){
-                            $('#pnl4 table').append($('<tr linha='+x+' class=novo4><td><input size=1px type=text name=numero_parcela'+x+' /></td><td><input size=10px type=text name=data_vencimento'+x+' /></td><td><input size=10px type=text name=valor'+x+' /></td><td><input size=10px type=text name=percentual'+x+' /></td>'))
+                            $('#pnl4 table').append($('<tr linha='+x+' class=novo4><td><input size=1px type=text name=numero_parcela'+x+' /></td><td><input size=10px type=text name=data_vencimento'+x+' /></td><td><input size=10px type=text name=valor'+x+' /></td><td><input size=10px type=text name=percentual'+x+' /></td>'));
                         }
-                        $('#pnl4 .novo4 input[name=numero_parcela'+x+']').val(x)
-                        $('#pnl4 .novo4 input[name=data_vencimento'+x+']').val(data(x))
-                        $('#pnl4 .novo4 input[name=valor'+x+']').val(calcula('/',$('.autoQuadro td[nome=vPedido]').text(),selecao))
-                        $('#pnl4 .novo4 input[name=percentual'+x+']').val(percent)
+                        $('#pnl4 .novo4 input[name=numero_parcela'+x+']').val(x);
+                        $('#pnl4 .novo4 input[name=data_vencimento'+x+']').val(data(x));
+                        $('#pnl4 .novo4 input[name=valor'+x+']').val(calcula('/',$('.autoQuadro td[nome=vPedido]').text(),selecao));
+                        $('#pnl4 .novo4 input[name=percentual'+x+']').val(percent);
                     }
                 }
             }
@@ -199,49 +199,49 @@ $(document).ready(function(){
                 $('.tabela select[name=parcela] option').each(function(){
                         $(this).removeAttr('selected');
                         if($(this).val()=='1 Parcela,001,1'){
-                            $(this).attr('selected','selected')
+                            $(this).attr('selected','selected');
                         }
-                    })
+                    });
                     $('#pnl4 .novo4').each(function(){
                         if($(this).attr('linha')>1){
-                            $(this).remove()
+                            $(this).remove();
                         }
-                    })
-                    $('#pnl4 .novo4 input[name=numero_parcela1]').val(1)
-                    $('#pnl4 .novo4 input[name=data_vencimento1]').val(data(1))
-                    $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
-                    $('#pnl4 .novo4 input[name=percentual1]').val(100)
+                    });
+                    $('#pnl4 .novo4 input[name=numero_parcela1]').val(1);
+                    $('#pnl4 .novo4 input[name=data_vencimento1]').val(data(1));
+                    $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text());
+                    $('#pnl4 .novo4 input[name=percentual1]').val(100);
             }else if(selecao=='1 '){
                 $('#pnl4 .novo4').each(function(){
                     if($(this).attr('linha')>1){
-                        $(this).remove()
+                        $(this).remove();
                     }
-                })
-                $('#pnl4 .novo4 input[name=numero_parcela1]').val(1)
-                $('#pnl4 .novo4 input[name=data_vencimento1]').val(data(1))
-                $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
-                $('#pnl4 .novo4 input[name=percentual1]').val(100)
+                });
+                $('#pnl4 .novo4 input[name=numero_parcela1]').val(1);
+                $('#pnl4 .novo4 input[name=data_vencimento1]').val(data(1));
+                $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text());
+                $('#pnl4 .novo4 input[name=percentual1]').val(100);
             }else{
                 $('#pnl4 .novo4').each(function(){
                     if($(this).attr('linha')>1){
-                        $(this).remove()
+                        $(this).remove();
                     }
-                })
+                });
                 var percent=100/selecao;
                 for(var x=1;x<parseInt(selecao)+1;x++){
                     if(x!=1){
-                        $('#pnl4 table').append($('<tr linha='+x+' class=novo4><td><input size=1px type=text name=numero_parcela'+x+' /></td><td><input size=10px type=text name=data_vencimento'+x+' /></td><td><input size=10px type=text name=valor'+x+' /></td><td><input size=10px type=text name=percentual'+x+' /></td>'))
-                    }
-                    $('#pnl4 .novo4 input[name=numero_parcela'+x+']').val(x)
-                    $('#pnl4 .novo4 input[name=data_vencimento'+x+']').val(data(x))
-                    $('#pnl4 .novo4 input[name=valor'+x+']').val(calcula('/',$('.autoQuadro td[nome=vPedido]').text(),selecao))
-                    $('#pnl4 .novo4 input[name=percentual'+x+']').val(percent)
+                        $('#pnl4 table').append($('<tr linha='+x+' class=novo4><td><input size=1px type=text name=numero_parcela'+x+' /></td><td><input size=10px type=text name=data_vencimento'+x+' /></td><td><input size=10px type=text name=valor'+x+' /></td><td><input size=10px type=text name=percentual'+x+' /></td>'));
+                    };
+                    $('#pnl4 .novo4 input[name=numero_parcela'+x+']').val(x);
+                    $('#pnl4 .novo4 input[name=data_vencimento'+x+']').val(data(x));
+                    $('#pnl4 .novo4 input[name=valor'+x+']').val(calcula('/',$('.autoQuadro td[nome=vPedido]').text(),selecao));
+                    $('#pnl4 .novo4 input[name=percentual'+x+']').val(percent);
                 }
             }
             alert('Defina a forma de pagamento.');
-            $('.tabela td select[name=fPagamento]').css('background','rgba(216, 0, 0,0.1)').focus()
+            $('.tabela td select[name=fPagamento]').css('background','rgba(216, 0, 0,0.1)').focus();
         }
-    })
+    });
     $('#dados').on("submit", function(event){
         var vendedor=$('.tabela .vendedor :selected').text();
         $('.vendedor input[name=vendedor]').val(vendedor);
@@ -268,10 +268,10 @@ $(document).ready(function(){
                 if(!perg){
                     $('.outrosItens span').each(function(){
                         if($(this).text()=='Itens de Venda'){
-                            $(this).trigger('click')
+                            $(this).trigger('click');
                         }
-                    })
-                    $(this).css('background','rgba(216, 0, 0,0.1)').focus()
+                    });
+                    $(this).css('background','rgba(216, 0, 0,0.1)').focus();
                     return false;
                 }
             }else{
@@ -280,7 +280,7 @@ $(document).ready(function(){
                     return false;
                 }
             }
-        })
+        });
         if(perg){
             $('.tabela select[name=parcela]').removeAttr('disabled');
             if(formPag=='dinheiro' || formPag=='debito'){
@@ -288,10 +288,10 @@ $(document).ready(function(){
                     alert('A forma de pagamento não condiz com parcelas.');
                     $('.outrosItens span').each(function(){
                         if($(this).text()=='Parcelas'){
-                            $(this).trigger('click')
+                            $(this).trigger('click');
                         }
-                    })
-                    $(this).focus()
+                    });
+                    $(this).focus();
                     return false;
                 }
             }else if(formPag=='credito'){
@@ -300,40 +300,40 @@ $(document).ready(function(){
                     return false;
                 }
             }
-            $(location).attr('href','index.php?pagina=pedido&act=cad&enviado=1')
+            $(location).attr('href','index.php?pagina=pedido&act=cad&enviado=1');
         }else{
             return false;
         }
-    })
+    });
     $('.tabela td select[name=fPagamento]').change(function(){
         var formPag=$('.tabela td select[name=fPagamento] :selected').val();
         if(formPag == 'credito' || formPag == 'debito'){
             $('.doc').show();
             $('.doc').keyup(function(){
                 var doc=$('.doc input').val();
-                $('#pnl3 tr.dados_adcionais_nf td textarea').val(doc)
-            })
+                $('#pnl3 tr.dados_adcionais_nf td textarea').val(doc);
+            });
         }else if(formPag == 'dinheiro' || formPag == ''){
             $('.doc').hide();
             $('.doc input').val('');
-            $('#pnl3 tr.dados_adcionais_nf td textarea').val('')
+            $('#pnl3 tr.dados_adcionais_nf td textarea').val('');
         }
         if(formPag == 'debito' || formPag == 'dinheiro'){
             if($('.tabela select[name=parcela] :selected').val() != 'A Vista,000,0'){
                 $('.tabela select[name=parcela] option').each(function(){
                     if($(this).val()=='A Vista,000,0'){
-                        $(this).attr('selected','selected')
+                        $(this).attr('selected','selected');
                     }
-                })
+                });
                 $('#pnl4 .novo4').each(function(){
                     if($(this).attr('linha')>1){
-                        $(this).remove()
+                        $(this).remove();
                     }
-                })
-                $('#pnl4 .novo4 input[name=numero_parcela1]').val(0)
-                $('#pnl4 .novo4 input[name=data_vencimento1]').val($('.previsao input[name=dPrevisao]:hidden').val())
-                $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
-                $('#pnl4 .novo4 input[name=percentual1]').val(100)
+                });
+                $('#pnl4 .novo4 input[name=numero_parcela1]').val(0);
+                $('#pnl4 .novo4 input[name=data_vencimento1]').val($('.previsao input[name=dPrevisao]:hidden').val());
+                $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text());
+                $('#pnl4 .novo4 input[name=percentual1]').val(100);
             }
         }else if(formPag == 'credito'){
             numParc=$('.tabela select[name=parcela] :selected').val();
@@ -341,42 +341,42 @@ $(document).ready(function(){
                 $('.tabela select[name=parcela] option').each(function(){
                     $(this).removeAttr('selected');
                     if($(this).val()=='1 Parcela,001,1'){
-                        $(this).attr('selected','selected')
+                        $(this).attr('selected','selected');
                     }
-                })
+                });
                 $('#pnl4 .novo4').each(function(){
                     if($(this).attr('linha')>1){
-                        $(this).remove()
+                        $(this).remove();
                     }
-                })
-                $('#pnl4 .novo4 input[name=numero_parcela1]').val(1)
-                $('#pnl4 .novo4 input[name=data_vencimento1]').val(data(1))
-                $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text())
-                $('#pnl4 .novo4 input[name=percentual1]').val(100)
+                });
+                $('#pnl4 .novo4 input[name=numero_parcela1]').val(1);
+                $('#pnl4 .novo4 input[name=data_vencimento1]').val(data(1));
+                $('#pnl4 .novo4 input[name=valor1]').val($('.autoQuadro td[nome=vPedido]').text());
+                $('#pnl4 .novo4 input[name=percentual1]').val(100);
             }
         }
-    })
+    });
     $('.pagina').text('PRÉ-VENDA');
     $('#novoPedido').click(function(){
         if(!confirm('O formulário será limpo.')){
             return false;
         }
-    })
+    });
     var codigo_categoria=$('.novo3 :selected').attr('codigo_categoria');
-    $('.novo3 :hidden[name=codigo_categoria]').val(codigo_categoria)
-    $('.novo3 :disabled[name=codigo_categoria]').val(codigo_categoria)
+    $('.novo3 :hidden[name=codigo_categoria]').val(codigo_categoria);
+    $('.novo3 :disabled[name=codigo_categoria]').val(codigo_categoria);
     $('.novo3 select[name=codigo_conta_corrente]').change(function(){
         var selecao=$(this).val();
         $('.novo3 select[name=codigo_conta_corrente] option').each(function(){
             if($(this).val()==selecao){
                 var codigo_categoria=$(this).attr('codigo_categoria');
-                $('.novo3 :hidden[name=codigo_categoria]').val(codigo_categoria)
-                $('.novo3 :disabled[name=codigo_categoria]').val(codigo_categoria)
+                $('.novo3 :hidden[name=codigo_categoria]').val(codigo_categoria);
+                $('.novo3 :disabled[name=codigo_categoria]').val(codigo_categoria);
             }
-        })
-    })
+        });
+    });
     if(funcao=='administrador'){
-        $('.mGeral').append($('<ul><li class=tabela>ATUALIZA TABELA CLIENTE</li></ul>'))
+        $('.mGeral').append($('<ul><li class=tabela>ATUALIZA TABELA CLIENTE</li></ul>'));
         $('.mGeral ul li.tabela').click(function(){
             var tab=$('.mGeral ul li.tabela').text().split(' ').slice('2');
             if(tab=='CLIENTE'){
@@ -386,8 +386,8 @@ $(document).ready(function(){
             }else if(tab=='PREÇO'){
                 window.location.assign('index.php?pagina=produto&act=atualizaTabela&seleciona=0');
             }
-        })
-        $('.vaivem').append($('<img title="Trocar tabela" src="../web/img/vaivem.png" height=20px/>'))
+        });
+        $('.vaivem').append($('<img title="Trocar tabela" src="../web/img/vaivem.png" height=20px/>'));
         var s=0;
         $('.vaivem img').click(function(){
             if(s==2){
@@ -406,19 +406,19 @@ $(document).ready(function(){
                     $('.mGeral ul li.tabela').text('ATUALIZA TABELA PREÇO');
                     break;
             }
-        })
+        });
         $('.opcaoTransp button').click(function(){
             var transpSelecionada=$('.opcaoTransp :selected').val();
             window.location.assign('index.php?pagina=pedido&act=cad&transpSelecionada='+transpSelecionada+'');
-        })
+        });
         $('.novo3 img').click(function(){
             window.location.assign('index.php?pagina=pedido&act=cad&contaAtualiza=1');
-        })
+        });
     }
     ///// funcoes ////
     function itemExclusao(){
         var corItem='rgba(255,0,0,0.7)';
-        $('#pnl1 table .item').wrap('<span></span>')
+        $('#pnl1 table .item').wrap('<span></span>');
         $('#pnl1 table span').css({
                 background: corItem,
                 borderRadius: '10px',
@@ -430,12 +430,12 @@ $(document).ready(function(){
             $(this).css({
                 cursor: 'pointer',
                 background: '#ccc'
-            })
+            });
             $(this).mouseleave(function(){
                 $(this).css({
                     background: corItem                                
-                })
-            })
+                });
+            });
             $(this).mousedown(function(){
                 $(this).css({
                     position: 'relative',
@@ -446,7 +446,7 @@ $(document).ready(function(){
                         position: 'relative',
                         top: '-1px',
                         boxShadow: '2px 2px 2px gray'
-                    })
+                    });
                 }).mouseup(function(){
                     if(!conf2 && $('#pnl1 table span').length != 1 && $('#pnl1 table input').val().length != 0){
                         if(confirm('Confirma a exclusão do ítem '+$(this).text()+'?')){
@@ -455,7 +455,7 @@ $(document).ready(function(){
                                 if($(this).attr('nome')=='tItem'){
                                     $(this).text(item-1);  
                                 }
-                            })
+                            });
                             var z=1;
                             var w=0;
                             $('#pnl1 table .item').each(function(){
@@ -465,28 +465,28 @@ $(document).ready(function(){
                             $('#pnl1 table tr').each(function(){
                                $(this).attr('id','item'+w)
                                w++;
-                            })
+                            });
                             var z=1;
                             var verifica=($('#pnl1 input').attr('name').substr(-1,1));
                             $('#pnl1 input[name]').each(function(){
                                 nome=$(this).attr('name');
                                 if(nome.substr(-1,1)==verifica){
                                     nome_=nome.substr(0,nome.length-1)+z;
-                                    $(this).attr('name',nome_)
-                                    $(this).attr('linha',z)
+                                    $(this).attr('name',nome_);
+                                    $(this).attr('linha',z);
                                 }else{
                                     verifica=nome.substr(-1,1);
                                     z++;
-                                    $(this).attr('name',nome.substr(0,nome.length-1)+z)
-                                    $(this).attr('linha',z)
+                                    $(this).attr('name',nome.substr(0,nome.length-1)+z);
+                                    $(this).attr('linha',z);
                                 }
-                            })
+                            });
                             z=1;
                             $('#pnl1 textarea').each(function(){
                                 nome=$(this).attr('name');
                                 $(this).attr('name',nome.substr(0,nome.length-1)+z);
                                 z++;
-                            })
+                            });
                             item=$('#pnl1 table .item').length;
                             conf2=null;
                             $('#pnl1 td input[name=quantidade1]').trigger('click')
@@ -498,34 +498,34 @@ $(document).ready(function(){
                         if(confirm('Confirma a exclusão do ítem '+$(this).text()+'?')){
                             $('#pnl1 td input').each(function(){
                                 $(this).val('')
-                            })
+                            });
                             die;;
                         }
                     }
-                })
-            })
-        })
+                });
+            });
+        });
         conf=1;
     }
-        //// Cria Busca ////
+        /* Cria Busca */
     function busca(){ 
         $('#pnl1 input').focus(function(){
             var str=$(this).attr('name');
             if(str.substr(0,str.length-1)=='codigo_produto'){
                 $('#pnl1 table .item').each(function(){
                     j=$(this).text();
-                })
+                });
                 $('#pnl1 table tr .lupa img').remove();
                 if(!$('#pnl1 table tr .lupa img').attr('src')){
-                    $('#pnl1 table tr .lupa').append('<img title="Pesquisar ítem" height=15px src="../web/img/lupa.png" busca='+j+' /> ')
+                    $('#pnl1 table tr .lupa').append('<img title="Pesquisar ítem" height=15px src="../web/img/lupa.png" busca='+j+' /> ');
                 }
             }
-        })
-        $('#pnl1 table input[name=codigo_produto'+item+']').trigger('focus')
-        $('#pnl1 table tr .lupa img[busca='+j+']').trigger('click')
+        });
+        $('#pnl1 table input[name=codigo_produto'+item+']').trigger('focus');
+        $('#pnl1 table tr .lupa img[busca='+j+']').trigger('click');
         quadroInferior();
     }
-        //// quadro inferior ////
+        /* quadro inferior */
     function quadroInferior(){
         $('#pnl1 td input').each(function(){
             var str=$(this).attr('name');
@@ -539,7 +539,7 @@ $(document).ready(function(){
                     $($('#pnl1 tr[id=item'+pedLinha+'] input[name=vTotalItem'+pedLinha+  ']')).val(numeroParaMoeda(vTotalItem));
                     qEstoque=$(this).attr('qestoque');
                     preencheTotais();
-                })                         
+                });
             }else if(str.substr(0,str.length-1)=='pDescontoItem'){
                 $(this).mask('000');
                 $(this).bind('keyup click', function(){
@@ -547,9 +547,9 @@ $(document).ready(function(){
                         $(this).val(100);
                     }
                     preencheTotais(); 
-                })
+                });
             }else if(str.substr(0,str.length-1)=='vUnitarioItem'){
-                $(this).mask('#.###.###,##', {reverse: true})
+                $(this).mask('#.###.###,##', {reverse: true});
                 $(this).focus(function(){
                     var vlItem=$(this).attr('name');
                     var nBusca=vlItem.substr(vlItem.length-1);
@@ -559,7 +559,7 @@ $(document).ready(function(){
                         if(e.keyCode==13){
                             return false;
                         }
-                    })
+                    });
                     $(this).blur(function(){
                         var pInserido=$(this).val();
                         var vInserido=pInserido.replace(',','.');
@@ -567,50 +567,50 @@ $(document).ready(function(){
                         var vMinimo=pMinimo.replace(',','.');
                         if(pTabela == 'Não Definido' && vInserido < vMinimo){
                             alert('Valor mínimo permitido '+pMinimo+'');
-                            $(this).val(pMinimo)
+                            $(this).val(pMinimo);
                             $('#pnl1 td input[name=quantidade'+nBusca+']').trigger('click');
                         }else if(vInserido < vTabela && pTabela != 'Não Definido'){
                             alert('Valor mínimo permitido '+pTabela+'');
                             $(this).val(pTabela);
                             $('#pnl1 td input[name=quantidade'+nBusca+']').trigger('click');
                         }
-                    })
-                })
+                    });
+                });
                 $(this).bind('keyup click', function(){
                     var vlItem=$(this).attr('name');
                     var nBusca=vlItem.substr(vlItem.length-1);
                     $('#pnl1 td input[name=quantidade'+nBusca+']').trigger('click');
-                })
+                });
             }
-        })
+        });
         $('#pnl1 textarea').focus(function(){
             linhaSerial=$(this).attr('linha');
-            $('#serial').show()
-            $('#serial textarea').focus()
+            $('#serial').show();
+            $('#serial textarea').focus();
             $('#serial textarea').blur(function(){
                 if($(this).val()!=''){
                     var msg=confirm('Transfere o serial para campo?');
                     if(msg){
                         $('#pnl1 textarea[linha='+linhaSerial+']').val($(this).val())
                     }
-                    $(this).val('')
+                    $(this).val('');
                 }
-                $('#serial').hide()
+                $('#serial').hide();
                 die;
-            })
+            });
             die;
-        })
+        });
     }
-    function preencheTotais(){///// preencher quadro com valores Totais ////
+    function preencheTotais(){/* preencher quadro com valores Totais */
             mercadoriaTotal=0;
             vDescontoTotal=0;
             var qVol=0;
             for(var h=1;h<parseInt(item)+1;h++){
                 qVol +=parseInt($('#pnl1 input[name=quantidade'+h+']').val());
             }
-            $('#pnl2 .novo2 input[name=qvolume]').val(qVol)
-            $('.autoQuadro input[name=tItem]').val(item)
-            $('.autoQuadro td[nome=tItem]').text(item)/// Rotal de Ítens ////
+            $('#pnl2 .novo2 input[name=qvolume]').val(qVol);
+            $('.autoQuadro input[name=tItem]').val(item);
+            $('.autoQuadro td[nome=tItem]').text(item)/* Rotal de Ítens */
             for(var i=1;i<item+1;i++){
                     mercadoria=$('#pnl1 tr[id=item'+i+'] input[name=vTotalItem'+i+']').val();
                 if(mercadoriaTotal==0){
@@ -630,7 +630,7 @@ $(document).ready(function(){
                     if(h.substr(0,h.length-1)=='pDescontoItem'){
                         if($(this).val()!=0)temDesconto=1;
                     }
-                })
+                });
                 if(temDesconto != 0){
                     mercadoria=$('#pnl1 tr[id=item'+i+'] input[name=vTotalItem'+i+']').val();
                     vDescontoItem=calcula('%',mercadoria,$('#pnl1 tr[id=item'+i+'] input[name=pDescontoItem'+i+']').val());
@@ -640,29 +640,29 @@ $(document).ready(function(){
                 }
             }
             if(mercadoriaTotal){
-                $('.autoQuadro input[name=mercadorias]').val(numeroParaMoeda(mercadoriaTotal))
-                $('.autoQuadro td[nome=mercadorias]').text(numeroParaMoeda(mercadoriaTotal)) /// mercadorias ////
+                $('.autoQuadro input[name=mercadorias]').val(numeroParaMoeda(mercadoriaTotal));
+                $('.autoQuadro td[nome=mercadorias]').text(numeroParaMoeda(mercadoriaTotal)); /* mercadorias */
             }
             if(vDescontoTotal){
-                $('.autoQuadro input[name=vDesconto]').val(numeroParaMoeda(vDescontoTotal))
-                $('.autoQuadro td[nome=vDesconto]').text(numeroParaMoeda(vDescontoTotal)) /// Desconto ///
+                $('.autoQuadro input[name=vDesconto]').val(numeroParaMoeda(vDescontoTotal));
+                $('.autoQuadro td[nome=vDesconto]').text(numeroParaMoeda(vDescontoTotal)); /* Desconto */
             }else{
-                $('.autoQuadro input[name=vDesconto]').val(numeroParaMoeda('0,00'))
-                $('.autoQuadro td[nome=vDesconto]').text(numeroParaMoeda('0,00'))
+                $('.autoQuadro input[name=vDesconto]').val(numeroParaMoeda('0,00'));
+                $('.autoQuadro td[nome=vDesconto]').text(numeroParaMoeda('0,00'));
             }
             var vPedido=calcula('-',$('.autoQuadro td[nome=mercadorias]').text(),$('.autoQuadro td[nome=vDesconto]').text());
-            $('.autoQuadro input[name=vPedido]').val(numeroParaMoeda(vPedido))
-            $('.autoQuadro td[nome=vPedido]').text(numeroParaMoeda(vPedido)) /// Valor do Pedido ///
+            $('.autoQuadro input[name=vPedido]').val(numeroParaMoeda(vPedido));
+            $('.autoQuadro td[nome=vPedido]').text(numeroParaMoeda(vPedido)); /* Valor do Pedido */
             var comissao=$('.vendedor :selected').attr('comissao')*vPedido/100;
-            $('.valorPedido').text("Valor do Pedido R$"+numeroParaMoeda(vPedido)).show()
+            $('.valorPedido').text("Valor do Pedido R$"+numeroParaMoeda(vPedido)).show();
             $('.valorPedido').append('<div><font color="blue">Comissão R$ '+numeroParaMoeda(comissao)+'</font></div>');
     }
     $('.vendedor select').change(function(){
         var vPedido=calcula('-',$('.autoQuadro td[nome=mercadorias]').text(),$('.autoQuadro td[nome=vDesconto]').text());
         var comissao=$('.vendedor :selected').attr('comissao')*vPedido/100;
         $('.valorPedido div font').text('Comissão R$ '+numeroParaMoeda(comissao));
-    })
-})
+    });
+});
 function numeroParaMoeda(n, c, d, t){
     c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
     return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");    
