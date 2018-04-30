@@ -52,7 +52,6 @@ final class Utils {
         if (!array_key_exists($name, $_GET)) {
             throw new NotFoundException('URL parameter "' . $name . '" not found.');
         }
-        //print_r($_GET[$name]);die;
         return $_GET[$name];
     }
 
@@ -94,7 +93,6 @@ final class Utils {
      * @return string escaped string
      */
     public static function escape($string) {
-        //print_r(htmlspecialchars($string, ENT_QUOTES));
         return htmlspecialchars($string, ENT_QUOTES);
     }
     public static function datafatura($str,$etapa=null){
