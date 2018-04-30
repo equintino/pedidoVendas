@@ -286,7 +286,6 @@
         }
         $file='../paginas/'.$loja.'numeroPedido.txt';
         $handle=fopen($file,'w');
-        echo $ultimoNumeroPedIntegracao;
         fwrite($handle, $ultimoNumeroPedIntegracao);
         fclose($handle);        
     }
