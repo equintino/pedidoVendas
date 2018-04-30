@@ -8,9 +8,6 @@
         public function novoArquivo(){
             $variavelConta=array('bol_instr1','bol_sn','cobr_sn','codigo_agencia','codigo_banco','data_alt','data_inc','descricao','dias_rcomp','hora_alt','hora_inc','nCodCC','nao_fluxo','nao_resumo','numero_conta_corrente','pdv_categoria','pdv_cod_adm','pdv_dias_venc','pdv_enviar','pdv_limite_pacelas','pdv_num_parcelas','pdv_sincr_analitica','pdv_taxa_adm','pdv_taxa_loja','pdv_tipo_tef','per_juros','per_multa','saldo_inicial','tipo','tipo_conta_corrente','user_alt','user_inc','valor_limite','OMIE_APP_KEY');
             $mode='w+';
-            /*foreach($campos as $item){
-                $variavelConta[] = $item;
-            }*/
             $handle = fopen($this->filename1, $mode); 
             $texto=$this->texto1($variavelConta);
             fwrite($handle, $texto); 
@@ -35,81 +32,80 @@
             return $padrao;
         }
         private function texto1($variavelConta){         
-            $texto="<?php \r\n class conta{\r\n";
+            $texto="<?php class conta{";
             $padrao=$this->padrao();
             foreach($padrao as $pad){
-                $texto .="\t private $"."$pad; \r\n";
-                $texto .="\t public function get".$pad."(){\r\n".
-                        "\t\t ".'return $this->'."$pad; \r\n \t}\r\n".
-                        "\t public function set$pad(".'$'."$pad){\r\n".
-                        "\t\t".'$this->'.$pad.'=$'."$pad;\r\n \t}\r\n"; 
+                $texto .=" private $"."$pad; ";
+                $texto .=" public function get".$pad."(){".
+                        'return $this->'."$pad; }".
+                        " public function set$pad(".'$'."$pad){".
+                        '$this->'.$pad.'=$'."$pad;}"; 
             }
             foreach($variavelConta as $item){
-              $texto .=' private $'.$item.';'."\r\n";
-              $texto .=  ' public function get'.$item."(){\r\n".
-                   "\t".'return $this->'.$item.";\r\n"." }\r\n".
-                   ' public function set'.$item.'($'.$item." ){\r\n".
-                   "\t".'$this->'.$item.'=$'.$item.";\r\n }\r\n";     
+              $texto .=' private $'.$item.';';
+              $texto .=  ' public function get'.$item."(){".
+                   'return $this->'.$item."; }".
+                   ' public function set'.$item.'($'.$item." ){".
+                   '$this->'.$item.'=$'.$item."; }";     
             }
             $texto .=' }'; 
             return $texto;
         }
         private function texto2($variavelConta){
-            $texto="<?php \r\n class contaMapper{\r\n";
-            $texto .= '  public static function map(conta $conta, array $properties){'."\r\n";
+            $texto="<?php class contaMapper{";
+            $texto .= '  public static function map(conta $conta, array $properties){';
             $padrao=$this->padrao();
             foreach($padrao as $pad){
-            $texto .="\t".'if (array_key_exists(\''.$pad.'\', $properties)){'."\r\n".
-                        "\t".'  $conta->set'.$pad.'($properties[\''.$pad.'\']);'."\r\n".
-                        "\t".'}'."\r\n";                
+            $texto .='if (array_key_exists(\''.$pad.'\', $properties)){'.
+                        '  $conta->set'.$pad.'($properties[\''.$pad.'\']);'.
+                        '}';                
             }
             foreach($variavelConta as $item){
-                $texto .="\t".'if (array_key_exists(\''.$item.'\', $properties)){'."\r\n".
-                        "\t".'  $conta->set'.$item.'($properties[\''.$item.'\']);'."\r\n".
-                        "\t".'}'."\r\n";
+                $texto .='if (array_key_exists(\''.$item.'\', $properties)){'.
+                        '  $conta->set'.$item.'($properties[\''.$item.'\']);'.
+                        '}';
             }
-            $texto .= '  }'." \r\n }"; 
+            $texto .= '  } }'; 
             return $texto;
         }
         private function texto3($variavelConta){
-            $texto="<?php \r\n class ContaSearchCriteria{\r\n";
+            $texto="<?php class ContaSearchCriteria{";
             $padrao=$this->padrao();
             foreach($padrao as $pad){
-              $texto .= '   private $'.$pad.';
-               public function get'.$pad.'(){
-                return $this->'.$pad.';
-              }
-              public function set'.$pad.'($'.$pad.'){
-                  $this->'.$pad.'=$'.$pad.';
-                  return $this;
-              }'."\r\n";
+              $texto .= ' private $'.$pad.';'.
+               'public function get'.$pad.'(){'.
+                'return $this->'.$pad.';'.
+              '}'.
+              'public function set'.$pad.'($'.$pad.'){'.
+                  '$this->'.$pad.'=$'.$pad.';'.
+                  'return $this;'.
+              '}';
             }
             foreach($variavelConta as $item){
-              $texto .= '   private $'.$item.';
-               public function get'.$item.'(){
-                return $this->'.$item.';
-              }
-              public function set'.$item.'($'.$item.'){
-                  $this->'.$item.' = $'.$item.';
-                  return $this;
-              }'."\r\n";
+              $texto .= ' private $'.$item.';'.
+               'public function get'.$item.'(){'.
+                'return $this->'.$item.';'.
+              '}'.
+              'public function set'.$item.'($'.$item.'){'.
+                  '$this->'.$item.' = $'.$item.';'.
+                  'return $this;'.
+              '}';
             }
             $texto .= '}';
             return $texto;
         }
         private function texto4($variavelConta){
-            //$variaveis3=array('codigo','codInt','nome','inativo','comissao','email','fatura_pedido','visualiza_pedido');
-            $texto="<?php \r\n class CRUDConta extends Dao{\r\n";
-            $texto .= '   public function insert5(conta $conta){
-                date_default_timezone_set("Brazil/East");
-                $now = mktime (date(\'H\'), date(\'i\'), date(\'s\'), date("m")  , date("d"), date("Y"));
-                $conta->setid(null);
-                $conta->setexcluido(0);
-                $conta->setcriado($now);  
-                $sql=$this->criaTabela5(\''.$this->tabela.'\');
-                $this->execute5($sql, $conta);  
-                $this->execute5(\'ALTER TABLE `tb_conta` ADD UNIQUE(`nCodCC`)\', $conta);
-                $sql = \'INSERT INTO '.$this->tabela.' (';
+            $texto="<?php class CRUDConta extends Dao{";
+            $texto .= ' public function insert5(conta $conta){'.
+                'date_default_timezone_set("Brazil/East");'.
+                '$now = mktime (date(\'H\'), date(\'i\'), date(\'s\'), date("m")  , date("d"), date("Y"));'.
+                '$conta->setid(null);'.
+                '$conta->setexcluido(0);'.
+                '$conta->setcriado($now);'.
+                '$sql=$this->criaTabela5(\''.$this->tabela.'\');'.
+                '$this->execute5($sql, $conta);'.
+                '$this->execute5(\'ALTER TABLE `tb_conta` ADD UNIQUE(`nCodCC`)\', $conta);'.
+                '$sql = \'INSERT INTO '.$this->tabela.' (';
                   foreach($variavelConta as $item){
                     $texto .= '`'.$item.'`,';
                   }
@@ -139,16 +135,16 @@
                 }
                 $x++;
             }
-            $texto .=  ')\';'."\r\n";
-            $texto .= "\t".'$search = new ContaSearchCriteria();
-                $search->settabela($conta->gettabela());
-                return $this->execute5($sql, $conta);
-                }'."\r\n";
-            $texto .= '   public function update5(conta $conta){
-                date_default_timezone_set("Brazil/East");
-                $now = mktime (date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
-                $conta->setmodificado($now);
-                $sql = \'UPDATE '.$this->tabela.' SET id=:id,criado=:criado,modificado=:modificado,';
+            $texto .=  ')\';';
+            $texto .= '$search = new ContaSearchCriteria();'.
+                '$search->settabela($conta->gettabela());'.
+                'return $this->execute5($sql, $conta);'.
+                '}';
+            $texto .= ' public function update5(conta $conta){'.
+                'date_default_timezone_set("Brazil/East");'.
+                '$now = mktime (date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));'.
+                '$conta->setmodificado($now);'.
+                '$sql = \'UPDATE '.$this->tabela.' SET id=:id,criado=:criado,modificado=:modificado,';
                    $x=1;
                     foreach($variavelConta as $item){
                         if($item != 'criado'){
@@ -159,28 +155,24 @@
                         }
                         $x++;
                     }
-                $texto .= ' WHERE id = :id \';
-                    return $this->execute5($sql, $conta);
-           }'."\r\n";
-                $texto .= '    public function criaTabela5($tabela){
-                        $sql="CREATE TABLE IF NOT EXISTS '.$this->tabela.' ( `id` INT(5) NOT NULL AUTO_INCREMENT , `criado` INT(100) NULL,';
+                $texto .= ' WHERE id = :id \';'.
+                    'return $this->execute5($sql, $conta);'.
+           '}';
+                $texto .= ' public function criaTabela5($tabela){'.
+                        '$sql="CREATE TABLE IF NOT EXISTS '.$this->tabela.' ( `id` INT(5) NOT NULL AUTO_INCREMENT , `criado` INT(100) NULL,';
                         foreach($variavelConta as $item){
                             $texto .= '`'.$item.'`';
                             if($item=='cod_API'){
                                 $texto .=' INT (5) NULL,';
-                            /*}elseif($item=='entrada'||$item=='saida'){
-                                $texto .=' DATETIME DEFAULT NULL,';
-                            }elseif($item=='descricao'){
-                                $texto .=' TEXT NULL,';*/
                             }else{
                                 $texto .=' varchar(100) NULL,';
                             }
                         }
-                        $texto .=' `excluido` ENUM(\'0\',\'1\') NOT NULL DEFAULT \'0\', PRIMARY KEY (`id`)) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci";
-                return $sql;
-                }'."\r\n";
-            $texto .='  public function getParams5(conta $conta){
-        $params = array(';
+                        $texto .=' `excluido` ENUM(\'0\',\'1\') NOT NULL DEFAULT \'0\', PRIMARY KEY (`id`)) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci";'.
+                'return $sql;'.
+                '}';
+            $texto .=' public function getParams5(conta $conta){'.
+        '$params = array(';
             $padrao=$this->padrao();
             foreach($padrao as $pad){
                 if($pad!='tabela'){
@@ -191,9 +183,9 @@
                     $classe='get'.$item;
                     $texto .='\':'.$item.'\'=>$conta->'.$classe.'(),';
                 }    
-                $texto .=' );
-	 return $params;
-   }'."\r\n";
+                $texto .=' );'.
+	 'return $params;'.
+   '}';
                 $texto .= '}';    
                 
             return $texto;
