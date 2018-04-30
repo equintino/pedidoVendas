@@ -9,7 +9,7 @@
                     $('.erro').hide();
                     window.print();
                     window.close();
-                    //window.location='../web/index.php?pagina=pedido&act=cad';
+                    /*window.location='../web/index.php?pagina=pedido&act=cad';*/
                 }
             })
         </script>
