@@ -75,13 +75,13 @@
         Flash::addFlash('Registro salvo com sucesso.');
     }
        
-   ////// Classes //////
+   /* Classes */
    if($contaAtualiza==1){
         $contas=new ContaCorrenteCadastroJsonClient();
         $contaListarRequest=array('pagina'=>'1','registros_por_pagina'=>'50');
         $conta=$contas->PesquisarContaCorrente($contaListarRequest)->conta_corrente_lista;
         
-        //$handle=fopen('../config/conta.ini','a+');
+        /*$handle=fopen('../config/conta.ini','a+');*/
         $variavelConta=array('bol_instr1','bol_sn','cobr_sn','codigo_agencia','codigo_banco','data_alt','data_inc','descricao','dias_rcomp','hora_alt','hora_inc','nCodCC','nao_fluxo','nao_resumo','numero_conta_corrente','pdv_categoria','pdv_cod_adm','pdv_dias_venc','pdv_enviar','pdv_limite_pacelas','pdv_num_parcelas','pdv_sincr_analitica','pdv_taxa_adm','pdv_taxa_loja','pdv_tipo_tef','per_juros','per_multa','saldo_inicial','tipo','tipo_conta_corrente','user_alt','user_inc','valor_limite');
         if(file_exists('../dao/CRUDConta.php')){
             include '../dao/CRUDConta.php';
@@ -106,7 +106,7 @@
             $dao3->grava5($conta_);
         
         }
-        //fclose($handle);
+        /*fclose($handle);*/
         echo '<script>window.location.assign("index.php?pagina=pedido&act=cad")</script>';
 
    }else{
@@ -267,9 +267,19 @@
     }
    
     $form_pag=array('dinheiro'=>'Dinheiro','debito'=>'Cartão de Débito','credito'=>'Cartão de Crédito');
+    
+    if(OMIE_APP_KEY=='461893204773'){
+        $loja='10';/*CACHAMBI*/
+    }elseif(OMIE_APP_KEY=='2769656370'){
+        $loja='20';/*BONSUCESSO*/
+    }else{
+        $loja='30';/*OUTRA*/ 
+    }
+        
+    $numero_pedido_atual = file_get_contents('../paginas/'.$loja.'numeroPedido.txt');
       
-   //////// Variáveis ////////  
-    $variaveis1=array('tItem'=>'Total de Ítens','mercadorias'=>'Mercadorias','vDesconto'=>'Desconto',/*'ipi'=>'IPI','icmsSt'=>'ICMS ST',*/'vPedido'=>'Valor do Pedido');//valores preenchidos automaticamente
+   /* Variáveis */ 
+    $variaveis1=array('tItem'=>'Total de Ítens','mercadorias'=>'Mercadorias','vDesconto'=>'Desconto','vPedido'=>'Valor do Pedido');
     $variaveis2=array(
                         'Ítens de Venda'=>array(
                             'busca'=>'','nItem'=>'Nº','cProduto'=>'Código','descricao'=>'Descrição do Produto','quantidade'=>'Quantidade','vUnitario'=>'Preço Unitário de Venda','vTotal'=>'Valor Total do Ítem','pDesconto'=>'Desconto','obs_item'=>'Observação do Ítem','cfop'=>'CFOP','ncm'=>'NCM','ean'=>'EAN','unidade'=>'Unidade'
