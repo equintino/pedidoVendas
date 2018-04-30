@@ -8,46 +8,10 @@
                 if(!flash && numero_pedido){
                     $('.erro').hide();
                     window.print();
-                    //window.close();
+                    window.close();
                     //window.location='../web/index.php?pagina=pedido&act=cad';
                 }
             })
-            
-            /* estudar
-            // Imprime a página
-        window.print();
-                
-        (function () {
-            var beforePrint = function () {
-                
-                // Remove o loading
-                $(".se-pre-con").hide();
-
-                // Remove Menu topo
-                $(".header").hide();
-                $('.content').css({
-                    top: ("0px")
-                }).show();
-            };
-            var afterPrint = function () {
-                // Redireciona página
-                window.location = 'Logado.php?pagina=<?php //$pagina_crypt ?>';
-            };
-
-            if (window.matchMedia) {
-                var mediaQueryList = window.matchMedia('print');
-                mediaQueryList.addListener(function (mql) {
-                    if (mql.matches) {
-                        beforePrint();
-                    } else {
-                        afterPrint();
-                    }
-                });
-            }
-
-            window.onbeforeprint = beforePrint;
-            window.onafterprint = afterPrint;
-        }()); */
         </script>
         <style>
             *{
@@ -180,9 +144,6 @@
         }
         return $str;
     }
-
-    include '../model/EmpresasCadastroJsonClient.php';
-    include '../model/empresa.php';
     
     array_key_exists('direto',$_GET)? $direto=$_GET['direto']: $direto=null;
     
@@ -197,6 +158,9 @@
     $cepCliente=substr($_POST['cep'],0,4).'-'.substr($_POST['cep'],5,3);
     $cidadeCliente=reduz($_POST['cidade'],25);
     $cnpj_cpfCliente=$_POST['cnpj_cpf'];
+    
+    include '../model/EmpresasCadastroJsonClient.php';
+    include '../model/empresa.php';
     
     if($direto){
         include '../dao/UserDao.php';
