@@ -1,11 +1,46 @@
 <meta charset="utf-8" >
+<script type="text/javascript" src="../web/js/jquery-3.2.1.min.js"></script>
 <style>
     .percentual{
         position: absolute;
         top: 50%;
-        laft: 50%;
+        left: 50%;
+    }
+    .selecao{
+        position: absolute;
+        top: 30%;
+        left: 30%; 
+    }
+    .selecao .opcao{
+        float: right;
+    }
+    .selecao button{
+        margin-left: 3px;
+    }
+    .selecao button:hover{
+        cursor: pointer;
     }
 </style>
+<script>
+    $(document).ready(function(){
+        var codTabela=$('.opcao :selected').val();
+        $('.opcao select').change(function(){
+            codTabela=$(this).val();
+        });
+        $('button#submit').click(function(){
+            window.location.assign('../web/index.php?pagina=produto&act=atualizaTabela&seleciona=0&codTabela='+codTabela+'');
+        });
+        $('button#cancela').click(function(){
+            window.location.assign('../web/index.php?pagina=pedido&act=cad');
+        });
+    });
+    function cancela(){
+        window.location.assign('../web/index.php?pagina=pedido&act=cad');
+    }
+    function submit(codTabela){
+        window.location.assign('../web/index.php?pagina=produto&act=atualizaTabela&seleciona=0&codTabela='+codTabela+'');
+    }
+</script>
 <div id=contador></div>
 <?php 
     if(array_key_exists('tipoBusca',$_GET)){
@@ -25,7 +60,12 @@
     if(array_key_exists('seleciona',$_GET)){
         $seleciona=$_GET['seleciona'];
     }
-    
+    if(array_key_exists('codTabela',$_GET)){
+        $codTabela=$_GET['codTabela'];
+    }else{
+        $codTabela='undefined';
+    }
+    echo '<script>var codTabela='.$codTabela.';</script>';
     if($funcao){
         echo '<script>var funcao="'.$funcao.'"</script>';
     }
@@ -71,7 +111,6 @@
             $arquivo->tabela='tb_produto';
             $variaveis=$arquivo->novoArquivo($campos);
         }   
-            // apaga e cria nova tabela //
         include '../dao/CRUDProduto.php';
         $dao2=new CRUDProduto();
         $dao2->drop('tb_produto');
@@ -90,6 +129,23 @@
         echo '<script>window.location.assign(\'index.php?pagina=pedido&act=cad\');</script>';        
         exit;
     }elseif($act=='atualizaTabela'){
+        if(!$codTabela || $codTabela=='undefined'){
+            /* Tabela de Preço */
+            $tabelaPreco=new TabelaPrecosJsonClient();
+            $tprListarRequest=array("nPagina"=>1,"nRegPorPagina"=>20);
+            @$codTabela=$tabelaPreco->ListarTabelasPreco($tprListarRequest);
+            echo '<div class=selecao><h2>SELECIONE A TABELA DE PREÇO: </h2>';
+            echo '<div class=opcao><select name="codTabela">';
+            foreach($codTabela->listaTabelasPreco as $item){
+                    echo '<option value="'.$item->nCodTabPreco.'">'.$item->cNome.'</option>';
+                /*if(strtoupper($item->cNome)=='BOADICA'){
+                    $codTabela=$item->nCodTabPreco;
+                }*/
+            }
+            echo '</select>';
+            echo '<button id=submit>Confirma</button><button id=cancela>Cancela</button></div></div>';
+            exit;
+        }
         $tabelaAtualizando='Preço';
         if($seleciona==0){
             echo '<script>pagina="produto";act="atualizaTabela";</script>';
@@ -99,18 +155,10 @@
             include '../paginas/atualizando.php';
         }
         include '../dao/CRUDProduto.php';
-        ///// Tabela de Preço //////
-        $tabelaPreco=new TabelaPrecosJsonClient();
-        $tprListarRequest=array("nPagina"=>1,"nRegPorPagina"=>20);
-        @$codTabela=$tabelaPreco->ListarTabelasPreco($tprListarRequest);
-        foreach($codTabela->listaTabelasPreco as $item){
-            if(strtoupper($item->cNome)=='BOADICA'){
-                $codTabela=$item->nCodTabPreco;
-            }
-        }
         
+        $tabelaPreco=new TabelaPrecosJsonClient();
         $tprItensListarRequest=array("nPagina"=>1,"nRegPorPagina"=>50,"nCodTabPreco"=>$codTabela,"cCodIntTabPreco"=>"");
-        @$tabPreco=$tabelaPreco->ListarTabelaItens($tprItensListarRequest);
+        $tabPreco=$tabelaPreco->ListarTabelaItens($tprItensListarRequest);
         is_object($tabPreco)? $obj='sim': $obj=null;
         if($obj){
             $nTotPaginas=$tabPreco->nTotPaginas;

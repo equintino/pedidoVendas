@@ -1,18 +1,10 @@
 <html>
 <head>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../web/js/jquery-3.2.1.min.js"></script>
     <script>
         $(document).ready(function() {
-            $(location).attr('href','../web/index.php?pagina='+pagina+'&act='+act+'&seleciona=2')
-            //alert([pagina,act]);
-            //alert('oi');
-            /*$('.btn-theme').click(function(){
-                //$('#aguarde, #blanket').css('display','none');
-            });*/
+            $(location).attr('href','../web/index.php?pagina='+pagina+'&act='+act+'&seleciona=2&codTabela='+codTabela+'');
         });
-        /*function carregando(){
-            document.getElementById('blanket').style.display = 'block';document.getElementById('aguarde').style.display = 'block';
-        }*/
     </script>
 <style>
     #blanket,#aguarde {
@@ -34,7 +26,7 @@
         height: 30px;
         top: 40%;
         left: 45%;
-        background: url('http://i.imgur.com/SpJvla7.gif') no-repeat 0 50%; // o gif que desejar, eu geralmente uso um 20x20
+        background: url('http://i.imgur.com/SpJvla7.gif') no-repeat 0 50%; 
         line-height: 30px;
         font-weight: bold;
         font-family: Arial, Helvetica, sans-serif;
