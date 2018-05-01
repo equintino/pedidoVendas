@@ -307,7 +307,11 @@
   }
     private function getEncontreSql2(ProdutoSearchCriteria $search = null){
         if($search->gettabela()=='tb_preco'){
-            $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo = "'.$search->getcodigo().'"';
+            if($search->getid()){
+                $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND id = "'.$search->getid().'"';
+            }else{
+                $sql = 'SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo = "'.$search->getcodigo().'"';
+            }
             return $sql;
         }
         $codigo=str_replace(' ','%',$search->getcodigo());

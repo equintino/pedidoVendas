@@ -448,11 +448,16 @@
                     $cont=0;
                     $dao = new Dao();
                     $search = new ProdutoSearchCriteria();
+                    
+                    $search->settabela('tb_preco');
+                    $search->setid(1);
+                    $nTabela=$dao->encontre2($search)[1]->getnTabela();
+                    
                     if($tipoBusca=='local'){
                         echo '<th  width="10%" class="col1">CÓDIGO</th>';
                         echo '<th class="descricao col2">DESCRIÇÃO DO PRODUTO</th>';
                         echo '<th class="col3">VALOR UNITÁRIO</th>';
-                        echo '<th class="col4">PREÇO BOADICA</th></tr></thead>';
+                        echo '<th class="col4">PREÇO '.strtoupper($nTabela).'</th></tr></thead>';
                         if($act != 'atualiza' && $detalhes){
                             foreach($detalhes as $item){
                                 $search->settabela('tb_preco');
@@ -519,7 +524,7 @@
                                         $col++;
                                     }
                                 }
-                                echo '<th class="col4">PREÇO BOADICA</th>';
+                                echo '<th class="col4">PREÇO '.strtoupper($nTabela).'</th>';
                                 $w=1;
                                 goto s;
                             }
