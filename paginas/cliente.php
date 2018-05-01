@@ -20,6 +20,12 @@
         $funcao=null;
     }
     echo '<script>var funcao="'.$funcao.'"</script>';
+    if(array_key_exists('codTabela',$_GET)){
+        $codTabela=$_GET['codTabela'];
+    }else{
+        $codTabela='undefined';
+    }
+    echo '<script>var codTabela='.$codTabela.'</script>';
     if(array_key_exists('act', $_GET)){
         $act=$_GET['act'];
     }else{

@@ -5,40 +5,40 @@
     $(document).ready(function(){
         var tipoBusca=$('.procura .tipoBusca input:checked').val();
         if(tipoBusca=='servidor'){
-            $('.loja').hide()
+            $('.loja').hide();
         }else{
-            $('.loja').show()
+            $('.loja').show();
         }
         $('.procura input[name=tipoBusca]:radio').click(function(){
             if($(this).val()=='local'){
-                $('.listaProduto, .paginacao').hide()
-                $('.loja').show()
+                $('.listaProduto, .paginacao').hide();
+                $('.loja').show();
                 tipoBusca='local';
             }else if($(this).val()=='servidor'){
-                $('.listaProduto, .paginacao').show()
-                $('.loja').hide()
+                $('.listaProduto, .paginacao').show();
+                $('.loja').hide();
                 tipoBusca='servidor';
-                $('.recarrega').trigger('click')
+                $('.recarrega').trigger('click');
             }
-        })
+        });
         $('.procura img').mouseover(function(){
             if(tipoBusca=='local'){
-                $(this).css('cursor','pointer')
+                $(this).css('cursor','pointer');
             }
-        })
+        });
         $('.procura img').click(function(){
             var loja=$('.loja :selected').val();
             if(tipoBusca=='local'){
                 buscaProduto=encodeURIComponent($('.procura input[name=procura]').val());
                 link='../paginas/formItem.php?tipoBusca='+tipoBusca+'&buscaProduto='+buscaProduto+'&loja='+loja+'';
-                $('.listaProduto').hide()
+                $('.listaProduto').hide();
                 $('.tituloProd').text('Aguarde...');
                 $('a[rel=modal]').attr('href',link);
-                $("a[rel=modal]").trigger("click")
+                $("a[rel=modal]").trigger("click");
             }else{
-                $('.recarrega').trigger('click')                
+                $('.recarrega').trigger('click');            
             }
-        })
+        });
         $('button').each(function(){
             if($(this).text()==pagAtual){
                 $(this).css({
@@ -46,36 +46,36 @@
                     border: 'solid black'
                 });
             }
-        })
+        });
         $('button').focus(function(){
             pagAtual=$(this).text();
             $('button').each(function(){
                 $(this).css({
                     border: 'none'
-                })
+                });
                 if($(this).text()==pagAtual){
                     $(this).css({
                         bacground: 'black',
                         border: 'solid black'
                     });
                 }
-            })
+            });
             link='../paginas/formItem.php?codigo_produto='+codigo_produto+'&pagAtual='+pagAtual+'&tipoBusca='+tipoBusca+'';
             $('a[rel=modal]').attr('href',link);
             
             $('.listaProduto').hide();
             $('.tituloProd').text('Aguarde...');
-            $("a[rel=modal]").trigger("click")
-        })
+            $("a[rel=modal]").trigger("click");
+        });
         $('.tituloProd').text('Páginas ');
         $('.listaProduto').mouseover(function(){
             $(this).css({
                 background:'#EDEDED',
                 cursor: 'pointer'
-            })
+            });
             $(this).mouseleave(function(){
-                $(this).css('background','white')
-            })
+                $(this).css('background','white');
+            });
             $(this).click(function(){
                 descricao=$(this).attr('descricao');
                 cProduto=$(this).attr('codigo');
@@ -91,11 +91,11 @@
                     var name=$(this).attr('name');
                     if(name.substr(0,name.length-1)=='codigo_produto'){
                         if($(this).val()==cProduto){
-                            //alert('Este Produto já foi inserido');
+                            /*alert('Este Produto já foi inserido');*/
                             die;
                         }
                     }
-                })
+                });
                 linha=linha.substring(4,5);
                 $('#pnl1 table #item'+linha+' input').each(function(){
                     var z=$(this).attr('name');
@@ -139,23 +139,23 @@
                            $(this).val(cOmie);
                            break;
                     }
-                })
+                });
                 $(".window").hide();
                 $('#mascara').hide();
                 $('.listaProduto').hide();
                 $('.tituloProd').text('Aguarde...');
-            })
-        })
+            });
+        });
         $(".procura input").on("keyup", function(){
             var value = $(this).val().toLowerCase();
             $(".listaProduto").filter(function(){
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
-        }).focus()
-        $('.recarrega').css('cursor','pointer')
+        }).focus();
+        $('.recarrega').css('cursor','pointer');
         $('.recarrega').click(function(){
             if(tipoBusca=='local'){
-                $('.procura img').trigger('click')
+                $('.procura img').trigger('click');
             }else{
                 if (typeof pagAtual == "undefined"){
                     pagAtual=1;
@@ -164,10 +164,10 @@
                 $('a[rel=modal]').attr('href',link);
                 $('.listaProduto').hide();
                 $('.tituloProd').text('Aguarde...');
-                $("a[rel=modal]").trigger("click")
+                $("a[rel=modal]").trigger("click");
             }
-        })
-        $('.procura input[name=procura]').focus()
+        });
+        $('.procura input[name=procura]').focus();
         if(tipoBusca=='local'){
             $('.cont').text(cont);
         }
@@ -177,15 +177,15 @@
                 link='../paginas/formItem.php?tipoBusca=local&loja='+loja+'';
                 $('a[rel=modal]').attr('href',link);
                 $('.listaProduto').hide();
-                $("a[rel=modal]").trigger("click")
+                $("a[rel=modal]").trigger("click");
             }
-        })
+        });
         $('span.loja select[name=loja] option').each(function(){
             if($(this).attr('value')==loja){
-                $(this).attr('selected','selected')
+                $(this).attr('selected','selected');
             }
-        })
-    })
+        });
+    });
 </script>
 <style>
     .head th{
@@ -387,7 +387,6 @@
         if($buscaProduto || @$pagAtual != 'undefined'){
             $search->setcodigo($buscaProduto);
             $search->setloja($loja);
-            //echo '<pre>';print_r($search);echo 'passei aqui';
             $detalhes=$dao->encontre2($search);
         }else{
             $detalhes=null;
@@ -417,7 +416,6 @@
         }
     }
     ?>
-<from>
     <div class="procura">
         <span class="loja">
             <label><b>LOJA:</b> </label>
@@ -431,7 +429,7 @@
                 <?php endif; ?>
             </select>
         </span>
-        <input autofocus type="text" name="procura" title="Pesquisar por produtos" /> <img height="18px" src="../web/img/lupa.png" title="Pesquisar por produtos" /> (F8)<br>
+        <input autofocus type="text" name="procura" title="Pesquisar por produtos" /> <img height="18" src="../web/img/lupa.png" title="Pesquisar por produtos" /> (F8)<br>
         <div class="tipoBusca"><input title="Tipo de busca" type="radio" name="tipoBusca" value="local" <?= $local ?>/><b> Local</b> &nbsp&nbsp&nbsp<input title="Tipo de busca" type="radio" name="tipoBusca" value="servidor" <?= $servidor ?>/> <b>Servidor</b></div>
     </div>
     <?php if($act != 'atualiza'): ?>
@@ -439,7 +437,6 @@
         <?php if($tipoBusca=='local'): ?>
         <?php endif; endif;?>
     </div>
-</form>
     <div class='tudo'>
         <div class='cima'></div>
         <div class='jTabela'>
@@ -465,6 +462,8 @@
                                         $db='db';
                                     }elseif(OMIE_APP_KEY=='461893204773'){
                                         $db='db2';
+                                    }else{
+                                        $db='db3';
                                     }
                                     $tabelaExiste=$dao->showTabela($search->gettabela(),$db);
                                     if(!$tabelaExiste){
@@ -543,6 +542,8 @@
                                     $db='db';
                                 }elseif(OMIE_APP_KEY=='461893204773'){
                                     $db='db2';
+                                }else{
+                                    $db='db3';
                                 }
                                 $tabelaExiste=$dao->showTabela($search->gettabela(),$db);
                                 if($tabelaExiste){
