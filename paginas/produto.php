@@ -270,7 +270,7 @@
     function gravaTabelaPreco($tabPreco,$contProd,$nTotRegistros,$nomeTabela){
         $CRUDProduto=new CRUDProduto();
         foreach($tabPreco as $item){
-            if($item->cCodigoProduto){
+            if(isset($item->cCodigoProduto)){
                 $modelProduto=new modelProduto();
                 $modelProduto->setnTabela($nomeTabela);
                 $modelProduto->setmodificado($item->itemInfo->dAltItem.' '.$item->itemInfo->hAltItem);
