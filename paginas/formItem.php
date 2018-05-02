@@ -455,6 +455,7 @@
                     $search->settabela('tb_preco');
                     $search->setid(1);
                     $nTabela=$dao->encontre2($search)[1]->getnTabela();
+                    $search->setid(null);
                     
                     if($tipoBusca=='local'){
                         echo '<th  width="10%" class="col1">CÓDIGO</th>';
