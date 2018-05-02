@@ -99,6 +99,9 @@
             foreach($variavelConta as $item2){
                 $$item2=$item->$item2;
                 $classe='set'.$item2;
+                if($classe=='setpdv_categoria' && !$$item2){
+                    $$item2='1.01.03';
+                }
                 $conta_->$classe($$item2);
             }
             $conta_->setOMIE_APP_KEY(OMIE_APP_KEY);
