@@ -98,7 +98,8 @@
         }elseif($search->getcodigo_pedido_integracao()){
             $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo_pedido_integracao ='.$search->getcodigo_pedido_integracao().'')->fetchAll();
         }else{
-            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND pedido IS NULL ORDER BY id DESC')->fetchAll();
+            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" ORDER BY id DESC')->fetchAll();
+            /*$row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND pedido IS NULL ORDER BY id DESC')->fetchAll();*/
         }
         foreach($row as $item){
             $pedido = new pedido();

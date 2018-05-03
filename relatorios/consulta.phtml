@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="pt-br">
     <head>
         <title>Consulta de Pedidos</title>
@@ -11,16 +10,24 @@
         <?php
             include '../dao/dao.php';
             include '../dao/CRUDPedido.php';
-            include '../dao/ProdutoSearchCriteria.php';
-            $dao = new CRUDPedido();
-            $search = new ProdutoSearchCriteria();
-            $search->settabela('tb_pedido');
-            //echo '<pre>';print_r($search);die;
-            echo '<pre>';print_r(get_class_methods($dao));
-            $dao->encontrePorPedido($search);
-            print_r($dao); 
+            include '../dao/PedidoSearchCriteria.php';
+            include '../validacao/valida_cookies.php';
+            include '../model/pedido.php';
+            include '../mapping/pedidoMapper.php';
             
-            die;
+            $valida=new valida_cookies();
+            $valida->setLogin($_COOKIE['login']);
+            $valida->loginDb('confere');
+            
+            $pedido=new pedido();
+            $dao = new CRUDPedido();
+            $search = new PedidoSearchCriteria();
+            $search->settabela('tb_pedido');
+            $dados=$dao->encontrePorPedido($search);
+            
+            //echo '<pre>';print_r($dados);
+            
+            //die;
         ?>
         
     </head>
