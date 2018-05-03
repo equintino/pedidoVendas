@@ -450,7 +450,7 @@
             }
         }
         /*echo '<pre>';print_r([$_POST,$pedido_venda_produto]);die;*/
-        @$resultado=$pedido->IncluirPedido($pedido_venda_produto);
+        //@$resultado=$pedido->IncluirPedido($pedido_venda_produto);
         
         @is_object($resultado)? $obj=1: $obj=null;
             
