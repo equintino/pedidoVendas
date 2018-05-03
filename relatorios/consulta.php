@@ -11,14 +11,22 @@
         <?php
             include '../dao/dao.php';
             include '../dao/CRUDPedido.php';
-            include '../dao/ProdutoSearchCriteria.php';
+            include '../dao/PedidoSearchCriteria.php';
+            include '../validacao/valida_cookies.php';
+            include '../model/pedido.php';
+            include '../mapping/pedidoMapper.php';
+            
+            $valida=new valida_cookies();
+            $valida->setLogin($_COOKIE['login']);
+            $valida->loginDb('confere');
+            
+            $pedido=new pedido();
             $dao = new CRUDPedido();
-            $search = new ProdutoSearchCriteria();
+            $search = new PedidoSearchCriteria();
             $search->settabela('tb_pedido');
-            //echo '<pre>';print_r($search);die;
-            echo '<pre>';print_r(get_class_methods($dao));
-            $dao->encontrePorPedido($search);
-            print_r($dao); 
+            $dados=$dao->encontrePorPedido($search);
+            
+            echo '<pre>';print_r($dados);
             
             die;
         ?>

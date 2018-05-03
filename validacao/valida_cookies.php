@@ -93,7 +93,7 @@ class valida_cookies{
 	exit;
         }
     }
-    public function loginDb(){
+    public function loginDb($confere=null){
         $dao = new UserDao();
         $search = new UserSearchCriteria();
         $search->setLogin($this->login);
@@ -113,7 +113,9 @@ class valida_cookies{
                 
                 //echo '<pre>';print_r($item);die;
                 echo '<script> document.cookie="funcao='.$funcao.';path:/";document.cookie="nomeEmpresa='.$nomeEmpresa.';path:/";document.cookie="cnpj='.$cnpj.';path:/";</script>';
-                $this->popup("Bem-Vindo ".$this->getlogin().".",'sim');
+                if(!$confere){
+                    $this->popup("Bem-Vindo ".$this->getlogin().".",'sim');
+                }
             }else{
                 $this->popup('A senha não confere.',null);
                 exit;
