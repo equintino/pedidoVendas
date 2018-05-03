@@ -7,6 +7,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/consulta.css"/>
         <script src="js/Chart.min.js"></script>
+
+        <?php
+            include '../dao/dao.php';
+            include '../dao/CRUDPedido.php';
+            include '../dao/ProdutoSearchCriteria.php';
+            $dao = new CRUDPedido();
+            $search = new ProdutoSearchCriteria();
+            $search->settabela('tb_pedido');
+            //echo '<pre>';print_r($search);die;
+            echo '<pre>';print_r(get_class_methods($dao));
+            $dao->encontrePorPedido($search);
+            print_r($dao); 
+            
+            die;
+        ?>
         
     </head>
     <body>
@@ -30,7 +45,35 @@
         </nav>
     <div id="canvas">
         <canvas class="line-chart"></canvas>
+        
+        <script>
+        //variáveis dinheiro
+        var dinSeg;
+        var dinTer;
+        var dinQua;
+        var dinQui;
+        var dinSex;
+        var dinSab;
+
+        //variáveis débito
+        var debSeg;
+        var debTer;
+        var debQua;
+        var debQui;
+        var debSex;
+        var debSab;
+
+        //variáveis crédito
+        var credSeg;
+        var credTer;
+        var credQua;
+        var credQui;
+        var credSex;
+        var credSab;
+
+        </script>
         <script src="js/relatorio.js"></script>
+
     </div>
     </body>
 </html>
