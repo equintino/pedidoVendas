@@ -23,12 +23,86 @@
             $dao = new CRUDPedido();
             $search = new PedidoSearchCriteria();
             $search->settabela('tb_pedido');
-            $dados=$dao->encontrePorPedido($search);
+            $search->setdSemana(1);
+            $seg=$dao->encontrePorPedido($search);
+            $search->setdSemana(2);
+            $ter=$dao->encontrePorPedido($search);
+            $search->setdSemana(3);
+            $qua=$dao->encontrePorPedido($search);
+            $search->setdSemana(4);
+            $qui=$dao->encontrePorPedido($search);
+            $search->setdSemana(5);
+            $sex=$dao->encontrePorPedido($search);
+            $search->setdSemana(6);
+            $sab=$dao->encontrePorPedido($search);
             
-            //echo '<pre>';print_r($dados);
-            
-            //die;
+            date_default_timezone_set('America/Sao_Paulo');
+            $vPedSegDin=$vPedSegDeb=$vPedSegCre=0;
+            $vPedTerDin=$vPedTerDeb=$vPedTerCre=0;
+            $vPedQuaDin=$vPedQuaDeb=$vPedQuaCre=0;
+            $vPedQuiDin=$vPedQuiDeb=$vPedQuiCre=0;
+            $vPedSexDin=$vPedSexDeb=$vPedSexCre=0;
+            $vPedSabDin=$vPedSabDeb=$vPedSabCre=0;
+            foreach($seg as $item){
+                if($item->getfPagamento()=='dinheiro'){
+                    $vPedSegDin=$vPedSegDin+$item->getvPedido();
+                }elseif($item->getfPagamento()=='debito'){
+                    $vPedSegDeb=$vPedSegDeb+$item->getvPedido();
+                }else{
+                    $vPedSegCre=$vPedSegCre+$item->getvPedido();
+                }
+            }
+            foreach($ter as $item){
+                if($item->getfPagamento()=='dinheiro'){
+                    $vPedTerDin=$vPedTerDin+$item->getvPedido();
+                }elseif($item->getfPagamento()=='debito'){
+                    $vPedTerDeb=$vPedTerDeb+$item->getvPedido();
+                }else{
+                    $vPedTerCre=$vPedTerCre+$item->getvPedido();
+                }
+            }
+            foreach($qua as $item){
+                if($item->getfPagamento()=='dinheiro'){
+                    $vPedQuaDin=$vPedQuaDin+$item->getvPedido();
+                }elseif($item->getfPagamento()=='debito'){
+                    $vPedQuaDeb=$vPedQuaDeb+$item->getvPedido();
+                }else{
+                    $vPedQuaCre=$vPedQuaCre+$item->getvPedido();
+                }
+            }
+            foreach($qui as $item){
+                if($item->getfPagamento()=='dinheiro'){
+                    $vPedQuiDin=$vPedQuiDin+$item->getvPedido();
+                }elseif($item->getfPagamento()=='debito'){
+                    $vPedQuiDeb=$vPedQuiDeb+$item->getvPedido();
+                }else{
+                    $vPedQuiCre=$vPedQuiCre+$item->getvPedido();
+                }
+            }
+            foreach($sex as $item){
+                if($item->getfPagamento()=='dinheiro'){
+                    $vPedSexDin=$vPedSexDin+$item->getvPedido();
+                }elseif($item->getfPagamento()=='debito'){
+                    $vPedSexDeb=$vPedSexDeb+$item->getvPedido();
+                }else{
+                    $vPedSexCre=$vPedSexCre+$item->getvPedido();
+                }
+            }
+            foreach($sab as $item){
+                if($item->getfPagamento()=='dinheiro'){
+                    $vPedSabDin=$vPedSabDin+$item->getvPedido();
+                }elseif($item->getfPagamento()=='debito'){
+                    $vPedSabDeb=$vPedSabDeb+$item->getvPedido();
+                }else{
+                    $vPedSabCre=$vPedSabCre+$item->getvPedido();
+                }
+            }
         ?>
+        <script>
+            var dinSex=<?= $vPedSexDin ?>;
+            var debSex=<?= $vPedSexDeb ?>;
+            var credSex=<?= $vPedSexCre ?>;
+        </script>
         
     </head>
     <body>
@@ -52,33 +126,6 @@
         </nav>
     <div id="canvas">
         <canvas class="line-chart"></canvas>
-        
-        <script>
-        //variáveis dinheiro
-        var dinSeg;
-        var dinTer;
-        var dinQua;
-        var dinQui;
-        var dinSex;
-        var dinSab;
-
-        //variáveis débito
-        var debSeg;
-        var debTer;
-        var debQua;
-        var debQui;
-        var debSex;
-        var debSab;
-
-        //variáveis crédito
-        var credSeg;
-        var credTer;
-        var credQua;
-        var credQui;
-        var credSex;
-        var credSab;
-
-        </script>
         <script src="js/relatorio.js"></script>
 
     </div>
