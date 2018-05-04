@@ -99,9 +99,24 @@
             }
         ?>
         <script>
+            var dinSeg=<?= $vPedSegDin ?>;
+            var debSeg=<?= $vPedSegDeb ?>;
+            var credSeg=<?= $vPedSegCre ?>;
+            var dinTer=<?= $vPedTerDin ?>;
+            var debTer=<?= $vPedTerDeb ?>;
+            var credTer=<?= $vPedTerCre ?>;
+            var dinQua=<?= $vPedQuaDin ?>;
+            var debQua=<?= $vPedQuaDeb ?>;
+            var credQua=<?= $vPedQuaCre ?>;
+            var dinQui=<?= $vPedQuiDin ?>;
+            var debQui=<?= $vPedQuiDeb ?>;
+            var credQui=<?= $vPedQuiCre ?>;
             var dinSex=<?= $vPedSexDin ?>;
             var debSex=<?= $vPedSexDeb ?>;
             var credSex=<?= $vPedSexCre ?>;
+            var dinSab=<?= $vPedSabDin ?>;
+            var debSab=<?= $vPedSabDeb ?>;
+            var credSab=<?= $vPedSabCre ?>;
         </script>
         
     </head>
