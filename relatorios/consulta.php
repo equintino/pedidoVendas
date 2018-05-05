@@ -6,6 +6,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/consulta.css"/>
         <script src="js/Chart.min.js"></script>
+        <style>
+            .centro{
+                width: 650px;
+                margin: auto;
+            }
+            .voltar{
+                float: right;
+                margin-right: 20px;
+            }
+        </style>
 
         <?php
             include '../dao/dao.php';
@@ -14,6 +24,7 @@
             include '../validacao/valida_cookies.php';
             include '../model/pedido.php';
             include '../mapping/pedidoMapper.php';
+            include '../excecao/Excecao.php';
             
             $valida=new valida_cookies();
             $valida->setLogin($_COOKIE['login']);
@@ -21,8 +32,23 @@
             
             $pedido=new pedido();
             $dao = new CRUDPedido();
+            
+            if(OMIE_APP_KEY=='2769656370'){
+                $db='db';
+            }elseif(OMIE_APP_KEY=='461893204773'){
+                $db='db2';
+            }else{
+                $db='db4';
+            }
+            if(!$dao->showTabela('tb_pedido',$db)){
+                echo '<div class=centro><h1>Tabela de pedido não foi criada.</h1>';
+                echo '<button class=voltar onclick=history.go(-1)>Voltar</button></div>';
+                exit;
+            }
+            
             $search = new PedidoSearchCriteria();
             $search->settabela('tb_pedido');
+            
             $search->setdSemana(1);
             $seg=$dao->encontrePorPedido($search);
             $search->setdSemana(2);
@@ -43,6 +69,7 @@
             $vPedQuiDin=$vPedQuiDeb=$vPedQuiCre=0;
             $vPedSexDin=$vPedSexDeb=$vPedSexCre=0;
             $vPedSabDin=$vPedSabDeb=$vPedSabCre=0;
+            
             $fPag=array('dinheiro','debito','credito');
             $dSem=array($seg,$ter,$qua,$qui,$sex,$sab);
             $dSem_=array('seg','ter','qua','qui','sex','sab');
@@ -52,19 +79,26 @@
                 }
             }
             $y=0;
+            $ultSem=array();
             foreach($dSem as $item_){
+                if(@is_object($item_[count($item_)-1])){
+                    //echo substr($item_[count($item_)-1]->getdPrevisao(),0,2);
+                    $ultSem[]=substr($item_[count($item_)-1]->getdPrevisao(),0,2);
+                }
                 foreach($item_ as $item){
                     for($x=0;$x<count($fPag);$x++){
                         if($item->getfPagamento()==$fPag[$x]){
-                            $ultimaSem[$dSem_[$y]]=substr($item->getdPrevisao(),0,2);
-                            $venda[$fPag[$x]][$dSem_[$y]][]=$item;
-                            $vPed[$fPag[$x]][$dSem_[$y]][]=$item->getvPedido();
+                            //$ultimaSem[$dSem_[$y]]=substr($item->getdPrevisao(),0,2);
+                            if(in_array(substr($item->getdPrevisao(),0,2),$ultSem)){
+                                $venda[$fPag[$x]][$dSem_[$y]][]=$item;
+                                $vPed[$fPag[$x]][$dSem_[$y]][]=$item->getvPedido();
+                            }
                         }
                     }
                 }
                 $y++;
             }
-            //echo '<pre>';print_r($ultimaSem);die;
+            //echo '<pre>';print_r($ultSem);//die;
         ?>
         <script>
             var dinSeg=<?= array_sum($vPed['dinheiro']['seg']) ?>;
@@ -98,7 +132,7 @@
                 <li><a href="#">PEDIDOS HOJE</a></li>
                 <li><a href="pedidos.html">PEDIDOS PENDENTES</a>
                 </li>
-                <li><a href="consulta.html">MOVIMENTAÇÃO SEMANAL</a>
+                <li><a href="consulta.php">MOVIMENTAÇÃO SEMANAL</a>
                     <ul>
                         <li><a href="dinheiro.html">DINHEIRO</a></li>
                         <li><a href="debito.html">DÉBITO</a></li>

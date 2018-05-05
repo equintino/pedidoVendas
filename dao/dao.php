@@ -106,7 +106,7 @@
         foreach($row as $item){
             $pedido = new pedido();
             pedidoMapper::map($pedido, $item);
-            $result[$pedido->getid()] = $pedido;
+            $result[] = $pedido;
         }
         return $result;
    }
