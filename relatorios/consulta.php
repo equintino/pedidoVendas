@@ -43,80 +43,48 @@
             $vPedQuiDin=$vPedQuiDeb=$vPedQuiCre=0;
             $vPedSexDin=$vPedSexDeb=$vPedSexCre=0;
             $vPedSabDin=$vPedSabDeb=$vPedSabCre=0;
-            foreach($seg as $item){
-                if($item->getfPagamento()=='dinheiro'){
-                    $vPedSegDin=$vPedSegDin+$item->getvPedido();
-                }elseif($item->getfPagamento()=='debito'){
-                    $vPedSegDeb=$vPedSegDeb+$item->getvPedido();
-                }else{
-                    $vPedSegCre=$vPedSegCre+$item->getvPedido();
+            $fPag=array('dinheiro','debito','credito');
+            $dSem=array($seg,$ter,$qua,$qui,$sex,$sab);
+            $dSem_=array('seg','ter','qua','qui','sex','sab');
+            foreach($fPag as $item){
+                foreach($dSem_ as $item_){
+                    $vPed[$item][$item_][]=array();
                 }
             }
-            foreach($ter as $item){
-                if($item->getfPagamento()=='dinheiro'){
-                    $vPedTerDin=$vPedTerDin+$item->getvPedido();
-                }elseif($item->getfPagamento()=='debito'){
-                    $vPedTerDeb=$vPedTerDeb+$item->getvPedido();
-                }else{
-                    $vPedTerCre=$vPedTerCre+$item->getvPedido();
+            $y=0;
+            foreach($dSem as $item_){
+                foreach($item_ as $item){
+                    for($x=0;$x<count($fPag);$x++){
+                        if($item->getfPagamento()==$fPag[$x]){
+                            $ultimaSem[$dSem_[$y]]=substr($item->getdPrevisao(),0,2);
+                            $venda[$fPag[$x]][$dSem_[$y]][]=$item;
+                            $vPed[$fPag[$x]][$dSem_[$y]][]=$item->getvPedido();
+                        }
+                    }
                 }
+                $y++;
             }
-            foreach($qua as $item){
-                if($item->getfPagamento()=='dinheiro'){
-                    $vPedQuaDin=$vPedQuaDin+$item->getvPedido();
-                }elseif($item->getfPagamento()=='debito'){
-                    $vPedQuaDeb=$vPedQuaDeb+$item->getvPedido();
-                }else{
-                    $vPedQuaCre=$vPedQuaCre+$item->getvPedido();
-                }
-            }
-            foreach($qui as $item){
-                if($item->getfPagamento()=='dinheiro'){
-                    $vPedQuiDin=$vPedQuiDin+$item->getvPedido();
-                }elseif($item->getfPagamento()=='debito'){
-                    $vPedQuiDeb=$vPedQuiDeb+$item->getvPedido();
-                }else{
-                    $vPedQuiCre=$vPedQuiCre+$item->getvPedido();
-                }
-            }
-            foreach($sex as $item){
-                if($item->getfPagamento()=='dinheiro'){
-                    $vPedSexDin=$vPedSexDin+$item->getvPedido();
-                }elseif($item->getfPagamento()=='debito'){
-                    $vPedSexDeb=$vPedSexDeb+$item->getvPedido();
-                }else{
-                    $vPedSexCre=$vPedSexCre+$item->getvPedido();
-                }
-            }
-            foreach($sab as $item){
-                if($item->getfPagamento()=='dinheiro'){
-                    $vPedSabDin=$vPedSabDin+$item->getvPedido();
-                }elseif($item->getfPagamento()=='debito'){
-                    $vPedSabDeb=$vPedSabDeb+$item->getvPedido();
-                }else{
-                    $vPedSabCre=$vPedSabCre+$item->getvPedido();
-                }
-            }
+            //echo '<pre>';print_r($ultimaSem);die;
         ?>
         <script>
-            var dinSeg=<?= $vPedSegDin ?>;
-            var debSeg=<?= $vPedSegDeb ?>;
-            var credSeg=<?= $vPedSegCre ?>;
-            var dinTer=<?= $vPedTerDin ?>;
-            var debTer=<?= $vPedTerDeb ?>;
-            var credTer=<?= $vPedTerCre ?>;
-            var dinQua=<?= $vPedQuaDin ?>;
-            var debQua=<?= $vPedQuaDeb ?>;
-            var credQua=<?= $vPedQuaCre ?>;
-            var dinQui=<?= $vPedQuiDin ?>;
-            var debQui=<?= $vPedQuiDeb ?>;
-            var credQui=<?= $vPedQuiCre ?>;
-            var dinSex=<?= $vPedSexDin ?>;
-            var debSex=<?= $vPedSexDeb ?>;
-            var credSex=<?= $vPedSexCre ?>;
-            var dinSab=<?= $vPedSabDin ?>;
-            var debSab=<?= $vPedSabDeb ?>;
-            var credSab=<?= $vPedSabCre ?>;
+            var dinSeg=<?= array_sum($vPed['dinheiro']['seg']) ?>;
+            var debSeg=<?= array_sum($vPed['debito']['seg']) ?>;
+            var credSeg=<?= array_sum($vPed['credito']['seg']) ?>;
+            var dinTer=<?= array_sum($vPed['dinheiro']['ter']) ?>;
+            var debTer=<?= array_sum($vPed['debito']['ter']) ?>;
+            var credTer=<?= array_sum($vPed['credito']['ter']) ?>;
+            var dinQua=<?= array_sum($vPed['dinheiro']['qua']) ?>;
+            var debQua=<?= array_sum($vPed['debito']['qua']) ?>;
+            var credQua=<?= array_sum($vPed['credito']['qua']) ?>;
+            var dinQui=<?= array_sum($vPed['dinheiro']['qui']) ?>;
+            var debQui=<?= array_sum($vPed['debito']['qui']) ?>;
+            var credQui=<?= array_sum($vPed['credito']['qui']) ?>;
+            var dinSex=<?= array_sum($vPed['dinheiro']['sex']) ?>;
+            var debSex=<?= array_sum($vPed['debito']['sex']) ?>;
+            var credSex=<?= array_sum($vPed['credito']['sex']) ?>;
+            var dinSab=<?= array_sum($vPed['dinheiro']['sab']) ?>;
+            var debSab=<?= array_sum($vPed['debito']['sab']) ?>;
+            var credSab=<?= array_sum($vPed['credito']['sab']) ?>;
         </script>
         
     </head>
