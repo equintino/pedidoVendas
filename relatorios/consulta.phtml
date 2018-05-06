@@ -15,6 +15,10 @@
                 float: right;
                 margin-right: 20px;
             }
+            .semana{
+                float: right;
+                margin: 10px 100px;
+            }
         </style>
 
         <?php
@@ -82,13 +86,11 @@
             $ultSem=array();
             foreach($dSem as $item_){
                 if(@is_object($item_[count($item_)-1])){
-                    //echo substr($item_[count($item_)-1]->getdPrevisao(),0,2);
                     $ultSem[]=substr($item_[count($item_)-1]->getdPrevisao(),0,2);
                 }
                 foreach($item_ as $item){
                     for($x=0;$x<count($fPag);$x++){
                         if($item->getfPagamento()==$fPag[$x]){
-                            //$ultimaSem[$dSem_[$y]]=substr($item->getdPrevisao(),0,2);
                             if(in_array(substr($item->getdPrevisao(),0,2),$ultSem)){
                                 $venda[$fPag[$x]][$dSem_[$y]][]=$item;
                                 $vPed[$fPag[$x]][$dSem_[$y]][]=$item->getvPedido();
@@ -98,7 +100,15 @@
                 }
                 $y++;
             }
-            //echo '<pre>';print_r($ultSem);//die;
+            foreach($fPag as $item_){
+                $$item_=0;
+                foreach($dSem_ as $item){
+                    $$item_ +=array_sum($vPed[$item_][$item]);
+                }
+            }
+            $dinheiro=number_format($dinheiro,'2',',','.');
+            $debito=number_format($debito,'2',',','.');
+            $credito=number_format($credito,'2',',','.');
         ?>
         <script>
             var dinSeg=<?= array_sum($vPed['dinheiro']['seg']) ?>;
@@ -144,7 +154,13 @@
     <div id="canvas">
         <canvas class="line-chart"></canvas>
         <script src="js/relatorio.js"></script>
-
     </div>
+        <div class="semana">Semana de <?= $ultSem[0] ?> á <?= $ultSem[5].'/'.date('m') ?><br>
+            Totais:<br>
+            - Dinheiro R$ <?= $dinheiro ?><br>
+            - Débito R$ <?= $debito ?><br>
+            - Crédito R$ <?= $credito ?><br>
+            
+        </div>
     </body>
 </html>
