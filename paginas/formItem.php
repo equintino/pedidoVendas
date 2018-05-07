@@ -367,20 +367,26 @@
     if($tipoBusca=='servidor' && $act != 'atualiza'){
         if(@$pagAtual=='undefined' || @!$pagAtual){
             $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>40,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
-            $dados=$produto->ListarProdutos($produto_servico_list_request);
-            if(!$dados){
-                echo 'Não foi encontrado nenhum produto cadastrado.';
-                exit;
-            }
-            $pagAtual=$dados->total_de_paginas;
-            echo '<script>pagAtual='.$pagAtual.'</script>';
+            //$dados=$produto->ListarProdutos($produto_servico_list_request);
+            
         }else{        
             $produto_servico_list_request=array("pagina"=>$pagAtual,"registros_por_pagina"=>40,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
-            $dados=$produto->ListarProdutos($produto_servico_list_request);
         }
+        $dados=$produto->ListarProdutos($produto_servico_list_request);
+        if(!$dados){
+            echo 'Não foi encontrado nenhum produto cadastrado.';
+            exit;
+        }
+            //$pagAtual=$dados->total_de_paginas;
+            //echo '<script>pagAtual='.$pagAtual.'</script>';
         $registros=$dados->registros;
         $totalRegistros=$dados->total_de_registros;
         $detalhes=$dados->produto_servico_cadastro;
+        $botoes=null;
+        for($g=1;$g <= $dados->total_de_paginas;$g++){
+            $botoes .='<button class=paginacao>'.$g.'</button>&nbsp&nbsp';
+        }
+        echo '<script>document.getElementById("numPaginas").innerHTML="'.$botoes.'";</script>';
     }elseif($tipoBusca=='local' && $act != 'atualiza'){
         $dao = new Dao();
         $search = new ProdutoSearchCriteria();
@@ -411,13 +417,8 @@
         $totalRegistros=$dao->totalLinhas2($search);
     }
     echo '<span class=tituloProd>Páginas </span>';
-    if($tipoBusca=='servidor'){
-        for($g=1;$g <= $dados->total_de_paginas;$g++){
-            echo '<button class=paginacao>'.$g.'</button>&nbsp&nbsp';
-        }
-    }
-    
     ?>
+    <span id="numPaginas"></span>
     <div class="procura">
         <span class="loja">
             <label><b>LOJA:</b> </label>
@@ -454,7 +455,10 @@
                     
                     $search->settabela('tb_preco');
                     $search->setid(1);
-                    $nTabela=$dao->encontre2($search)[1]->getnTabela();
+                    @$nTabela=$dao->encontre2($search)[1]->getnTabela();
+                    if(@!$nTabela){
+                        echo 'Necessário atualizar tabela de Preço.';
+                    }
                     $search->setid(null);
                     
                     if($tipoBusca=='local'){
@@ -566,15 +570,15 @@
                                         $pTabela='Não Definido';
                                     }
                                 }else{
-                                    $pTabela=null;
-                                }
-                                if(!$pTabela){
-                                    include '../dao/CRUDProduto.php';
-                                    include '../dao/ModelSearchCriteria.php';
-                                    $dao2=new CRUDProduto();
-                                    $modelProduto=new modelProduto();
-                                    $modelProduto->settabela('tb_preco');
-                                    $dao2->grava4($modelProduto);
+                                    if(!$pTabela){
+                                        include '../dao/CRUDProduto.php';
+                                        include '../dao/ModelSearchCriteria.php';
+                                        $dao2=new CRUDProduto();
+                                        $modelProduto=new modelProduto();
+                                        $modelProduto->settabela('tb_preco');
+                                        echo '<pre>';print_r($modelProduto);die;
+                                        $dao2->grava4($modelProduto);
+                                    }
                                 }
                             }
                             echo 'pTabela="'.$pTabela.'"';
