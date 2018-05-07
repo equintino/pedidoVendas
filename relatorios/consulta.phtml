@@ -151,16 +151,13 @@
                 </li>
             </ul>
         </nav>
+        <script>
+            var dSeg=<?= $ultSem[0] ?>; var dSab="<?= $ultSem[5].'/'.date('m') ?>";
+            var tDinheiro="<?="R$ ". $dinheiro ?>";var tDebito="<?= 'R$ '.$debito ?>";var tCredito="<?= 'R$ '.$credito ?>";
+        </script>
     <div id="canvas">
         <canvas class="line-chart"></canvas>
         <script src="js/relatorio.js"></script>
     </div>
-        <div class="semana">Semana de <?= $ultSem[0] ?> á <?= $ultSem[5].'/'.date('m') ?><br>
-            Totais:<br>
-            - Dinheiro R$ <?= $dinheiro ?><br>
-            - Débito R$ <?= $debito ?><br>
-            - Crédito R$ <?= $credito ?><br>
-            
-        </div>
     </body>
 </html>
