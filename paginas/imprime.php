@@ -2,13 +2,14 @@
     <head>
         <meta charset="utf-8" />
         <script type="text/javascript" src="../web/js/jquery-3.2.1.min.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Medula+One" rel="stylesheet">
         
         <script>
             $(document).ready(function(){
                 if(!flash && numero_pedido){
                     $('.erro').hide();
                     window.print();
-                    window.close();
+                    //window.close();
                     /*window.location='../web/index.php?pagina=pedido&act=cad';*/
                 }
             })
@@ -20,11 +21,26 @@
             }
             body{
                 background: #000;
-                font: 12pt serif;
-                font-weight: 900;
+                font: 11pt serif;
+                font-weight: 300;
                 width: 105mm;
                 text-transform: uppercase;
                 line-height: 1.4;
+            }
+            .hr {
+                border-top: 1px dashed black;
+                border-bottom: 1px dashed black;
+                border-left: none;
+                height: 4px;
+            }
+            hr {
+                border-top: 1px dashed black;
+                border-bottom: none;
+                margin: 2px;
+            }
+            .fim{
+                border-top: 1px solid black;
+                border-bottom: none;                
             }
             #texto{
                 width: 100%; 
@@ -43,9 +59,6 @@
             }
             .cnpj{
                 margin-top: 10px;
-            }
-            hr{
-                margin-top: 8px;
             }
             h2{
                 text-align: center;
@@ -127,6 +140,13 @@
                 color: red;
                 animation: blinker 1s linear infinite;
                 text-align: center;
+            }
+            .data{
+                float: right;
+            }
+            .ass{
+                margin-top: 15px;
+                float: right;
             }
             
             .blink_me {
@@ -247,52 +267,57 @@
             <?php else: ?>
             <script>var flash=null;</script>
             <?php endif ?>
-            <h3><?= $razao_social ?></h3>
-            <div class="web"><?= $website ?></div>
-            <div class="endereco">Tel. (<?= $telefone1_ddd ?>) <?= $telefone1_numero ?> </div><br>
-            <div class="cnpj">CNPJ: <?= $cnpj ?><br></div>
-            <div class="ie">IE: <?= $inscricao_estadual ?><br></div>
-            <!--<div class="IM">IM:0.000.000-0</div>-->
             <hr>
+            <div><?= $razao_social ?></div>
+            <div><?= $website ?></div>
+            <div>Tel. (<?= $telefone1_ddd ?>) <?= substr($telefone1_numero,0,4).'-'.substr($telefone1_numero,4,4) ?> </div>
+            <!--<div class="cnpj">CNPJ: <?= $cnpj ?><br></div>
+            <div class="ie">IE: <?= $inscricao_estadual ?><br></div>-->
+            <hr class="hr">
+            <span>Pedido: <?= preg_replace('/^0+/','',@$numero_pedido) ?></span><br>
+            <span>Vendedor: <?= @$vendedor ?></span>
             <span class="data"><?= date('d/m/Y h:m:s') ?></span>
-            <span class="pedido">Pedido: <?= preg_replace('/^0+/','',@$numero_pedido) ?></span><br>
-            <span>Vendedor: <?= @$vendedor ?></span><br>
             <hr>
             <span class="campos">Cliente: </span><span class="dCliente"><?= $cliente ?></span><br>
             <span class="campos">Endereço: </span><span class="dCliente"><?= $enderecoCliente ?></span><br>
-            <span class="campos">Bairro: </span><span class="dCliente"><?= $bairroCliente ?></span>&nbsp&nbsp&nbsp <span class="campos">Cep: </span><span class="dCliente"><?= $cepCliente ?></span><br>
+            <span class="campos">Bairro: </span><span class="dCliente"><?= $bairroCliente ?></span>&nbsp&nbsp&nbsp <span class="campos"> - &nbsp&nbsp Cep: </span><span class="dCliente"><?= $cepCliente ?></span><br>
             <span class="campos">Cidade: </span><span class="dCliente"><?= $cidadeCliente ?></span><br>
             <span class="campos">CPF/CNPJ: </span><span class="dCliente"><?= $cnpj_cpfCliente ?></span><br>
             <hr>
-            <div class="titulo1">
-                <span>ÍTEM &nbsp&nbsp&nbspCODIGO</span><span class="descricao">DESCRIÇÃO<br></span>
-                <span class='seriais_'>SERIAL</span><br>
-                <span class='qtd'>QTD.</span><span class=vlUnit>VL. UNIT(R$)</span><span class='vlItem'>VL. ÍTEM(R$)</span>
-            </div>
-            <hr>
+            <!--<div class="titulo1">-->
+                <span>CÓDIGO-DESCRIÇÃO<br></span>
+                <span>QUANTIDADE</span><span class=vlUnit>UNITÁRIO</span><span class='vlItem'>TOTAL</span>
+            <!--</div>-->
+            <hr class="hr">
             <div class="titulo2">
             <?php for($i=1;$i<=$tItens;$i++): 
                 $codigo=$pedido_venda_produto->det[$i-1]['produto']->codigo_produto_integracao;
-                $descricao=reduz($pedido_venda_produto->det[$i-1]['produto']->descricao,40);
+                $descricao=reduz($pedido_venda_produto->det[$i-1]['produto']->descricao,70);
                 $quantidade=$pedido_venda_produto->det[$i-1]['produto']->quantidade;
                 $dados_adcionais_item=$pedido_venda_produto->det[$i-1]['inf_adic']->dados_adicionais_item;
                 $vUnitario=number_format($pedido_venda_produto->det[$i-1]['produto']->valor_unitario,'2',',','.');
                 $vTotalItem=number_format($pedido_venda_produto->det[$i-1]['produto']->valor_mercadoria,'2',',','.');
             ?>
-                <span><?= '00'.$i.'</span><span class=cod>'.$codigo.'</span><span class=desc>'.$descricao ?><br></span>
-                <div class="seriais"><?= nl2br($dados_adcionais_item) ?></div>
+                <?='<span>'.$codigo.' - </span><span>'.$descricao ?><br>
                 <span class="quant">&nbsp&nbsp<?= $quantidade.'</span> &nbsp&nbsp&nbsp&nbsp&nbsp X <span class=vlUnit2>'.$vUnitario.'</span><span class=vTotalItem2>'.$vTotalItem ?></span><br>
+                <div class="seriais"><?= nl2br($dados_adcionais_item) ?></div>
             <?php endfor; ?>
             </div>
-            <span class=desconto>(Desconto) -<?= $vDesconto ?></span><br>
-            <hr class='hrTotal'>
-            <div class='final'>
-                <span class="total">TOTAL</span>
-                <span class="vTotal">R$ <?= $vPedido ?></span>
-                <span class='fpagamento'>(FORM. PAG.) &nbsp<?= $fPagamento ?></span>
-            </div>
-            <br><br>
             <hr>
+            <span>Total Desconto: <?= $vDesconto ?></span><br>
+            <!--<hr class='hrTotal'>-->
+            <!--<div class='final'>-->
+                <span class="total">TOTAL Geral: </span>
+                <span><?= $vPedido ?></span><br>
+                <span>Total Qtd -> <?= $pedido_venda_produto->cabecalho->quantidade_itens ?></span>
+                <hr>
+                <span>(FORM. PAG.) &nbsp<?= $fPagamento ?></span>
+            <!--</div>-->
+            <hr>
+            RECEBI OS PRODUTOS CONSTANTE NESTE PEDIDO E RECONHEÇO A DIVIDA ACIMA,
+            <span class='ass'>______________________________</span>
+            <br><br><br><br>
+            <hr class='fim'>
             <div class="rodape">DEUS SEJA LOUVADO!</div>
         </div>
         <!--<button onclick='window.print()'>Imprimir</button>-->
