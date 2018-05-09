@@ -250,7 +250,7 @@
                     }
                 }
 
-                $prcListarCaractRequest=array("nPagina"=>$y,"nRegPorPagina"=>$regPorPagina,"nCodProd"=>$modelProduto->getcodigo_produto());
+                $prcListarCaractRequest=array("nPagina"=>1,"nRegPorPagina"=>$regPorPagina,"nCodProd"=>$modelProduto->getcodigo_produto());
                 $conteudo=$caracteristica->ListarCaractProduto($prcListarCaractRequest);
                 if(is_object($conteudo)){
                     foreach($conteudo->listaCaracteristicas as $item3){
