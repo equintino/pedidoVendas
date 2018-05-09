@@ -364,7 +364,22 @@
             break;
     }
     echo '<div class=recarrega><img src="../web/img/atualiza.png" height="18px" title="Recarregar esta página."/></div>';
-    if($tipoBusca=='servidor' && $act != 'atualiza'){
+        //echo $tipoBusca.'-'.$buscaProduto.'-'.$pagAtual;die;
+    if($tipoBusca=='local'){
+        $dao = new Dao();
+        $search = new ProdutoSearchCriteria();
+        $search->settabela('tb_produto');
+        if($buscaProduto || @$pagAtual != 'undefined'){
+            $search->setcodigo($buscaProduto);
+            $search->setloja($loja);
+            $detalhes=$dao->encontre2($search);
+            //echo '<pre>';print_r($detalhes);
+        }else{
+            $detalhes=null;
+        }
+        $totalRegistros=$dao->totalLinhas2($search);
+        $registros=null;
+    }elseif($tipoBusca=='servidor'){
         if(@$pagAtual=='undefined' || @!$pagAtual){
             $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>40,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
             //$dados=$produto->ListarProdutos($produto_servico_list_request);
@@ -387,19 +402,6 @@
             $botoes .='<button class=paginacao>'.$g.'</button>&nbsp&nbsp';
         }
         echo '<script>document.getElementById("numPaginas").innerHTML="'.$botoes.'";</script>';
-    }elseif($tipoBusca=='local' && $act != 'atualiza'){
-        $dao = new Dao();
-        $search = new ProdutoSearchCriteria();
-        $search->settabela('tb_produto');
-        if($buscaProduto || @$pagAtual != 'undefined'){
-            $search->setcodigo($buscaProduto);
-            $search->setloja($loja);
-            $detalhes=$dao->encontre2($search);
-        }else{
-            $detalhes=null;
-        }
-        $totalRegistros=$dao->totalLinhas2($search);
-        $registros=null;
     }elseif($loja && $funcao='administrador'){
         $dao = new Dao();
         $search = new ProdutoSearchCriteria();
@@ -576,7 +578,7 @@
                                         $dao2=new CRUDProduto();
                                         $modelProduto=new modelProduto();
                                         $modelProduto->settabela('tb_preco');
-                                        echo '<pre>';print_r($modelProduto);die;
+                                        //echo '<pre>';print_r($modelProduto);die;
                                         $dao2->grava4($modelProduto);
                                     }
                                 }
