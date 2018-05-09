@@ -373,7 +373,6 @@
             $search->setcodigo($buscaProduto);
             $search->setloja($loja);
             $detalhes=$dao->encontre2($search);
-            //echo '<pre>';print_r($detalhes);
         }else{
             $detalhes=null;
         }
@@ -382,8 +381,6 @@
     }elseif($tipoBusca=='servidor'){
         if(@$pagAtual=='undefined' || @!$pagAtual){
             $produto_servico_list_request=array("pagina"=>1,"registros_por_pagina"=>40,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
-            //$dados=$produto->ListarProdutos($produto_servico_list_request);
-            
         }else{        
             $produto_servico_list_request=array("pagina"=>$pagAtual,"registros_por_pagina"=>40,"apenas_importado_api"=>"N","filtrar_apenas_omiepdv"=>"N");
         }
@@ -439,78 +436,57 @@
     </div>
     <?php if($act != 'atualiza'): ?>
     <div class="paginas">Registros <span class="cont"><?= $registros ?></span> de <?= $totalRegistros ?>
-        <?php if($tipoBusca=='local'): ?>
-        <?php endif; endif;?>
+        <?php endif;?>
     </div>
     <div class='tudo'>
         <div class='cima'></div>
         <div class='jTabela'>
             <table class="head" border=1 cellspacing=0 >
-                <thead><tr>
+                <thead>
                 <?php
+                echo '<tr>';
                     $w=$row=0;
                     $col=1;
                     $cont=0;
                     $dao = new Dao();
                     $search = new ProdutoSearchCriteria();
-                    
-                    
                     $search->settabela('tb_preco');
-                    $search->setid(1);
-                    @$nTabela=$dao->encontre2($search)[1]->getnTabela();
-                    if(@!$nTabela){
-                        echo 'Necessário atualizar tabela de Preço.';
+                    if(OMIE_APP_KEY=='2769656370'){
+                        $db='db';
+                    }elseif(OMIE_APP_KEY=='461893204773'){
+                        $db='db2';
+                    }else{
+                        $db='db3';
+                    }
+                    
+                    if(!$dao->showTabela('tb_preco',$db)){
+                        echo 'Necessário atualizar tabela de Preços.(ESC)';
+                        exit;
+                    }else{
+                        $search->setid(1);
+                        @$nTabela=$dao->encontre2($search)[1]->getnTabela();
                     }
                     $search->setid(null);
                     
+                    echo '<th  width="10%" class="col1">CÓDIGO</th>';
+                    echo '<th class="descricao col2">DESCRIÇÃO DO PRODUTO</th>';
+                    echo '<th class="col3">VALOR UNITÁRIO</th>';
+
+
+                    echo '<th class="col4">PREÇO '.strtoupper($nTabela).'</th></tr>';
                     if($tipoBusca=='local'){
-                        echo '<th  width="10%" class="col1">CÓDIGO</th>';
-                        echo '<th class="descricao col2">DESCRIÇÃO DO PRODUTO</th>';
-                        echo '<th class="col3">VALOR UNITÁRIO</th>';
-                        
-                        
-                        echo '<th class="col4">PREÇO '.strtoupper($nTabela).'</th></tr></thead>';
                         if($act != 'atualiza' && $detalhes){
                             foreach($detalhes as $item){
                                 $search->setcodigo($item->getcodigo());
-                                if($cont==0){
-                                    if(OMIE_APP_KEY=='2769656370'){
-                                        $db='db';
-                                    }elseif(OMIE_APP_KEY=='461893204773'){
-                                        $db='db2';
-                                    }else{
-                                        $db='db3';
-                                    }
-                                    $tabelaExiste=$dao->showTabela($search->gettabela(),$db);
-                                    if(!$tabelaExiste){
-                                        include '../dao/CRUDProduto.php';
-                                        include '../dao/ModelSearchCriteria.php';
-                                        $dao2=new CRUDProduto();
-                                        $modelProduto=new modelProduto();
-                                        $modelProduto->settabela('tb_preco');
-                                        $dao2->grava4($modelProduto);
-                                    }
-                                    if($tabelaExiste){
-                                        $boadica=$dao->encontre2($search);
-                                        if($boadica){
-                                            foreach($boadica as $preco){
-                                                $pTabela=number_format($preco->getpTabela(),'2',',','.');
-                                            }
-                                        }else{
-                                            $pTabela='Não Definido';
-                                        }
+                                $boadica=$dao->encontre2($search);
+                                if($boadica){
+                                    foreach($boadica as $preco){
+                                        $pTabela=number_format($preco->getpTabela(),'2',',','.');
                                     }
                                 }else{
-                                    $boadica=$dao->encontre2($search);
-                                    if($boadica){
-                                        foreach($boadica as $preco){
-                                            $pTabela=number_format($preco->getpTabela(),'2',',','.');
-                                        }
-                                    }else{
-                                        $pTabela='Não Definido';
-                                    }
+                                    $pTabela='Não Definido';
                                 }
-                                if(!$pTabela)$pTabela='Não Definido';
+                                if(!$pTabela){$pTabela='Não Definido';}
                                 $item->setpTabela($pTabela);
                                 echo '<tr class=listaProduto row="'.$row.'" descricao="'.$item->getdescricao().'" codigo="'.$item->getcodigo().'" codigo_produto="'.$item->getcodigo_produto().'" valor_unitario="'.$item->getvalor_unitario().'" pTabela="'.$item->getpTabela().'" quantidade_estoque="'.$item->getquantidade_estoque().'" cfop="'.$item->getcfop().'" ncm="'.$item->getncm().'" ean="'.$item->getean().'" unidade="'.$item->getunidade().'" ><td class="col1" align=center><div width=10px>'.$item->getcodigo().'</td>';
                                 echo '<td class="col2" align=center>'.$item->getdescricao().'</td>';
@@ -520,76 +496,33 @@
                             }
                             echo '<script>var cont='.$cont.'</script>';
                         }
-                    }elseif($tipoBusca=='servidor'){
-                        foreach($detalhes as $prod){
-                            if($w==0){
-                                foreach($prod as $key => $item){
-                                    if(!strstr($key,'aliquo') && !strstr($key,'altura') && !strstr($key,'bloqueado') && !strstr($key,'cest') && !strstr($key,'familia') && !strstr($key,'cst') && !strstr($key,'dias') && !stristr($key,'dadosib') && !stristr($key,'csosn') && !stristr($key,'importado') && !stristr($key,'inativo') && !stristr($key,'largura') && !stristr($key,'peso') && !stristr($key,'profundidade') && !stristr($key,'red') && !stristr($key,'recomendacoes') && !stristr($key,'imagens') && !stristr($key,'integracao') && !stristr($key,'marca') && !stristr($key,'cfop') && !stristr($key,'produto') && !stristr($key,'minimo') && !stristr($key,'internas') && !stristr($key,'tipo') && !stristr($key,'quantidade_estoque') && !stristr($key,'ean') && !stristr($key,'ncm') && !stristr($key,'unidade') && !stristr($key,'detalhada')){
-                                        if($key=='descricao'){
-                                            echo '<th class="descricao col'.$col.'">DESCRIÇÃO DO PRODUTO</th>';
-                                        }elseif($key=='valor_unitario'){
-                                            echo '<th class="col'.$col.'">VALOR UNITÁRIO</th>';
-                                        }elseif($key=='codigo'){
-                                            echo '<th  width="10%" class="col'.$col.'">CÓDIGO</th>';
-                                        }
-                                        $col++;
-                                    }
-                                }
-                                echo '<th class="col4">PREÇO '.strtoupper($nTabela).'</th>';
-                                $w=1;
-                                goto s;
-                            }
-                            s:
-                            $col=1;
-                            $z=0;
+                    }else{
                     ?>
-                    </tr>
                 </thead>
-            <?php
-                $serv=0;
+        <?php
+            foreach($detalhes as $prod){
+                $col=1;
                 foreach($prod as $key => $item){
                     echo '<tr class="listaProduto" row="'.$row.'" ';
                     if($key!='dadosIbpt' && $key!='imagens' && $key!='recomendacoes_fiscais'){
                         if(stristr($key,'codigo')){
-                            if($serv==0){
-                                $search->settabela('tb_preco');
-                                $search->setcodigo($item);
-                                if(OMIE_APP_KEY=='2769656370'){
-                                    $db='db';
-                                }elseif(OMIE_APP_KEY=='461893204773'){
-                                    $db='db2';
-                                }else{
-                                    $db='db3';
+                            $search->settabela('tb_preco');
+                            $search->setcodigo($item);
+                            $boadica=$dao->encontre2($search);
+                            if($boadica){
+                                foreach($boadica as $preco){
+                                    $pTabela=number_format($preco->getpTabela(),'2',',','.');
                                 }
-                                $tabelaExiste=$dao->showTabela($search->gettabela(),$db);
-                                if($tabelaExiste){
-                                    $boadica=$dao->encontre2($search);
-                                    if($boadica){
-                                        foreach($boadica as $preco){
-                                            $pTabela=number_format($preco->getpTabela(),'2',',','.');
-                                        }
-                                    }else{
-                                        $pTabela='Não Definido';
-                                    }
-                                }else{
-                                    if(!$pTabela){
-                                        include '../dao/CRUDProduto.php';
-                                        include '../dao/ModelSearchCriteria.php';
-                                        $dao2=new CRUDProduto();
-                                        $modelProduto=new modelProduto();
-                                        $modelProduto->settabela('tb_preco');
-                                        //echo '<pre>';print_r($modelProduto);die;
-                                        $dao2->grava4($modelProduto);
-                                    }
-                                }
+                            }else{
+                                $pTabela='Não Definido';
                             }
                             echo 'pTabela="'.$pTabela.'"';
                         }
                         echo $key.'="'.$item.'"';
                     }
                 }
-                echo ' pTabela="'.$pTabela.'">';
-                foreach($prod as $key => $item){                    
+                echo '>';
+                foreach($prod as $key => $item){               
                     if(!strstr($key,'aliquo') && !strstr($key,'altura') && !strstr($key,'bloqueado') && !strstr($key,'cest') && !strstr($key,'familia') && !strstr($key,'cst') && !strstr($key,'dias') && !stristr($key,'dadosib') && !stristr($key,'csosn') && !stristr($key,'importado') && !stristr($key,'inativo') && !stristr($key,'largura') && !stristr($key,'peso') && !stristr($key,'profundidade') && !stristr($key,'red') && !stristr($key,'recomendacoes') && !stristr($key,'imagens') && !stristr($key,'integracao') && !stristr($key,'marca') && !stristr($key,'cfop') && !stristr($key,'produto') && !stristr($key,'minimo') && !stristr($key,'internas') && !stristr($key,'tipo') && !stristr($key,'quantidade_estoque') && !stristr($key,'ean') && !stristr($key,'ncm') && !stristr($key,'unidade') && !stristr($key,'detalhada')){
                         if(stristr($key,'obs_interna')){
                             echo '<td class="col'.$col.'" align=center>'.$item.'</td>';
