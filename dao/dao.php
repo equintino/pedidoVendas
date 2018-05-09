@@ -320,25 +320,25 @@
         $codigo=str_replace(' ','%',$search->getcodigo());
         if($search->getcodigo_produto()){
             if($search->getloja()){
-                $sql = 'SELECT `id`,`descricao`,`codigo`,`codigo_produto`,`valor_unitario`,`quantidade_estoque`,`cfop`,`ncm`,`ean`,`unidade` FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo_produto = "'.$search->getcodigo_produto().'" AND loja = "'.$search->getloja().'" OR descricao like "%'.$search->getcodigo_produto().'%"';
+                $sql = 'SELECT `id`,`descricao`,`codigo`,`codigo_produto`,`valor_unitario`,`quantidade_estoque`,`cfop`,`ncm`,`ean`,`unidade` FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo_produto = "'.$search->getcodigo_produto().'" AND loja like "%'.$search->getloja().'%" OR descricao like "%'.$search->getcodigo_produto().'%"';
                 return $sql;
             }
             $sql = 'SELECT `id`,`descricao`,`codigo`,`codigo_produto`,`valor_unitario`,`quantidade_estoque`,`cfop`,`ncm`,`ean`,`unidade` FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo_produto = "'.$search->getcodigo_produto().'" OR descricao like "%'.$search->getcodigo_produto().'%"';
-        }elseif(preg_match('/[0-9]/',$codigo) && !$search->getcodigo_produto()){
+        }elseif(preg_match('/[0-9]/',$codigo)){
             if($search->getloja()){
-                $sql = 'SELECT `id`,`descricao`,`codigo`,`codigo_produto`,`valor_unitario`,`quantidade_estoque`,`cfop`,`ncm`,`ean`,`unidade` FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo like "%'.$codigo.'%" AND loja = "'.$search->getloja().'" OR descricao like "%'.$codigo.'%"';
+                $sql = 'SELECT `id`,`descricao`,`codigo`,`codigo_produto`,`valor_unitario`,`quantidade_estoque`,`cfop`,`ncm`,`ean`,`unidade` FROM `'.$search->gettabela().'` WHERE excluido = "0" AND loja like "%'.$search->getloja().'%" AND (codigo like "%'.$codigo.'%" OR descricao like "%'.$codigo.'%")';
                 return $sql;
             }
-            $sql = 'SELECT `id`,`descricao`,`codigo`,`codigo_produto`,`valor_unitario`,`quantidade_estoque`,`cfop`,`ncm`,`ean`,`unidade` FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo like "%'.$codigo.'%" OR descricao like "%'.$codigo.'%"';
+            $sql = 'SELECT `id`,`descricao`,`codigo`,`codigo_produto`,`valor_unitario`,`quantidade_estoque`,`cfop`,`ncm`,`ean`,`unidade` FROM `'.$search->gettabela().'` WHERE excluido = "0" AND (codigo like "%'.$codigo.'%" OR descricao like "%'.$codigo.'%")';
         }elseif(!preg_match('/[0-9]/',$codigo)){
             if($search->getloja()){
-                $sql = 'SELECT `id`,`descricao`,`codigo`,`codigo_produto`,`valor_unitario`,`quantidade_estoque`,`cfop`,`ncm`,`ean`,`unidade` FROM `'.$search->gettabela().'` WHERE excluido = "0" AND descricao like "%'.$codigo.'%" AND loja = "'.$search->getloja().'" OR codigo like "%'.$codigo.'%"';
+                $sql = 'SELECT `id`,`descricao`,`codigo`,`codigo_produto`,`valor_unitario`,`quantidade_estoque`,`cfop`,`ncm`,`ean`,`unidade` FROM `'.$search->gettabela().'` WHERE excluido = "0" AND loja like "%'.$search->getloja().'%" AND (descricao like "%'.$codigo.'%" OR codigo like "%'.$codigo.'%")';
                 return $sql;
             }
             $sql = 'SELECT `id`,`descricao`,`codigo`,`codigo_produto`,`valor_unitario`,`quantidade_estoque`,`cfop`,`ncm`,`ean`,`unidade` FROM `'.$search->gettabela().'` WHERE excluido = "0" AND descricao like "%'.$codigo.'%" OR codigo like "%'.$codigo.'%"';
         }else{
             if($search->getloja()){
-                $sql = 'SELECT `id`,`descricao`,`codigo`,`codigo_produto`,`valor_unitario`,`quantidade_estoque`,`cfop`,`ncm`,`ean`,`unidade` FROM `'.$search->gettabela().'` WHERE excluido = "0" AND loja = "'.$search->getloja().'" ';
+                $sql = 'SELECT `id`,`descricao`,`codigo`,`codigo_produto`,`valor_unitario`,`quantidade_estoque`,`cfop`,`ncm`,`ean`,`unidade` FROM `'.$search->gettabela().'` WHERE excluido = "0" AND loja like "%'.$search->getloja().'%" ';
                 return $sql;
             }
             $sql = 'SELECT `id`,`descricao`,`codigo`,`codigo_produto`,`valor_unitario`,`quantidade_estoque`,`cfop`,`ncm`,`ean`,`unidade` FROM `'.$search->gettabela().'` WHERE excluido = "0" ';
