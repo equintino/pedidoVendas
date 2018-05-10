@@ -119,6 +119,7 @@
     var credSab=<?= array_sum($vPed['credito']['sab']) ?>;
     
     
+    
     var dSeg=<?= $ultSem[0] ?>; var dSab="<?= $ultSem[5].'/'.date('m') ?>";
     var tDinheiro="<?="R$ ". $dinheiro ?>";var tDebito="<?= 'R$ '.$debito ?>";var tCredito="<?= 'R$ '.$credito ?>";
 </script>

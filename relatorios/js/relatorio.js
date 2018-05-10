@@ -5,7 +5,6 @@ var dinQua;
 var dinQui;
 var dinSex;
 var dinSab;
-
 /*variáveis débito*/
 var debSeg;
 var debTer;

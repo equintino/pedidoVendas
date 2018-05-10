@@ -2,7 +2,7 @@
 <html lang="pt-br">
     <head></head>
     <body>
-    <?php include 'menu.phtml' ?> 
+    <?php include 'menu.php' ?> 
     <div id="canvas">
         <canvas class="line-chart"></canvas>
         <script src="js/relatorio.js"></script>

@@ -14,13 +14,13 @@
         <nav class="menu">
             <ul>
                 <li><a href="#">PEDIDOS HOJE</a></li>
-                <li><a href="pedidos.phtml">PEDIDOS PENDENTES</a>
+                <li><a href="pedidos.html">PEDIDOS PENDENTES</a>
                 </li>
-                <li><a href="consulta.phtml">MOVIMENTAÇÃO SEMANAL</a>
+                <li><a href="consulta.php">MOVIMENTAÇÃO SEMANAL</a>
                     <ul>
-                        <li><a href="dinheiro.phtml">DINHEIRO</a></li>
-                        <li><a href="debito.phtml">DÉBITO</a></li>
-                        <li><a href="credito.phtml">CRÉDITO</a></li>
+                        <li><a href="dinheiro.php">DINHEIRO</a></li>
+                        <li><a href="debito.php">DÉBITO</a></li>
+                        <li><a href="credito.php">CRÉDITO</a></li>
                      </ul>
                 </li>
             </ul>

@@ -3,10 +3,10 @@
 <html lang="pt-br">
     <head></head>
     <body>
-        <?php include 'menu.phtml' ?>
+        <?php include 'menu.php' ?>
         <div id="canvas">
                 <canvas class="line-chart"></canvas>
-                <script src="js/Chart.min.js"></script>        
+                <script src="js/Chart.min.js"></script>
                 <script>
                     var ctx = document.getElementsByClassName("line-chart");
         
@@ -15,11 +15,11 @@
                         data: {
                             labels: ["Seg","ter","Quar","Qui","Sex","Sab"],
                             datasets: [{
-                                label: "CRÉDITO ("+tCredito+")",
-                                data: [credSeg,credTer,credQua,credQui,credSex,credSab],
+                                label: "DÉBITO ("+tDebito+")",
+                                data: [debSeg,debTer,debQua,debQui,debSex,debSab],
                                 borderWidth: 6,
-                                borderColor: 'rgba(225,60,60,0.85)',
-                                backgroundColor: 'transparent'
+                                borderColor: 'rgba(77,166,253,0.85)',
+                                backgroundColor: 'transparent',
                             },
                             ]
                 },
@@ -34,7 +34,7 @@
                         fontStyle: "bold"
                     }
                 }
-            })
+            });
         </script>
         </body>
 </html>
