@@ -19,7 +19,7 @@
     }elseif(OMIE_APP_KEY=='461893204773'){
         $db='db2';
     }else{
-        $db='db4';
+        $db='db3';
     }
     if(!$dao->showTabela('tb_pedido',$db)){
         echo '<div class=centro><h1>Tabela de pedido não foi criada.</h1>';
