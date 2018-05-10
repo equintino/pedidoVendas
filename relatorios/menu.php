@@ -9,21 +9,30 @@
         <?php include 'relatorio.php'; ?>
     </head>
     <body>
+        <div class="back"></div>
+        <div class="cabecalho">
         <input type="checkbox" id="bt_menu"/>
         <label for="bt_menu">&#9776;</label>
         <nav class="menu">
             <ul>
-                <li><a href="#">PEDIDOS HOJE</a></li>
-                <li><a href="pedidos.html">PEDIDOS PENDENTES</a>
+                <li><a href="#">PEDIDDOS PENDENTES</a></li>
+                <li><a href="pedidos.html">PEDIDDOS VENDAS</a>
+                <ul>
+                    <li><a href="dinheiro.php">HOJE</a></li>
+                    <li><a href="debito.php">SEMANA</a></li>
+                    <li><a href="credito.php">MÊS</a></li>
+                </ul>
                 </li>
-                <li><a href="consulta.php">MOVIMENTAÇÃO SEMANAL</a>
+                <li><a href="consulta.php">MOVIMENTAÇÃO</a>
                     <ul>
                         <li><a href="dinheiro.php">DINHEIRO</a></li>
                         <li><a href="debito.php">DÉBITO</a></li>
                         <li><a href="credito.php">CRÉDITO</a></li>
                      </ul>
                 </li>
+                <li><a href="relgel.php">RELATÓRIO GERAL</a></li>
             </ul>
         </nav>
+        </div>
     </body>
 </html>

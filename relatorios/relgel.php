@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
+
+        
         <meta charset="UTF-8">
         <title>Relatórios</title>
         <link rel="stylesheet" type="text/css" media="screen" href="../web/css/jquery.dataTables.min.css"/>
@@ -34,10 +36,19 @@
                 });
             });
         </script>
-        
+        <?php
+        include "menu.php";
+        ?>
+        <style type:"text/css">
+            #principal {
+                margin: auto;
+                margin-top: 50px;
+                width: 900px;
+            }
+        </style>
     </head>
     <body>
-        
+    <div id="principal">
     <table class="display" id='tabela1'>
         <thead><tr><th>Nome</th><th>cpf</th><th>endereco</th><th>sexo</th><th>Valor</th></tr></thead>
         <tbody>
@@ -67,6 +78,7 @@
             <tr><td>maria</td><td>3333333</td><td>Rua antônio</td><td>S</td><td>1234567.89</td></tr>
         </tbody>
     </table>
+    </div>
         <?php
         // put your code here
         ?>
