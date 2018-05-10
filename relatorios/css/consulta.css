@@ -7,6 +7,8 @@ body{
     background: white;
 }
 .menu{
+    position: relative;
+    z-index: 100;
     width: 100%;
     height: 81px;
     background-color: #3E73A0;
@@ -21,7 +23,7 @@ body{
 }
 
 .menu ul li {
-    width: 350px;
+    width: 280px;
     float: left;
 }
 

@@ -32,12 +32,24 @@
                         },
                     "pagingType": "full_numbers",
                 });
+                $('.tabrel').show();
             });
         </script>
-        
+        <style>
+            body{
+                background: #f4f4f4;
+            }
+            .tabrel{
+                position: relative;
+                display: none;
+            }
+        </style>
+    <?php 
+        include '../relatorios/menu.php';
+    ?>
     </head>
     <body>
-        
+    <div class='tabrel'>   
     <table class="display" id='tabela1'>
         <thead><tr><th>Nome</th><th>cpf</th><th>endereco</th><th>sexo</th><th>Valor</th></tr></thead>
         <tbody>
@@ -67,8 +79,6 @@
             <tr><td>maria</td><td>3333333</td><td>Rua antônio</td><td>S</td><td>1234567.89</td></tr>
         </tbody>
     </table>
-        <?php
-        // put your code here
-        ?>
+    </div>
     </body>
 </html>

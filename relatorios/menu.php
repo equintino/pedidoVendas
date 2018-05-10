@@ -13,16 +13,17 @@
         <label for="bt_menu">&#9776;</label>
         <nav class="menu">
             <ul>
-                <li><a href="#">PEDIDOS HOJE</a></li>
-                <li><a href="pedidos.html">PEDIDOS PENDENTES</a>
+                <li><a href="#">PEDIDOS<br>HOJE</a></li>
+                <li><a href="pedidos.html">PEDIDOS<br>PENDENTES</a>
                 </li>
-                <li><a href="consulta.php">MOVIMENTAÇÃO SEMANAL</a>
+                <li><a href="consulta.php">MOVIMENTAÇÃO<br>SEMANAL</a>
                     <ul>
                         <li><a href="dinheiro.php">DINHEIRO</a></li>
                         <li><a href="debito.php">DÉBITO</a></li>
                         <li><a href="credito.php">CRÉDITO</a></li>
                      </ul>
                 </li>
+                <li><a href="teste.php">RELATÓRIO<br>GERAL</a>
             </ul>
         </nav>
     </body>
