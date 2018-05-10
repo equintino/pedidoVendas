@@ -6,7 +6,9 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/consulta.css"/>
-        <script src="js/Chart.min.js"></script>
+        <link rel="stylesheet" href="css/tabelas.css"/>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+        
     </head>
     <body>
         
@@ -18,7 +20,7 @@
                 <li><a href="#">PEDIDOS HOJE</a></li>
                 <li><a href="pedidos.html">PEDIDOS PENDENTES</a>
                 </li>
-                <li><a href="consulta.html">MOVIMENTAÇÃO SEMANAL</a>
+                <li><a href="consulta.php">MOVIMENTAÇÃO SEMANAL</a>
                     <ul>
                         <li><a href="dinheiro.html">DINHEIRO</a></li>
                         <li><a href="debito.html">DÉBITO</a></li>
@@ -27,15 +29,65 @@
                 </li>
             </ul>
         </nav>
-
-        <table id="tPed">
-                <caption>Pedidos Pendentes</caption>
-            
-            <tr><td class="ce">Cliente</td><td class="cd">Cesar Augustus</td></tr>
-            <tr><td class="ce">Cod. Produto</td><td class="cd"> 25145</td></tr>
-            <tr><td class="ce">Desc. Produto</td><td class="cd"> Mouse C3Tech</td></tr>
-            <tr><td class="ce">Memória Interna</td><td class="cd"> 12GB</td></tr>
+        
+            <table id="tab">
+                    
+                <thead>
+                    <tr>
+                        <th>VENDEDOR</th>
+                        <th>CLIENTE</th>
+                        <th>CODIGO PROD.</th>
+                        <th>DESC. PROD.</th>
+                        <th>QUANTIDADE</th>
+                        <th>VALOR TOT. VENDA</th>
+                    </tr> 
+                </thead>
+                    <tbody>
+                        <tr><button class="btn btnExc" type="button">X</button>
+                            <th>SERGIO</th>
+                            <th>CESAR AUGUSTUS</th>
+                            <th>2456</th>
+                            <th>MOUSE PAD EXBOM</th>
+                            <th>1</th>
+                            <th>R$ 15,00 <button class="btn btnEnv" type="button">REENVIAR</button></th>
+                        </tr> 
+                        <tr>
+                            <th>JADEYLSON</th>
+                            <th>PAULO CESAR</th>
+                            <th>24142</th>
+                            <th>FONE LOGITECH</th>
+                            <th>1</th>
+                            <th>R$ 120,00</th>
+                        </tr>
+                        <tr>
+                            <th>MOISES</th>
+                            <th>LUCAS JR.</th>
+                            <th>24145</th>
+                            <th>MONITOR AOC</th>
+                            <th>1</th>
+                            <th>R$ 450,00</th>
+                        </tr>
+                        <tr>
+                            <th>JADEYLSON</th>
+                            <th>KAREN C.</th>
+                            <th>24175</th>
+                            <th>CARREGADOR V8</th>
+                            <th>2</th>
+                            <th>R$ 30,00</th>
+                        </tr>
+                        <tr>
+                            <th>SERGIO</th>
+                            <th>EDMILSON Q.</th>
+                            <th>24174</th>
+                            <th>GPS MULTILASER</th>
+                            <th>1</th>
+                            <th>R$ 165,00</th>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
             </table>
 
+            <script type="text/javascript" src="js/tabelas.js"></script>
     </body>
 </html>
