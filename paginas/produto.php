@@ -249,8 +249,7 @@
                         $modelProduto->$classe($item_);
                     }
                 }
-
-                $prcListarCaractRequest=array("nPagina"=>$y,"nRegPorPagina"=>$regPorPagina,"nCodProd"=>$modelProduto->getcodigo_produto());
+                $prcListarCaractRequest=array("nPagina"=>1,"nRegPorPagina"=>$regPorPagina,"nCodProd"=>$modelProduto->getcodigo_produto());
                 $conteudo=$caracteristica->ListarCaractProduto($prcListarCaractRequest);
                 if(is_object($conteudo)){
                     foreach($conteudo->listaCaracteristicas as $item3){
@@ -259,7 +258,6 @@
                         }
                     }
                 }
-
                 $gravado=$dao2->grava2($modelProduto);
                 echo '<script>document.getElementById("cont").innerHTML="Percentual concluido '.number_format($y*100/$registros,'0','.','').'%";</script>';
                 $y++;

@@ -562,14 +562,14 @@ $(document).ready(function(){
                     });
                     $(this).blur(function(){
                         var pInserido=$(this).val();
-                        var vInserido=pInserido.replace(',','.');
-                        var vTabela=pTabela.replace(',','.');
-                        var vMinimo=pMinimo.replace(',','.');
-                        if(pTabela == 'Não Definido' && vInserido < vMinimo){
+                        var vInserido=pInserido.replace(',','');
+                        var vTabela=pTabela.replace(',','');
+                        var vMinimo=pMinimo.replace(',','');
+                        if(pTabela == 'Não Definido' && parseInt(vInserido) < parseInt(vMinimo)){
                             alert('Valor mínimo permitido '+pMinimo+'');
                             $(this).val(pMinimo);
                             $('#pnl1 td input[name=quantidade'+nBusca+']').trigger('click');
-                        }else if(vInserido < vTabela && pTabela != 'Não Definido'){
+                        }else if(parseInt(vInserido) < parseInt(vTabela) && pTabela != 'Não Definido'){
                             alert('Valor mínimo permitido '+pTabela+'');
                             $(this).val(pTabela);
                             $('#pnl1 td input[name=quantidade'+nBusca+']').trigger('click');

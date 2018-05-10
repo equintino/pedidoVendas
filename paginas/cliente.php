@@ -121,7 +121,6 @@
                 $clientes_list_request=array('pagina'=>$pagAtual,'registros_por_pagina'=>'50','apenas_importado_api'=>'N');
             }
             $dados=$cliente->ListarClientes($clientes_list_request);
-            //print_r((!$dados));
             if(is_object($dados)){
                 $paginaAtual=$dados->pagina;
                 $totalPagina=$dados->total_de_paginas;

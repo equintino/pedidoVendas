@@ -455,6 +455,7 @@
         @is_object($resultado)? $obj=1: $obj=null;
             
         $preVenda->setcodigo_pedido_integracao($codigo_pedido_integracao);
+        $preVenda->setdSemana(date('N'));
         if($obj){
             @$numero_pedido=$resultado->numero_pedido;
             $preVenda->setpedido($numero_pedido);
