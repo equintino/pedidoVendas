@@ -14,12 +14,12 @@
         <label for="bt_menu">&#9776;</label>
         <nav class="menu">
             <ul>
-                <li><a href="#">PEDIDOS PENDENTES</a></li>
-                <li><a href="pedidos.html">PEDIDDOS VENDAS</a>
+                <li><a href="#" title="Em construção" onclick="alert('Em construção.')">PEDIDOS PENDENTES</a></li>
+                <li><a href="#" title="Em construção" onclick="alert('Em construção.')">PEDIDOS VENDAS</a>
                 <ul>
-                    <li><a href="dinheiro.php">HOJE</a></li>
+                    <!--<li><a href="dinheiro.php">HOJE</a></li>
                     <li><a href="debito.php">SEMANA</a></li>
-                    <li><a href="credito.php">MÊS</a></li>
+                    <li><a href="credito.php">MÊS</a></li>-->
                 </ul>
                 </li>
                 <li><a href="consulta.php">MOVIMENTAÇÃO</a>

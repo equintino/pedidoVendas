@@ -68,15 +68,23 @@
                     }*/
                     
                 });
-                    $('.toggle-vis').on( 'click', function (e) {
-                        e.preventDefault();
-                        var column = table.column($(this).attr('col'));
-                        /*$(this).css({
-                            'background':'blue',
-                            color:'white'
-                        });*/
-                        column.visible( ! column.visible() );
-                    } );
+                $('.toggle-vis').mouseover(function(){
+                    $(this).css('cursor','pointer');
+                });
+                $('.toggle-vis').on( 'click', function (e) {
+                    e.preventDefault();
+                    var column = table.column($(this).attr('col'));
+                    if($(this).css('color')=='rgb(0, 0, 0)'){
+                        $(this).css({
+                            color:'#ccc'
+                        }); 
+                    }else{
+                        $(this).css({
+                            color:'rgb(0, 0, 0)'
+                        });
+                    }
+                    column.visible( ! column.visible() );
+                } );
                 $('#principal').show();
             });
         </script>
@@ -143,7 +151,7 @@
         </tbody>
     </table>
     <div class='ocultar'>
-        <span class=oculTitulo>OCULTAR COLUNAS:</span><br><br><?php $x=0;foreach($colunas as $item): ?>
+        <span class=oculTitulo>OCULTAR/EXIBIR COLUNAS:</span><br><br><?php $x=0;foreach($colunas as $item): ?>
         <span class='toggle-vis' col='<?= $x ?>' ><?= $item ?></span>
         <?php $x++;endforeach; ?>
     </div>
