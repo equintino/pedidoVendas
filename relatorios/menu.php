@@ -6,7 +6,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/consulta.css"/>
         <script src="js/Chart.min.js"></script>
-        <?php include 'relatorio.php'; ?>
     </head>
     <body>
         <div class="back"></div>
@@ -15,7 +14,7 @@
         <label for="bt_menu">&#9776;</label>
         <nav class="menu">
             <ul>
-                <li><a href="#">PEDIDDOS PENDENTES</a></li>
+                <li><a href="#">PEDIDOS PENDENTES</a></li>
                 <li><a href="pedidos.html">PEDIDDOS VENDAS</a>
                 <ul>
                     <li><a href="dinheiro.php">HOJE</a></li>

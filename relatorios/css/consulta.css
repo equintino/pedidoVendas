@@ -15,8 +15,8 @@ body{
 }
 
 .cabecalho {
-    width: 1400px;
-    margin: auto
+    width: 1150px;
+    margin: auto;
 }
 
 .menu{
@@ -35,7 +35,7 @@ body{
 }
 
 .menu ul li {
-    width: 320px;
+    width: 280px;
     float: left;
 }
 

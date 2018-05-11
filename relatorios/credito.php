@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 
 <html lang="pt-br">
-    <head></head>
+    <head>
+    <?php 
+        include 'menu.php';
+        include 'relatorio.php';
+    ?>         
+    </head>
     <body>
-        <?php include 'menu.php' ?>
         <div id="canvas">
                 <canvas class="line-chart"></canvas>
                 <script src="js/Chart.min.js"></script>        
