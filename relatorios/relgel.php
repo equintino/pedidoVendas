@@ -9,20 +9,19 @@
         <script type='text/javascript'>
             $(document).ready(function(){
                 var table = $('#tabela1').DataTable({
-                    "order": [[ 3, "desc" ]],
+                    "order": [[ 0, "desc" ]],
                     "columnDefs": [
                             {
-                                "targets": [ 1 ],
+                                "targets": [ 0 ],
                                 "visible": true,
                                 "searchable": true
                             }
                         ],
-                    /*"stateSave": true,*/
                     "scrollX": true,
-                    /*"language": {
+                    "language": {
                             "decimal": ",",
                             "thousands": "."
-                        },*/
+                        },
                     "language": {
                             "lengthMenu": "Exibir _MENU_ registros por página",
                             "zeroRecords": "Nenhum registro encontrado",
@@ -31,42 +30,30 @@
                             "infoFiltered": "(total de _MAX_ registros)"
                         },
                     "pagingType": "full_numbers",
-                    
-                    
-                    
-                    /*"footerCallback": function ( row, data, start, end, display ) {
+                    "footerCallback": function ( row, data, start, end, display ) {
                         var api = this.api(), data;
-
-                        // Remove the formatting to get integer data for summation
                         var intVal = function ( i ) {
                             return typeof i === 'string' ?
                                 i.replace(/[\$,]/g, '')*1 :
                                 typeof i === 'number' ?
                                     i : 0;
                         };
-
-                        // Total over all pages
                         total = api
-                            .column( 4 )
+                            .column( 1 )
                             .data()
                             .reduce( function (a, b) {
                                 return intVal(a) + intVal(b);
                             }, 0 );
-
-                        // Total over this page
                         pageTotal = api
-                            .column( 4, { page: 'current'} )
+                            .column( 1, { page: 'current'} )
                             .data()
                             .reduce( function (a, b) {
                                 return intVal(a) + intVal(b);
                             }, 0 );
-
-                        // Update footer
-                        $( api.column( 4 ).footer() ).html(
-                            '$'+pageTotal +' ( $'+ total +' total)'
+                        $( api.column( 1 ).footer() ).html(
+                            'R$ '+numeroParaMoeda(pageTotal)+' (Total R$ '+numeroParaMoeda(total)+')'
                         );
-                    }*/
-                    
+                    }
                 });
                 $('.toggle-vis').mouseover(function(){
                     $(this).css('cursor','pointer');
@@ -87,6 +74,10 @@
                 } );
                 $('#principal').show();
             });
+        function numeroParaMoeda(n, c, d, t){
+            c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
+            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");    
+        }
         </script>
         <?php 
             include 'menu.php';
@@ -111,21 +102,17 @@
             .oculTitulo{
                 font-size: 18px;
             }
-            .toggle-vis{
-                float: left;
-                margin-left: 250px;
-            }
         </style>
     </head>
     <body>
     <div id="principal">
     <div class='titulo'>RELATÓRIO GERAL</div>
-    <table class="display" id='tabela1'>
-        <thead><tr ><th>PEDIDO</th><th>VALOR DO PEDIDO</th><th>FORMA DE PAGAMENTO</th><th>N° DOCUMENTO</th><th>ETAPA</th><th>VENDEDOR</th><th>CLIENTE</th><th>QTD VOLUME</th><th>CÓD PRODUTO</th><th>DESCRIÇÃO</th><th>SERIAL</th><th>TRANSPORTADORA</th></tr></thead>
+    <table class="display" id="tabela1">
+        <thead><tr><th>DATA</th><th>PEDIDO</th><th>VALOR DO PEDIDO</th><th>FORMA DE PAGAMENTO</th><th>N° DOCUMENTO</th><th>ETAPA</th><th>VENDEDOR</th><th>CLIENTE</th><th>QTD VOLUME</th><th>CÓD PRODUTO</th><th>DESCRIÇÃO</th><th>SERIAL</th><th>TRANSPORTADORA</th></tr></thead>
         <tbody>
             <?php foreach($dados as $key => $item): ?>
             <?php 
-                $colunas=array('PEDIDO','VALOR DO PEDIDO','FORMA DE PAGAMENTO','Nº DOCUMENTO','ETAPA','VENDEDOR','CLIENTE','QTD VOLUME','CÓD PRODUTO','DESCRIÇÃO','SERIAL','TRANSPORTADORA');
+                $colunas=array('DATA','PEDIDO','VALOR DO PEDIDO','FORMA DE PAGAMENTO','Nº DOCUMENTO','ETAPA','VENDEDOR','CLIENTE','QTD VOLUME','CÓD PRODUTO','DESCRIÇÃO','SERIAL','TRANSPORTADORA');
                 if($item->getetapa()){
                     switch($item->getetapa()){
                         case 10:
@@ -146,12 +133,21 @@
                     }
                 }
             ?>
-            <tr><td align='center'><?= intval($item->getpedido()); ?></td><td align='right'><?= number_format($item->getvPedido(),'2',',','.'); ?></td><td align='center'><?= $item->getfPagamento() ?></td><td align='center'><?= $item->getdados_adcionais_nf() ?></td><td align='center'><?= $etapa ?></td><td align='center'><?= $item->getvendedor() ?></td><td><?= $item->getcliente() ?></td><td align='center'><?= $item->getqvolume(); ?></td><td><?= str_replace('*/*',' / ',$item->getcodigo_produto()); ?></td><td><?= str_replace('*/*',' / ',$item->getdescricao()); ?></td><td><?= str_replace('*/*',' / ',$item->getobs_item()); ?></td><td><?= $item->gettransportadora(); ?></td></tr>
+            <tr><td align='center'><?= $item->getdPrevisao(); ?></td><td align='center'><?= intval($item->getpedido()); ?></td><td align='right'><?= $item->getvPedido(); ?></td><td align='center'><?= $item->getfPagamento() ?></td><td align='center'><?= $item->getdados_adcionais_nf() ?></td><td align='center'><?= $etapa ?></td><td align='center'><?= $item->getvendedor() ?></td><td><?= $item->getcliente() ?></td><td align='center'><?= $item->getqvolume(); ?></td><td><?= str_replace('*/*',' / ',$item->getcodigo_produto()); ?></td><td><?= str_replace('*/*',' / ',$item->getdescricao()); ?></td><td><?= str_replace('*/*',' / ',$item->getobs_item()); ?></td><td><?= $item->gettransportadora(); ?></td></tr>
             <?php endforeach; ?>
         </tbody>
+        <tfoot>
+            <tr>
+                <th>Parcial:</th>
+                <th colspan="3" style='text-align: left'></th>
+                <th colspan="6"></th>
+            </tr>
+        </tfoot>
     </table>
-    <div class='ocultar'>
-        <span class=oculTitulo>OCULTAR/EXIBIR COLUNAS:</span><br><br><?php $x=0;foreach($colunas as $item): ?>
+    <div class='ocultarCol'>
+        <span class=oculTitulo>OCULTAR/EXIBIR COLUNAS:</span>
+        <!--<span class='toggle-vis' col="0">PEDIDO,</span><span class='toggle-vis' col="1">VALOR DO PEDIDO,</span><span class='toggle-vis' col="2">FORMA DE PAGAMENTO,</span><span class='toggle-vis' col="3">Nº DOCUMENTO,</span><span class='toggle-vis' col="4">ETAPA,</span><span class='toggle-vis' col="5">VENDEDOR,</span><span class='toggle-vis' col="6">CLIENTE,</span><span class='toggle-vis' col="7">QTD VOLUME,</span><span class='toggle-vis' col="8">CÓD PRODUTO,</span><span class='toggle-vis' col="9">DESCRIÇÃO,</span><span class='toggle-vis' col="10">SERIAL,</span><span class='toggle-vis' col="11">TRANSPORTADORA</span>-->
+        <?php $x=0;foreach($colunas as $item): ?>
         <span class='toggle-vis' col='<?= $x ?>' ><?= $item ?></span>
         <?php $x++;endforeach; ?>
     </div>

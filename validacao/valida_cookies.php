@@ -2,7 +2,7 @@
     <head>
         <script type="text/javascript">
             $(document).ready(function(){
-                $('select').change(function(){
+                $('select#inicio').change(function(){
                     if($(this).val()=='relatorio'){
                         $(location).attr("href","relatorios/consulta.php");
                     }else{
@@ -168,7 +168,7 @@ class valida_cookies{
             }else{
                 if($_COOKIE['funcao']=='administrador'){
                     echo 'SELECIONA UMA DAS OPÇÕES: ';
-                    echo '<select name="abrir">';
+                    echo '<select id="inicio" name="abrir">';
                     echo '<option value=""></option>';
                     echo '<option value="sistema">Sistema</option>';
                     echo '<option value="relatorio">Relatórios</option>';
