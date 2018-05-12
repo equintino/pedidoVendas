@@ -107,7 +107,7 @@
         if($numero_pedido_atual==$_GET['numero_pedido_atual']){
             file_put_contents('../paginas/'.$loja.'numeroPedido.txt', ++$numero_pedido_atual);
         }
-        $codigo_pedido_integracao=$loja.file_get_contents('../paginas/'.$loja.'numeroPedido.txt');
+        $codigo_pedido_integracao=file_get_contents('../paginas/'.$loja.'numeroPedido.txt');
         
         $campos=$campo1=$campo2=array();
         $campoMultiplus=array('codigo_produto','descricao','quantidade','vUnitarioItem','pDescontoItem','obs_item','cfop','ncm','ean','unidade','vTotalItem','pTabela','cOmie');

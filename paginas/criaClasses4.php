@@ -137,7 +137,7 @@
                 '$pedido->setcriado($now);'.
                 '$sql=$this->criaTabela6(\''.$this->tabela.'\');'.
                 '$this->execute6($sql, $pedido);'.
-                '$this->execute6(\'ALTER TABLE `tb_pedido` ADD UNIQUE(`codigo_pedido_integracao`)\', $pedido);'.
+                //'$this->execute6(\'ALTER TABLE `tb_pedido` ADD UNIQUE(`codigo_pedido_integracao`)\', $pedido);'.
                 '$sql = \'INSERT INTO '.$this->tabela.' (';
                   foreach($variaveis as $key => $item){
                     if($key==='item' || $key==='parcela'){
