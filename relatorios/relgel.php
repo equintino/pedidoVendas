@@ -7,6 +7,25 @@
         <script type="text/javascript" src='../web/js/jquery-3.2.1.min.js' ></script>
         <script type="text/javascript" src='../web/js/jquery.dataTables.min.js' ></script>
         <script type='text/javascript'>
+            /* Custom filtering function which will search data in column four between two values */
+            $.fn.dataTable.ext.search.push(
+                function( settings, data, dataIndex ) {
+                    //alert($('#min').val());
+                    var min = parseInt( $('#min').val(), 10 );
+                    var max = parseInt( $('#max').val(), 10 );
+                    //alert(max);
+                    var age = parseFloat( data[0] ) || 0; // use data for the age column
+
+                    if ( ( isNaN( min ) && isNaN( max ) ) ||
+                         ( isNaN( min ) && age <= max ) ||
+                         ( min <= age   && isNaN( max ) ) ||
+                         ( min <= age   && age <= max ) )
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+            );
             $(document).ready(function(){
                 var table = $('#tabela1').DataTable({
                     "order": [[ 0, "desc" ]],
@@ -55,6 +74,11 @@
                         );
                     }
                 });
+                    // Event listener to the two range filtering inputs to redraw on input
+                $('#min, #max').click( function() {
+                    //alert(table);
+                    table.draw();
+                } );
                 $('.toggle-vis').mouseover(function(){
                     $(this).css('cursor','pointer');
                 });
@@ -107,6 +131,16 @@
     <body>
     <div id="principal">
     <div class='titulo'>RELATÓRIO GERAL</div>
+    <table cellspacing="5" cellpadding="5" border="0">
+        <tbody><tr>
+            <td>Data Inicio:</td>
+            <td><input id="min" name="min" type="text"></td>
+        </tr>
+        <tr>
+            <td>Data Fim:</td>
+            <td><input id="max" name="max" type="text"></td>
+        </tr>
+    </tbody></table>
     <table class="display" id="tabela1">
         <thead><tr><th>DATA</th><th>PEDIDO</th><th>VALOR DO PEDIDO</th><th>FORMA DE PAGAMENTO</th><th>N° DOCUMENTO</th><th>ETAPA</th><th>VENDEDOR</th><th>CLIENTE</th><th>QTD VOLUME</th><th>CÓD PRODUTO</th><th>DESCRIÇÃO</th><th>SERIAL</th><th>TRANSPORTADORA</th></tr></thead>
         <tbody>
