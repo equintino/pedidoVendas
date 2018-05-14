@@ -32,13 +32,6 @@
             $(document).ready(function(){
                 $('#min').datepicker({dateFormat: 'dd/mm/yy'});
                 $('#max').datepicker({dateFormat: 'dd/mm/yy'});
-                $('#min').change(function(){
-                    
-                    //alert(dMin);
-                    /*dataMin=filtroData($('#min').val());
-                    $('#min').attr('dMin',dataMin);
-                    alert($('#min').attr('dMin'));*/
-                })
                 var table = $('#tabela1').DataTable({
                     "order": [[ 0, "desc" ]],
                     "columnDefs": [
@@ -140,13 +133,15 @@
             .ocultarCol{
                 position: absolute;
             }
+            select#campoCol{
+                float: right;
+            }
         </style>
     </head>
     <body>
     <div id="principal">
     <div class='ocultarCol'>
-        <span class=oculTitulo>OCULTAR/EXIBIR COLUNAS:</span>
-        <!--<span class='toggle-vis' col="0">PEDIDO,</span><span class='toggle-vis' col="1">VALOR DO PEDIDO,</span><span class='toggle-vis' col="2">FORMA DE PAGAMENTO,</span><span class='toggle-vis' col="3">Nº DOCUMENTO,</span><span class='toggle-vis' col="4">ETAPA,</span><span class='toggle-vis' col="5">VENDEDOR,</span><span class='toggle-vis' col="6">CLIENTE,</span><span class='toggle-vis' col="7">QTD VOLUME,</span><span class='toggle-vis' col="8">CÓD PRODUTO,</span><span class='toggle-vis' col="9">DESCRIÇÃO,</span><span class='toggle-vis' col="10">SERIAL,</span><span class='toggle-vis' col="11">TRANSPORTADORA</span>-->
+        <span class=oculTitulo>Ocultar/exibir colinas:</span>
         <?php
             $colunas=array('DATA','PEDIDO','VALOR DO PEDIDO','FORMA DE PAGAMENTO','Nº DOCUMENTO','ETAPA','VENDEDOR','CLIENTE','QTD VOLUME','CÓD PRODUTO','DESCRIÇÃO','SERIAL','TRANSPORTADORA');
             echo '<select id="campoCol">';
