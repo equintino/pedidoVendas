@@ -39,10 +39,6 @@
                     $('#min').attr('dMin',dataMin);
                     alert($('#min').attr('dMin'));*/
                 })
-                /*$('#max').change(function(){
-                    dataMax=filtroData($('#max').val());
-                    $('#max').attr('dMax',dataMax);
-                })*/
                 var table = $('#tabela1').DataTable({
                     "order": [[ 0, "desc" ]],
                     "columnDefs": [
@@ -74,16 +70,16 @@
                                     i : 0;
                         };
                         total = api
-                            .column( 1 )
+                            .column( 2 )
                             .data()
                             .reduce( function (a, b) {
-                                return intVal(a) + intVal(b);
+                                return parseFloat(a) + parseFloat(b);
                             }, 0 );
                         pageTotal = api
-                            .column( 1, { page: 'current'} )
+                            .column( 2, { page: 'current'} )
                             .data()
                             .reduce( function (a, b) {
-                                return intVal(a) + intVal(b);
+                                return parseFloat(a) + parseFloat(b);
                             }, 0 );
                         $( api.column( 1 ).footer() ).html(
                             'R$ '+numeroParaMoeda(pageTotal)+' (Total R$ '+numeroParaMoeda(total)+')'
@@ -102,15 +98,17 @@
                 $('.toggle-vis').on( 'click', function (e) {
                     e.preventDefault();
                     var column = table.column($(this).attr('col'));
-                    if($(this).css('color')=='rgb(0, 0, 0)'){
+                    //alert($(this).val());
+                    /*if($(this).css('color')=='rgb(255, 255, 255)'){
                         $(this).css({
-                            color:'#ccc'
+                            color:'#ccc',
+                            background: 'red'
                         }); 
                     }else{
                         $(this).css({
-                            color:'rgb(0, 0, 0)'
+                            color:'rgb(255, 255, 255)'
                         });
-                    }
+                    }*/
                     column.visible( ! column.visible() );
                 } );
                 $('#principal').show();
@@ -144,20 +142,38 @@
             }
             .titulo{
                 text-align: center;
-                margin-left: 200px;
+                margin-left: 370px;
                 font-family: sans-serif;
                 font-size: 30px;
+                width: 300px;
             }
             .oculTitulo{
                 font-size: 18px;
             }
             .periodo{
+                margin: 20px -5px;
                 float: right;
+            }
+            .ocultarCol{
+                position: absolute;
             }
         </style>
     </head>
     <body>
     <div id="principal">
+    <div class='ocultarCol'>
+        <span class=oculTitulo>OCULTAR/EXIBIR COLUNAS:</span>
+        <!--<span class='toggle-vis' col="0">PEDIDO,</span><span class='toggle-vis' col="1">VALOR DO PEDIDO,</span><span class='toggle-vis' col="2">FORMA DE PAGAMENTO,</span><span class='toggle-vis' col="3">Nº DOCUMENTO,</span><span class='toggle-vis' col="4">ETAPA,</span><span class='toggle-vis' col="5">VENDEDOR,</span><span class='toggle-vis' col="6">CLIENTE,</span><span class='toggle-vis' col="7">QTD VOLUME,</span><span class='toggle-vis' col="8">CÓD PRODUTO,</span><span class='toggle-vis' col="9">DESCRIÇÃO,</span><span class='toggle-vis' col="10">SERIAL,</span><span class='toggle-vis' col="11">TRANSPORTADORA</span>-->
+        <select>
+        <option id='nenhum'></option>
+        <?php
+            $colunas=array('DATA','PEDIDO','VALOR DO PEDIDO','FORMA DE PAGAMENTO','Nº DOCUMENTO','ETAPA','VENDEDOR','CLIENTE','QTD VOLUME','CÓD PRODUTO','DESCRIÇÃO','SERIAL','TRANSPORTADORA'); 
+            $x=0;foreach($colunas as $item): 
+        ?>
+        <option class='toggle-vis' col='<?= $x ?>' ><?= $item ?></option>
+        <?php $x++;endforeach; ?>
+        </select>
+    </div>
     <table class="periodo" cellspacing="5" cellpadding="5" border="0">
         <tbody><tr>
             <td>Data Inicio:</td>
@@ -174,7 +190,6 @@
         <tbody>
             <?php foreach($dados as $key => $item): ?>
             <?php 
-                $colunas=array('DATA','PEDIDO','VALOR DO PEDIDO','FORMA DE PAGAMENTO','Nº DOCUMENTO','ETAPA','VENDEDOR','CLIENTE','QTD VOLUME','CÓD PRODUTO','DESCRIÇÃO','SERIAL','TRANSPORTADORA');
                 if($item->getetapa()){
                     switch($item->getetapa()){
                         case 10:
@@ -206,13 +221,6 @@
             </tr>
         </tfoot>
     </table>
-    <div class='ocultarCol'>
-        <span class=oculTitulo>OCULTAR/EXIBIR COLUNAS:</span>
-        <!--<span class='toggle-vis' col="0">PEDIDO,</span><span class='toggle-vis' col="1">VALOR DO PEDIDO,</span><span class='toggle-vis' col="2">FORMA DE PAGAMENTO,</span><span class='toggle-vis' col="3">Nº DOCUMENTO,</span><span class='toggle-vis' col="4">ETAPA,</span><span class='toggle-vis' col="5">VENDEDOR,</span><span class='toggle-vis' col="6">CLIENTE,</span><span class='toggle-vis' col="7">QTD VOLUME,</span><span class='toggle-vis' col="8">CÓD PRODUTO,</span><span class='toggle-vis' col="9">DESCRIÇÃO,</span><span class='toggle-vis' col="10">SERIAL,</span><span class='toggle-vis' col="11">TRANSPORTADORA</span>-->
-        <?php $x=0;foreach($colunas as $item): ?>
-        <span class='toggle-vis' col='<?= $x ?>' ><?= $item ?></span>
-        <?php $x++;endforeach; ?>
-    </div>
     </div>
     </body>
 </html>
