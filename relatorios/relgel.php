@@ -86,30 +86,13 @@
                         );
                     }
                 });
-                    // Event listener to the two range filtering inputs to redraw on input
                 $('#max, #min').change( function() {
-                    //alert(filtroData($('#max').val()));
-                    //alert(table);
                     table.draw();
                 } );
-                $('.toggle-vis').mouseover(function(){
-                    $(this).css('cursor','pointer');
-                });
-                $('.toggle-vis').on( 'click', function (e) {
-                    e.preventDefault();
-                    var column = table.column($(this).attr('col'));
-                    //alert($(this).val());
-                    /*if($(this).css('color')=='rgb(255, 255, 255)'){
-                        $(this).css({
-                            color:'#ccc',
-                            background: 'red'
-                        }); 
-                    }else{
-                        $(this).css({
-                            color:'rgb(255, 255, 255)'
-                        });
-                    }*/
+                $('select#campoCol').change(function () {
+                    var column = table.column($(':selected').attr('id'));
                     column.visible( ! column.visible() );
+                    $(this).val('');
                 } );
                 $('#principal').show();
             });
@@ -164,15 +147,17 @@
     <div class='ocultarCol'>
         <span class=oculTitulo>OCULTAR/EXIBIR COLUNAS:</span>
         <!--<span class='toggle-vis' col="0">PEDIDO,</span><span class='toggle-vis' col="1">VALOR DO PEDIDO,</span><span class='toggle-vis' col="2">FORMA DE PAGAMENTO,</span><span class='toggle-vis' col="3">Nº DOCUMENTO,</span><span class='toggle-vis' col="4">ETAPA,</span><span class='toggle-vis' col="5">VENDEDOR,</span><span class='toggle-vis' col="6">CLIENTE,</span><span class='toggle-vis' col="7">QTD VOLUME,</span><span class='toggle-vis' col="8">CÓD PRODUTO,</span><span class='toggle-vis' col="9">DESCRIÇÃO,</span><span class='toggle-vis' col="10">SERIAL,</span><span class='toggle-vis' col="11">TRANSPORTADORA</span>-->
-        <select>
-        <option id='nenhum'></option>
         <?php
-            $colunas=array('DATA','PEDIDO','VALOR DO PEDIDO','FORMA DE PAGAMENTO','Nº DOCUMENTO','ETAPA','VENDEDOR','CLIENTE','QTD VOLUME','CÓD PRODUTO','DESCRIÇÃO','SERIAL','TRANSPORTADORA'); 
-            $x=0;foreach($colunas as $item): 
+            $colunas=array('DATA','PEDIDO','VALOR DO PEDIDO','FORMA DE PAGAMENTO','Nº DOCUMENTO','ETAPA','VENDEDOR','CLIENTE','QTD VOLUME','CÓD PRODUTO','DESCRIÇÃO','SERIAL','TRANSPORTADORA');
+            echo '<select id="campoCol">';
+                echo '<option id="nenhum"></option>';
+                $x=0;
+                foreach($colunas as $item){
+                    echo "<option class='campoCol' id='$x' >$item</option>";
+                    $x++;
+                }
+            echo '</select>';
         ?>
-        <option class='toggle-vis' col='<?= $x ?>' ><?= $item ?></option>
-        <?php $x++;endforeach; ?>
-        </select>
     </div>
     <table class="periodo" cellspacing="5" cellpadding="5" border="0">
         <tbody><tr>
