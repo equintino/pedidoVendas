@@ -11,6 +11,19 @@
         <script type="text/javascript" src='../web/js/jquery.dataTables.min.js' ></script>
         <script type='text/javascript' src='js/jquery-ui.min.js'></script>
         <script type='text/javascript'>
+            /*$.fn.dataTable.Api.register( 'column().data().sum()', function () {
+                z=0;
+                return this.reduce( function (a,b) {
+                    b=1;
+                    var x = parseFloat( a ) || 0;
+                    var y = parseFloat( b ) || 0;
+                    if(z==0){
+                        x=1;
+                    }
+                    z++;
+                    return x + y;
+                } );
+            } );*/
             /* Custom filtering function which will search data in column four between two values */
             $.fn.dataTable.ext.search.push(
                 function( settings, data, dataIndex ) {
@@ -81,12 +94,16 @@
                 });
                 $('#max, #min').change( function() {
                     table.draw();
+                    $( '#linhas' ).text( 'Linhas exibidas: '+ table.column({page:'current'} ).data().length );
                 } );
                 $('select#campoCol').change(function () {
                     var column = table.column($(':selected').attr('id'));
                     column.visible( ! column.visible() );
                     $(this).val('');
                 } );
+                $(document).on('keyup click', function(){
+                    $( '#linhas' ).text( 'Linhas exibidas: '+ table.column({page:'current'} ).data().length );                   
+                });
                 $('#principal').show();
             });
         function numeroParaMoeda(n, c, d, t){
@@ -147,6 +164,10 @@
                 float: right;
                 background-color: #F6F6F6;
             }
+            #linhas{
+                position: absolute;
+                margin-top: 70px;
+            }
         </style>
     </head>
     <body>
@@ -165,6 +186,7 @@
             echo '</select>';
         ?>
     </div>
+    <div id='linhas'></div>
     <table class="periodo" cellspacing="5" cellpadding="5" border="0">
         <tbody><tr>
             <td>Data Inicio:</td>

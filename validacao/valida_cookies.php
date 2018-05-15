@@ -116,7 +116,7 @@ class valida_cookies{
                 
                 echo '<script> document.cookie="funcao='.$funcao.';path:/";document.cookie="nomeEmpresa='.$nomeEmpresa.';path:/";document.cookie="cnpj='.$cnpj.';path:/";</script>';
                 if(!$confere){
-                    $this->popup("Bem-Vindo ".$this->getlogin().".",'sim');
+                    $this->popup("Bem-Vindo ".$this->getlogin().".",'sim',$funcao);
                 }
             }else{
                 $this->popup('A senha não confere.',null);
@@ -152,7 +152,7 @@ class valida_cookies{
 	$string=str_replace("а", "A", $string);
 	return $string;
     }
-    public function popup($msg,$ok=null){
+    public function popup($msg,$ok=null,$funcao=null){
        echo "<form action='web/index.php?index=sim' method=POST>";
         echo "<table width=100% height=80% border=0>";
         echo "<tr height=100%>";
@@ -166,7 +166,7 @@ class valida_cookies{
                 echo '<br>';
                 echo "<center><input type=button value='  Cancelar  ' onclick=history.back()>";
             }else{
-                if($_COOKIE['funcao']=='administrador'){
+                if($funcao=='administrador'){
                     echo 'SELECIONA UMA DAS OPÇÕES: ';
                     echo '<select id="inicio" name="abrir">';
                     echo '<option value=""></option>';
@@ -176,8 +176,6 @@ class valida_cookies{
                     die;
                 }
                 echo '<script>window.location.assign("web/index.php?index=sim&pagina=pedido&act=cad")</script>';
-                //header('Location:web/index.php?index=sim&pagina=pedido&act=cad');
-                //echo "<center><input autofocus type=button value=\"Entrar\" onclick=\"location.href='web/index.php?index=sim&pagina=pedido&act=cad'\">";
             }
         echo "</td></tr></table>";
         echo "</td></tr>";
