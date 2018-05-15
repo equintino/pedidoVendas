@@ -1,6 +1,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="web/js/jquery-3.2.1.min.js"></script>
 </head>
 <body>
 <?php 
