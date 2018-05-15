@@ -129,6 +129,15 @@
         <style type="text/css">
             @import url('https://fonts.googleapis.com/css?family=Nunito:600');
 
+            body {
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+
             #principal {
                 margin: auto;
                 margin-top: -100px;
