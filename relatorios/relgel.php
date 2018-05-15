@@ -39,11 +39,19 @@
         <?php
         include "menu.php";
         ?>
-        <style type:"text/css">
-            #principal {
-                margin: auto;
-                margin-top: 50px;
-                width: 900px;
+        <style type="text/css">
+        #principal {
+            margin: auto;
+            margin-top: 50px;
+            width: 900px;
+            }
+
+        #tabela1 {
+           font-family: Verdana, Geneva, Tahoma, sans-serif;
+            }
+
+        thead tr{
+            background: rgb(38, 93, 141);
             }
         </style>
     </head>
