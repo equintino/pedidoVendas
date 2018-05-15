@@ -22,7 +22,7 @@
             body{
                 background: #000;
                 font: 11pt serif;
-                font-weight: 300;
+                font-weight: 900;
                 width: 105mm;
                 text-transform: uppercase;
                 line-height: 1.4;

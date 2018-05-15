@@ -6,7 +6,7 @@
         private $filename3='../dao/PedidoSearchCriteria.php';
         private $filename4='../dao/CRUDPedido.php';
         public function novoArquivo($variaveis){
-            array_push($variaveis,"pedido","codigo_pedido_integracao","modificado");
+            array_push($variaveis,"pedido","codigo_pedido_integracao","modificado","dSemana");
             $mode='w+';
             $handle = fopen($this->filename1, $mode); 
             $texto=$this->texto1($variaveis);
@@ -137,7 +137,7 @@
                 '$pedido->setcriado($now);'.
                 '$sql=$this->criaTabela6(\''.$this->tabela.'\');'.
                 '$this->execute6($sql, $pedido);'.
-                '$this->execute6(\'ALTER TABLE `tb_pedido` ADD UNIQUE(`codigo_pedido_integracao`)\', $pedido);'.
+                //'$this->execute6(\'ALTER TABLE `tb_pedido` ADD UNIQUE(`codigo_pedido_integracao`)\', $pedido);'.
                 '$sql = \'INSERT INTO '.$this->tabela.' (';
                   foreach($variaveis as $key => $item){
                     if($key==='item' || $key==='parcela'){

@@ -107,7 +107,7 @@
         if($numero_pedido_atual==$_GET['numero_pedido_atual']){
             file_put_contents('../paginas/'.$loja.'numeroPedido.txt', ++$numero_pedido_atual);
         }
-        $codigo_pedido_integracao=$loja.file_get_contents('../paginas/'.$loja.'numeroPedido.txt');
+        $codigo_pedido_integracao=file_get_contents('../paginas/'.$loja.'numeroPedido.txt');
         
         $campos=$campo1=$campo2=array();
         $campoMultiplus=array('codigo_produto','descricao','quantidade','vUnitarioItem','pDescontoItem','obs_item','cfop','ncm','ean','unidade','vTotalItem','pTabela','cOmie');
@@ -450,11 +450,12 @@
             }
         }
         /*echo '<pre>';print_r([$_POST,$pedido_venda_produto]);die;*/
-        @$resultado=$pedido->IncluirPedido($pedido_venda_produto);
+        //@$resultado=$pedido->IncluirPedido($pedido_venda_produto);
         
         @is_object($resultado)? $obj=1: $obj=null;
             
         $preVenda->setcodigo_pedido_integracao($codigo_pedido_integracao);
+        $preVenda->setdSemana(date('N'));
         if($obj){
             @$numero_pedido=$resultado->numero_pedido;
             $preVenda->setpedido($numero_pedido);

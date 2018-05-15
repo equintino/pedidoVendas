@@ -1,13 +1,16 @@
 <html>
     <head>
-        <?php
-            /*if($_GET['pagina']=='atualizando'){
-                function redirecionar($tempo,$url, $mensagem){
-                    header("Refresh: $tempo; url=$url"); 
-                }
-                redirecionar('5','../web/index.php?pagina=cliente&act=atualiza&seleciona=1','mensagem a mostrar');        
-            }*/
-        ?>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('select#inicio').change(function(){
+                    if($(this).val()=='relatorio'){
+                        $(location).attr("href","relatorios/consulta.php");
+                    }else{
+                        $(location).attr("href","web/index.php?index=sim&pagina=pedido&act=cad");
+                    }
+                }); 
+            });
+        </script>
     </head>
     <body bgcolor=#4cb1f1>
 <?php
@@ -93,7 +96,7 @@ class valida_cookies{
 	exit;
         }
     }
-    public function loginDb(){
+    public function loginDb($confere=null){
         $dao = new UserDao();
         $search = new UserSearchCriteria();
         $search->setLogin($this->login);
@@ -111,9 +114,10 @@ class valida_cookies{
                 $nomeEmpresa=$item->getempresa();
                 $cnpj=$item->getcnpj();
                 
-                //echo '<pre>';print_r($item);die;
                 echo '<script> document.cookie="funcao='.$funcao.';path:/";document.cookie="nomeEmpresa='.$nomeEmpresa.';path:/";document.cookie="cnpj='.$cnpj.';path:/";</script>';
-                $this->popup("Bem-Vindo ".$this->getlogin().".",'sim');
+                if(!$confere){
+                    $this->popup("Bem-Vindo ".$this->getlogin().".",'sim',$funcao);
+                }
             }else{
                 $this->popup('A senha não confere.',null);
                 exit;
@@ -148,7 +152,7 @@ class valida_cookies{
 	$string=str_replace("а", "A", $string);
 	return $string;
     }
-    public function popup($msg,$ok=null){
+    public function popup($msg,$ok=null,$funcao=null){
        echo "<form action='web/index.php?index=sim' method=POST>";
         echo "<table width=100% height=80% border=0>";
         echo "<tr height=100%>";
@@ -162,9 +166,16 @@ class valida_cookies{
                 echo '<br>';
                 echo "<center><input type=button value='  Cancelar  ' onclick=history.back()>";
             }else{
+                if($funcao=='administrador'){
+                    echo 'SELECIONA UMA DAS OPÇÕES: ';
+                    echo '<select id="inicio" name="abrir">';
+                    echo '<option value=""></option>';
+                    echo '<option value="sistema">Sistema</option>';
+                    echo '<option value="relatorio">Relatórios</option>';
+                    echo '</select>';
+                    die;
+                }
                 echo '<script>window.location.assign("web/index.php?index=sim&pagina=pedido&act=cad")</script>';
-                //header('Location:web/index.php?index=sim&pagina=pedido&act=cad');
-                //echo "<center><input autofocus type=button value=\"Entrar\" onclick=\"location.href='web/index.php?index=sim&pagina=pedido&act=cad'\">";
             }
         echo "</td></tr></table>";
         echo "</td></tr>";

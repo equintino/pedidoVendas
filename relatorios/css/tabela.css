@@ -1,0 +1,13 @@
+#principal {
+  margin: auto;
+  margin-top: 50px;
+  width: 900px;
+}
+
+#tabela1 {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+thead tr{
+  background: rgb(38, 93, 141);
+}
