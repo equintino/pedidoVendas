@@ -110,6 +110,8 @@
             $dados=$dao->encontrePorPedido($search);
         ?> 
         <style type="text/css">
+            @import url('https://fonts.googleapis.com/css?family=Nunito:600');
+
             #principal {
                 margin: auto;
                 margin-top: -100px;
@@ -119,7 +121,8 @@
             .titulo{
                 text-align: center;
                 margin-left: 370px;
-                font-family: sans-serif;
+                text-shadow: 1px 1px 2px #888;
+                font-family: 'Nunito', sans-serif;
                 font-size: 30px;
                 width: 300px;
             }
@@ -129,12 +132,20 @@
             .periodo{
                 margin: 20px -5px;
                 float: right;
+                color: #fff;
+                background-color: #3E73A0;
+                border-radius: 4px;
+                box-shadow: 2px 2px 2px #888;
             }
+
             .ocultarCol{
                 position: absolute;
+                text-align: right;
+                font-family: 'Nunito', sans-serif;
             }
             select#campoCol{
                 float: right;
+                background-color: #F6F6F6;
             }
         </style>
     </head>
