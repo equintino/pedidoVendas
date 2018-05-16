@@ -6,7 +6,7 @@
         
         <script>
             $(document).ready(function(){
-                alert([flash,numero_pedido,direto]);
+                
                 if((!flash && numero_pedido) || direto==1){
                     $('.erro').hide();
                     window.print();
