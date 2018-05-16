@@ -46,14 +46,15 @@
                 $('#min').datepicker({dateFormat: 'dd/mm/yy'});
                 $('#max').datepicker({dateFormat: 'dd/mm/yy'});
                 var table = $('#tabela1').DataTable({
-                    "order": [[ 0, "desc" ]],
-                    "columnDefs": [
+                    "columnDefs": [ 
                             {
-                                "targets": [ 0 ],
-                                "visible": true,
-                                "searchable": true
-                            }
+                                "searchable": false,
+                                "orderable": false,
+                                "visible": false,
+                                "targets": 13
+                            } 
                         ],
+                    "order": [[ 0, "desc" ]],
                     "scrollX": true,
                     "language": {
                             "decimal": ",",
@@ -92,6 +93,8 @@
                         );
                     }
                 });
+                /*$('#tabela1').css( 'display', 'block' );
+                table.columns.adjust().draw();*/
                 $('#max, #min').change( function() {
                     table.draw();
                     $( '#linhas' ).text( 'Linhas exibidas: '+ table.column({page:'current'} ).data().length );
@@ -104,6 +107,22 @@
                 $(document).on('keyup click', function(){
                     $( '#linhas' ).text( 'Linhas exibidas: '+ table.column({page:'current'} ).data().length );                   
                 });
+                /*table.on( 'order.dt search.dt', function () {
+                    table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                        cell.innerHTML = i+1;
+                    } );
+                } ).draw();*/
+                $('#tabela1 tbody').on( 'mouseover', 'tr', function () {
+                    $(this).addClass('selected');
+                } );
+                $('#tabela1 tbody').on( 'mouseleave', 'tr', function () {
+                    $(this).removeClass('selected');
+                } );
+                $('#tabela1 tbody').dblclick( function () {
+                    var id = table.row('.selected').data()[13];
+                    $(location).attr('href','../paginas/imprime.php?id='+id+'&direto=1');
+                } );
+                
                 $('#principal').show();
             });
         function numeroParaMoeda(n, c, d, t){
@@ -165,6 +184,7 @@
             }
 
             .ocultarCol{
+                margin-left: -20px;
                 position: absolute;
                 text-align: right;
                 font-family: 'Nunito', sans-serif;
@@ -175,7 +195,7 @@
             }
             #linhas{
                 position: absolute;
-                margin-top: 70px;
+                margin-top: 80px;
             }
         </style>
     </head>
@@ -208,7 +228,7 @@
     </tbody></table>
     <div class='titulo'>RELATÓRIO GERAL</div>
     <table class="display" id="tabela1">
-        <thead><tr><th>DATA</th><th>PEDIDO</th><th>VALOR DO PEDIDO</th><th>FORMA DE PAGAMENTO</th><th>N° DOCUMENTO</th><th>ETAPA</th><th>VENDEDOR</th><th>CLIENTE</th><th>QTD VOLUME</th><th>CÓD PRODUTO</th><th>DESCRIÇÃO</th><th>SERIAL</th><th>TRANSPORTADORA</th></tr></thead>
+        <thead><tr><th>DATA</th><th>PEDIDO</th><th>VALOR DO PEDIDO</th><th>FORMA DE PAGAMENTO</th><th>N° DOCUMENTO</th><th>ETAPA</th><th>VENDEDOR</th><th>CLIENTE</th><th>QTD VOLUME</th><th>CÓD PRODUTO</th><th>DESCRIÇÃO</th><th>SERIAL</th><th>TRANSPORTADORA</th><th>ID</th></tr></thead>
         <tbody>
             <?php foreach($dados as $key => $item): ?>
             <?php 
@@ -232,7 +252,7 @@
                     }
                 }
             ?>
-            <tr><td align='center'><?= $item->getdPrevisao(); ?></td><td align='center'><?= intval($item->getpedido()); ?></td><td align='right'><?= $item->getvPedido(); ?></td><td align='center'><?= $item->getfPagamento() ?></td><td align='center'><?= $item->getdados_adcionais_nf() ?></td><td align='center'><?= $etapa ?></td><td align='center'><?= $item->getvendedor() ?></td><td><?= $item->getcliente() ?></td><td align='center'><?= $item->getqvolume(); ?></td><td><?= str_replace('*/*',' / ',$item->getcodigo_produto()); ?></td><td><?= str_replace('*/*',' / ',$item->getdescricao()); ?></td><td><?= str_replace('*/*',' / ',$item->getobs_item()); ?></td><td><?= $item->gettransportadora(); ?></td></tr>
+            <tr><td align='center'><?= $item->getdPrevisao(); ?></td><td align='center'><?= intval($item->getpedido()); ?></td><td align='right'><?= $item->getvPedido(); ?></td><td align='center'><?= $item->getfPagamento() ?></td><td align='center'><?= $item->getdados_adcionais_nf() ?></td><td align='center'><?= $etapa ?></td><td align='center'><?= $item->getvendedor() ?></td><td><?= $item->getcliente() ?></td><td align='center'><?= $item->getqvolume(); ?></td><td><?= str_replace('*/*',' / ',$item->getcodigo_produto()); ?></td><td><?= str_replace('*/*',' / ',$item->getdescricao()); ?></td><td><?= str_replace('*/*',' / ',$item->getobs_item()); ?></td><td><?= $item->gettransportadora(); ?></td><td><?= $item->getid() ?></td></tr>
             <?php endforeach; ?>
         </tbody>
         <tfoot>
