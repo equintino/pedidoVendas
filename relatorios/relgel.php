@@ -114,13 +114,15 @@
                 } ).draw();*/
                 $('#tabela1 tbody').on( 'mouseover', 'tr', function () {
                     $(this).addClass('selected');
+                    $(this).attr('title','Dê um duplo clique para abrir comprovante de venda').css('cursor','pointer');
                 } );
                 $('#tabela1 tbody').on( 'mouseleave', 'tr', function () {
                     $(this).removeClass('selected');
                 } );
                 $('#tabela1 tbody').dblclick( function () {
                     var id = table.row('.selected').data()[13];
-                    $(location).attr('href','../paginas/imprime.php?id='+id+'&direto=1');
+                    var url='../paginas/imprime.php?id='+id+'&direto=1';
+                    window.open(url,'_blank');
                 } );
                 
                 $('#principal').show();

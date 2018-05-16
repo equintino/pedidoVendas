@@ -6,7 +6,8 @@
         
         <script>
             $(document).ready(function(){
-                if(!flash && numero_pedido){
+                alert([flash,numero_pedido,direto]);
+                if((!flash && numero_pedido) || direto==1){
                     $('.erro').hide();
                     window.print();
                     //window.close();
@@ -194,6 +195,13 @@
     }
     
     array_key_exists('direto',$_GET)? $direto=$_GET['direto']: $direto=null;
+    if(!isset($flash)){
+        array_key_exists('flash',$_GET)? $flash=$_GET['flash']: $flash=null;
+    }
+    if(!isset($numero_pedido)){
+        array_key_exists('numero_pedido',$_GET)? $numero_pedido=$_GET['numero_pedido']: $numero_pedido=null;
+    }
+    echo '<script>var direto="'.$direto.'";var flash="'.$flash.'";var numero_pedido="'.$numero_pedido.'";</script>';
     if(!$direto){
         @$vendedor=$_POST['vendedor'];
         @$empresaAtualiza=$_GET['empresaAtualiza'];
