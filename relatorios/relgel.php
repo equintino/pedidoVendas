@@ -51,9 +51,10 @@
                                 "searchable": false,
                                 "orderable": false,
                                 "visible": false,
-                                "targets": 13
+                                "targets": [13]
                             } 
                         ],
+                    /*"autoWidth": true,*/
                     "order": [[ 0, "desc" ]],
                     "scrollX": true,
                     "language": {
@@ -93,8 +94,8 @@
                         );
                     }
                 });
-                /*$('#tabela1').css( 'display', 'block' );
-                table.columns.adjust().draw();*/
+                //$('#tabela1').css( 'width', '20%' );
+                //table.columns.adjust().draw();
                 $('#max, #min').change( function() {
                     table.draw();
                     $( '#linhas' ).text( 'Linhas exibidas: '+ table.column({page:'current'} ).data().length );
@@ -230,7 +231,7 @@
     </tbody></table>
     <div class='titulo'>RELATÓRIO GERAL</div>
     <table class="display" id="tabela1">
-        <thead><tr><th>DATA</th><th>PEDIDO</th><th>VALOR DO PEDIDO</th><th>FORMA DE PAGAMENTO</th><th>N° DOCUMENTO</th><th>ETAPA</th><th>VENDEDOR</th><th>CLIENTE</th><th>QTD VOLUME</th><th>CÓD PRODUTO</th><th>DESCRIÇÃO</th><th>SERIAL</th><th>TRANSPORTADORA</th><th>ID</th></tr></thead>
+        <thead><tr><th>&nbsp&nbspDATA&nbsp&nbsp</th><th>PEDIDO</th><th>VL. PEDIDO</th><th>FORMA PAGAMENTO</th><th>N° DOCUMENTO</th><th>&nbsp&nbsp&nbspETAPA &nbsp&nbsp&nbsp&nbsp&nbsp</th><th>VENDEDOR</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp CLIENTE &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>QTD VOLUME</th><th>&nbsp&nbsp&nbsp&nbsp CÓDIGO DO PRODUTO &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DESCRIÇÃO &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp SERIAL &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TRANSPORTADORA &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>ID</th></tr></thead>
         <tbody>
             <?php foreach($dados as $key => $item): ?>
             <?php 
