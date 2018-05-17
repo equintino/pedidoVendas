@@ -93,8 +93,8 @@
    }
    public function encontrePorPedido(PedidoSearchCriteria $search=null){
         $result = array();
-        if($search->getpedido()){
-            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND pedido = "'.$search->getpedido().'"')->fetchAll();
+        if($search->getid()){
+            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND id = "'.$search->getid().'"')->fetchAll();
         }elseif($search->getcodigo_pedido_integracao()){
             $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo_pedido_integracao ='.$search->getcodigo_pedido_integracao().'')->fetchAll();
         }elseif($search->getdSemana()){

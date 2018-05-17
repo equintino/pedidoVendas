@@ -6,7 +6,8 @@
         
         <script>
             $(document).ready(function(){
-                if(!flash && numero_pedido){
+                
+                if((!flash && numero_pedido) || direto==1){
                     $('.erro').hide();
                     window.print();
                     //window.close();
@@ -141,7 +142,7 @@
                 animation: blinker 1s linear infinite;
                 text-align: center;
             }
-            .data{
+            .data_{
                 float: right;
             }
             .ass{
@@ -164,23 +165,59 @@
         }
         return $str;
     }
+    function abrevia($str){
+        $str_=explode(' ',strtoupper($str));
+        switch($str_[0]){
+            case 'RUA':
+                $str_[0]='R.';
+                break;
+            case 'AVENIDA':
+                $str_[0]='AV.';
+                break;
+            case 'ESTRADA':
+                $str_[0]='EST.';
+                break;
+            case 'TRAVESSA':
+                $str_[0]='TRA.';
+                break;
+            case 'BECO':
+                $str_[0]='BC.';
+                break;
+            case 'PARQUE':
+                $str_[0]='PQ.';
+                break;
+            case 'BLOCO':
+                $str_[0]='BLC.';
+                break;
+        }
+        $str=implode($str_);
+        return $str;
+    }
     
     array_key_exists('direto',$_GET)? $direto=$_GET['direto']: $direto=null;
-    
-    @$vendedor=$_POST['vendedor'];
-    @$empresaAtualiza=$_GET['empresaAtualiza'];
-    @$tItens=$pedido_venda_produto->cabecalho->quantidade_itens;
-    @$vPedido=$_POST['vPedido'];
-    @$vDesconto=$_POST['vDesconto'];
-    $cliente=reduz($_POST['cliente'],23);
-    $enderecoCliente=reduz($_POST['endereco'],23);
-    $bairroCliente=reduz($_POST['bairro'],12);
-    $cepCliente=substr($_POST['cep'],0,4).'-'.substr($_POST['cep'],5,3);
-    $cidadeCliente=reduz($_POST['cidade'],25);
-    $cnpj_cpfCliente=$_POST['cnpj_cpf'];
-    
+    if(!isset($flash)){
+        array_key_exists('flash',$_GET)? $flash=$_GET['flash']: $flash=null;
+    }
+    if(!isset($numero_pedido)){
+        array_key_exists('numero_pedido',$_GET)? $numero_pedido=$_GET['numero_pedido']: $numero_pedido=null;
+    }
+    echo '<script>var direto="'.$direto.'";var flash="'.$flash.'";var numero_pedido="'.$numero_pedido.'";</script>';
+    if(!$direto){
+        @$vendedor=$_POST['vendedor'];
+        @$empresaAtualiza=$_GET['empresaAtualiza'];
+        @$tItens=$pedido_venda_produto->cabecalho->quantidade_itens;
+        @$vPedido=$_POST['vPedido'];
+        @$vDesconto=$_POST['vDesconto'];
+        $cliente=reduz($_POST['cliente'],20);
+        $enderecoCliente=reduz($_POST['endereco'],23);
+        $bairroCliente=reduz($_POST['bairro'],12);
+        $cepCliente=substr($_POST['cep'],0,4).'-'.substr($_POST['cep'],5,3);
+        $cidadeCliente=reduz($_POST['cidade'],25);
+        $cnpj_cpfCliente=$_POST['cnpj_cpf'];
+    }
     include '../model/EmpresasCadastroJsonClient.php';
     include '../model/empresa.php';
+    date_default_timezone_set("Brazil/East");
     
     if($direto){
         include '../dao/UserDao.php';
@@ -204,9 +241,29 @@
         }
         $search=new PedidoSearchCriteria();
         $search->settabela('tb_pedido');
+        $search->setid($_GET['id']);
         $dao=new CRUDPedido();
-        echo '<pre>';
-        print_r($dao->encontrePorPedido($search));
+        foreach($dao->encontrePorPedido($search) as $item){
+            $vendedor=$item->getvendedor();
+            $tItens=$item->gettItem();
+            $vPedido=number_format($item->getvPedido(),'2',',','.');
+            $vDesconto=number_format($item->getvDesconto(),'2',',','.');
+            $cliente=reduz($item->getcliente(),20);
+            $enderecoCliente=reduz($item->getendereco(),23);
+            $bairroCliente=reduz($item->getbairro(),12);
+            $cepCliente=substr($item->getcep(),0,4).'-'.substr($item->getcep(),5,3);
+            $cidadeCliente=reduz($item->getcidade(),25);
+            $cnpj_cpfCliente=$item->getcnpj_cpf();
+            $numero_pedido=$item->getpedido();
+            $codigo_=explode('*/*',$item->getcodigo_produto());
+            $descricao_=explode('*/*',$item->getdescricao());
+            $quantidade_=explode('*/*',$item->getquantidade());
+            $dados_adcionais_item_=explode('*/*',$item->getobs_item());
+            $vUnitarioItem_=explode('*/*',$item->getvUnitarioItem());
+            $vTotalItem_=explode('*/*',$item->getvTotalItem());
+            $fPagamento=$item->getfPagamento();
+            $dataHora=date('d/m/Y H:i',$item->getcriado());
+        }
     }
     
         
@@ -271,48 +328,61 @@
             <div><?= $razao_social ?></div>
             <div><?= $website ?></div>
             <div>Tel. (<?= $telefone1_ddd ?>) <?= substr($telefone1_numero,0,4).'-'.substr($telefone1_numero,4,4) ?> </div>
-            <!--<div class="cnpj">CNPJ: <?= $cnpj ?><br></div>
-            <div class="ie">IE: <?= $inscricao_estadual ?><br></div>-->
             <hr class="hr">
             <span>Pedido: <?= preg_replace('/^0+/','',@$numero_pedido) ?></span><br>
             <span>Vendedor: <?= @$vendedor ?></span>
-            <span class="data"><?= date('d/m/Y h:m:s') ?></span>
+            <?php
+                if(!isset($direto)){
+                    $dataHora=date('d/m/Y H:i');
+                }
+            ?>
+            <span class="data_"><?= $dataHora ?></span>
             <hr>
             <span class="campos">Cliente: </span><span class="dCliente"><?= $cliente ?></span><br>
-            <span class="campos">Endereço: </span><span class="dCliente"><?= $enderecoCliente ?></span><br>
-            <span class="campos">Bairro: </span><span class="dCliente"><?= $bairroCliente ?></span>&nbsp&nbsp&nbsp <span class="campos"> - &nbsp&nbsp Cep: </span><span class="dCliente"><?= $cepCliente ?></span><br>
+            <span class="campos">Endereço: </span><span class="dCliente"><?= abrevia($enderecoCliente) ?></span><br>
+            <span class="campos">Bairro: </span><span class="dCliente"><?= abrevia($bairroCliente) ?></span>&nbsp<span class="campos"> - &nbsp Cep: </span><span class="dCliente"><?= $cepCliente ?></span><br>
             <span class="campos">Cidade: </span><span class="dCliente"><?= $cidadeCliente ?></span><br>
             <span class="campos">CPF/CNPJ: </span><span class="dCliente"><?= $cnpj_cpfCliente ?></span><br>
             <hr>
-            <!--<div class="titulo1">-->
                 <span>CÓDIGO-DESCRIÇÃO<br></span>
                 <span>QUANTIDADE</span><span class=vlUnit>UNITÁRIO</span><span class='vlItem'>TOTAL</span>
-            <!--</div>-->
             <hr class="hr">
             <div class="titulo2">
-            <?php for($i=1;$i<=$tItens;$i++): 
-                $codigo=$pedido_venda_produto->det[$i-1]['produto']->codigo_produto_integracao;
-                $descricao=reduz($pedido_venda_produto->det[$i-1]['produto']->descricao,70);
-                $quantidade=$pedido_venda_produto->det[$i-1]['produto']->quantidade;
-                $dados_adcionais_item=$pedido_venda_produto->det[$i-1]['inf_adic']->dados_adicionais_item;
-                $vUnitario=number_format($pedido_venda_produto->det[$i-1]['produto']->valor_unitario,'2',',','.');
-                $vTotalItem=number_format($pedido_venda_produto->det[$i-1]['produto']->valor_mercadoria,'2',',','.');
+            <?php 
+                if(!$direto):
+                    $quantidade_=array();
+                    for($i=1;$i<=$tItens;$i++): 
+                        $codigo=$pedido_venda_produto->det[$i-1]['produto']->codigo_produto_integracao;
+                        $descricao=reduz($pedido_venda_produto->det[$i-1]['produto']->descricao,70);
+                        $quantidade_[]=$pedido_venda_produto->det[$i-1]['produto']->quantidade;
+                        $dados_adcionais_item=$pedido_venda_produto->det[$i-1]['inf_adic']->dados_adicionais_item;
+                        $vUnitario=number_format($pedido_venda_produto->det[$i-1]['produto']->valor_unitario,'2',',','.');
+                        $vTotalItem=number_format($pedido_venda_produto->det[$i-1]['produto']->valor_mercadoria,'2',',','.');
             ?>
                 <?='<span>'.$codigo.' - </span><span>'.$descricao ?><br>
-                <span class="quant">&nbsp&nbsp<?= $quantidade.'</span> &nbsp&nbsp&nbsp&nbsp&nbsp X <span class=vlUnit2>'.$vUnitario.'</span><span class=vTotalItem2>'.$vTotalItem ?></span><br>
+                <span class="quant">&nbsp&nbsp<?= $quantidade_[$i-1].'</span> &nbsp&nbsp&nbsp&nbsp&nbsp X <span class=vlUnit2>'.$vUnitario.'</span><span class=vTotalItem2>'.$vTotalItem ?></span><br>
                 <div class="seriais"><?= nl2br($dados_adcionais_item) ?></div>
-            <?php endfor; ?>
+            <?php endfor;else:
+                for($i=0;$i<$tItens;$i++):
+                    $codigo=$codigo_[$i];
+                    $descricao=reduz($descricao_[$i],70);
+                    $quantidade=$quantidade_[$i];
+                    $dados_adcionais_item=$dados_adcionais_item_[$i];
+                    $vUnitarioItem=number_format($vUnitarioItem_[$i],'2',',','.');
+                    $vTotalItem=number_format($vTotalItem_[$i],'2',',','.');
+            ?>
+                <?='<span>'.$codigo.' - </span><span>'.$descricao ?><br>
+                <span class="quant">&nbsp&nbsp<?= $quantidade.'</span> &nbsp&nbsp&nbsp&nbsp&nbsp X <span class=vlUnit2>'.$vUnitarioItem.'</span><span class=vTotalItem2>'.$vTotalItem ?></span><br>
+                <div class="seriais"><?= nl2br($dados_adcionais_item) ?></div>
+                <?php endfor;endif; ?>
             </div>
             <hr>
             <span>Total Desconto: <?= $vDesconto ?></span><br>
-            <!--<hr class='hrTotal'>-->
-            <!--<div class='final'>-->
-                <span class="total">TOTAL Geral: </span>
-                <span><?= $vPedido ?></span><br>
-                <span>Total Qtd -> <?= $pedido_venda_produto->cabecalho->quantidade_itens ?></span>
-                <hr>
-                <span>(FORM. PAG.) &nbsp<?= $fPagamento ?></span>
-            <!--</div>-->
+            <span class="total">TOTAL Geral: </span>
+            <span><?= $vPedido ?></span><br>
+            <span>Total Qtd -> <?= array_sum($quantidade_) ?></span>
+            <hr>
+            <span>(FORM. PAG.) &nbsp<?= $fPagamento ?></span>
             <hr>
             RECEBI OS PRODUTOS CONSTANTE NESTE PEDIDO E RECONHEÇO A DIVIDA ACIMA,
             <span class='ass'>______________________________</span>
