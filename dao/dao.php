@@ -165,6 +165,12 @@
        }
        return $this->update6($pedido);
    }
+   public function grava7(nota $nota){
+       if($nota->getid() === null){
+           return $this->insert7($nota);
+       }
+       return $this->update7($nota);
+   }
    public function gravaNumeroPedido($pedido){
        date_default_timezone_set("Brazil/East");
        $now = mktime (date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
@@ -279,6 +285,16 @@
             /*return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));*/
         }
         return $pedido;
+   }
+   public function execute7($sql,nota $nota){
+        $statement = $this->getDb()->prepare($sql);
+        $this->executeStatement($statement, $this->getParams7($nota));
+        $search=new NotaSearchCriteria();        
+        $search->settabela($nota->gettabela());
+        if (!$nota->getid()) {
+            /*return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));*/
+        }
+        return $nota;
    }
    private function executeStatement(PDOStatement $statement, array $params){
         if (!$statement->execute($params)){
