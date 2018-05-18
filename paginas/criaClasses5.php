@@ -53,7 +53,7 @@
         }
         private function texto2($variaveis){
             $texto="<?php class notaMapper{";
-            $texto .= ' public static function map(pedido $nota, array $properties){';
+            $texto .= ' public static function map(nota $nota, array $properties){';
             $padrao=$this->padrao();
             foreach($padrao as $pad){
             $texto .='if (array_key_exists(\''.$pad.'\', $properties)){'.

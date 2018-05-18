@@ -27,11 +27,10 @@
             /* Custom filtering function which will search data in column four between two values */
             $.fn.dataTable.ext.search.push(
                 function( settings, data, dataIndex ) {
-                    var min = new Date($('#min').val());
-                    var max = new Date($('#max').val());
+                    var min = new Date(formataData($('#min').val()));
+                    var max = new Date(formataData($('#max').val()));
                     /*var age = parseFloat( data[0] ) || 0;*/
-                    var dat = new Date(data[0]) || 0;
-                    
+                    var dat = new Date(formataData(data[0])) || 0;
                     if ( ( isNaN( min ) && isNaN( max ) ) ||
                          ( isNaN( min ) && dat <= max ) ||
                          ( min <= dat   && isNaN( max ) ) ||
@@ -42,6 +41,12 @@
                     return false;
                 }
             );
+            function formataData(str){
+                var dia=str.substr(0,2);
+                var mes=str.substr(3,2);
+                var ano=str.substr(-4,4);
+                return mes+'/'+dia+'/'+ano;
+            }
             $(document).ready(function(){
                 $('#min').datepicker({dateFormat: 'dd/mm/yy'});
                 $('#max').datepicker({dateFormat: 'dd/mm/yy'});

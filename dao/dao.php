@@ -110,6 +110,20 @@
         }
         return $result;
    }
+   public function encontrePorNota(NotaSearchCriteria $search=null){
+        $result = array();
+        if($search->getnIdPedido()){
+            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND nIdPedido = "'.$search->getnIdPedido().'"')->fetchAll();
+        }else{
+            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND nNF = "'.$search->getnNF().'"')->fetchAll();
+        }
+        foreach($row as $item){
+            $nota = new nota();
+            notaMapper::map($nota, $item);
+            $result[$nota->getid()] = $nota;
+        }
+        return $result;
+   }
    public function totalLinhas(ModelSearchCriteria $search=null){
            $row = $this->query("SELECT id FROM `".$search->gettabela()."` WHERE `excluido` =  '0' ORDER BY id DESC ")->fetchAll();
         if (!$row) {
