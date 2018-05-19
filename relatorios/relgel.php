@@ -11,19 +11,13 @@
         <script type="text/javascript" src='../web/js/jquery.dataTables.min.js' ></script>
         <script type='text/javascript' src='js/jquery-ui.min.js'></script>
         <script type='text/javascript'>
-            /*$.fn.dataTable.Api.register( 'column().data().sum()', function () {
-                z=0;
+            $.fn.dataTable.Api.register( 'column().data().sum()', function () {
                 return this.reduce( function (a,b) {
-                    b=1;
                     var x = parseFloat( a ) || 0;
                     var y = parseFloat( b ) || 0;
-                    if(z==0){
-                        x=1;
-                    }
-                    z++;
                     return x + y;
                 } );
-            } );*/
+            } );
             /* Custom filtering function which will search data in column four between two values */
             $.fn.dataTable.ext.search.push(
                 function( settings, data, dataIndex ) {
@@ -56,7 +50,7 @@
                                 "searchable": false,
                                 "orderable": false,
                                 "visible": false,
-                                "targets": [13]
+                                "targets": [14]
                             } 
                         ],
                     /*"autoWidth": true,*/
@@ -83,13 +77,11 @@
                                     i : 0;
                         };
                         total = api
-                            .column( 2 )
+                            .column( 3 )
                             .data()
-                            .reduce( function (a, b) {
-                                return parseFloat(a) + parseFloat(b);
-                            }, 0 );
+                            .sum();
                         pageTotal = api
-                            .column( 2, { page: 'current'} )
+                            .column( 3, { page: 'current' } )
                             .data()
                             .reduce( function (a, b) {
                                 return parseFloat(a) + parseFloat(b);
@@ -121,12 +113,15 @@
                 $('#tabela1 tbody').on( 'mouseover', 'tr', function () {
                     $(this).addClass('selected');
                     $(this).attr('title','Dê um duplo clique para abrir comprovante de venda').css('cursor','pointer');
+                    $(this).click(function(){
+                        alert($(this).attr('id'));
+                    });
                 } );
                 $('#tabela1 tbody').on( 'mouseleave', 'tr', function () {
                     $(this).removeClass('selected');
                 } );
                 $('#tabela1 tbody').dblclick( function () {
-                    var id = table.row('.selected').data()[13];
+                    var id = table.row('.selected').data()[14];
                     var url='../paginas/imprime.php?id='+id+'&direto=1';
                     window.open(url,'_blank');
                 } );
@@ -221,6 +216,22 @@
                     $x++;
                 }
             echo '</select>';
+            include '../dao/CRUDNota.php';
+            include '../dao/NotaSearchCriteria.php';
+            include '../model/modelNota.php';
+            include '../mapping/notaMapper.php';
+            $dao2=new CRUDNota();
+            $search=new NotaSearchCriteria();
+            $search->settabela('tb_nf');
+            /*foreach($dados as $key => $item){
+                $search->setnIdPedido($item->getcodigo_pedido());
+                $dadosNota=$dao2->encontrePorNota($search);
+                foreach($dadosNota as $nf){
+                    $cChaveNFe=$nf->getcChaveNFe();
+                    $nNF=$nf->getnNF();
+                    print_r([$cChaveNFe,$nNF]);
+                }
+            }die;*/
         ?>
     </div>
     <div id='linhas'></div>
@@ -236,7 +247,7 @@
     </tbody></table>
     <div class='titulo'>RELATÓRIO GERAL</div>
     <table class="display" id="tabela1">
-        <thead><tr><th>&nbsp&nbspDATA&nbsp&nbsp</th><th>PEDIDO</th><th>VL. PEDIDO</th><th>FORMA PAGAMENTO</th><th>N° DOCUMENTO</th><th>&nbsp&nbsp&nbspETAPA &nbsp&nbsp&nbsp&nbsp&nbsp</th><th>VENDEDOR</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp CLIENTE &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>QTD VOLUME</th><th>&nbsp&nbsp&nbsp&nbsp CÓDIGO DO PRODUTO &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DESCRIÇÃO &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp SERIAL &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TRANSPORTADORA &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>ID</th></tr></thead>
+        <thead><tr><th>&nbsp&nbspDATA&nbsp&nbsp</th><th>NOTA FISCAL</th><th>&nbsp PEDIDO &nbsp</th><th>VALOR PEDIDO </th><th>FORMA PAGAMENTO</th><th>N° DOCUMENTO</th><th>&nbsp&nbsp&nbspETAPA &nbsp&nbsp&nbsp&nbsp&nbsp</th><th>VENDEDOR</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp CLIENTE &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>QTD VOLUME</th><th>&nbsp&nbsp&nbsp&nbsp CÓDIGO DO PRODUTO &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DESCRIÇÃO &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp SERIAL &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TRANSPORTADORA &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>ID</th></tr></thead>
         <tbody>
             <?php foreach($dados as $key => $item): ?>
             <?php 
@@ -259,9 +270,15 @@
                             break;
                     }
                 }
+                $search->setnIdPedido($item->getcodigo_pedido());
+                $dadosNota=$dao2->encontrePorNota($search);
+                foreach($dadosNota as $nf){
+                    $cChaveNFe=$nf->getcChaveNFe();
+                    $nNF=intval($nf->getnNF());
+                }
             ?>
-            <tr><td align='center'><?= $item->getdPrevisao(); ?></td><td align='center'><?= intval($item->getpedido()); ?></td><td align='right'><?= $item->getvPedido(); ?></td><td align='center'><?= $item->getfPagamento() ?></td><td align='center'><?= $item->getdados_adcionais_nf() ?></td><td align='center'><?= $etapa ?></td><td align='center'><?= $item->getvendedor() ?></td><td><?= $item->getcliente() ?></td><td align='center'><?= $item->getqvolume(); ?></td><td><?= str_replace('*/*',' / ',$item->getcodigo_produto()); ?></td><td><?= str_replace('*/*',' / ',$item->getdescricao()); ?></td><td><?= str_replace('*/*',' / ',$item->getobs_item()); ?></td><td><?= $item->gettransportadora(); ?></td><td><?= $item->getid() ?></td></tr>
-            <?php endforeach; ?>
+            <tr id='<?= isset($cChaveNFe)? $cChaveNFe: null; ?>'><td align='center'><?= $item->getdPrevisao(); ?></td><td align='right' ><?= isset($nNF)? $nNF: null; ?></td><td align='center'><?= intval($item->getpedido()); ?></td><td align='right'><?= $item->getvPedido(); ?></td><td align='center'><?= $item->getfPagamento() ?></td><td align='center'><?= $item->getdados_adcionais_nf() ?></td><td align='center'><?= $etapa ?></td><td align='center'><?= $item->getvendedor() ?></td><td><?= $item->getcliente() ?></td><td align='center'><?= $item->getqvolume(); ?></td><td><?= str_replace('*/*',' / ',$item->getcodigo_produto()); ?></td><td><?= str_replace('*/*',' / ',$item->getdescricao()); ?></td><td><?= str_replace('*/*',' / ',$item->getobs_item()); ?></td><td><?= $item->gettransportadora(); ?></td><td><?= $item->getid() ?></td></tr>
+            <?php unset($cChaveNFe,$nNF); endforeach; ?>
         </tbody>
         <tfoot>
             <tr>

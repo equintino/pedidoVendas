@@ -141,6 +141,7 @@
             include '../paginas/criaClasses4.php';
             $arqClasse=new criaClsses4();
             $arqClasse->novoArquivo($variaveis);
+            sleep(5);
         }
         include '../dao/CRUDPedido.php';
         include '../dao/PedidoSearchCriteria.php';
@@ -450,15 +451,17 @@
             }
         }
         /*echo '<pre>';print_r([$_POST,$pedido_venda_produto]);die;*/
-        //@$resultado=$pedido->IncluirPedido($pedido_venda_produto);
+        @$resultado=$pedido->IncluirPedido($pedido_venda_produto);
         
         @is_object($resultado)? $obj=1: $obj=null;
-            
+         $codigo_pedido=411228542;
         $preVenda->setcodigo_pedido_integracao($codigo_pedido_integracao);
         $preVenda->setdSemana(date('N'));
         if($obj){
             @$numero_pedido=$resultado->numero_pedido;
+            @$codigo_pedido=$resultado->codigo_pedido;
             $preVenda->setpedido($numero_pedido);
+            $preVenda->setcodigo_pedido($codigo_pedido);
         }else{
             Flash::addFlash("Não retornou, n° do pedido.");
             @$flash=Flash::getFlashes()[0];
@@ -489,6 +492,7 @@
         }else{
             foreach($busca as $item){
                 $item->setpedido(@$numero_pedido);
+                $item->setcodigo_pedido(@$codigo_pedido);
                 $gravado=$dao->gravaNumeroPedido($item);
             }
         }

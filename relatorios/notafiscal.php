@@ -8,19 +8,53 @@
             include 'relatorio.php';
             include '../model/modelNota.php';
             include '../dao/NotaSearchCriteria.php';
+            $act=$_GET['act'];
         ?>
     </head>
     <body>
         <?php
+            if($act=='atualiza'){
+                include '../model/PedidoVendaProdutoJsonClient.php';
+                $dao=new CRUDPedido();
+                $search=new PedidoSearchCriteria();
+                $search->settabela('tb_pedido');
+                $regPagina=20;
+                $pedidoOmie=new PedidoVendaProdutoJsonClient();
+                $pvpListarRequest=array("pagina"=>1,"registros_por_pagina"=>$regPagina,"apenas_importado_api"=>"N");
+                $pedidoLista=$pedidoOmie->ListarPedidos($pvpListarRequest);
+                
+                $total_de_paginas=$pedidoLista->total_de_paginas;
+                for($x=0;$x<count($pedidoLista->pedido_venda_produto);$x++){
+                    $codigo_pedido=$pedidoLista->pedido_venda_produto[$x]->cabecalho->codigo_pedido;
+                    $pedido=$pedidoLista->pedido_venda_produto[$x]->cabecalho->numero_pedido;
+                    $search->setpedido($pedido);
+                    $pedOmie=$dao->encontrePorPedido($search);
+                    if($pedOmie){
+                        $pedOmie[0]->setcodigo_pedido($codigo_pedido);
+                        $dao->gravaNumeroPedido($pedOmie[0]);
+                    }
+                }
+                for($y=2;$y<=$total_de_paginas;$y++){
+                    $pvpListarRequest=array("pagina"=>$y,"registros_por_pagina"=>$regPagina,"apenas_importado_api"=>"N");
+                    $pedidoLista=$pedidoOmie->ListarPedidos($pvpListarRequest);
+                    for($x=0;$x<count($pedidoLista->pedido_venda_produto);$x++){
+                        $codigo_pedido=$pedidoLista->pedido_venda_produto[$x]->cabecalho->codigo_pedido;
+                        $pedido=$pedidoLista->pedido_venda_produto[$x]->cabecalho->numero_pedido;
+                        $search->setpedido($pedido);
+                        $pedOmie=$dao->encontrePorPedido($search);
+                        if($pedOmie){
+                            $pedOmie[0]->setcodigo_pedido($codigo_pedido);
+                            $dao->gravaNumeroPedido($pedOmie[0]);
+                        }
+                    }
+                }
+                die;
+            }
             $notaOmie=new NFConsultarJsonClient();
-            $regPagina=1;
+            $regPagina=20;
             $nfListarRequest=array("pagina"=>1,"registros_por_pagina"=>$regPagina,"apenas_importado_api"=>"N","ordenar_por"=>"CODIGO");
             $dados=$notaOmie->ListarNF($nfListarRequest);
-            
-            
-            if(file_exists('../dao/CRUDNota.php')){
-            }
-           
+                
             gravaDados($dados,0);
             $tPaginas=$dados->total_de_paginas;
             for($x=2;$x<=$tPaginas;$x++){
@@ -91,6 +125,7 @@
                             $arquivos=new criaClsses5();
                             $campos=array_unique($campos);
                             $arquivos->novoArquivo($campos);
+                            sleep(5);
                         }
                         include '../dao/CRUDNota.php';
                         include '../mapping/notaMapper.php';
@@ -145,7 +180,7 @@
                             }
                         }
                     }
-                    //include '../dao/CRUDNota.php';
+                    $dao2=new CRUDNota();
                     $search=new NotaSearchCriteria();
                     $search->settabela('tb_nf');
                     $search->setnNF($nota->getnNF());

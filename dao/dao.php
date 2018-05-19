@@ -97,6 +97,8 @@
             $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND id = "'.$search->getid().'"')->fetchAll();
         }elseif($search->getcodigo_pedido_integracao()){
             $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo_pedido_integracao ='.$search->getcodigo_pedido_integracao().'')->fetchAll();
+        }elseif($search->getpedido()){
+            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND pedido ='.$search->getpedido().'')->fetchAll();
         }elseif($search->getdSemana()){
             $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND dSemana ='.$search->getdSemana().'')->fetchAll();
         }else{
@@ -189,7 +191,11 @@
        date_default_timezone_set("Brazil/East");
        $now = mktime (date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
        $pedido->setmodificado($now);
-       $sql = 'UPDATE `tb_pedido` SET pedido = '.$pedido->getpedido().', modificado = '.$pedido->getmodificado().' WHERE codigo_pedido_integracao = '.$pedido->getcodigo_pedido_integracao().'';
+       if($pedido->getcodigo_pedido()){
+           $sql = 'UPDATE `tb_pedido` SET pedido = '.$pedido->getpedido().', modificado = '.$pedido->getmodificado().',codigo_pedido = '.$pedido->getcodigo_pedido().' WHERE pedido = '.$pedido->getpedido().'';
+       }else{
+            $sql = 'UPDATE `tb_pedido` SET pedido = '.$pedido->getpedido().', modificado = '.$pedido->getmodificado().' WHERE codigo_pedido_integracao = '.$pedido->getcodigo_pedido_integracao().'';
+       }
        $statement = $this->getDb()->prepare($sql)->execute();
        return $statement;
    }
