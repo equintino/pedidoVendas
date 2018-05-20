@@ -3,6 +3,10 @@
     <script type="text/javascript" src="../web/js/jquery-3.2.1.min.js"></script>
     <script>
         $(document).ready(function() {
+            if(codTabela=='nenhum'){
+                $(location).attr('href',''+pagina+'.php?act='+act+'&seleciona=2&');
+                die;
+            }
             $(location).attr('href','../web/index.php?pagina='+pagina+'&act='+act+'&seleciona=2&codTabela='+codTabela+'');
         });
     </script>
