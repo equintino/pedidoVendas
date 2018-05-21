@@ -189,6 +189,20 @@
             echo '<pre>';
             $search->setdSemana(null);
             $dados=$dao->encontrePorPedido($search);
+            
+            function confereTabela($tabela){
+                //include '../dao/dao.php';
+                $dao=new dao();
+                if(OMIE_APP_KEY=='2769656370'){
+                    $db='db';
+                }elseif(OMIE_APP_KEY=='461893204773'){
+                    $db='db2';
+                }else{
+                    $db='db3';
+                }
+                $tab=$dao->showTabela($tabela,$db);
+                return $tab;
+            }
         ?> 
         <style type="text/css">
             @import url('https://fonts.googleapis.com/css?family=Nunito:600');
@@ -268,13 +282,16 @@
                     $x++;
                 }
             echo '</select>';
-            include '../dao/CRUDNota.php';
-            include '../dao/NotaSearchCriteria.php';
-            include '../model/modelNota.php';
-            include '../mapping/notaMapper.php';
-            $dao2=new CRUDNota();
-            $search=new NotaSearchCriteria();
-            $search->settabela('tb_nf');
+            if(file_exists('../dao/CRUDNota.php')){
+                include '../dao/CRUDNota.php';
+                include '../dao/NotaSearchCriteria.php';
+                include '../model/modelNota.php';
+                include '../mapping/notaMapper.php';
+                $dao2=new CRUDNota();
+                $search=new NotaSearchCriteria();
+                $search->settabela('tb_nf');
+                $tab=confereTabela('tb_nf');
+            }
             /*foreach($dados as $key => $item){
                 $search->setnIdPedido($item->getcodigo_pedido());
                 $dadosNota=$dao2->encontrePorNota($search);
@@ -324,11 +341,15 @@
                             break;
                     }
                 }
-                $search->setnIdPedido($item->getcodigo_pedido());
-                $dadosNota=$dao2->encontrePorNota($search);
-                foreach($dadosNota as $nf){
-                    $cChaveNFe=$nf->getcChaveNFe();
-                    $nNF=intval($nf->getnNF());
+                if(isset($tab)){
+                    $search->setnIdPedido($item->getcodigo_pedido());
+                    $dadosNota=$dao2->encontrePorNota($search);
+                    if(isset($dadosNota)){
+                        foreach($dadosNota as $nf){
+                            $cChaveNFe=$nf->getcChaveNFe();
+                            $nNF=intval($nf->getnNF());
+                        }
+                    }
                 }
             ?>
             <tr id='<?= isset($cChaveNFe)? $cChaveNFe: null; ?>'><td align='center'><?= $item->getdPrevisao(); ?></td><td align='right' ><?= isset($nNF)? $nNF: null; ?></td><td align='center'><?= intval($item->getpedido()); ?></td><td align='right'><?= $item->getvPedido(); ?></td><td align='center'><?= $item->getfPagamento() ?></td><td align='center'><?= $item->getdados_adcionais_nf() ?></td><td align='center'><?= $etapa ?></td><td align='center'><?= $item->getvendedor() ?></td><td><?= $item->getcliente() ?></td><td align='center'><?= $item->getqvolume(); ?></td><td><?= str_replace('*/*',' / ',$item->getcodigo_produto()); ?></td><td><?= str_replace('*/*',' / ',$item->getdescricao()); ?></td><td><?= str_replace('*/*',' / ',$item->getobs_item()); ?></td><td><?= $item->gettransportadora(); ?></td><td><?= $item->getid() ?></td></tr>

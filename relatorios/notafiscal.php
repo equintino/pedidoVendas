@@ -32,6 +32,16 @@
             }
             
             if(isset($acertaTabela)){
+                $tabelaAtualizando='Pedidos, Campo Código Pedido';
+                if(!isset($seleciona)){
+                    $seleciona=0;
+                    echo '<script>pagina="notafiscal";codTabela="acertaTabela";</script>';
+                    include '../paginas/atualizando.php';
+                    exit;
+                }else{
+                    echo '<script>var seleciona=2</script>';
+                    include '../paginas/atualizando.php';
+                }
                 $regPagina=20;
                 $pedidoOmie=new PedidoVendaProdutoJsonClient();
                 $pvpListarRequest=array("pagina"=>1,"registros_por_pagina"=>$regPagina,"apenas_importado_api"=>"S");
@@ -66,7 +76,7 @@
             if(file_exists('../dao/CRUDNota.php')){
                 include '../dao/CRUDNota.php';
             }
-            if($act=='atualiza' || !confereRabela('tb_nf')){
+            if($act=='atualiza' || !confereTabela('tb_nf')){
                 $tabelaAtualizando='Notas Fiscais';
                 if(!isset($seleciona)){
                     $seleciona=0;
@@ -91,7 +101,41 @@
                 }
                 echo '<script>window.location.assign("../relatorios/relgel.php");</script>';
             }elseif($act=='buscaNF'){
-                echo 'estou aqui';
+                $tabelaAtualizando='Notas Fiscais';
+                if(!isset($seleciona)){
+                    $seleciona=0;
+                    echo '<script>pagina="notafiscal";act="buscaNF";codTabela="nenhum";</script>';
+                    include '../paginas/atualizando.php';
+                    exit;
+                }else{
+                    echo '<script>var seleciona=2</script>';
+                    include '../paginas/atualizando.php';
+                }
+                $notaOmie=new NFConsultarJsonClient();
+                $regPagina=1;
+                $nfListarRequest=array("pagina"=>1,"registros_por_pagina"=>$regPagina,"apenas_importado_api"=>"N","ordenar_por"=>"CODIGO");
+                $dados=$notaOmie->ListarNF($nfListarRequest);
+                $tPaginas=$dados->total_de_paginas;
+                $registros=$dados->total_de_registros;
+                
+                include '../mapping/notaMapper.php';
+                $daoNota=new CRUDNota();
+                $search=new NotaSearchCriteria();
+                $search->settabela('tb_nf');
+                for($y=$tPaginas;$y>=1;$y--){
+                    $nfListarRequest=array("pagina"=>$y,"registros_por_pagina"=>$regPagina,"apenas_importado_api"=>"N","ordenar_por"=>"CODIGO");
+                    $dados=$notaOmie->ListarNF($nfListarRequest);
+                    
+                    $search->setnIdNF($dados->nfCadastro[0]->compl->nIdNF);
+                    $notaAchada=$daoNota->encontrePorNota($search);
+                    if(!$notaAchada){
+                        gravaDados($dados,1,1,1);
+                    }else{
+                        goto s;
+                    }
+                }
+                s:
+                echo '<script>window.location.assign("relgel.php");</script>';
             }
             function gravaDados($dados,$cont=null,$y,$registros){
                 foreach($dados->nfCadastro as $item_){
@@ -134,17 +178,16 @@
                     $search=new NotaSearchCriteria();
                     $search->settabela('tb_nf');
                     $search->setnNF($nota->getnNF());
-                    //echo "<pre>".print_r([$y,$nota]);
                     $dao2->grava7($nota);
                     echo '<script>document.getElementById("cont").innerHTML="Percentual concluido '.number_format($y*100/$registros,'0','.','').'%";</script>';
                     $y++;
                 }
                 return $y;
             }
-            function confereRabela($tabela){
-                $dao2=new CRUDNota();
-                $search=new NotaSearchCriteria();
-                $search->settabela($tabela);
+            function confereTabela($tabela){
+                $dao=new dao();
+                //$search=new NotaSearchCriteria();
+                //$search->settabela($tabela);
                 if(OMIE_APP_KEY=='2769656370'){
                     $db='db';
                 }elseif(OMIE_APP_KEY=='461893204773'){
@@ -152,7 +195,7 @@
                 }else{
                     $db='db3';
                 }
-                return $dao2->showTabela('tb_nf',$db);
+                return $dao->showTabela($tabela,$db);
             }
         ?>
     </body>

@@ -4,7 +4,10 @@
     <script>
         $(document).ready(function() {
             if(codTabela=='nenhum'){
-                $(location).attr('href',''+pagina+'.php?act='+act+'&seleciona=2&');
+                $(location).attr('href',''+pagina+'.php?act='+act+'&seleciona=2');
+                die;
+            }else if(codTabela=='acertaTabela'){
+                $(location).attr('href',''+pagina+'.php?seleciona=2&acertaTabela=1');
                 die;
             }
             $(location).attr('href','../web/index.php?pagina='+pagina+'&act='+act+'&seleciona=2&codTabela='+codTabela+'');

@@ -116,6 +116,8 @@
         $result = array();
         if($search->getnIdPedido()){
             $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND nIdPedido = "'.$search->getnIdPedido().'"')->fetchAll();
+        }elseif($search->getnIdNF()){
+            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND nIdNF = "'.$search->getnIdNF().'"')->fetchAll();
         }else{
             $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND nNF = "'.$search->getnNF().'"')->fetchAll();
         }
