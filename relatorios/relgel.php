@@ -11,27 +11,20 @@
         <script type="text/javascript" src='../web/js/jquery.dataTables.min.js' ></script>
         <script type='text/javascript' src='js/jquery-ui.min.js'></script>
         <script type='text/javascript'>
-            /*$.fn.dataTable.Api.register( 'column().data().sum()', function () {
-                z=0;
+            $.fn.dataTable.Api.register( 'column().data().sum()', function () {
                 return this.reduce( function (a,b) {
-                    b=1;
                     var x = parseFloat( a ) || 0;
                     var y = parseFloat( b ) || 0;
-                    if(z==0){
-                        x=1;
-                    }
-                    z++;
                     return x + y;
                 } );
-            } );*/
+            } );
             /* Custom filtering function which will search data in column four between two values */
             $.fn.dataTable.ext.search.push(
                 function( settings, data, dataIndex ) {
-                    var min = new Date($('#min').val());
-                    var max = new Date($('#max').val());
+                    var min = new Date(formataData($('#min').val()));
+                    var max = new Date(formataData($('#max').val()));
                     /*var age = parseFloat( data[0] ) || 0;*/
-                    var dat = new Date(data[0]) || 0;
-                    
+                    var dat = new Date(formataData(data[0])) || 0;
                     if ( ( isNaN( min ) && isNaN( max ) ) ||
                          ( isNaN( min ) && dat <= max ) ||
                          ( min <= dat   && isNaN( max ) ) ||
@@ -42,6 +35,12 @@
                     return false;
                 }
             );
+            function formataData(str){
+                var dia=str.substr(0,2);
+                var mes=str.substr(3,2);
+                var ano=str.substr(-4,4);
+                return mes+'/'+dia+'/'+ano;
+            }
             $(document).ready(function(){
                 $('#min').datepicker({dateFormat: 'dd/mm/yy'});
                 $('#max').datepicker({dateFormat: 'dd/mm/yy'});
@@ -51,7 +50,7 @@
                                 "searchable": false,
                                 "orderable": false,
                                 "visible": false,
-                                "targets": [13]
+                                "targets": [14]
                             } 
                         ],
                     /*"autoWidth": true,*/
@@ -78,13 +77,11 @@
                                     i : 0;
                         };
                         total = api
-                            .column( 2 )
+                            .column( 3 )
                             .data()
-                            .reduce( function (a, b) {
-                                return parseFloat(a) + parseFloat(b);
-                            }, 0 );
+                            .sum();
                         pageTotal = api
-                            .column( 2, { page: 'current'} )
+                            .column( 3, { page: 'current' } )
                             .data()
                             .reduce( function (a, b) {
                                 return parseFloat(a) + parseFloat(b);
@@ -94,8 +91,8 @@
                         );
                     }
                 });
-                //$('#tabela1').css( 'width', '20%' );
-                //table.columns.adjust().draw();
+                /*$('#tabela1').css( 'width', '20%' );
+                table.columns.adjust().draw();*/
                 $('#max, #min').change( function() {
                     table.draw();
                     $( '#linhas' ).text( 'Linhas exibidas: '+ table.column({page:'current'} ).data().length );
@@ -115,18 +112,25 @@
                 } ).draw();*/
                 $('#tabela1 tbody').on( 'mouseover', 'tr', function () {
                     $(this).addClass('selected');
-                    $(this).attr('title','Dê um duplo clique para abrir comprovante de venda').css('cursor','pointer');
+                    $(this).attr('title','Com "UM" clique a CHAVE NF-e será copiada, com um "DUPLO" clique para reimprimir comprovante de venda').css('cursor','pointer');
+                    $(this).click(function(){
+                        var texto = $(this).attr('id');
+                        copyTextToClipboard(texto);
+                    });
                 } );
                 $('#tabela1 tbody').on( 'mouseleave', 'tr', function () {
                     $(this).removeClass('selected');
                 } );
                 $('#tabela1 tbody').dblclick( function () {
-                    var id = table.row('.selected').data()[13];
+                    var id = table.row('.selected').data()[14];
                     var url='../paginas/imprime.php?id='+id+'&direto=1';
                     window.open(url,'_blank');
                 } );
                 
                 $('#principal').show();
+                $('.bntNf').click(function(){
+                    $(location).attr('href','notafiscal.php?act=buscaNF');
+                });
             });
         function numeroParaMoeda(n, c, d, t){
             c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
@@ -139,6 +143,44 @@
             var str = ano+'/'+mes+'/'+dia;
             return str;
         }
+        function copyTextToClipboard(text) {
+            if(!text){
+                text='Não existe nenhuma chave relacionada.';
+            }
+            var textArea = document.createElement("textarea");
+
+            textArea.style.position = 'fixed';
+            textArea.style.top = 0;
+            textArea.style.left = 0;
+            textArea.style.width = '2em';
+            textArea.style.height = '2em';
+            textArea.style.padding = 0;
+            textArea.style.border = 'none';
+            textArea.style.outline = 'none';
+            textArea.style.boxShadow = 'none';
+            textArea.style.background = 'transparent';
+            textArea.value = text;
+
+            document.body.appendChild(textArea);
+            textArea.select();
+
+            try {
+                var successful = document.execCommand('copy');
+                var msg = successful ? 'Chave copiada com sucesso' : 'Nao foi possível copiar a chave';
+                console.log(msg);
+            } catch (err) {
+                console.log('Oops, siga o passo abaixo:');
+                window.prompt("Copie para área de transferência: Ctrl+C e tecle Enter", text);
+            }
+
+            document.body.removeChild(textArea);
+        }
+
+        /*Teste*/
+        var copyTest = document.querySelector('.copyTest');
+        copyTest.addEventListener('click', function(event) {
+        copyTextToClipboard('Teste');
+        });
         </script>
         <?php 
             include 'menu.php';
@@ -147,6 +189,20 @@
             echo '<pre>';
             $search->setdSemana(null);
             $dados=$dao->encontrePorPedido($search);
+            
+            function confereTabela($tabela){
+                //include '../dao/dao.php';
+                $dao=new dao();
+                if(OMIE_APP_KEY=='2769656370'){
+                    $db='db';
+                }elseif(OMIE_APP_KEY=='461893204773'){
+                    $db='db2';
+                }else{
+                    $db='db3';
+                }
+                $tab=$dao->showTabela($tabela,$db);
+                return $tab;
+            }
         ?> 
         <style type="text/css">
             @import url('https://fonts.googleapis.com/css?family=Nunito:600');
@@ -200,6 +256,16 @@
                 position: absolute;
                 margin-top: 80px;
             }
+            .bntNf{
+                float: right;
+                position: absolute;
+                margin: 0px 970px;
+                padding: 2px 5px;
+                font-weight: 600;
+                //text-shadow: 2px 2px 2px gray;
+                //background: orange;
+            }
+            
         </style>
     </head>
     <body>
@@ -216,11 +282,32 @@
                     $x++;
                 }
             echo '</select>';
+            if(file_exists('../dao/CRUDNota.php')){
+                include '../dao/CRUDNota.php';
+                include '../dao/NotaSearchCriteria.php';
+                include '../model/modelNota.php';
+                include '../mapping/notaMapper.php';
+                $dao2=new CRUDNota();
+                $search=new NotaSearchCriteria();
+                $search->settabela('tb_nf');
+                $tab=confereTabela('tb_nf');
+            }
+            /*foreach($dados as $key => $item){
+                $search->setnIdPedido($item->getcodigo_pedido());
+                $dadosNota=$dao2->encontrePorNota($search);
+                foreach($dadosNota as $nf){
+                    $cChaveNFe=$nf->getcChaveNFe();
+                    $nNF=$nf->getnNF();
+                    print_r([$cChaveNFe,$nNF]);
+                }
+            }die;*/
         ?>
     </div>
     <div id='linhas'></div>
+    <button class='bntNf'>Atualiza NF-e</button>
     <table class="periodo" cellspacing="5" cellpadding="5" border="0">
-        <tbody><tr>
+        <tbody>
+        <tr>
             <td>Data Inicio:</td>
             <td><input id="min" name="min" type="text"></td>
         </tr>
@@ -231,7 +318,7 @@
     </tbody></table>
     <div class='titulo'>RELATÓRIO GERAL</div>
     <table class="display" id="tabela1">
-        <thead><tr><th>&nbsp&nbspDATA&nbsp&nbsp</th><th>PEDIDO</th><th>VL. PEDIDO</th><th>FORMA PAGAMENTO</th><th>N° DOCUMENTO</th><th>&nbsp&nbsp&nbspETAPA &nbsp&nbsp&nbsp&nbsp&nbsp</th><th>VENDEDOR</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp CLIENTE &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>QTD VOLUME</th><th>&nbsp&nbsp&nbsp&nbsp CÓDIGO DO PRODUTO &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DESCRIÇÃO &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp SERIAL &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TRANSPORTADORA &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>ID</th></tr></thead>
+        <thead><tr><th>&nbsp&nbspDATA&nbsp&nbsp</th><th>NOTA FISCAL</th><th>&nbsp PEDIDO &nbsp</th><th>VALOR PEDIDO </th><th>FORMA PAGAMENTO</th><th>N° DOCUMENTO</th><th>&nbsp&nbsp&nbspETAPA &nbsp&nbsp&nbsp&nbsp&nbsp</th><th>VENDEDOR</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp CLIENTE &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>QTD VOLUME</th><th>&nbsp&nbsp&nbsp&nbsp CÓDIGO DO PRODUTO &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DESCRIÇÃO &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp SERIAL &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TRANSPORTADORA &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>ID</th></tr></thead>
         <tbody>
             <?php foreach($dados as $key => $item): ?>
             <?php 
@@ -254,9 +341,19 @@
                             break;
                     }
                 }
+                if(isset($tab)){
+                    $search->setnIdPedido($item->getcodigo_pedido());
+                    $dadosNota=$dao2->encontrePorNota($search);
+                    if(isset($dadosNota)){
+                        foreach($dadosNota as $nf){
+                            $cChaveNFe=$nf->getcChaveNFe();
+                            $nNF=intval($nf->getnNF());
+                        }
+                    }
+                }
             ?>
-            <tr><td align='center'><?= $item->getdPrevisao(); ?></td><td align='center'><?= intval($item->getpedido()); ?></td><td align='right'><?= $item->getvPedido(); ?></td><td align='center'><?= $item->getfPagamento() ?></td><td align='center'><?= $item->getdados_adcionais_nf() ?></td><td align='center'><?= $etapa ?></td><td align='center'><?= $item->getvendedor() ?></td><td><?= $item->getcliente() ?></td><td align='center'><?= $item->getqvolume(); ?></td><td><?= str_replace('*/*',' / ',$item->getcodigo_produto()); ?></td><td><?= str_replace('*/*',' / ',$item->getdescricao()); ?></td><td><?= str_replace('*/*',' / ',$item->getobs_item()); ?></td><td><?= $item->gettransportadora(); ?></td><td><?= $item->getid() ?></td></tr>
-            <?php endforeach; ?>
+            <tr id='<?= isset($cChaveNFe)? $cChaveNFe: null; ?>'><td align='center'><?= $item->getdPrevisao(); ?></td><td align='right' ><?= isset($nNF)? $nNF: null; ?></td><td align='center'><?= intval($item->getpedido()); ?></td><td align='right'><?= $item->getvPedido(); ?></td><td align='center'><?= $item->getfPagamento() ?></td><td align='center'><?= $item->getdados_adcionais_nf() ?></td><td align='center'><?= $etapa ?></td><td align='center'><?= $item->getvendedor() ?></td><td><?= $item->getcliente() ?></td><td align='center'><?= $item->getqvolume(); ?></td><td><?= str_replace('*/*',' / ',$item->getcodigo_produto()); ?></td><td><?= str_replace('*/*',' / ',$item->getdescricao()); ?></td><td><?= str_replace('*/*',' / ',$item->getobs_item()); ?></td><td><?= $item->gettransportadora(); ?></td><td><?= $item->getid() ?></td></tr>
+            <?php unset($cChaveNFe,$nNF); endforeach; ?>
         </tbody>
         <tfoot>
             <tr>

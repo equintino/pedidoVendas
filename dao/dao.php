@@ -97,6 +97,8 @@
             $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND id = "'.$search->getid().'"')->fetchAll();
         }elseif($search->getcodigo_pedido_integracao()){
             $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo_pedido_integracao ='.$search->getcodigo_pedido_integracao().'')->fetchAll();
+        }elseif($search->getpedido()){
+            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND pedido ='.$search->getpedido().'')->fetchAll();
         }elseif($search->getdSemana()){
             $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND dSemana ='.$search->getdSemana().'')->fetchAll();
         }else{
@@ -107,6 +109,22 @@
             $pedido = new pedido();
             pedidoMapper::map($pedido, $item);
             $result[] = $pedido;
+        }
+        return $result;
+   }
+   public function encontrePorNota(NotaSearchCriteria $search=null){
+        $result = array();
+        if($search->getnIdPedido()){
+            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND nIdPedido = "'.$search->getnIdPedido().'"')->fetchAll();
+        }elseif($search->getnIdNF()){
+            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND nIdNF = "'.$search->getnIdNF().'"')->fetchAll();
+        }else{
+            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND nNF = "'.$search->getnNF().'"')->fetchAll();
+        }
+        foreach($row as $item){
+            $nota = new nota();
+            notaMapper::map($nota, $item);
+            $result[$nota->getid()] = $nota;
         }
         return $result;
    }
@@ -165,11 +183,31 @@
        }
        return $this->update6($pedido);
    }
+   public function grava7(nota $nota){
+       if($nota->getid() === null){
+           return $this->insert7($nota);
+       }
+       return $this->update7($nota);
+   }
    public function gravaNumeroPedido($pedido){
        date_default_timezone_set("Brazil/East");
        $now = mktime (date("H"), date("i"), date("s"), date("m")  , date("d"), date("Y"));
        $pedido->setmodificado($now);
-       $sql = 'UPDATE `tb_pedido` SET pedido = '.$pedido->getpedido().', modificado = '.$pedido->getmodificado().' WHERE codigo_pedido_integracao = '.$pedido->getcodigo_pedido_integracao().'';
+       if($pedido->getcodigo_pedido()){
+            $row = $this->query('SHOW COLUMNS FROM tb_pedido')->fetchAll();
+            foreach($row as $item){
+                if($item['Field']=='codigo_pedido'){
+                    $coluna='existe';
+                }
+            }
+            if(!isset($coluna)){
+                $sql = 'ALTER TABLE `tb_pedido` ADD `codigo_pedido` VARCHAR(100) NULL';
+                $this->getDb()->prepare($sql)->execute();
+            }
+            $sql = 'UPDATE `tb_pedido` SET pedido = '.$pedido->getpedido().', modificado = '.$pedido->getmodificado().',codigo_pedido = '.$pedido->getcodigo_pedido().' WHERE pedido = '.$pedido->getpedido().'';
+       }else{
+            $sql = 'UPDATE `tb_pedido` SET pedido = '.$pedido->getpedido().', modificado = '.$pedido->getmodificado().' WHERE codigo_pedido_integracao = '.$pedido->getcodigo_pedido_integracao().'';
+       }
        $statement = $this->getDb()->prepare($sql)->execute();
        return $statement;
    }
@@ -279,6 +317,16 @@
             /*return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));*/
         }
         return $pedido;
+   }
+   public function execute7($sql,nota $nota){
+        $statement = $this->getDb()->prepare($sql);
+        $this->executeStatement($statement, $this->getParams7($nota));
+        $search=new NotaSearchCriteria();        
+        $search->settabela($nota->gettabela());
+        if (!$nota->getid()) {
+            /*return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));*/
+        }
+        return $nota;
    }
    private function executeStatement(PDOStatement $statement, array $params){
         if (!$statement->execute($params)){

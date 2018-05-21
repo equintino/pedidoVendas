@@ -68,7 +68,7 @@
                 $ultSeg=$diaDaSemena;
                 $ultSem[]=$diaDaSemena;
             }
-            if($diaDaSemena > $ultSeg || $diaDaSemena < ($ultSeg-10)){
+            if($diaDaSemena > @$ultSeg || $diaDaSemena < (@$ultSeg-10)){
                 $ultSem[]=$diaDaSemena;
             }
         }

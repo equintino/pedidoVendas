@@ -413,7 +413,7 @@ class departamentos{
  * @pw_element imposto $imposto Informações referentes aos impostos do Item do Pedido de Vendas.<BR>Preenchimento Opcional.<BR><BR>Essa estrutura deve ser preenchida quando os dados dos impostos devem ser respeitados tais como foram enviados na API.<BR><BR>Caso essa estrutura não seja enviada, o Omie irá identificar a regra de imposto que melhor se ajusta as condições da venda realizada.<BR>Para utilizar essa opção esteja seguro de que as regras e cenários de impostos estejam cadastrados corretamente no Omie. As infomações preenchidas serão decorrentes dos dados configurados.<BR><BR><BR>
  * @pw_complex det
  */
-class det{
+class det_{
 	/**
 	 * Identificação do Item do Pedido de Vendas.<BR>Preenchimento Obrigatório.
 	 *
@@ -456,7 +456,7 @@ class det{
  * @pw_element integer $regra_impostos DEPRECATED
  * @pw_complex ide
  */
-class ide{
+class ide_{
 	/**
 	 * Código de Integração do Item do Pedido de Venda.<BR>Preenchimento Obrigatório.<BR><BR>Informe a identificação do Item do Pedido de Venda. Caso você não tenha essa informação no seu aplicativo, informe o número sequencial de cada item do pedido.<BR><BR>Informa de 1 a 199.<BR><BR>
 	 *
