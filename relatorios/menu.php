@@ -14,22 +14,22 @@
         <label for="bt_menu">&#9776;</label>
         <nav class="menu">
             <ul>
-                <li><a href="#" title="Em construção" onclick="alert('Em construção.')">PEDIDOS PENDENTES</a></li>
-                <li><a href="#" title="Em construção" onclick="alert('Em construção.')">PEDIDOS VENDAS</a>
+                <li class="menu1"><a href="#" title="Em construção" onclick="alert('Em construção.')">PEDIDOS PENDENTES</a></li>
+                <li class="menu1"><a href="statusPedido.php" >PEDIDOS VENDAS</a>
                 <ul>
                     <!--<li><a href="dinheiro.php">HOJE</a></li>
                     <li><a href="debito.php">SEMANA</a></li>
                     <li><a href="credito.php">MÊS</a></li>-->
                 </ul>
                 </li>
-                <li><a href="consulta.php">MOVIMENTAÇÃO</a>
+                <li class="menu1"><a href="consulta.php">MOVIMENTAÇÃO</a>
                     <ul>
                         <li><a href="dinheiro.php">DINHEIRO</a></li>
                         <li><a href="debito.php">DÉBITO</a></li>
                         <li><a href="credito.php">CRÉDITO</a></li>
                      </ul>
                 </li>
-                <li><a href="relgel.php">RELATÓRIO GERAL</a></li>
+                <li class="menu1"><a href="relgel.php">RELATÓRIO GERAL</a></li>
             </ul>
         </nav>
         </div>

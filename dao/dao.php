@@ -102,7 +102,7 @@
         }elseif($search->getdSemana()){
             $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND dSemana ='.$search->getdSemana().'')->fetchAll();
         }else{
-            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" ORDER BY id DESC')->fetchAll();
+            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo_pedido IS NOT null ORDER BY id DESC')->fetchAll();
             /*$row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND pedido IS NULL ORDER BY id DESC')->fetchAll();*/
         }
         foreach($row as $item){
@@ -125,6 +125,21 @@
             $nota = new nota();
             notaMapper::map($nota, $item);
             $result[$nota->getid()] = $nota;
+        }
+        return $result;
+   }
+   public function encontrePorStatus(StatusSearchCriteria $search=null){
+        $result = array();
+        if($search->getnumero_pedido()){
+            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND numero_pedido = "'.$search->getnumero_pedido().'"')->fetchAll();
+        }else{
+            //$row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" ')->fetchAll();
+            $row = $this->query("SELECT tb_pedido.id,tb_pedido.codigo_pedido,tb_status.codigo_pedido_integracao,numero_pedido,tb_status.etapa,valor_total_pedido,chave_nfe,danfe,data_emissao,status_nfe,dPrevisao,tb_pedido.dSemana,fPagamento,vendedor,numero_nfe FROM `tb_pedido` LEFT JOIN `tb_status` ON tb_pedido.codigo_pedido = tb_status.codigo_pedido AND 'tb_status.excluido' = 0 AND 'tb_pedido.codigo_pedido' IS NOT null");
+        }
+        foreach($row as $item){
+            $status = new status();
+            statusMapper::map($status, $item);
+            $result[$status->getnumero_pedido()] = $status;
         }
         return $result;
    }
@@ -188,6 +203,12 @@
            return $this->insert7($nota);
        }
        return $this->update7($nota);
+   }
+   public function grava8(status $status){
+       if($status->getid() === null){
+           return $this->insert8($status);
+       }
+       return $this->update8($status);
    }
    public function gravaNumeroPedido($pedido){
        date_default_timezone_set("Brazil/East");
@@ -327,6 +348,16 @@
             /*return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));*/
         }
         return $nota;
+   }
+   public function execute8($sql,status $status){
+        $statement = $this->getDb()->prepare($sql);
+        $this->executeStatement($statement, $this->getParams8($status));
+        $search=new StatusSearchCriteria();        
+        $search->settabela($status->gettabela());
+        if (!$status->getid()) {
+            /*return $this->encontrePorId($search->setid($this->getDb()->lastInsertId()));*/
+        }
+        return $status;
    }
    private function executeStatement(PDOStatement $statement, array $params){
         if (!$statement->execute($params)){

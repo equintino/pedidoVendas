@@ -43,7 +43,7 @@
 </style>
 </head>
 <body>
-    
+    <?php $tabelaAtualizando? $tabelaAtualizando=$tabelaAtualizando: $tabelaAtualizando='aguarde..'; ?>
     <div id="aguarde">Atualizando Tabela de <?= $tabelaAtualizando ?>.<div id="cont"></div></div> 
 </body>
 </html>
