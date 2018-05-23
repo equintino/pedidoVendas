@@ -50,10 +50,11 @@
                                 "searchable": false,
                                 "orderable": false,
                                 "visible": false,
-                                "targets": [14]
+                                "targets": [13]
                             } 
                         ],
                     /*"autoWidth": true,*/
+                    /*"stateSave": true,*/
                     "order": [[ 0, "desc" ]],
                     "scrollX": true,
                     "language": {
@@ -122,7 +123,7 @@
                     $(this).removeClass('selected');
                 } );
                 $('#tabela1 tbody').dblclick( function () {
-                    var id = table.row('.selected').data()[14];
+                    var id = table.row('.selected').data()[13];
                     var url='../paginas/imprime.php?id='+id+'&direto=1';
                     window.open(url,'_blank');
                 } );
@@ -203,6 +204,13 @@
                 $tab=$dao->showTabela($tabela,$db);
                 return $tab;
             }
+            
+            function reduz($str,$num){
+                if(strlen($str)>$num){
+                    $str=substr($str,0,$num).'...';
+                }
+                return $str;
+            }
         ?> 
         <style type="text/css">
             @import url('https://fonts.googleapis.com/css?family=Nunito:600');
@@ -240,6 +248,8 @@
                 background-color: #3E73A0;
                 border-radius: 4px;
                 box-shadow: 2px 2px 2px #888;
+                background: url('images/fundoAzulclaro.png') repeat-x right;// bottom;
+                background-size: 11px;
             }
 
             .ocultarCol{
@@ -273,7 +283,7 @@
     <div class='ocultarCol'>
         <span class=oculTitulo>Ocultar/exibir colinas:</span>
         <?php
-            $colunas=array('DATA','PEDIDO','VALOR DO PEDIDO','FORMA DE PAGAMENTO','Nº DOCUMENTO','ETAPA','VENDEDOR','CLIENTE','QTD VOLUME','CÓD PRODUTO','DESCRIÇÃO','SERIAL','TRANSPORTADORA');
+            $colunas=array('DATA','NOTA FISCAL','PEDIDO','VALOR DO PEDIDO','FORMA DE PAGAMENTO','Nº DOCUMENTO',/*'ETAPA',*/'VENDEDOR','CLIENTE','QTD VOLUME','CÓD PRODUTO','DESCRIÇÃO','SERIAL','TRANSPORTADORA');
             echo '<select id="campoCol">';
                 echo '<option id="nenhum"></option>';
                 $x=0;
@@ -318,7 +328,7 @@
     </tbody></table>
     <div class='titulo'>RELATÓRIO GERAL</div>
     <table class="display" id="tabela1">
-        <thead><tr><th>&nbsp&nbspDATA&nbsp&nbsp</th><th>NOTA FISCAL</th><th>&nbsp PEDIDO &nbsp</th><th>VALOR PEDIDO </th><th>FORMA PAGAMENTO</th><th>N° DOCUMENTO</th><th>&nbsp&nbsp&nbspETAPA &nbsp&nbsp&nbsp&nbsp&nbsp</th><th>VENDEDOR</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp CLIENTE &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>QTD VOLUME</th><th>&nbsp&nbsp&nbsp&nbsp CÓDIGO DO PRODUTO &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DESCRIÇÃO &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp SERIAL &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TRANSPORTADORA &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>ID</th></tr></thead>
+        <thead><tr><th>&nbsp&nbspDATA&nbsp&nbsp</th><th>NOTA FISCAL</th><th>PEDIDO</th><th>VALOR PEDIDO </th><th>FORMA PAGAMENTO</th><th>N° DOCUMENTO</th><!--<th>&nbsp&nbsp&nbspETAPA &nbsp&nbsp&nbsp&nbsp&nbsp</th>--><th>VENDEDOR</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp CLIENTE &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>QTD VOLUME</th><th>&nbsp&nbsp&nbsp&nbsp CÓDIGO DO PRODUTO &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DESCRIÇÃO &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp SERIAL &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th> TRANSPORTADORA </th><th>ID</th></tr></thead>
         <tbody>
             <?php foreach($dados as $key => $item): ?>
             <?php 
@@ -344,7 +354,7 @@
                 if(isset($tab)){
                     $search->setnIdPedido($item->getcodigo_pedido());
                     $dadosNota=$dao2->encontrePorNota($search);
-                    if(isset($dadosNota)){
+                    if($dadosNota){
                         foreach($dadosNota as $nf){
                             $cChaveNFe=$nf->getcChaveNFe();
                             $nNF=intval($nf->getnNF());
@@ -352,7 +362,7 @@
                     }
                 }
             ?>
-            <tr id='<?= isset($cChaveNFe)? $cChaveNFe: null; ?>'><td align='center'><?= $item->getdPrevisao(); ?></td><td align='right' ><?= isset($nNF)? $nNF: null; ?></td><td align='center'><?= intval($item->getpedido()); ?></td><td align='right'><?= $item->getvPedido(); ?></td><td align='center'><?= $item->getfPagamento() ?></td><td align='center'><?= $item->getdados_adcionais_nf() ?></td><td align='center'><?= $etapa ?></td><td align='center'><?= $item->getvendedor() ?></td><td><?= $item->getcliente() ?></td><td align='center'><?= $item->getqvolume(); ?></td><td><?= str_replace('*/*',' / ',$item->getcodigo_produto()); ?></td><td><?= str_replace('*/*',' / ',$item->getdescricao()); ?></td><td><?= str_replace('*/*',' / ',$item->getobs_item()); ?></td><td><?= $item->gettransportadora(); ?></td><td><?= $item->getid() ?></td></tr>
+            <tr id='<?= isset($cChaveNFe)? $cChaveNFe: null; ?>'><td align='center'><?= $item->getdPrevisao(); ?></td><td align='right' ><?= isset($nNF)? $nNF: null; ?></td><td align='center'><?= intval($item->getpedido()); ?></td><td align='right'><?= $item->getvPedido(); ?></td><td align='center'><?= $item->getfPagamento() ?></td><td align='center'><?= reduz($item->getdados_adcionais_nf(),8) ?></td><!--<td align='center'><?php //echo $etapa ?></td>--><td align='center'><?= $item->getvendedor() ?></td><td><?= reduz($item->getcliente(),28) ?></td><td align='center'><?= $item->getqvolume(); ?></td><td><?= reduz(str_replace('*/*',' / ',$item->getcodigo_produto()),28); ?></td><td><?= reduz(str_replace('*/*',' / ',$item->getdescricao()),60); ?></td><td><?= reduz(str_replace('*/*',' / ',$item->getobs_item()),30); ?></td><td><?= reduz($item->gettransportadora(),10); ?></td><td><?= $item->getid() ?></td></tr>
             <?php unset($cChaveNFe,$nNF); endforeach; ?>
         </tbody>
         <tfoot>

@@ -326,7 +326,7 @@
                 
         $det=array();
         for($x=1;$x <= $_POST['tItem'];$x++){
-            $ide=new ide();
+            $ide=new ide_();
             $observacao=new observacao();
             $produto=new produto();
             $inf_adic=new inf_adic();
@@ -454,7 +454,6 @@
         @$resultado=$pedido->IncluirPedido($pedido_venda_produto);
         
         @is_object($resultado)? $obj=1: $obj=null;
-         $codigo_pedido=411228542;
         $preVenda->setcodigo_pedido_integracao($codigo_pedido_integracao);
         $preVenda->setdSemana(date('N'));
         if($obj){

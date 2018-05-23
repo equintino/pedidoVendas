@@ -12,6 +12,8 @@ body{
     width: 100%;
     height: 81px;
     background-color: #3E73A0;
+    background: url('../images/fundoAzulclaro.png') repeat-x right;// bottom;
+    background-size: 11px;
 }
 
 .cabecalho {
@@ -27,6 +29,8 @@ body{
     font-family: Arial;
     font-size: 20px;
     font-weight: 700;
+    background: url('../images/fundoAzulclaro.png') repeat-x right;// bottom;
+    background-size: 11px;
 }
 
 .menu ul{
@@ -59,6 +63,12 @@ body{
 .menu a:hover {
     background-color: #62BCEE;
     color: #F1F1F1;
+    //background: url('../images/fundoAzulCeu.png') repeat-x right;// bottom;
+    //background-size: 11px;
+}
+.menu ul li:hover, .menu1 > a:hover {
+    background: url('../images/fundoAzulCeu.png') repeat-x right;// bottom;
+    background-size: 11px;
 }
 
 .menu ul ul li {
@@ -68,6 +78,8 @@ body{
 
 .menu ul ul li a {
     background-color: #62BCBA;
+    //background: url('../images/fundoVerde.png') repeat-x right;// bottom;
+    //background-size: 11px;
 }
 
 label[for="bt_menu"] {
