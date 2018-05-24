@@ -1,6 +1,6 @@
-<?php include 'header.php'; ?>
-<?php include 'sidebar.php'; ?>
-<?php include 'content.php'; ?>
+<?php include '../header.php'; ?>
+<?php include '../sidebar.php'; ?>
+<?php include '../content.php'; ?>
 <h1>Home</h1>
 <div id="chartContainer"></div>
 

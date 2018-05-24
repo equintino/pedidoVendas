@@ -91,7 +91,10 @@
         }
         return $result;
    }
-   public function encontrePorPedido(PedidoSearchCriteria $search=null){
+   public function encontrePorPedido(PedidoSearchCriteria $search=null,$order=null){
+        if(!isset($order)){
+            $order='DESC';
+        }
         $result = array();
         if($search->getid()){
             $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND id = "'.$search->getid().'"')->fetchAll();
@@ -102,7 +105,7 @@
         }elseif($search->getdSemana()){
             $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND dSemana ='.$search->getdSemana().'')->fetchAll();
         }else{
-            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo_pedido IS NOT null ORDER BY id DESC')->fetchAll();
+            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo_pedido IS NOT null ORDER BY id '.$order)->fetchAll();
             /*$row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND pedido IS NULL ORDER BY id DESC')->fetchAll();*/
         }
         foreach($row as $item){
