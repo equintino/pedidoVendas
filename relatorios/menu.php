@@ -23,11 +23,11 @@
                 </ul>
                 </li>
                 <li class="menu1"><a href="consulta.php">MOVIMENTAÇÃO</a>
-                    <ul>
+                    <!--<ul>
                         <li><a href="dinheiro.php">DINHEIRO</a></li>
                         <li><a href="debito.php">DÉBITO</a></li>
                         <li><a href="credito.php">CRÉDITO</a></li>
-                     </ul>
+                     </ul>-->
                 </li>
                 <li class="menu1"><a href="relgel.php">RELATÓRIO GERAL</a></li>
             </ul>

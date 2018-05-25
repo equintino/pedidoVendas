@@ -207,51 +207,63 @@
                 $y=1;
                 foreach($pedidoLocal as $item){
                     $codigo_pedido=$item->getcodigo_pedido();
-                    $pvpStatusRequest=array("codigo_pedido"=>$codigo_pedido,"codigo_pedido_integracao"=>"");
-                    $statusPedido=$pedidoVendaOmie->StatusPedido($pvpStatusRequest);
-                    if(!$statusPedido){
-                        array_push($pedidoInexistente,$codigo_pedido);
-                        goto s;
-                    }else{
-                        //echo '<pre>';print_r($statusPedido);//die;
-                    }
-                    //echo '<pre>';print_r($statusPedido);die;
-                    if(!file_exists('../dao/CRUDStatus.php')){
-                        include '../paginas/criaClasses6.php';
-                        $arqClasse=new criaClasses6();
-                        foreach(geraCampos($statusPedido)[0] as $item){
-                            $variaveis=$item;
-                        }
-                        $arqClasse->novoArquivo($variaveis);
-                        sleep(2);
-                        $classeCriada=1;
-                    }
-                    if(isset($classeCriada)){
-                        include '../dao/CRUDStatus.php';
-                        include '../model/modelStatus.php';
-                        include '../dao/StatusSearchCriteria.php';
-                    }
-                    $status=new status();
-                    foreach($statusPedido as $key => $item){
-                        if($key != 'ListaNfe'){
-                            $classe='set'.$key;
-                            $status->$classe($item);
+                    //if(isset($codigo_pedido)){
+                        $pvpStatusRequest=array("codigo_pedido"=>$codigo_pedido,"codigo_pedido_integracao"=>"");
+                        $statusPedido=$pedidoVendaOmie->StatusPedido($pvpStatusRequest);
+                        if(!$statusPedido){
+                            array_push($pedidoInexistente,$codigo_pedido);
+                            goto s;
                         }else{
-                            foreach($item[0] as $key2 => $item2){
-                                if($key2 != 'mensagens'){
-                                    $classe='set'.$key2;
-                                    $status->$classe($item2);
+                            //echo '<pre>';print_r($statusPedido);//die;
+                        }
+                        //echo '<pre>';print_r($statusPedido);die;
+                        if(!file_exists('../dao/CRUDStatus.php')){
+                            include '../paginas/criaClasses6.php';
+                            $arqClasse=new criaClasses6();
+                            foreach(geraCampos($statusPedido)[0] as $item){
+                                $variaveis=$item;
+                            }
+                            $arqClasse->novoArquivo($variaveis);
+                            sleep(2);
+                            $classeCriada=1;
+                        }
+                        if(isset($classeCriada)){
+                            include '../dao/CRUDStatus.php';
+                            include '../model/modelStatus.php';
+                            include '../dao/StatusSearchCriteria.php';
+                        }
+                        $status=new status();
+                        foreach($statusPedido as $key => $item){
+                            if($key != 'ListaNfe'){
+                                $classe='set'.$key;
+                                $status->$classe($item);
+                            }else{
+                                foreach($item[0] as $key2 => $item2){
+                                    if($key2 != 'mensagens'){
+                                        $classe='set'.$key2;
+                                        $status->$classe($item2);
+                                    }
                                 }
                             }
                         }
-                    }
-                    $daoStatus=new CRUDStatus();
-                    $status->settabela('tb_status');
-                    //echo '<pre>';print_r($status);die;
-                    $gravado=$daoStatus->grava8($status);
-                    echo '<script>document.getElementById("cont").innerHTML="Status Atualizados '.$y.'";</script>';
-                    $y++;
-                    s:
+                        $daoStatus=new CRUDStatus();
+                        $status->settabela('tb_status');
+                        $gravado=$daoStatus->grava8($status);
+                        echo '<script>document.getElementById("cont").innerHTML="Registros Atualizados '.$y.'";</script>';
+                        $y++;
+                        s:
+                    //}
+                    /*else{
+                        $pvpListarRequest=array("pagina"=>1,"registros_por_pagina"=> 20,"apenas_importado_api"=>"S");
+                        $listaPedido=$pedidoVendaOmie->ListarPedidos($pvpListarRequest);
+                        $total_de_registros=$listaPedido->total_de_registros;
+                        $total_de_paginas=$listaPedido->total_de_paginas;   
+                        foreach($listaPedido->pedido_venda_produto as $item){
+                            $codigo_pedido=$item->cabecalho->codigo_pedido;
+                            $codigo_pedido_integracao=$item->cabecalho->codigo_pedido_integracao;
+                            $numero_pedido=$item->cabecalho->numero_pedido;
+                        }
+                    }*/
                 }
                 echo '<script>window.location.assign("statusPedido.php");</script>';
             }else{

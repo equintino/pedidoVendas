@@ -14,9 +14,24 @@
                 var dia=str.substr(0,2);
                 var mes=str.substr(3,2);
                 var ano=str.substr(-4,4);
-                return mes+'/'+dia+'/'+ano;
+                return new Date(ano+'/'+mes+'/'+dia);
             }
             $(document).ready(function(){
+                for(i in dataPoints1){
+                    for(s in dataPoints1[i]){
+                        dataPoints1[i]['x']=new Date(dataPoints1[i]['x']);
+                    }
+                }
+                for(i in dataPoints2){
+                    for(s in dataPoints2[i]){
+                        dataPoints2[i]['x']=new Date(dataPoints2[i]['x']);
+                    }
+                }
+                for(i in dataPoints3){
+                    for(s in dataPoints3[i]){
+                        dataPoints3[i]['x']=new Date(dataPoints3[i]['x']);
+                    }
+                }
                 var dMin=null;
                 var dMax=null;
                 $('#min').datepicker({dateFormat: 'dd/mm/yy'});
@@ -33,7 +48,7 @@
                                 text: "Clique na Legenda para Ocultar ou Exibir Dados"
                         }],
                         axisX: {
-                                title: "Data",
+                                title: "Data da Venda",
                                 minimum: dMin,
                                 maximum: dMax,
                                 suffix: mes
@@ -51,10 +66,11 @@
                                 content: function (e) {
                                     var body;
                                     var head;
-                                    head = "<span style = 'color:black; '><strong>Dia " + (e.entries[0].dataPoint.x) + "</strong></span><br/>";
+                                    //head = "<span style = 'color:black; '><strong>Dia " + (e.entries[0].dataPoint.x) + "</strong></span><br/>";
 
                                     body = "<span style= 'color:" + e.entries[0].dataSeries.color + "'> " + e.entries[0].dataSeries.name + "</span>: R$ " + numeroParaMoeda(e.entries[0].dataPoint.y) + "<br/> <span style= 'color:" + e.entries[1].dataSeries.color + "'> " + e.entries[1].dataSeries.name + "</span>: R$ " + numeroParaMoeda(e.entries[1].dataPoint.y) + "<br/> <span style= 'color:" + e.entries[2].dataSeries.color + "'> " + e.entries[2].dataSeries.name + "</span>: R$ " + numeroParaMoeda(e.entries[2].dataPoint.y) + "";
-                                    return (head.concat(body));
+                                    //return (head.concat(body));
+                                    return body;
                                 },
                         },
                         legend: {
@@ -85,8 +101,10 @@
                     };
                     $("#chartContainer").CanvasJSChart(options);
                     $('#min, #max').change(function(e){
-                        dMin=$('#min').val().substr(0,2);
-                        dMax=$('#max').val().substr(0,2);
+                        dMin=formataData($('#min').val());
+                        dMax=formataData($('#max').val());
+                        //dMin=$('#min').val().substr(0,2);
+                        //dMax=$('#max').val().substr(0,2);
                         grafico();
                     });
                     function toggleDataSeries(e) {
@@ -145,24 +163,31 @@
                 $arrDin=$arrDeb=$arrCre=array();
                 foreach($dias as $item2){
                     $vDin=array_sum($dGrafico[$anoSelecionado][$key][$item2]['dinheiro']);
+                    //$resultado = (date(2018-12-31) - date(2018-12-20));
+                    //echo $resultado;die;
+
+                    //echo date("2017-12-31")-date("2017-08-01").'<br>';die;
+                    //die;
                     $vDin?:$vDin=0;
                     @$vDeb=array_sum($dGrafico[$anoSelecionado][$key][$item2]['debito']);
                     $vDeb?:$vDeb=0;
                     @$vCre=array_sum($dGrafico[$anoSelecionado][$key][$item2]['credito']);
                     $vCre?:$vCre=0;
                     
-                    @array_push($arrDin,array("x" => $item2,"y" => $vDin));
-                    @array_push($arrDeb,array('x' => $item2,'y' => $vDeb));
-                    @array_push($arrCre,array('x' => $item2,'y' => $vCre));
+                    @array_push($arrDin,array("x" => $anoSelecionado.','.$key.','.$item2,"y" => $vDin));
+                    @array_push($arrDeb,array('x' => $anoSelecionado.','.$key.','.$item2,'y' => $vDeb));
+                    @array_push($arrCre,array('x' => $anoSelecionado.','.$key.','.$item2,'y' => $vCre));
                 }
                 $dataPoints1=$arrDin;
                 $dataPoints2=$arrDeb;
                 $dataPoints3=$arrCre;
             }
+                //print_r($dataPoints1);die;
                 $dataPoints1_=json_encode($dataPoints1, JSON_NUMERIC_CHECK);
                 $dataPoints2_=json_encode($dataPoints2, JSON_NUMERIC_CHECK);
                 $dataPoints3_=json_encode($dataPoints3, JSON_NUMERIC_CHECK);
-                function mesNome($str){
+                //print_r($dataPoints1_);
+                /*function mesNome($str){
                     switch($str){
                         case 01:
                             $str='Jan';
@@ -202,7 +227,7 @@
                             break;
                         return $str;
                     }
-                }
+                }*/
         ?>
         <script>var dataPoints1=<?= $dataPoints1_ ?>;var dataPoints2=<?= $dataPoints2_ ?>;var dataPoints3=<?= $dataPoints3_ ?>;</script>
     </head>
