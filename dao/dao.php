@@ -95,7 +95,7 @@
         $row = $this->query('SHOW COLUMNS FROM tb_pedido')->fetchAll();
         foreach($row as $item){
             if($item['Field']=='codigo_pedido'){
-                $coluna='existe';
+                $coluna=1;
             }
         }
         if(!isset($coluna)){
@@ -238,7 +238,7 @@
                 $sql = 'ALTER TABLE `tb_pedido` ADD `codigo_pedido` VARCHAR(100) NULL';
                 $this->getDb()->prepare($sql)->execute();
             }
-            $sql = 'UPDATE `tb_pedido` SET pedido = '.$pedido->getpedido().', modificado = '.$pedido->getmodificado().',codigo_pedido = '.$pedido->getcodigo_pedido().' WHERE pedido = '.$pedido->getpedido().'';
+            $sql = 'UPDATE `tb_pedido` SET pedido = '.$pedido->getpedido().', modificado = '.$pedido->getmodificado().',codigo_pedido = '.$pedido->getcodigo_pedido().', codigo_pedido_integracao = '.$pedido->getcodigo_pedido_integracao().' WHERE pedido = '.$pedido->getpedido().'';
        }else{
             $sql = 'UPDATE `tb_pedido` SET pedido = '.$pedido->getpedido().', modificado = '.$pedido->getmodificado().' WHERE codigo_pedido_integracao = '.$pedido->getcodigo_pedido_integracao().'';
        }
