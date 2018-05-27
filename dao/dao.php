@@ -143,7 +143,9 @@
    }
    public function encontrePorStatus(StatusSearchCriteria $search=null){
         $result = array();
-        if($search->getnumero_pedido()){
+        if($search->getnumero_nfe('busca')){
+            $row = $this->query("SELECT * FROM `tb_status` where `numero_nfe` is null");
+        }elseif($search->getnumero_pedido()){
             $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND numero_pedido = "'.$search->getnumero_pedido().'"')->fetchAll();
         }else{
             //$row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" ')->fetchAll();

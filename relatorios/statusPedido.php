@@ -96,7 +96,12 @@
                 $('.bntNf').mouseover(function(){
                     $(this).css('cursor','pointer');
                     $(this).click(function(){
-                        $(location).attr('href','statusPedido.php?act=atualiza');
+                        var perg = confirm('A tabela STATUS será recriada. Deseja continuar?');
+                        if(perg){
+                            $(location).attr('href','statusPedido.php?act=atualiza');
+                        }else{
+                            return false;
+                        }
                     });
                 });
                 $(document).on('keyup click', function(){
@@ -202,22 +207,16 @@
                     include '../paginas/atualizando.php';
                 }
                 $daoPedido->drop('tb_status');
-                $pedidoLocal=$daoPedido->encontrePorPedido($searchPedido);
+                $pedidoLocal=$daoPedido->encontrePorPedido($searchPedido,'ASC');
+                $registros=count($pedidoLocal);
                 $pedidoInexistente=array();
                 $y=1;
-                foreach($pedidoLocal as $item){
-                    $codigo_pedido=$item->getcodigo_pedido();
-                    //if(isset($codigo_pedido)){
+                if(!file_exists('../dao/CRUDStatus.php')){
+                    foreach($pedidoLocal as $item){
+                        $codigo_pedido=$item->getcodigo_pedido();
                         $pvpStatusRequest=array("codigo_pedido"=>$codigo_pedido,"codigo_pedido_integracao"=>"");
                         $statusPedido=$pedidoVendaOmie->StatusPedido($pvpStatusRequest);
-                        if(!$statusPedido){
-                            array_push($pedidoInexistente,$codigo_pedido);
-                            goto s;
-                        }else{
-                            //echo '<pre>';print_r($statusPedido);//die;
-                        }
-                        //echo '<pre>';print_r($statusPedido);die;
-                        if(!file_exists('../dao/CRUDStatus.php')){
+                        if($statusPedido->ListaNfe){
                             include '../paginas/criaClasses6.php';
                             $arqClasse=new criaClasses6();
                             foreach(geraCampos($statusPedido)[0] as $item){
@@ -226,18 +225,31 @@
                             $arqClasse->novoArquivo($variaveis);
                             sleep(2);
                             $classeCriada=1;
+                            goto segue;
                         }
-                        if(isset($classeCriada)){
-                            include '../dao/CRUDStatus.php';
-                            include '../model/modelStatus.php';
-                            include '../dao/StatusSearchCriteria.php';
-                        }
-                        $status=new status();
-                        foreach($statusPedido as $key => $item){
-                            if($key != 'ListaNfe'){
-                                $classe='set'.$key;
-                                $status->$classe($item);
-                            }else{
+                    }
+                }
+                segue:
+                foreach($pedidoLocal as $item){
+                    $codigo_pedido=$item->getcodigo_pedido();
+                    $pvpStatusRequest=array("codigo_pedido"=>$codigo_pedido,"codigo_pedido_integracao"=>"");
+                    $statusPedido=$pedidoVendaOmie->StatusPedido($pvpStatusRequest);
+                    if(!$statusPedido){
+                        array_push($pedidoInexistente,$codigo_pedido);
+                        goto s;
+                    }
+                    if(isset($classeCriada)){
+                        include '../dao/CRUDStatus.php';
+                        include '../model/modelStatus.php';
+                        include '../dao/StatusSearchCriteria.php';
+                    }
+                    $status=new status();
+                    foreach($statusPedido as $key => $item){
+                        if($key != 'ListaNfe'){
+                            $classe='set'.$key;
+                            $status->$classe($item);
+                        }else{
+                            if($item){
                                 foreach($item[0] as $key2 => $item2){
                                     if($key2 != 'mensagens'){
                                         $classe='set'.$key2;
@@ -246,24 +258,13 @@
                                 }
                             }
                         }
-                        $daoStatus=new CRUDStatus();
-                        $status->settabela('tb_status');
-                        $gravado=$daoStatus->grava8($status);
-                        echo '<script>document.getElementById("cont").innerHTML="Registros Atualizados '.$y.'";</script>';
-                        $y++;
-                        s:
-                    //}
-                    /*else{
-                        $pvpListarRequest=array("pagina"=>1,"registros_por_pagina"=> 20,"apenas_importado_api"=>"S");
-                        $listaPedido=$pedidoVendaOmie->ListarPedidos($pvpListarRequest);
-                        $total_de_registros=$listaPedido->total_de_registros;
-                        $total_de_paginas=$listaPedido->total_de_paginas;   
-                        foreach($listaPedido->pedido_venda_produto as $item){
-                            $codigo_pedido=$item->cabecalho->codigo_pedido;
-                            $codigo_pedido_integracao=$item->cabecalho->codigo_pedido_integracao;
-                            $numero_pedido=$item->cabecalho->numero_pedido;
-                        }
-                    }*/
+                    }
+                    $daoStatus=new CRUDStatus();
+                    $status->settabela('tb_status');
+                    $gravado=$daoStatus->grava8($status);
+                    s:
+                    echo '<script>document.getElementById("cont").innerHTML="Percentual concluido '.number_format($y*100/$registros,'0','.','').'%";</script>';
+                    $y++;
                 }
                 echo '<script>window.location.assign("statusPedido.php");</script>';
             }else{
@@ -271,7 +272,6 @@
                 $search=new StatusSearchCriteria();
                 $search->settabela('tb_status');
                 $dados=$daoStatus->encontrePorStatus($search);
-                //echo '<pre>';print_r($dados);
             }
         ?>
         <style type="text/css">
@@ -352,29 +352,8 @@
                     $x++;
                 }
             echo '</select>';
-            /*if(file_exists('../dao/CRUDNota.php')){
-                include '../dao/CRUDNota.php';
-                include '../dao/NotaSearchCriteria.php';
-                include '../model/modelNota.php';
-                include '../mapping/notaMapper.php';
-                $dao2=new CRUDNota();
-                $search=new NotaSearchCriteria();
-                $search->settabela('tb_nf');
-                $tab=confereTabela('tb_nf');
-            }*/
-            /*foreach($dados as $key => $item){
-                $search->setnIdPedido($item->getcodigo_pedido());
-                $dadosNota=$dao2->encontrePorNota($search);
-                foreach($dadosNota as $nf){
-                    $cChaveNFe=$nf->getcChaveNFe();
-                    $nNF=$nf->getnNF();
-                    print_r([$cChaveNFe,$nNF]);
-                }
-            }die;*/
         ?>
     </div>
-        
-        
     <div id='linhas'></div>
     <button class='bntNf'>Atualiza STATUS</button>
     <div class='titulo'>PEDIDOS VENDAS</div>
@@ -395,10 +374,13 @@
             <?php
                 if(isset($dados)):
                 foreach($dados as $key => $item):
-                    //echo '<pre>';print_r($dados);die;
                     if($key):
+                        $item->getdanfe()? $danfe=$item->getdanfe(): $danfe=null;
+                        !$danfe && $item->getnumero_nfe()? $cor='red': $cor=null;
+                        $danfe? $target='target="_blank"': $target=null;
+                        $danfe? $data=$item->getdata_emissao():$data=null;
                     ?>
-            <tr><td align='center'><?= $item->getdata_emissao() ?></td><td align='right'><a href="<?= $item->getdanfe() ?>" target="_blank" title="clique para abrir NF-e"><?= intval($item->getnumero_nfe()) ?></a></td><td align='center'><?= $item->getdPrevisao() ?></td><td align='right'><a href="../paginas/imprime.php?id=<?= $item->getid() ?>&direto=1" target="_blank" title="clique para reimprimir pedido"><?= $item->getnumero_pedido() ?></a></td><td align='right'><?= number_format($item->getvalor_total_pedido(),'2',',','.') ?></td><td><?= $item->getfPagamento() ?></td><td><?= defineEtapa($item->getetapa()) ?></td><td><?= $item->getvendedor() ?></td></tr>
+            <tr style="color: <?= $cor ?>"><td align='center'><?= $data ?></td><td align='right'><a href="<?= $danfe; ?>" <?= $target ?> title="clique para abrir NF-e"><?php $item->getnumero_nfe()? $nfe=intval($item->getnumero_nfe()):$nfe=null; echo $nfe;?></a></td><td align='center'><?= $item->getdPrevisao() ?></td><td align='right'><a href="../paginas/imprime.php?id=<?= $item->getid() ?>&direto=1" target="_blank" title="clique para reimprimir pedido"><?= $item->getnumero_pedido() ?></a></td><td align='right'><?= number_format($item->getvalor_total_pedido(),'2',',','.') ?></td><td><?= $item->getfPagamento() ?></td><td><?= defineEtapa($item->getetapa()) ?></td><td><?= $item->getvendedor() ?></td></tr>
             <?php endif; endforeach; endif;?>
         </tbody>
         <tfoot>
@@ -410,6 +392,5 @@
         </tfoot>
     </table>
     </div>
-    
     </body>
 </html>
