@@ -54,7 +54,7 @@
                             } 
                         ],
                     /*"autoWidth": true,*/
-                    /*"stateSave": true,*/
+                    "stateSave": true,
                     "order": [[ 0, "desc" ]],
                     "scrollX": true,
                     "language": {
@@ -190,6 +190,7 @@
             echo '<pre>';
             $search->setdSemana(null);
             $dados=$dao->encontrePorPedido($search);
+            //echo '<pre>';print_r($dados);die;
             
             function confereTabela($tabela){
                 //include '../dao/dao.php';
@@ -275,6 +276,13 @@
                 //text-shadow: 2px 2px 2px gray;
                 //background: orange;
             }
+            thead tr{
+                //background-image: rgb(38, 93, 141);
+                background: url(../web/img/fundoAzulmarinho.png) repeat-x right bottom;
+                background-size: 4.5px;
+                color: white;
+                white-space: nowrap;
+            }
             
         </style>
     </head>
@@ -292,7 +300,7 @@
                     $x++;
                 }
             echo '</select>';
-            if(file_exists('../dao/CRUDNota.php')){
+            /*if(file_exists('../dao/CRUDNota.php')){
                 include '../dao/CRUDNota.php';
                 include '../dao/NotaSearchCriteria.php';
                 include '../model/modelNota.php';
@@ -301,6 +309,16 @@
                 $search=new NotaSearchCriteria();
                 $search->settabela('tb_nf');
                 $tab=confereTabela('tb_nf');
+            }*/
+            if(file_exists('../dao/CRUDStatus.php')){
+                include '../dao/CRUDStatus.php';
+                include '../dao/StatusSearchCriteria.php';
+                include '../model/modelStatus.php';
+                include '../mapping/statusMapper.php';
+                $dao2=new CRUDStatus();
+                $search=new StatusSearchCriteria();
+                $search->settabela('tb_status');
+                $tab=confereTabela('tb_status');
             }
             /*foreach($dados as $key => $item){
                 $search->setnIdPedido($item->getcodigo_pedido());
@@ -352,12 +370,13 @@
                     }
                 }
                 if(isset($tab)){
-                    $search->setnIdPedido($item->getcodigo_pedido());
-                    $dadosNota=$dao2->encontrePorNota($search);
-                    if($dadosNota){
-                        foreach($dadosNota as $nf){
-                            $cChaveNFe=$nf->getcChaveNFe();
-                            $nNF=intval($nf->getnNF());
+                    $search->setnumero_pedido($item->getpedido());
+                    $dadosStatus=$dao2->encontrePorStatus($search);
+                    if($dadosStatus[$item->getpedido()]->getnumero_nfe()){
+                        //echo '<pre>';print_r($dadosStatus[$item->getpedido()]);//die;
+                        foreach($dadosStatus as $nf){
+                            $cChaveNFe=$dadosStatus[$item->getpedido()]->getchave_nfe();
+                            $nNF=intval($dadosStatus[$item->getpedido()]->getnumero_nfe());
                         }
                     }
                 }

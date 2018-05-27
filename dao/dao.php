@@ -91,7 +91,20 @@
         }
         return $result;
    }
-   public function encontrePorPedido(PedidoSearchCriteria $search=null){
+   public function encontrePorPedido(PedidoSearchCriteria $search=null,$order=null){
+        $row = $this->query('SHOW COLUMNS FROM tb_pedido')->fetchAll();
+        foreach($row as $item){
+            if($item['Field']=='codigo_pedido'){
+                $coluna=1;
+            }
+        }
+        if(!isset($coluna)){
+            $sql = 'ALTER TABLE `tb_pedido` ADD `codigo_pedido` VARCHAR(100) NULL';
+            $this->getDb()->prepare($sql)->execute();
+        }
+        if(!isset($order)){
+            $order='DESC';
+        }
         $result = array();
         if($search->getid()){
             $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND id = "'.$search->getid().'"')->fetchAll();
@@ -102,8 +115,8 @@
         }elseif($search->getdSemana()){
             $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND dSemana ='.$search->getdSemana().'')->fetchAll();
         }else{
-            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo_pedido IS NOT null ORDER BY id DESC')->fetchAll();
-            /*$row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND pedido IS NULL ORDER BY id DESC')->fetchAll();*/
+            $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND codigo_pedido IS NOT null ORDER BY id '.$order)->fetchAll();
+            //$row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND pedido IS NULL ORDER BY id DESC')->fetchAll();
         }
         foreach($row as $item){
             $pedido = new pedido();
@@ -130,7 +143,9 @@
    }
    public function encontrePorStatus(StatusSearchCriteria $search=null){
         $result = array();
-        if($search->getnumero_pedido()){
+        if($search->getnumero_nfe('busca')){
+            $row = $this->query("SELECT * FROM `tb_status` where `numero_nfe` is null");
+        }elseif($search->getnumero_pedido()){
             $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND numero_pedido = "'.$search->getnumero_pedido().'"')->fetchAll();
         }else{
             //$row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" ')->fetchAll();
@@ -225,7 +240,7 @@
                 $sql = 'ALTER TABLE `tb_pedido` ADD `codigo_pedido` VARCHAR(100) NULL';
                 $this->getDb()->prepare($sql)->execute();
             }
-            $sql = 'UPDATE `tb_pedido` SET pedido = '.$pedido->getpedido().', modificado = '.$pedido->getmodificado().',codigo_pedido = '.$pedido->getcodigo_pedido().' WHERE pedido = '.$pedido->getpedido().'';
+            $sql = 'UPDATE `tb_pedido` SET pedido = '.$pedido->getpedido().', modificado = '.$pedido->getmodificado().',codigo_pedido = '.$pedido->getcodigo_pedido().', codigo_pedido_integracao = '.$pedido->getcodigo_pedido_integracao().' WHERE pedido = '.$pedido->getpedido().'';
        }else{
             $sql = 'UPDATE `tb_pedido` SET pedido = '.$pedido->getpedido().', modificado = '.$pedido->getmodificado().' WHERE codigo_pedido_integracao = '.$pedido->getcodigo_pedido_integracao().'';
        }

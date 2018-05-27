@@ -21,6 +21,12 @@
             }else{
                 $act='atualiza';
             }
+            if(file_exists('../dao/CRUDStatus.php')){
+                include '../dao/CRUDStatus.php';
+                include '../model/modelStatus.php';
+                include '../dao/StatusSearchCriteria.php';
+                include '../mapping/statusMapper.php';
+            }
         ?>
     </head>
     <body>
@@ -28,15 +34,8 @@
             $dao=new CRUDPedido();
             $search=new PedidoSearchCriteria();
             $search->settabela('tb_pedido');
-            foreach($dao->encontrePorPedido($search) as $item){
-                if($item->getcodigo_pedido()){
-                    $acertaTabela=null;
-                    break;
-                }else{
-                    $acertaTabela=1;
-                }
-            }
-            if(isset($acertaTabela)){
+            $listaPedidoLocal=$dao->encontrePorPedido($search);
+            if(!$listaPedidoLocal){
                 $tabelaAtualizando='Pedidos, Campo Código Pedido';
                 if(!isset($seleciona)){
                     $seleciona=0;
@@ -56,10 +55,12 @@
                 for($x=0;$x<count($pedidoLista->pedido_venda_produto);$x++){
                     $codigo_pedido=$pedidoLista->pedido_venda_produto[$x]->cabecalho->codigo_pedido;
                     $pedido=$pedidoLista->pedido_venda_produto[$x]->cabecalho->numero_pedido;
+                    $codigo_pedido_integracao=$pedidoLista->pedido_venda_produto[$x]->cabecalho->codigo_pedido_integracao;
                     $search->setpedido($pedido);
                     $pedOmie=$dao->encontrePorPedido($search);
-                    if($pedOmie){
+                    if($pedOmie && !$pedOmie[0]->getcodigo_pedido()){
                         $pedOmie[0]->setcodigo_pedido($codigo_pedido);
+                        $pedOmie[0]->setcodigo_pedido_integracao($codigo_pedido_integracao);
                         $dao->gravaNumeroPedido($pedOmie[0]);
                     }
                 }
@@ -69,17 +70,19 @@
                     for($x=0;$x<count($pedidoLista->pedido_venda_produto);$x++){
                         $codigo_pedido=$pedidoLista->pedido_venda_produto[$x]->cabecalho->codigo_pedido;
                         $pedido=$pedidoLista->pedido_venda_produto[$x]->cabecalho->numero_pedido;
+                        $codigo_pedido_integracao=$pedidoLista->pedido_venda_produto[$x]->cabecalho->codigo_pedido_integracao;
                         $search->setpedido($pedido);
                         $pedOmie=$dao->encontrePorPedido($search);
                         if($pedOmie && !$pedOmie[0]->getcodigo_pedido()){
                             $pedOmie[0]->setcodigo_pedido($codigo_pedido);
+                            $pedOmie[0]->setcodigo_pedido_integracao($codigo_pedido_integracao);
                             $dao->gravaNumeroPedido($pedOmie[0]);
                         }
                     }
                 }
                 echo '<script>window.location.assign("../relatorios/relgel.php");</script>';
             }
-            if($act=='atualiza' || !confereTabela('tb_nf')){
+            if($act=='atualiza' || !confereTabela('tb_status')){
                 $tabelaAtualizando='Notas Fiscais';
                 if(!isset($seleciona)){
                     $seleciona=0;
@@ -90,19 +93,70 @@
                     echo '<script>var seleciona=2</script>';
                     include '../paginas/atualizando.php';
                 }
-                $notaOmie=new NFConsultarJsonClient();
-                $regPagina=1;
-                $nfListarRequest=array("pagina"=>1,"registros_por_pagina"=>$regPagina,"apenas_importado_api"=>"N","ordenar_por"=>"CODIGO");
-                $dados=$notaOmie->ListarNF($nfListarRequest);
-                $tPaginas=$dados->total_de_paginas;
-                $registros=$dados->total_de_registros;
-                
-                $dao->drop('tb_nf');
-                $y=gravaDados($dados,0,1,$registros);
-                for($x=2;$x<=$tPaginas;$x++){
-                    $nfListarRequest=array("pagina"=>$x,"registros_por_pagina"=>$regPagina,"apenas_importado_api"=>"N","ordenar_por"=>"CODIGO");
-                    $dados=$notaOmie->ListarNF($nfListarRequest);
-                    $y=gravaDados($dados,1,$y,$registros);
+                $daoPedido=new CRUDPedido();
+                $searchPedido=new PedidoSearchCriteria();
+                $pedidoVendaOmie=new PedidoVendaProdutoJsonClient();
+                $searchPedido->settabela('tb_pedido');
+                $daoPedido->drop('tb_status');
+                $pedidoLocal=$daoPedido->encontrePorPedido($searchPedido,'ASC');
+                $registros=count($pedidoLocal);
+                $pedidoInexistente=array();
+                $y=1;
+                if(!file_exists('../dao/CRUDStatus.php')){
+                    foreach($pedidoLocal as $item){
+                        $codigo_pedido=$item->getcodigo_pedido();
+                        $pvpStatusRequest=array("codigo_pedido"=>$codigo_pedido,"codigo_pedido_integracao"=>"");
+                        $statusPedido=$pedidoVendaOmie->StatusPedido($pvpStatusRequest);
+                        if($statusPedido->ListaNfe){
+                            include '../paginas/criaClasses6.php';
+                            $arqClasse=new criaClasses6();
+                            foreach(geraCampos($statusPedido)[0] as $item){
+                                $variaveis=$item;
+                            }
+                            $arqClasse->novoArquivo($variaveis);
+                            sleep(2);
+                            $classeCriada=1;
+                            goto segue;
+                        }
+                    }
+                }
+                segue:
+                foreach($pedidoLocal as $item){
+                    $codigo_pedido=$item->getcodigo_pedido();
+                    $pvpStatusRequest=array("codigo_pedido"=>$codigo_pedido,"codigo_pedido_integracao"=>"");
+                    $statusPedido=$pedidoVendaOmie->StatusPedido($pvpStatusRequest);
+                    if(!$statusPedido){
+                        echo $codigo_pedido;die;
+                        array_push($pedidoInexistente,$codigo_pedido);
+                        goto v;
+                    }
+                    if(isset($classeCriada)){
+                        include '../dao/CRUDStatus.php';
+                        include '../model/modelStatus.php';
+                        include '../dao/StatusSearchCriteria.php';
+                    }
+                    $status=new status();
+                    foreach($statusPedido as $key => $item){
+                        if($key != 'ListaNfe'){
+                            $classe='set'.$key;
+                            $status->$classe($item);
+                        }else{
+                            if($item){
+                                foreach($item[0] as $key2 => $item2){
+                                    if($key2 != 'mensagens'){
+                                        $classe='set'.$key2;
+                                        $status->$classe($item2);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    $daoStatus=new CRUDStatus();
+                    $status->settabela('tb_status');
+                    $gravado=$daoStatus->grava8($status);
+                    v:
+                    echo '<script>document.getElementById("cont").innerHTML="Percentual concluido '.number_format($y*100/$registros,'0','.','').'%";</script>';
+                    $y++;
                 }
                 echo '<script>window.location.assign("../relatorios/relgel.php");</script>';
             }elseif($act=='buscaNF'){
@@ -116,34 +170,64 @@
                     echo '<script>var seleciona=2</script>';
                     include '../paginas/atualizando.php';
                 }
-                $notaOmie=new NFConsultarJsonClient();
-                $regPagina=1;
-                $nfListarRequest=array("pagina"=>1,"registros_por_pagina"=>$regPagina,"apenas_importado_api"=>"N","ordenar_por"=>"CODIGO");
-                $dados=$notaOmie->ListarNF($nfListarRequest);
-                $tPaginas=$dados->total_de_paginas;
-                $registros=$dados->total_de_registros;
-                
-                //if(file_exists('../dao/CRUDNota.php')){
-                    //include '../mapping/notaMapper.php';
-                    $daoNota=new CRUDNota();
-                    $search=new NotaSearchCriteria();
-                    $search->settabela('tb_nf');
-                //}
-                for($y=$tPaginas;$y>=1;$y--){
-                    $nfListarRequest=array("pagina"=>$y,"registros_por_pagina"=>$regPagina,"apenas_importado_api"=>"N","ordenar_por"=>"CODIGO");
-                    $dados=$notaOmie->ListarNF($nfListarRequest);
-                    //if(file_exists('../dao/CRUDNota.php')){
-                        $search->setnIdNF($dados->nfCadastro[0]->compl->nIdNF);
-                        $notaAchada=$daoNota->encontrePorNota($search);
-                    //}
-                    if(!$notaAchada){
-                        gravaDados($dados,1,1,1);
+                $daoStatus=new CRUDStatus();
+                $searchStatus=new StatusSearchCriteria();
+                $pedidoVendaOmie=new PedidoVendaProdutoJsonClient();
+                $searchStatus->settabela('tb_status');
+                $searchStatus->setnumero_nfe('busca');
+                $dadosStatus=$daoStatus->encontrePorStatus($searchStatus);
+                $y=0;
+                foreach($dadosStatus as $item){
+                    $codigo_pedido=$item->getcodigo_pedido();
+                    $pvpStatusRequest=array("codigo_pedido"=>$codigo_pedido,"codigo_pedido_integracao"=>"");
+                    $statusPedido=$pedidoVendaOmie->StatusPedido($pvpStatusRequest);
+                    if($statusPedido->ListaNfe){
+                        $status=new status();
+                        foreach($statusPedido as $key => $item){
+                            if($key != 'ListaNfe'){
+                                $classe='set'.$key;
+                                $status->$classe($item);
+                            }else{
+                                if($item){
+                                    foreach($item[0] as $key2 => $item2){
+                                        if($key2 != 'mensagens'){
+                                            $classe='set'.$key2;
+                                            $status->$classe($item2);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        $daoStatus=new CRUDStatus();
+                        $status->settabela('tb_status');
+                        $gravado=$daoStatus->grava8($status);
+                    }
+                    echo '<script>document.getElementById("cont").innerHTML="Notas Atualizadas '.$y.';</script>';
+                    $y++;
+                }
+                echo '<script>window.location.assign("../relatorios/relgel.php");</script>';
+            }
+            
+            function geraCampos($campos){
+                $campo[$campos->numero_pedido]=array();
+                $dPedido[$campos->numero_pedido]=array();
+                foreach($campos as $key => $item){
+                    if($key != 'ListaNfe'){
+                        array_push($campo[$campos->numero_pedido],$key);
+                        array_push($dPedido[$campos->numero_pedido],$item);
                     }else{
-                        goto s;
+                        foreach($item as $item2){
+                            foreach($item2 as $key3 => $item3){
+                                if($key3 != 'mensagens'){
+                                    array_push($campo[$campos->numero_pedido],$key3);
+                                    array_push($dPedido[$campos->numero_pedido],$item3);
+                                }
+                            }
+                        }
                     }
                 }
-                s:
-                echo '<script>window.location.assign("relgel.php");</script>';
+                $arr=([$campo,$dPedido]);
+                return $arr;
             }
             function gravaDados($dados,$cont=null,$y,$registros){
                 foreach($dados->nfCadastro as $item_){
