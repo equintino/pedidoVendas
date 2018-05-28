@@ -78,7 +78,7 @@
 .vaivem:hover{
     cursor: pointer;
 }
-.pagina, .mGeral{
+.pagina, .mGeral, .tabRel{
     margin-top: 5px;
     font-size: 15px;
     text-shadow: 4px 4px 4px white;
@@ -89,11 +89,15 @@
     padding: 6px 20px;
     height: 20px;
 }
-.mGeral ul li{
+.tabRel{
+    position: absolute;
+    margin-left: -100px;
+}
+.mGeral ul li, .tabRel ul li{
     display: inline;
     padding: 7px 10px;
 }
-.mGeral li:hover{
+.mGeral li:hover, .tabRel ul li:hover{
     cursor: pointer;
     background: #4e9bae;
     color: white;

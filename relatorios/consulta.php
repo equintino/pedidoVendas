@@ -122,6 +122,7 @@
                         //dMin=$('#min').val().substr(0,2);
                         //dMax=$('#max').val().substr(0,2);
                         grafico();
+                        grafico2();
                     });
                     function toggleDataSeries(e) {
                         if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
@@ -135,6 +136,7 @@
                 //////////////////////////////
                 function grafico2() {
                     var chart2 = new CanvasJS.Chart("chartContainer2", {
+                        exportEnabled: true,
                         animationEnabled: true,
                         title:{
                             text: "Faturamento"
@@ -142,18 +144,36 @@
                         axisX: {
                             interval: 1,
                             intervalType: "day",
-                            valueFormatString: "DD"
+                            valueFormatString: "DD",
+                            minimum: dMin,
+                            maximum: dMax,
                         },
                         axisY: {
                             suffix: "%"
                         },
                         toolTip: {
-                            shared: true
+                            shared: true,   
+                            content: function(e){
+                                var body;
+                                var total;
+                                body = '<span style="color:'+e.entries[0].dataSeries.color+'">'+e.entries[0].dataSeries.name+': </span><span style="float:right"> '+ numeroParaMoeda(e.entries[0].dataPoint.y)+'</span>';
+                                total=e.entries[0].dataPoint.y;
+                                if(typeof e.entries[1]!='undefined'){
+                                    body += '<br><span style="color:'+e.entries[1].dataSeries.color+'">'+e.entries[1].dataSeries.name+': </span><span style="float:right"> '+ numeroParaMoeda(e.entries[1].dataPoint.y)+'</span>';
+                                    total=parseFloat(e.entries[0].dataPoint.y)+parseFloat(e.entries[1].dataPoint.y);
+                                    if(typeof e.entries[2]!='undefined'){
+                                        body += '<br><span style="color:'+e.entries[2].dataSeries.color+'">'+e.entries[2].dataSeries.name+': </span><span style="float:right"> '+ numeroParaMoeda(e.entries[2].dataPoint.y)+'</span>';
+                                        total=parseFloat(e.entries[0].dataPoint.y)+parseFloat(e.entries[1].dataPoint.y)+parseFloat(e.entries[2].dataPoint.y);
+                                    }
+                                }
+                                body += '<hr><strong>Total: <span style="float:right">'+numeroParaMoeda(total)+'</span></strong>';
+                                return body;
+                            }
                         },
                         legend: {
-                            reversed: true,
-                            verticalAlign: "center",
-                            horizontalAlign: "right"
+                            reversed: false,
+                            //verticalAlign: "center",
+                            //horizontalAlign: "right"
                         },
                         data: [{
                             type: "stackedColumn100",

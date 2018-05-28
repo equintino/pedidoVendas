@@ -106,9 +106,22 @@
                 });
                 $(document).on('keyup click', function(){
                     $( '#linhas' ).text( 'Linhas exibidas: '+ table.column({page:'current'} ).data().length );
+                    nfCancelada();
                 });
                 $( '#linhas' ).text( 'Linhas exibidas: '+ table.column({page:'current'} ).data().length );
                 $('#principal').show();
+                nfCancelada();
+                function nfCancelada(){
+                    $('tbody tr').each(function(){
+                        if($(this).attr('style')=='color: red'){
+                            $(this).css('color','#ccc');
+                            $(this).click(function(){
+                                alert('Possivelmente esta nota foi cancelada.');
+                                return false;
+                            });
+                        } 
+                    });
+                }
             });
             function numeroParaMoeda(n, c, d, t){
                 c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
@@ -374,14 +387,15 @@
             <?php
                 if(isset($dados)):
                 foreach($dados as $key => $item):
-                    if($key):
-                        $item->getdanfe()? $danfe=$item->getdanfe(): $danfe=null;
-                        !$danfe && $item->getnumero_nfe()? $cor='red': $cor=null;
-                        $danfe? $target='target="_blank"': $target=null;
-                        $danfe? $data=$item->getdata_emissao():$data=null;
-                    ?>
+                    if($item->getnumero_pedido()):
+                        if($key):
+                            $item->getdanfe()? $danfe=$item->getdanfe(): $danfe=null;
+                            !$danfe && $item->getnumero_nfe()? $cor='red': $cor=null;
+                            $danfe? $target='target="_blank"': $target=null;
+                            $danfe? $data=$item->getdata_emissao():$data=null;
+                        ?>
             <tr style="color: <?= $cor ?>"><td align='center'><?= $data ?></td><td align='right'><a href="<?= $danfe; ?>" <?= $target ?> title="clique para abrir NF-e"><?php $item->getnumero_nfe()? $nfe=intval($item->getnumero_nfe()):$nfe=null; echo $nfe;?></a></td><td align='center'><?= $item->getdPrevisao() ?></td><td align='right'><a href="../paginas/imprime.php?id=<?= $item->getid() ?>&direto=1" target="_blank" title="clique para reimprimir pedido"><?= $item->getnumero_pedido() ?></a></td><td align='right'><?= number_format($item->getvalor_total_pedido(),'2',',','.') ?></td><td><?= $item->getfPagamento() ?></td><td><?= defineEtapa($item->getetapa()) ?></td><td><?= $item->getvendedor() ?></td></tr>
-            <?php endif; endforeach; endif;?>
+                <?php endif; endif; endforeach; endif;?>
         </tbody>
         <tfoot>
             <tr>

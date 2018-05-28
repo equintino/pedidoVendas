@@ -407,6 +407,13 @@ $(document).ready(function(){
                     break;
             }
         });
+        $('.tabrel').append($('<ul><li>RELATÓRIOS</li></ul>'));
+        $('.tabRel').mouseover(function(){
+            $(this).css('cursor','pointer');
+            $(this).click(function(){
+               window.location.assign('../relatorios/consulta.php'); 
+            });
+        });
         $('.opcaoTransp button').click(function(){
             var transpSelecionada=$('.opcaoTransp :selected').val();
             window.location.assign('index.php?pagina=pedido&act=cad&transpSelecionada='+transpSelecionada+'');

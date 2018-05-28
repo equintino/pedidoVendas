@@ -372,11 +372,13 @@
                 if(isset($tab)){
                     $search->setnumero_pedido($item->getpedido());
                     $dadosStatus=$dao2->encontrePorStatus($search);
-                    if($dadosStatus[$item->getpedido()]->getnumero_nfe()){
-                        //echo '<pre>';print_r($dadosStatus[$item->getpedido()]);//die;
-                        foreach($dadosStatus as $nf){
-                            $cChaveNFe=$dadosStatus[$item->getpedido()]->getchave_nfe();
-                            $nNF=intval($dadosStatus[$item->getpedido()]->getnumero_nfe());
+                    foreach($dadosStatus as $item2){
+                        if($item2->getnumero_nfe()){
+                            //echo '<pre>';print_r($dadosStatus[$item->getpedido()]);//die;
+                            foreach($dadosStatus as $nf){
+                                $cChaveNFe=$item2->getchave_nfe();
+                                $nNF=intval($item2->getnumero_nfe());
+                            }
                         }
                     }
                 }
