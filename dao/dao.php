@@ -154,7 +154,7 @@
         foreach($row as $item){
             $status = new status();
             statusMapper::map($status, $item);
-            $result[$status->getnumero_pedido()] = $status;
+            $result[] = $status;
         }
         return $result;
    }

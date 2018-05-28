@@ -32,6 +32,21 @@
                         dataPoints3[i]['x']=new Date(dataPoints3[i]['x']);
                     }
                 }
+                for(i in dataPoints4){
+                    for(s in dataPoints4[i]){
+                        dataPoints4[i]['x']=new Date(dataPoints4[i]['x']);
+                    }
+                }
+                for(i in dataPoints5){
+                    for(s in dataPoints5[i]){
+                        dataPoints5[i]['x']=new Date(dataPoints5[i]['x']);
+                    }
+                }
+                for(i in dataPoints6){
+                    for(s in dataPoints6[i]){
+                        dataPoints6[i]['x']=new Date(dataPoints6[i]['x']);
+                    }
+                }
                 var dMin=null;
                 var dMax=null;
                 $('#min').datepicker({dateFormat: 'dd/mm/yy'});
@@ -66,9 +81,10 @@
                                 content: function (e) {
                                     var body;
                                     var head;
+                                    var totalParcial=parseFloat(e.entries[0].dataPoint.y)+parseFloat(e.entries[1].dataPoint.y)+parseFloat(e.entries[2].dataPoint.y);
                                     //head = "<span style = 'color:black; '><strong>Dia " + (e.entries[0].dataPoint.x) + "</strong></span><br/>";
 
-                                    body = "<span style= 'color:" + e.entries[0].dataSeries.color + "'> " + e.entries[0].dataSeries.name + "</span>: R$ " + numeroParaMoeda(e.entries[0].dataPoint.y) + "<br/> <span style= 'color:" + e.entries[1].dataSeries.color + "'> " + e.entries[1].dataSeries.name + "</span>: R$ " + numeroParaMoeda(e.entries[1].dataPoint.y) + "<br/> <span style= 'color:" + e.entries[2].dataSeries.color + "'> " + e.entries[2].dataSeries.name + "</span>: R$ " + numeroParaMoeda(e.entries[2].dataPoint.y) + "";
+                                    body = "<span style= 'color:" + e.entries[0].dataSeries.color + "'> " + e.entries[0].dataSeries.name + "</span>: <span style=float:right>" + numeroParaMoeda(e.entries[0].dataPoint.y) + "</span><br/> <span style= 'color:" + e.entries[1].dataSeries.color + "'> " + e.entries[1].dataSeries.name + "</span>: <span style=float:right>" + numeroParaMoeda(e.entries[1].dataPoint.y) + "</span><br/> <span style= 'color:" + e.entries[2].dataSeries.color + "'> " + e.entries[2].dataSeries.name + "</span>: <span style=float:right>" + numeroParaMoeda(e.entries[2].dataPoint.y) + "</span><hr><span style= 'color:black'><strong> Total</span>: R$ " + numeroParaMoeda(totalParcial) + "</strong>";
                                     //return (head.concat(body));
                                     return body;
                                 },
@@ -116,8 +132,57 @@
                         e.chart.render();
                     }
                 }
+                //////////////////////////////
+                function grafico2() {
+                    var chart2 = new CanvasJS.Chart("chartContainer2", {
+                        animationEnabled: true,
+                        title:{
+                            text: "Faturamento"
+                        },
+                        axisX: {
+                            interval: 1,
+                            intervalType: "day",
+                            valueFormatString: "DD"
+                        },
+                        axisY: {
+                            suffix: "%"
+                        },
+                        toolTip: {
+                            shared: true
+                        },
+                        legend: {
+                            reversed: true,
+                            verticalAlign: "center",
+                            horizontalAlign: "right"
+                        },
+                        data: [{
+                            type: "stackedColumn100",
+                            name: "Valor Faturado",
+                            showInLegend: true,
+                            xValueFormatString: "DD",
+                            yValueFormatString: "#,##0\"%\"",
+                            dataPoints: dataPoints4
+                        }, 
+                        {
+                            type: "stackedColumn100",
+                            name: "Valor a Faturar",
+                            showInLegend: true,
+                            xValueFormatString: "DD",
+                            yValueFormatString: "#,##0\"%\"",
+                            dataPoints: dataPoints5
+                        },{
+                            type: "stackedColumn100",
+                            name: "Cancelado",
+                            showInLegend: true,
+                            xValueFormatString: "DD",
+                            yValueFormatString: "#,##0\"%\"",
+                            dataPoints: dataPoints6
+                        }]
+                    });
+                    chart2.render();
+                }
+                grafico2();
             });
-
             function numeroParaMoeda(n, c, d, t){
                 c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
                 return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");    
@@ -146,6 +211,9 @@
                 background: url('images/fundoAzulclaro.png') repeat-x right;
                 background-size: 11px;
             }
+            #chartContainer2{
+                padding-top: 10px;
+            }
         </style>
         <?php
             include 'relatorio.php';
@@ -163,11 +231,6 @@
                 $arrDin=$arrDeb=$arrCre=array();
                 foreach($dias as $item2){
                     $vDin=array_sum($dGrafico[$anoSelecionado][$key][$item2]['dinheiro']);
-                    //$resultado = (date(2018-12-31) - date(2018-12-20));
-                    //echo $resultado;die;
-
-                    //echo date("2017-12-31")-date("2017-08-01").'<br>';die;
-                    //die;
                     $vDin?:$vDin=0;
                     @$vDeb=array_sum($dGrafico[$anoSelecionado][$key][$item2]['debito']);
                     $vDeb?:$vDeb=0;
@@ -182,54 +245,81 @@
                 $dataPoints2=$arrDeb;
                 $dataPoints3=$arrCre;
             }
-                //print_r($dataPoints1);die;
-                $dataPoints1_=json_encode($dataPoints1, JSON_NUMERIC_CHECK);
-                $dataPoints2_=json_encode($dataPoints2, JSON_NUMERIC_CHECK);
-                $dataPoints3_=json_encode($dataPoints3, JSON_NUMERIC_CHECK);
-                //print_r($dataPoints1_);
-                /*function mesNome($str){
-                    switch($str){
-                        case 01:
-                            $str='Jan';
-                            break;
-                        case 02:
-                            $str='Fev';
-                            break;
-                        case 03:
-                            $str='Mar';
-                            break;
-                        case 04:
-                            $str='Abr';
-                            break;
-                        case 05:
-                            $str='Mai';
-                            break;
-                        case 06:
-                            $str='Jun';
-                            break;
-                        case 07:
-                            $str='Jul';
-                            break;
-                        case 08:
-                            $str='Ago';
-                            break;
-                        case 09:
-                            $str='Set';
-                            break;
-                        case 10:
-                            $str='Out';
-                            break;
-                        case 11:
-                            $str='Nov';
-                            break;
-                        case 12:
-                            $str='Dez';
-                            break;
-                        return $str;
-                    }
-                }*/
+            $dataPoints1_=json_encode($dataPoints1, JSON_NUMERIC_CHECK);
+            $dataPoints2_=json_encode($dataPoints2, JSON_NUMERIC_CHECK);
+            $dataPoints3_=json_encode($dataPoints3, JSON_NUMERIC_CHECK);
         ?>
         <script>var dataPoints1=<?= $dataPoints1_ ?>;var dataPoints2=<?= $dataPoints2_ ?>;var dataPoints3=<?= $dataPoints3_ ?>;</script>
+        
+        <?php
+            include '../dao/CRUDStatus.php';
+            include '../dao/StatusSearchCriteria.php';
+            include '../model/modelStatus.php';
+            include '../mapping/statusMapper.php';
+            $daoStatus=new CRUDStatus();
+            $search=new StatusSearchCriteria();
+            $search->settabela('tb_status');
+            $dados=$daoStatus->encontrePorStatus($search);
+            //echo '<pre>';print_r(count($dados));die;
+            //print_r($search);
+            //$faturado['faturado'][]=$nFaturado['nFaturado'][]=array();
+            foreach($dados as $key => $item){
+                //echo ($item->getdata_emissao()).' -> ';//die;
+                if($item->getdata_emissao()){
+                    if(preg_match('/^[0-9]/',$item->getdata_emissao())){
+                        if($item->getvalor_total_pedido()!=''){
+                            //echo 'Faturado -> '.$item->getdPrevisao().' = '.$item->getvalor_total_pedido().' -> '.$item->getnumero_pedido().'<br>';
+                            $faturado['faturado'][$item->getdPrevisao()][]=$item->getvalor_total_pedido();
+                            //$faturado2['faturado'][$item->getdPrevisao()][]=array('vator'=>$item->getvalor_total_pedido(),'pedido'=>$item->getnumero_pedido());
+                        }
+                    }else{
+                        if($item->getvalor_total_pedido()!=''){
+                            //echo 'Nota Cancelada -> '.$item->getdPrevisao().' = '.$item->getvalor_total_pedido().' -> '.$item->getnumero_pedido().'<br>';
+                            $faturado['cancelado'][$item->getdPrevisao()][]=$item->getvalor_total_pedido();
+                            //$faturado2['cancelado'][$item->getdPrevisao()][]=array('vator'=>$item->getvalor_total_pedido(),'pedido'=>$item->getnumero_pedido());
+                        }
+                    }
+                }else{
+                    if($item->getvalor_total_pedido()!=''){
+                        //echo 'Não Faturado -> '.$item->getdPrevisao().' = '.$item->getvalor_total_pedido().' -> '.$item->getnumero_pedido().'<br>';
+                        $nFaturado['nFaturado'][$item->getdPrevisao()][]=$item->getvalor_total_pedido();
+                    }
+                }
+            }
+            foreach($faturado['faturado'] as $key => $item){
+                $soma1[$key]=array_sum($faturado['faturado'][$key]);
+            }
+            foreach($nFaturado['nFaturado'] as $key => $item){
+                $soma2[$key]=array_sum($nFaturado['nFaturado'][$key]);
+            }
+            foreach($faturado['cancelado'] as $key => $item){
+                $soma3[$key]=array_sum($faturado['cancelado'][$key]);
+            }
+            $fat=$nFat=$fatCan=array();
+            foreach($soma1 as $key => $item){
+                $ano=substr($key,-4,4);
+                $mes=substr($key,3,2);
+                $dia=substr($key,0,2);
+                array_push($fat,array('x' => $ano.','.$mes.','.$dia,'y' => $item));
+            }
+            foreach($soma2 as $key => $item){
+                $ano=substr($key,-4,4);
+                $mes=substr($key,3,2);
+                $dia=substr($key,0,2);
+                array_push($nFat,array('x' => $ano.','.$mes.','.$dia,'y' => $item));
+            }
+            foreach($soma3 as $key => $item){
+                $ano=substr($key,-4,4);
+                $mes=substr($key,3,2);
+                $dia=substr($key,0,2);
+                array_push($fatCan,array('x' => $ano.','.$mes.','.$dia,'y' => $item));
+            }
+            $dataPoints4=json_encode($fat, JSON_NUMERIC_CHECK);
+            $dataPoints5=json_encode($nFat, JSON_NUMERIC_CHECK);
+            $dataPoints6=json_encode($fatCan, JSON_NUMERIC_CHECK);
+            //echo '<pre>';print_r([$dataPoints4,$dataPoints5,$dataPoints6]);die;
+        ?>
+        <script>var dataPoints4=<?= $dataPoints4 ?>;var dataPoints5=<?= $dataPoints5 ?>;var dataPoints6=<?= $dataPoints6 ?>;</script>
     </head>
     <body>
         <?php
@@ -250,6 +340,7 @@
             </tbody></table>
             <div class='graf'>
                 <div id="chartContainer" style="height: 370px; max-width: 920px; margin: 0px auto;"></div>
+                <div id="chartContainer2" style="height: 370px; max-width: 920px; margin: 0px auto;"></div>
             </div>
         </div>
     </body>
