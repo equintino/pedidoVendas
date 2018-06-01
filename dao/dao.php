@@ -1,8 +1,10 @@
 <?php 
  class dao {
    private $db = null;
+   private $db2 = null;
    public function __destruct(){
       $this->db = null;
+      $this->db2 = null;
    }
    public function encontre(ModelSearchCriteria $search = null){
             set_time_limit(3600);
@@ -149,7 +151,7 @@
             $row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" AND numero_pedido = "'.$search->getnumero_pedido().'"')->fetchAll();
         }else{
             //$row = $this->query('SELECT * FROM `'.$search->gettabela().'` WHERE excluido = "0" ')->fetchAll();
-            $row = $this->query("SELECT tb_pedido.id,tb_pedido.codigo_pedido,tb_status.codigo_pedido_integracao,numero_pedido,tb_status.etapa,valor_total_pedido,chave_nfe,danfe,data_emissao,status_nfe,dPrevisao,tb_pedido.dSemana,fPagamento,vendedor,numero_nfe FROM `tb_pedido` LEFT JOIN `tb_status` ON tb_pedido.codigo_pedido = tb_status.codigo_pedido AND 'tb_status.excluido' = 0 AND 'tb_pedido.codigo_pedido' IS NOT null");
+            $row = $this->query("SELECT tb_pedido.id,tb_pedido.codigo_pedido,tb_status.codigo_pedido_integracao,numero_pedido,pedido,tb_status.etapa,valor_total_pedido,vPedido,chave_nfe,danfe,data_emissao,status_nfe,dPrevisao,tb_pedido.dSemana,fPagamento,vendedor,numero_nfe FROM `tb_pedido` LEFT JOIN `tb_status` ON tb_pedido.codigo_pedido = tb_status.codigo_pedido AND 'tb_status.excluido' = 0 AND 'tb_pedido.codigo_pedido' IS NOT null");
         }
         foreach($row as $item){
             $status = new status();
@@ -275,13 +277,31 @@
         }
         return null;
    }
+   public function showBancoMySql(){
+        $sql = 'SHOW DATABASES';
+        $statement = $this->getDb()->query($sql, PDO::FETCH_ASSOC)->fetchAll();
+        $bancos=array();
+        foreach($statement as $key => $item){
+            array_push($bancos,$item);
+        }
+        return $bancos;
+   }
+   public function showBancoSql(){
+        $sql = 'SHOW DATABASES';
+        $statement = $this->getDb2()->query($sql, PDO::FETCH_ASSOC)->fetchAll();
+        $bancos=array();
+        foreach($statement as $key => $item){
+            array_push($bancos,$item);
+        }
+        return $bancos;
+   }
    public function getDb() {
         if ($this->db !== null) {
             return $this->db;
         }
-        if(OMIE_APP_KEY=='2769656370'){
+        if(@OMIE_APP_KEY=='2769656370'){
             $config = Config::getConfig("db");
-        }elseif(OMIE_APP_KEY=='461893204773'){
+        }elseif(@OMIE_APP_KEY=='461893204773'){
            $config = Config::getConfig("db2");
         }else{
            $config = Config::getConfig("db3");            
@@ -293,6 +313,19 @@
             throw new Exception('DB connection error: ' . $ex->getMessage());
         }
         return $this->db;
+   }
+   public function getDb2() {
+        if ($this->db2 !== null) {
+            return $this->db2;
+        }
+        $config = Config::getConfig("db4");
+        try {
+            $this->db2 = new PDO($config['dsn'], $config['username'], $config['password'],
+            array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));  
+        } catch (Exception $ex) {
+            throw new Exception('DB erro na conexão: ' . $ex->getMessage());
+        }
+        return $this->db2;
    }
    public function execute($sql,Model $model){
         $statement = $this->getDb()->prepare($sql);

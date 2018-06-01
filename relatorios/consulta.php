@@ -280,60 +280,61 @@
             $search=new StatusSearchCriteria();
             $search->settabela('tb_status');
             $dados=$daoStatus->encontrePorStatus($search);
-            //echo '<pre>';print_r(count($dados));die;
-            //print_r($search);
-            //$faturado['faturado'][]=$nFaturado['nFaturado'][]=array();
             foreach($dados as $key => $item){
-                //echo ($item->getdata_emissao()).' -> ';//die;
-                if($item->getdata_emissao()){
+                if($item->getnumero_nfe()){
                     if(preg_match('/^[0-9]/',$item->getdata_emissao())){
-                        if($item->getvalor_total_pedido()!=''){
-                            //echo 'Faturado -> '.$item->getdPrevisao().' = '.$item->getvalor_total_pedido().' -> '.$item->getnumero_pedido().'<br>';
-                            $faturado['faturado'][$item->getdPrevisao()][]=$item->getvalor_total_pedido();
-                            //$faturado2['faturado'][$item->getdPrevisao()][]=array('vator'=>$item->getvalor_total_pedido(),'pedido'=>$item->getnumero_pedido());
+                        if($item->getvPedido()!=''){
+                            $faturado['faturado'][$item->getdPrevisao()][]=$item->getvPedido();
                         }
                     }else{
-                        if($item->getvalor_total_pedido()!=''){
-                            //echo 'Nota Cancelada -> '.$item->getdPrevisao().' = '.$item->getvalor_total_pedido().' -> '.$item->getnumero_pedido().'<br>';
-                            $faturado['cancelado'][$item->getdPrevisao()][]=$item->getvalor_total_pedido();
-                            //$faturado2['cancelado'][$item->getdPrevisao()][]=array('vator'=>$item->getvalor_total_pedido(),'pedido'=>$item->getnumero_pedido());
+                        if($item->getvPedido()!=''){
+                            $faturado['cancelado'][$item->getdPrevisao()][]=$item->getvPedido();
                         }
                     }
                 }else{
-                    if($item->getvalor_total_pedido()!=''){
-                        //echo 'Não Faturado -> '.$item->getdPrevisao().' = '.$item->getvalor_total_pedido().' -> '.$item->getnumero_pedido().'<br>';
-                        $nFaturado['nFaturado'][$item->getdPrevisao()][]=$item->getvalor_total_pedido();
+                    if($item->getnumero_pedido()){
+                        $nFaturado['nFaturado'][$item->getdPrevisao()][]=$item->getvPedido();
+                    }elseif($item->getcodigo_pedido()){
+                        $faturado['cancelado'][$item->getdPrevisao()][]=$item->getvPedido();
                     }
                 }
             }
-            foreach($faturado['faturado'] as $key => $item){
-                $soma1[$key]=array_sum($faturado['faturado'][$key]);
-            }
-            foreach($nFaturado['nFaturado'] as $key => $item){
-                $soma2[$key]=array_sum($nFaturado['nFaturado'][$key]);
-            }
-            foreach($faturado['cancelado'] as $key => $item){
-                $soma3[$key]=array_sum($faturado['cancelado'][$key]);
-            }
             $fat=$nFat=$fatCan=array();
-            foreach($soma1 as $key => $item){
-                $ano=substr($key,-4,4);
-                $mes=substr($key,3,2);
-                $dia=substr($key,0,2);
-                array_push($fat,array('x' => $ano.','.$mes.','.$dia,'y' => $item));
-            }
-            foreach($soma2 as $key => $item){
-                $ano=substr($key,-4,4);
-                $mes=substr($key,3,2);
-                $dia=substr($key,0,2);
-                array_push($nFat,array('x' => $ano.','.$mes.','.$dia,'y' => $item));
-            }
-            foreach($soma3 as $key => $item){
-                $ano=substr($key,-4,4);
-                $mes=substr($key,3,2);
-                $dia=substr($key,0,2);
-                array_push($fatCan,array('x' => $ano.','.$mes.','.$dia,'y' => $item));
-            }
+            if(isset($faturado['faturado'])):
+                foreach($faturado['faturado'] as $key => $item){
+                    $soma1[$key]=array_sum($faturado['faturado'][$key]);
+                }
+                foreach($soma1 as $key => $item){
+                    $ano=substr($key,-4,4);
+                    $mes=substr($key,3,2);
+                    $dia=substr($key,0,2);
+                    array_push($fat,array('x' => $ano.','.$mes.','.$dia,'y' => $item));
+                }
+            endif;
+            if(isset($faturado['cancelado'])):
+                foreach($faturado['cancelado'] as $key => $item){
+                    $soma3[$key]=array_sum($faturado['cancelado'][$key]);
+                }
+                foreach($soma3 as $key => $item){
+                    $ano=substr($key,-4,4);
+                    $mes=substr($key,3,2);
+                    $dia=substr($key,0,2);
+                    array_push($fatCan,array('x' => $ano.','.$mes.','.$dia,'y' => $item));
+                }
+            endif;
+            if(isset($nFaturado['nFaturado'])):
+                foreach($nFaturado['nFaturado'] as $key => $item){
+                    $soma2[$key]=array_sum($nFaturado['nFaturado'][$key]);
+                }
+                foreach($soma2 as $key => $item){
+                    $ano=substr($key,-4,4);
+                    $mes=substr($key,3,2);
+                    $dia=substr($key,0,2);
+                    array_push($nFat,array('x' => $ano.','.$mes.','.$dia,'y' => $item));
+                }
+            endif;
+            
+            
             $dataPoints4=json_encode($fat, JSON_NUMERIC_CHECK);
             $dataPoints5=json_encode($nFat, JSON_NUMERIC_CHECK);
             $dataPoints6=json_encode($fatCan, JSON_NUMERIC_CHECK);

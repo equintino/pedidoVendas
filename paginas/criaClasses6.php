@@ -8,7 +8,7 @@
         public function novoArquivo($variaveis){
             array_push($variaveis,"modificado","dSemana");
             $variaveis2=$variaveis;
-            array_push($variaveis,"dPrevisao","fPagamento","vendedor");
+            array_push($variaveis,"dPrevisao","fPagamento","vendedor","pedido","vPedido");
             $mode='w+';
             $handle = fopen($this->filename1, $mode); 
             $texto=$this->texto1($variaveis);

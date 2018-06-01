@@ -126,7 +126,7 @@
                     $pvpStatusRequest=array("codigo_pedido"=>$codigo_pedido,"codigo_pedido_integracao"=>"");
                     $statusPedido=$pedidoVendaOmie->StatusPedido($pvpStatusRequest);
                     if(!$statusPedido){
-                        echo $codigo_pedido;die;
+                        //echo $codigo_pedido;die;
                         array_push($pedidoInexistente,$codigo_pedido);
                         goto v;
                     }
@@ -158,6 +158,7 @@
                     echo '<script>document.getElementById("cont").innerHTML="Percentual concluido '.number_format($y*100/$registros,'0','.','').'%";</script>';
                     $y++;
                 }
+                echo '<pre>';print_r($pedidoInexistente);die;
                 echo '<script>window.location.assign("../relatorios/relgel.php");</script>';
             }elseif($act=='buscaNF'){
                 $tabelaAtualizando='Notas Fiscais';
