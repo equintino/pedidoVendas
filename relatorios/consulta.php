@@ -246,20 +246,18 @@
                 $dGrafico[$ano][$mes][$dia][$item->getfPagamento()][]=$item->getvpedido();
             }
             $anoSelecionado='2018';
+            $arrDin=$arrDeb=$arrCre=array();
             foreach($dGrafico[$anoSelecionado] as $key => $item){
-                $dias=array_keys($item);
-                $arrDin=$arrDeb=$arrCre=array();
-                foreach($dias as $item2){
-                    $vDin=array_sum($dGrafico[$anoSelecionado][$key][$item2]['dinheiro']);
+                foreach($item as $key2 => $item2){
+                    $vDin=array_sum($dGrafico[$anoSelecionado][$key][$key2]['dinheiro']);
                     $vDin?:$vDin=0;
-                    @$vDeb=array_sum($dGrafico[$anoSelecionado][$key][$item2]['debito']);
+                    @$vDeb=array_sum($dGrafico[$anoSelecionado][$key][$key2]['debito']);
                     $vDeb?:$vDeb=0;
-                    @$vCre=array_sum($dGrafico[$anoSelecionado][$key][$item2]['credito']);
+                    @$vCre=array_sum($dGrafico[$anoSelecionado][$key][$key2]['credito']);
                     $vCre?:$vCre=0;
-                    
-                    @array_push($arrDin,array("x" => $anoSelecionado.','.$key.','.$item2,"y" => $vDin));
-                    @array_push($arrDeb,array('x' => $anoSelecionado.','.$key.','.$item2,'y' => $vDeb));
-                    @array_push($arrCre,array('x' => $anoSelecionado.','.$key.','.$item2,'y' => $vCre));
+                    @array_push($arrDin,array("x" => $anoSelecionado.','.$key.','.$key2,"y" => $vDin));
+                    @array_push($arrDeb,array('x' => $anoSelecionado.','.$key.','.$key2,'y' => $vDeb));
+                    @array_push($arrCre,array('x' => $anoSelecionado.','.$key.','.$key2,'y' => $vCre));
                 }
                 $dataPoints1=$arrDin;
                 $dataPoints2=$arrDeb;
@@ -338,7 +336,6 @@
             $dataPoints4=json_encode($fat, JSON_NUMERIC_CHECK);
             $dataPoints5=json_encode($nFat, JSON_NUMERIC_CHECK);
             $dataPoints6=json_encode($fatCan, JSON_NUMERIC_CHECK);
-            //echo '<pre>';print_r([$dataPoints4,$dataPoints5,$dataPoints6]);die;
         ?>
         <script>var dataPoints4=<?= $dataPoints4 ?>;var dataPoints5=<?= $dataPoints5 ?>;var dataPoints6=<?= $dataPoints6 ?>;</script>
     </head>
