@@ -2,10 +2,10 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+        <script src="../web/js/jquery-3.2.1.min.js"></script>
         <title>Cadastro de Clientes</title>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.js"></script>
-        <script src="//irql.bipbop.com.br/js/jquery.bipbop.min.js"></script>
+        <script src="../web/js/jquery.mask.min.js"></script>
+        <script src="../web/js/jquery.bipbop.min.js"></script>
         <script type="text/javascript" >
             $(document).ready(function() {
                 var corBack = '#ccc';
@@ -34,37 +34,39 @@
                         }
                     }
                 });
-                $(".cep").blur(function() {
-                    var cep = $(this).val().replace(/\D/g, '');
-                    if (cep != "") {
-                        var validacep = /^[0-9]{8}$/;
-                        if(validacep.test(cep)) {
-                            $("#endereco").val("...");
-                            $("#bairro").val("...");
-                            $("#cidade").val("...");
-                            $("#uf").val("...");
-                            $("#ibge").val("...");
-                            $.getJSON("https://viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
-                                if (!("erro" in dados)) {
-                                    $("#endereco").val(dados.logradouro);
-                                    $("#bairro").val(dados.bairro);
-                                    $("#cidade").val(dados.localidade);
-                                    $("#uf").val(dados.uf);
-                                    $("#cep").val(dados.cep);
-                                    $("#ibge").val(dados.ibge);
-                                }else {
-                                    limpa_formulário_cep();
-                                    alert("CEP não encontrado.");
-                                }
-                            });
-                            $('#numero').css('background',corBack).focus();
-                            $(this).css('background','none');
+                $(".cep").keyup(function() {
+                    if($(this).val().length==8){
+                        var cep = $(this).val().replace(/\D/g, '');
+                        if (cep != "") {
+                            var validacep = /^[0-9]{8}$/;
+                            if(validacep.test(cep)) {
+                                $("#endereco").val("...");
+                                $("#bairro").val("...");
+                                $("#cidade").val("...");
+                                $("#uf").val("...");
+                                $("#ibge").val("...");
+                                $.getJSON("https://viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
+                                    if (!("erro" in dados)) {
+                                        $("#endereco").val(dados.logradouro);
+                                        $("#bairro").val(dados.bairro);
+                                        $("#cidade").val(dados.localidade);
+                                        $("#uf").val(dados.uf);
+                                        $("#cep").val(dados.cep);
+                                        $("#ibge").val(dados.ibge);
+                                    }else {
+                                        limpa_formulário_cep();
+                                        alert("CEP não encontrado.");
+                                    }
+                                });
+                                $('#numero').css('background',corBack).focus();
+                                $(this).css('background','none');
+                            }else {
+                                limpa_formulário_cep();
+                                alert("Formato de CEP inválido.");
+                            }
                         }else {
                             limpa_formulário_cep();
-                            alert("Formato de CEP inválido.");
                         }
-                    }else {
-                        limpa_formulário_cep();
                     }
                 });
                 function validCPF(cpf){
@@ -113,14 +115,28 @@
                 $("#nascimento").mask("00/00/0000");
                 $("#cpf").mask("000.000.000-00");
                 $('#telefone').keyup(function(e){
+                    var tel=$(this).val();
                     if($(this).val()[4]==9){
                         $('#telefone').mask("(00)90000-0000");
                         $('td[nome=telefone] label').text('Celeular');
+                        if(tel.length==14){
+                            if($(this).val().length==14||$(this).val().length==13){
+                                $(this).blur().css('background','none');
+                                $('.cep').css('background',corBack).focus();
+                            }
+                        }
                     }else{
                         $('#telefone').mask("(00)0000-0000");
                         $('td[nome=telefone] label').text('Telefone');
+                        if(tel.length==13){
+                            if($(this).val().length==14||$(this).val().length==13){
+                                $(this).blur().css('background','none');
+                                $('.cep').css('background',corBack).focus();
+                            }
+                        }
                     }
                     if(e.keyCode==13){
+                        alert(tel.length);
                         if($(this).val().length==14||$(this).val().length==13){
                             $(this).blur().css('background','none');
                             $('.cep').css('background',corBack).focus();
@@ -168,9 +184,9 @@
                         });
                     }
                 });*/
-                $('form input[name=cpf').blur(function(){
+                $('form input[name=cpf').keyup(function(){
                     var cpf=validCPF($(this).val());
-                    if(typeof cpf!='undefined'){
+                    if(cpf.length==14){
                         $(document).bipbop("SELECT FROM 'BIPBOPJS'.'CPFCNPJ'", BIPBOP_FREE, {
                             data: {
                                 "documento": cpf
@@ -186,9 +202,9 @@
                                 }
                             }
                         });
+                        $(this).css('background','none');
+                        $('#nascimento').css('background',corBack).focus();
                     }
-                    $(this).css('background','none');
-                    $('#nascimento').css('background',corBack).focus();
                 });
                 $('form input[name=cpf').css('background',corBack);
                 $('form input[name=cpf').keyup(function(e){
@@ -200,7 +216,8 @@
                     }
                 });
                 $('#nascimento').keyup(function(e){
-                    if(e.keyCode==13){
+                    var dataNascimento=$(this).val().length;
+                    if(dataNascimento==10){
                         $('#telefone').css('background',corBack).focus();
                         $(this).css('background','none');
                     }
@@ -231,6 +248,7 @@
                     $('.tipo select').val('pj');
                 }
                 $('#tabIdEmp input[name=cnpj').keyup(function(){
+                    $(this).mask('00000000000000');
                     var cnpj=$(this).val();
                     if(cnpj.length==14){
                         window.location.assign("../web/index.php?pagina=teste&cnpj="+cnpj+"");
@@ -249,21 +267,37 @@
             body{
                 padding: 0;
                 margin: 0;
-                background: white;
+                background: #e7ebf6;
             }
             #corpo{
                 width: 1100px;
                 margin: 40px auto;
                 text-align: center;
-                //border: solid red;
+            }
+            #back {
+                position: absolute;
+                top: 0;
+                width: 100%;
+                height: 81px;
+                background-color: #3E73A0;
+                background: url('../web/img/fundoAzulmarinho.png') repeat-x right;
+                background-size: 11px;
+                z-index: -10;
             }
             .titulo{
-                font-size: 30px;
+                width: 500px;
+                margin: 18px auto;
+                font-size: 38px;
+                color: white;
+                text-shadow: 2px 2px 2px black;
             }
             table{
                 margin: auto;
                 width: 100%;
-                //border: solid green;
+                background: white;
+            }
+            table td{
+                padding-left: 10px;
             }
             table tr td label{
                 align: right;
@@ -272,6 +306,13 @@
                 font-size: 15px;
                 border: none;
             }
+            /*.logo{
+                position: absolute;
+                margin: 0 -260px;
+            }
+            .logo img{
+                height: 60px;
+            }*/
             input.cep{
                 border: 1px solid gray;
             }
@@ -283,37 +324,34 @@
                 position: relative;
                 top: 10px;
                 margin: auto;
-                border: 1px solid gray;
+                border: 1px solid white;
                 clear: right;
                 width: 950px;
                 border-radius: 8px;
-                //border: solid yellow;
+                background: rgba(167, 170, 179,0.3);
+                padding: 20px 30px;
             }
             .subTitulo{
-                border: solid green;
+                text-shadow: -2px -2px 1px white;
+                font-weight: 900px;
             }
             legend{
                 font-size: 20px;
                 text-align: left;
+                margin-top: 8px;
+                text-shadow: 2px 2px 2px white;
+                padding: 0 5px;
             }
             label{
                 color: blue;
                 padding-right: 5px;
             }
-            /*#tabIdEmp tr td{
-                border: 1px solid red; 
-            }*/
         </style>
     </head>
     <body>
         <?php
             include '../dao/dao.php';
             $dao=new dao();
-            //print_r(phpinfo());die;
-            //print_r($dao->showBancoSql());die;
-            //$cnpj='11482378000195';
-            //$cnpj='02558157000162';
-            //$cnpj='39062831000557';
             
             function getCnpj($cnpj){
                 $ch=curl_init("https://www.receitaws.com.br/v1/cnpj/".$cnpj);
@@ -352,19 +390,29 @@
                             }
                         }
                     }
+                    if(!@is_numeric($dados['cnpj'][0])){
+                        return $dados=null;
+                    }
                     return $dados;
                 endif;
             }
             $dados=getCnpj($cnpj);
-            //echo '<pre>';print_r($dados);
             $campoCnpj=Array('data_situacao','complemento','situacao','abertura','natureza_juridica','ultima_atualizacao','status','efr','motivo_situacao','situacao_especial','data_situacao_especial','capital_social');
             $identCnpj=array('cnpj','fantasia','nome','telefone','email',);
             $endCnpj=array('logradouro','numero','bairro','municipio','uf','cep',);
+            /*
+            // These code snippets use an open-source library. http://unirest.io/php
+            $response = Unirest\Request::get("https://consulta-situacao-cpf-cnpj.p.mashape.com/consultaSituacaoCPF?cpf=95611711715",
+            array(
+                "X-Mashape-Key" => "bKzN8KX7CJmshcaOoDLbpii4eak6p1VPuXtjsnjkomkjmk94xP"
+              )
+            );*/
         ?>
+        <div id="back"></div>
+        <div class='titulo'><!--<span class="logo"><img src="../web/emqdesenv.ico" /></span>-->CADASTRO DE CLIENTE</div>
         <div id='corpo'>
-            <div class='titulo'>CADASTRO DE CLIENTE</div>
             <div class='tipo'>
-                <span>Tipo do Formulário: </span> 
+                <span class="subTitulo">TIPO DO FORMULÁRIO: </span> 
                 <select name='tipoForm'>
                     <option <?= $selecionado ?> value='pf'>Pessoa Fisica</option>
                     <option <?= $selecionado ?> value='pj'>Pessoa Jurídica</option>
@@ -372,7 +420,7 @@
             </div>
             <form id="pf" method="get" action="#">
                 <fieldset class='dCliente'>
-                    <legend>Identificação</legend>
+                    <legend>IDENTIFICAÇÃO</legend>
                     <table cellspacing='0' cellpadding='0' border='1'>
                         <tr>
                             <td nome="cpf"><label>Cpf:</label><br />
@@ -389,7 +437,7 @@
                     </table>
                 </fieldset>
                 <fieldset class='endCliente'>
-                    <legend>Localização</legend>
+                    <legend>LOCALIZAÇÃO</legend>
                     <table cellspacing='0' cellpadding='0' border='0'>
                         <tr>
                             <td width="370px">&nbsp</td><td align=right>Digite aqui o CEP para busca do endereço: </td>
@@ -422,17 +470,17 @@
             </form>
             <form id="pj" method="get" action="#">
                 <fieldset class='dCliente'>
-                    <legend>Identificação</legend>
+                    <legend>IDENTIFICAÇÃO</legend>
                     <table id=tabIdEmp cellspacing='0' cellpadding='0' border='1'>
                         <tr>
                             <td width=10px nome="<?= $identCnpj[0] ?>" ><label><?= $identCnpj[0] ?>:</label><br />
-                                <input autofocus type="text" name="<?= $identCnpj[0] ?>" id="<?= $identCnpj[0] ?>" value="<?= $dados[$identCnpj[0]] ?>"/></td>
+                                <input placeholder="Digite somente números" autofocus type="text" name="<?= $identCnpj[0] ?>" id="<?= $identCnpj[0] ?>" value="<?= $dados[$identCnpj[0]] ?>"/></td>
                             <td colspan=2 nome="<?= $identCnpj[1] ?>"><label><?= $identCnpj[1] ?>:</label><br />
-                                <input size="50px" type="text" name="<?= $identCnpj[1] ?>" id="<?= $identCnpj[1] ?>" value="<?= $dados[$identCnpj[1]] ?>" /></td>
+                                <input size="80px" type="text" name="<?= $identCnpj[1] ?>" id="<?= $identCnpj[1] ?>" value="<?= $dados[$identCnpj[1]] ?>" /></td>
                         </tr>
                         <tr>
                             <td colspan=2 nome="<?= $identCnpj[2] ?>"><label>Razão Social:</label><br>
-                                <input type="text" size="40px" name="<?= $identCnpj[2] ?>" id="<?= $identCnpj[2] ?>" value="<?= $dados[$identCnpj[2]] ?>" /></td>
+                                <input type="text" size="80px" name="<?= $identCnpj[2] ?>" id="<?= $identCnpj[2] ?>" value="<?= $dados[$identCnpj[2]] ?>" /></td>
                             <td width=10px nome="<?= $identCnpj[3] ?>"><label><?= $identCnpj[3] ?>:</label><br />
                                 <input size=15px name="<?= $identCnpj[3] ?>" id="telefone" value="<?= $dados[$identCnpj[3]] ?>" /></td>
                         </tr>
@@ -442,18 +490,18 @@
                         </tr>
                         <tr>
                             <td nome="qsa" colspan=3><label>QSA:</label><br>
-                                <input type="text" size="40px" name="qsa" id="qsa" value="<?= $dados['qsa']['nome'] ?>" /></td>
+                                <input type="text" size="90px" name="qsa" id="qsa" value="<?= $dados['qsa']['nome'] ?>" /></td>
                         </tr>
                         <tr>
                             <td colspan=2 nome="atvPrincipal" ><label>Atividade Principal:</label><br>
-                                <input type="text" size="70px" name="atvPrincipal" id="atvPrincipal" value="<?= $dados['atividade_principal']['text'][0]->text ?>" /></td>
+                                <input type="text" size="90px" name="atvPrincipal" id="atvPrincipal" value="<?php is_object($dados['atividade_principal']['text'][0])? $atv=$dados['atividade_principal']['text'][0]->text: $atv=null; echo $atv;?>" /></td>
                             <td nome="tipo" ><label>Tipo:</label><br>
                                 <input size=10px type="text" name="tipo" id="tipo" value="<?= $dados['tipo'] ?>" /></td>
                         </tr>
                     </table>
                 </fieldset>
                 <fieldset class='endCliente'>
-                    <legend>Localização</legend>
+                    <legend>LOCALIZAÇÃO</legend>
                     <table cellspacing='0' cellpadding='0' border='1'>
                         <tr>
                             <td nome="endereco" ><label>Endereço:</label><br />
